@@ -95,6 +95,99 @@ interface ApplicantData {
   gender: string;
 }
 
+// Searchable Country Selector Component
+function CountrySelector({
+  value,
+  onChange,
+  countries,
+}: {
+  value: string;
+  onChange: (code: string) => void;
+  countries: { code: string; name: string }[];
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const selectedCountry = countries.find((c) => c.code === value);
+
+  const filteredCountries = countries.filter((country) =>
+    country.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSelect = (code: string) => {
+    onChange(code);
+    setSearchTerm("");
+    setIsOpen(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setIsOpen(true);
+  };
+
+  const handleInputFocus = () => {
+    setIsOpen(true);
+    setSearchTerm("");
+  };
+
+  const handleInputBlur = () => {
+    // Delay to allow click on dropdown items
+    setTimeout(() => setIsOpen(false), 200);
+  };
+
+  return (
+    <div className="relative">
+      <input
+        type="text"
+        value={isOpen ? searchTerm : selectedCountry?.name || ""}
+        onChange={handleInputChange}
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        placeholder="Type to search or select..."
+        className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+      />
+
+      {/* Dropdown arrow */}
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+        <svg
+          className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
+      {/* Dropdown list */}
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-2 max-h-60 overflow-y-auto rounded-xl bg-gray-900 border border-white/20 shadow-xl">
+          {filteredCountries.length > 0 ? (
+            filteredCountries.map((country) => (
+              <button
+                key={country.code}
+                type="button"
+                onClick={() => handleSelect(country.code)}
+                className={`w-full px-4 py-3 text-left text-lg hover:bg-emerald-500/20 transition-colors ${
+                  value === country.code
+                    ? "bg-emerald-500/10 text-emerald-400"
+                    : "text-white"
+                }`}
+              >
+                {country.name}
+              </button>
+            ))
+          ) : (
+            <div className="px-4 py-3 text-gray-500 text-lg">
+              No countries found
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Photo Upload Component with Two Options
 function PhotoUploadSection({
   label,
@@ -364,8 +457,8 @@ function ApplyForm() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       {/* Header */}
-      <header className="px-5 py-6 flex justify-between items-center max-w-6xl mx-auto">
-        <a href="/" className="text-2xl font-bold text-emerald-400">
+      <header className="px-5 lg:px-8 py-6 flex justify-between items-center max-w-6xl mx-auto">
+        <a href="/" className="text-2xl lg:text-3xl font-bold text-emerald-400">
           VietnamFastVisa
         </a>
         <a
@@ -373,28 +466,29 @@ function ApplyForm() {
           className="flex items-center gap-2 text-base text-gray-300 hover:text-white"
         >
           <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-          Need help?
+          <span className="hidden sm:inline">24/7 Support</span>
+          <span className="sm:hidden">Help</span>
         </a>
       </header>
 
       <main className="px-5 pb-24">
         {/* Progress Steps */}
-        <div className="max-w-lg mx-auto mb-10">
-          <div className="flex items-center justify-center gap-3">
+        <div className="max-w-4xl mx-auto mb-10">
+          <div className="flex items-center justify-center gap-3 lg:gap-6">
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-base font-bold">
                 ✓
               </div>
               <span className="text-base text-gray-400 hidden sm:inline">Trip Details</span>
             </div>
-            <div className="w-10 h-0.5 bg-emerald-500"></div>
+            <div className="w-10 lg:w-20 h-0.5 bg-emerald-500"></div>
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-base font-bold">
                 2
               </div>
               <span className="text-base text-white hidden sm:inline">Your Information</span>
             </div>
-            <div className="w-10 h-0.5 bg-gray-600"></div>
+            <div className="w-10 lg:w-20 h-0.5 bg-gray-600"></div>
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-base">
                 3
@@ -405,7 +499,7 @@ function ApplyForm() {
         </div>
 
         {/* Form Card */}
-        <section className="max-w-lg mx-auto">
+        <section className="max-w-lg lg:max-w-4xl mx-auto">
           <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur overflow-hidden shadow-xl shadow-black/20">
             {/* Form Header */}
             <div className="bg-emerald-500/20 border-b border-emerald-500/30 px-6 py-5">
@@ -442,260 +536,265 @@ function ApplyForm() {
             )}
 
             {/* Form Body */}
-            <div className="p-6 space-y-6">
-              {/* Full Name */}
-              <div>
-                <label className="block text-base font-medium text-gray-300 mb-3">
-                  Full Name (as on passport) *
-                </label>
-                <input
-                  type="text"
-                  value={currentData.fullName}
-                  onChange={(e) => updateApplicant("fullName", e.target.value.toUpperCase())}
-                  placeholder="JOHN DOE"
-                  className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 uppercase transition-all"
-                />
-                <p className="text-sm text-gray-500 mt-2">
-                  Enter exactly as shown on passport
-                </p>
-              </div>
-
-              {/* Gender */}
-              <div>
-                <label className="block text-base font-medium text-gray-300 mb-3">
-                  Gender *
-                </label>
-                <div className="flex gap-4">
-                  {["Male", "Female"].map((gender) => (
-                    <label
-                      key={gender}
-                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-xl border-2 cursor-pointer transition-all text-lg ${
-                        currentData.gender === gender.toLowerCase()
-                          ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
-                          : "bg-white/5 border-white/20 text-gray-300 hover:border-white/40"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name={`gender-${currentApplicant}`}
-                        value={gender.toLowerCase()}
-                        checked={currentData.gender === gender.toLowerCase()}
-                        onChange={(e) => updateApplicant("gender", e.target.value)}
-                        className="sr-only"
-                      />
-                      {gender}
-                    </label>
-                  ))}
+            <div className="p-6 lg:p-8">
+              {/* Desktop: Two Column Grid, Mobile: Single Column */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                {/* Full Name - Full Width */}
+                <div className="lg:col-span-2">
+                  <label className="block text-base font-medium text-gray-300 mb-3">
+                    Full Name (as on passport) *
+                  </label>
+                  <input
+                    type="text"
+                    value={currentData.fullName}
+                    onChange={(e) => updateApplicant("fullName", e.target.value.toUpperCase())}
+                    placeholder="JOHN DOE"
+                    className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 uppercase transition-all"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Enter exactly as shown on passport
+                  </p>
                 </div>
-              </div>
 
-              {/* Nationality */}
-              <div>
-                <label className="block text-base font-medium text-gray-300 mb-3">
-                  Nationality *
-                </label>
-                <select
-                  value={currentData.nationality}
-                  onChange={(e) => updateApplicant("nationality", e.target.value)}
-                  className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
-                >
-                  <option value="" className="bg-gray-900">Select your nationality</option>
-                  {EVISA_COUNTRIES.map((country) => (
-                    <option key={country.code} value={country.code} className="bg-gray-900">
-                      {country.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Date of Birth */}
-              <div>
-                <label className="block text-base font-medium text-gray-300 mb-3">
-                  Date of Birth *
-                </label>
-                <input
-                  type="date"
-                  value={currentData.dateOfBirth}
-                  onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
-                  className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 [color-scheme:dark] transition-all"
-                />
-              </div>
-
-              {/* Passport Number */}
-              <div>
-                <label className="block text-base font-medium text-gray-300 mb-3">
-                  Passport Number *
-                </label>
-                <input
-                  type="text"
-                  value={currentData.passportNumber}
-                  onChange={(e) => updateApplicant("passportNumber", e.target.value.toUpperCase())}
-                  placeholder="AB1234567"
-                  className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 uppercase transition-all"
-                />
-              </div>
-
-              {/* Passport Expiry */}
-              <div>
-                <label className="block text-base font-medium text-gray-300 mb-3">
-                  Passport Expiry Date *
-                </label>
-                <input
-                  type="date"
-                  value={currentData.passportExpiry}
-                  onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
-                  min={minPassportExpiry.toISOString().split("T")[0]}
-                  className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 [color-scheme:dark] transition-all"
-                />
-                <p className="text-sm text-gray-500 mt-2">
-                  Must be valid for at least 6 months
-                </p>
-              </div>
-
-              {/* Passport Photo Upload */}
-              <PhotoUploadSection
-                label="Passport Data Page"
-                description="Clear photo showing all details"
-                icon="📄"
-                file={passportPhotos[currentApplicant]}
-                onFileChange={(file) => {
-                  const files = [...passportPhotos];
-                  files[currentApplicant] = file;
-                  setPassportPhotos(files);
-                }}
-                captureType="environment"
-              />
-
-              {/* Portrait Photo Upload */}
-              <PhotoUploadSection
-                label="Portrait Photo"
-                description="White background, no glasses"
-                icon="🤳"
-                file={portraitPhotos[currentApplicant]}
-                onFileChange={(file) => {
-                  const files = [...portraitPhotos];
-                  files[currentApplicant] = file;
-                  setPortraitPhotos(files);
-                }}
-                captureType="user"
-              />
-
-              {/* Contact Information (only for first applicant) */}
-              {currentApplicant === 0 && (
-                <>
-                  <div className="border-t border-white/10 pt-6 mt-6">
-                    <h3 className="font-semibold text-lg text-white mb-5">Contact Information</h3>
+                {/* Gender */}
+                <div>
+                  <label className="block text-base font-medium text-gray-300 mb-3">
+                    Gender *
+                  </label>
+                  <div className="flex gap-4">
+                    {["Male", "Female"].map((gender) => (
+                      <label
+                        key={gender}
+                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 rounded-xl border-2 cursor-pointer transition-all text-lg ${
+                          currentData.gender === gender.toLowerCase()
+                            ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
+                            : "bg-white/5 border-white/20 text-gray-300 hover:border-white/40"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name={`gender-${currentApplicant}`}
+                          value={gender.toLowerCase()}
+                          checked={currentData.gender === gender.toLowerCase()}
+                          onChange={(e) => updateApplicant("gender", e.target.value)}
+                          className="sr-only"
+                        />
+                        {gender}
+                      </label>
+                    ))}
                   </div>
+                </div>
 
-                  {/* Email */}
-                  <div>
-                    <label className="block text-base font-medium text-gray-300 mb-3">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      value={contactInfo.email}
-                      onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
-                      placeholder="your@email.com"
-                      className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
-                    />
-                    <p className="text-sm text-gray-500 mt-2">
-                      Visa will be sent to this email
-                    </p>
-                  </div>
+                {/* Date of Birth */}
+                <div>
+                  <label className="block text-base font-medium text-gray-300 mb-3">
+                    Date of Birth *
+                  </label>
+                  <input
+                    type="date"
+                    value={currentData.dateOfBirth}
+                    onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
+                    max={new Date().toISOString().split("T")[0]}
+                    className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 [color-scheme:dark] transition-all"
+                  />
+                </div>
 
-                  {/* Confirm Email */}
-                  <div>
-                    <label className="block text-base font-medium text-gray-300 mb-3">
-                      Confirm Email *
-                    </label>
-                    <input
-                      type="email"
-                      value={contactInfo.confirmEmail}
-                      onChange={(e) => setContactInfo({ ...contactInfo, confirmEmail: e.target.value })}
-                      placeholder="your@email.com"
-                      className={`w-full px-4 py-4 rounded-xl bg-white/10 border text-white text-lg placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${
-                        contactInfo.confirmEmail && contactInfo.email !== contactInfo.confirmEmail
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/50"
-                          : "border-white/20 focus:border-emerald-500 focus:ring-emerald-500/50"
-                      }`}
-                    />
-                    {contactInfo.confirmEmail && contactInfo.email !== contactInfo.confirmEmail && (
-                      <p className="text-sm text-red-400 mt-2">Emails do not match</p>
-                    )}
-                  </div>
+                {/* Nationality - Full Width */}
+                <div className="lg:col-span-2">
+                  <label className="block text-base font-medium text-gray-300 mb-3">
+                    Nationality *
+                  </label>
+                  <CountrySelector
+                    value={currentData.nationality}
+                    onChange={(code) => updateApplicant("nationality", code)}
+                    countries={EVISA_COUNTRIES}
+                  />
+                </div>
 
-                  {/* WhatsApp */}
-                  <div>
-                    <label className="block text-base font-medium text-gray-300 mb-3">
-                      WhatsApp Number *
-                    </label>
-                    <input
-                      type="tel"
-                      value={contactInfo.phone}
-                      onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
-                      placeholder="+1 234 567 8900"
-                      className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
-                    />
-                    <p className="text-sm text-gray-500 mt-2">
-                      Include country code for instant updates
-                    </p>
-                  </div>
-                </>
-              )}
+                {/* Passport Number */}
+                <div>
+                  <label className="block text-base font-medium text-gray-300 mb-3">
+                    Passport Number *
+                  </label>
+                  <input
+                    type="text"
+                    value={currentData.passportNumber}
+                    onChange={(e) => updateApplicant("passportNumber", e.target.value.toUpperCase())}
+                    placeholder="AB1234567"
+                    className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 uppercase transition-all"
+                  />
+                </div>
 
-              {/* Navigation Buttons */}
-              <div className="flex gap-4 pt-6">
-                {applicantCount > 1 && currentApplicant > 0 && (
-                  <button
-                    onClick={() => setCurrentApplicant(currentApplicant - 1)}
-                    className="flex-1 py-4 rounded-xl border border-white/20 text-gray-300 text-lg hover:bg-white/5 transition-colors"
-                  >
-                    ← Previous
-                  </button>
+                {/* Passport Expiry */}
+                <div>
+                  <label className="block text-base font-medium text-gray-300 mb-3">
+                    Passport Expiry Date *
+                  </label>
+                  <input
+                    type="date"
+                    value={currentData.passportExpiry}
+                    onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
+                    min={minPassportExpiry.toISOString().split("T")[0]}
+                    className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 [color-scheme:dark] transition-all"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Must be valid for at least 6 months
+                  </p>
+                </div>
+
+                {/* Document Uploads Section - Full Width */}
+                <div className="lg:col-span-2 border-t border-white/10 pt-6 mt-2">
+                  <h3 className="font-semibold text-lg text-white mb-5">Document Uploads</h3>
+                </div>
+
+                {/* Passport Photo Upload */}
+                <div>
+                  <PhotoUploadSection
+                    label="Passport Data Page"
+                    description="Clear photo showing all details"
+                    icon="📄"
+                    file={passportPhotos[currentApplicant]}
+                    onFileChange={(file) => {
+                      const files = [...passportPhotos];
+                      files[currentApplicant] = file;
+                      setPassportPhotos(files);
+                    }}
+                    captureType="environment"
+                  />
+                </div>
+
+                {/* Portrait Photo Upload */}
+                <div>
+                  <PhotoUploadSection
+                    label="Portrait Photo"
+                    description="White background, no glasses"
+                    icon="🤳"
+                    file={portraitPhotos[currentApplicant]}
+                    onFileChange={(file) => {
+                      const files = [...portraitPhotos];
+                      files[currentApplicant] = file;
+                      setPortraitPhotos(files);
+                    }}
+                    captureType="user"
+                  />
+                </div>
+
+                {/* Contact Information (only for first applicant) */}
+                {currentApplicant === 0 && (
+                  <>
+                    <div className="lg:col-span-2 border-t border-white/10 pt-6 mt-2">
+                      <h3 className="font-semibold text-lg text-white mb-5">Contact Information</h3>
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                      <label className="block text-base font-medium text-gray-300 mb-3">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        value={contactInfo.email}
+                        onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
+                        placeholder="your@email.com"
+                        className="w-full px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+                      />
+                      <p className="text-sm text-gray-500 mt-2">
+                        Visa will be sent to this email
+                      </p>
+                    </div>
+
+                    {/* Confirm Email */}
+                    <div>
+                      <label className="block text-base font-medium text-gray-300 mb-3">
+                        Confirm Email *
+                      </label>
+                      <input
+                        type="email"
+                        value={contactInfo.confirmEmail}
+                        onChange={(e) => setContactInfo({ ...contactInfo, confirmEmail: e.target.value })}
+                        placeholder="your@email.com"
+                        className={`w-full px-4 py-4 rounded-xl bg-white/10 border text-white text-lg placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${
+                          contactInfo.confirmEmail && contactInfo.email !== contactInfo.confirmEmail
+                            ? "border-red-500 focus:border-red-500 focus:ring-red-500/50"
+                            : "border-white/20 focus:border-emerald-500 focus:ring-emerald-500/50"
+                        }`}
+                      />
+                      {contactInfo.confirmEmail && contactInfo.email !== contactInfo.confirmEmail && (
+                        <p className="text-sm text-red-400 mt-2">Emails do not match</p>
+                      )}
+                    </div>
+
+                    {/* WhatsApp - Full Width on Desktop */}
+                    <div className="lg:col-span-2">
+                      <label className="block text-base font-medium text-gray-300 mb-3">
+                        WhatsApp Number *
+                      </label>
+                      <input
+                        type="tel"
+                        value={contactInfo.phone}
+                        onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
+                        placeholder="+1 234 567 8900"
+                        className="w-full lg:w-1/2 px-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white text-lg placeholder-gray-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all"
+                      />
+                      <p className="text-sm text-gray-500 mt-2">
+                        Include country code for instant updates
+                      </p>
+                    </div>
+                  </>
                 )}
 
-                {applicantCount > 1 && currentApplicant < applicantCount - 1 ? (
-                  <button
-                    onClick={() => setCurrentApplicant(currentApplicant + 1)}
-                    className="flex-1 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 font-bold text-lg transition-colors"
-                  >
-                    Next Applicant →
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="flex-1 py-5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 font-bold text-xl transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center justify-center gap-3">
-                        <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
-                        Processing...
-                      </span>
-                    ) : (
-                      "Continue to Payment →"
-                    )}
-                  </button>
-                )}
+                {/* Navigation Buttons - Full Width */}
+                <div className="lg:col-span-2 flex gap-4 pt-6">
+                  {applicantCount > 1 && currentApplicant > 0 && (
+                    <button
+                      onClick={() => setCurrentApplicant(currentApplicant - 1)}
+                      className="flex-1 lg:flex-none lg:px-8 py-4 rounded-xl border border-white/20 text-gray-300 text-lg hover:bg-white/5 transition-colors"
+                    >
+                      ← Previous
+                    </button>
+                  )}
 
-                {/* Error Message */}
+                  {applicantCount > 1 && currentApplicant < applicantCount - 1 ? (
+                    <button
+                      onClick={() => setCurrentApplicant(currentApplicant + 1)}
+                      className="flex-1 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 font-bold text-lg transition-colors"
+                    >
+                      Next Applicant →
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                      className="flex-1 py-5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 font-bold text-xl transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 text-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center gap-3">
+                          <svg className="animate-spin h-6 w-6" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          Processing...
+                        </span>
+                      ) : (
+                        "Continue to Payment →"
+                      )}
+                    </button>
+                  )}
+                </div>
+
+                {/* Error Message - Full Width */}
                 {submitError && (
-                  <div className="col-span-full text-center p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+                  <div className="lg:col-span-2 text-center p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
                     <p className="text-red-400">{submitError}</p>
                   </div>
                 )}
-              </div>
 
-              {/* Price Summary */}
-              <div className="border-t border-white/10 pt-5 mt-5">
-                <div className="flex justify-between text-xl font-bold">
-                  <span>Total ({applicantCount} {applicantCount === 1 ? "person" : "people"})</span>
-                  <span className="text-emerald-400">${totalPrice} USD</span>
+                {/* Price Summary - Full Width */}
+                <div className="lg:col-span-2 border-t border-white/10 pt-5 mt-2">
+                  <div className="flex justify-between text-xl font-bold">
+                    <span>Total ({applicantCount} {applicantCount === 1 ? "person" : "people"})</span>
+                    <span className="text-emerald-400">${totalPrice} USD</span>
+                  </div>
                 </div>
               </div>
             </div>
