@@ -284,7 +284,7 @@ function getVisaRequirement(countryCode: string): {
   if (EVISA_COUNTRIES.find((c) => c.code === countryCode)) {
     return {
       type: "evisa",
-      message: "You are eligible for Vietnam E-Visa! We can process your visa in just 1 hour.",
+      message: "You are eligible for Vietnam E-Visa! Approval letter in just 30 minutes.",
       color: "text-blue-700",
       bgColor: "bg-blue-50 border-blue-200",
     };
@@ -384,7 +384,7 @@ function CitizenshipChecker({
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    Apply below - Get your visa in 1 hour!
+                    Apply below - Approval in 30 minutes!
                   </div>
                 </div>
               )}
@@ -702,7 +702,7 @@ function ApplyForm() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">vietnamvisa1hour.com</h1>
-              <p className="text-xs text-gray-500">1 Hour Processing Service</p>
+              <p className="text-xs text-gray-500">30 Min Approval Letter</p>
             </div>
           </a>
           <a
@@ -753,10 +753,10 @@ function ApplyForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-4 p-4 rounded-xl bg-green-50 border border-green-200">
               <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-xl font-bold">40</span>
+                <span className="text-white text-xl font-bold">30</span>
               </div>
               <div>
-                <div className="text-green-700 font-bold text-lg">40 Minutes</div>
+                <div className="text-green-700 font-bold text-lg">30 Minutes</div>
                 <div className="text-green-600 text-sm">Approval letter for airline check-in</div>
               </div>
             </div>
