@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { EncryptedText } from "@/components/ui/encrypted-text";
 
 // Visa Info Modal Component
 function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -17,7 +18,7 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
       {/* Modal */}
       <div className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="sticky top-0 bg-blue-600 px-6 py-4 flex justify-between items-center">
+        <div className="sticky top-0 px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#ef7175' }}>
           <h2 className="text-xl font-bold text-white">Vietnam Visa Guide</h2>
           <button
             onClick={onClose}
@@ -44,7 +45,7 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
           ].map((step, index) => (
             <div key={index} className="space-y-2">
               <h3 className="text-lg font-bold text-gray-800 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm">{index + 1}</span>
+                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm text-white" style={{ backgroundColor: '#ef7175' }}>{index + 1}</span>
                 {step.title}
               </h3>
               <p className="text-gray-600 pl-11">{step.content}</p>
@@ -52,9 +53,9 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
           ))}
 
           {/* Important Notice */}
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
-            <h3 className="text-lg font-bold text-amber-800 mb-2">Important: "Visa on Arrival"</h3>
-            <p className="text-amber-700">Vietnam does NOT issue visas at the airport without advance approval. A pre-approved visa letter is mandatory before travel.</p>
+          <div className="rounded-xl p-5" style={{ backgroundColor: '#afcef6' }}>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Important: &quot;Visa on Arrival&quot;</h3>
+            <p className="text-gray-700">Vietnam does NOT issue visas at the airport without advance approval. A pre-approved visa letter is mandatory before travel.</p>
           </div>
         </div>
 
@@ -62,7 +63,8 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
         <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4">
           <button
             onClick={onClose}
-            className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition-all"
+            className="w-full py-4 rounded-xl text-white font-bold text-lg transition-all hover:opacity-90"
+            style={{ backgroundColor: '#ef7175' }}
           >
             Got it, Start Application →
           </button>
@@ -105,34 +107,15 @@ export default function Home() {
   const totalPrice = pricePerPerson * applicants;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Mobile Chat Banner - Only visible on mobile */}
-      <div className="md:hidden bg-gradient-to-r from-green-500 to-green-600 text-white py-2 px-4">
-        <button
-          onClick={() => {
-            // Trigger Askly chat widget
-            if (typeof window !== 'undefined' && (window as unknown as { Askly?: { open?: () => void } }).Askly?.open) {
-              (window as unknown as { Askly: { open: () => void } }).Askly.open();
-            }
-          }}
-          className="w-full flex items-center justify-center gap-2 text-sm font-medium"
-        >
-          <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-          Need fast help with Check-In? We are online to help You!
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-          </svg>
-        </button>
-      </div>
-
+    <div className="min-h-screen" style={{ backgroundColor: '#afcef6' }}>
       {/* Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-yellow-400 text-xl font-bold">V</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#ef7175' }}>
+                <span className="text-white text-xl font-bold">V</span>
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-900">VietnamVisaHelp.com</h1>
@@ -155,49 +138,92 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Denied Boarding Banner - Shows on all devices */}
+      <div className="py-3 md:py-4 px-4" style={{ backgroundColor: '#e13530' }}>
+        <button
+          onClick={() => {
+            if (typeof window !== 'undefined' && (window as unknown as { Askly?: { open?: () => void } }).Askly?.open) {
+              (window as unknown as { Askly: { open: () => void } }).Askly.open();
+            }
+          }}
+          className="max-w-6xl mx-auto flex items-center justify-center gap-2 md:gap-4 w-full"
+        >
+          <span className="w-2 h-2 md:w-3 md:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></span>
+          <p className="text-white text-sm md:text-lg font-semibold">
+            <EncryptedText
+              text='Denied boarding? "We can help now."'
+              encryptedClassName="text-white/50"
+              revealedClassName="text-white"
+              revealDelayMs={40}
+            />
+          </p>
+          <span className="hidden md:inline-flex px-4 py-2 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors items-center gap-2 flex-shrink-0">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+            </svg>
+            Chat Now
+          </span>
+          <svg className="w-5 h-5 md:hidden text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-12 md:py-16">
+      <section className="text-white py-12 md:py-16" style={{ background: 'linear-gradient(135deg, #a4afbe 0%, #b4d5d5 50%, #afcef6 100%)' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             {/* Urgency Badge */}
-            <div className="inline-block mb-4 rounded-full bg-red-500 px-4 py-2 text-sm font-medium">
+            <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium text-white" style={{ backgroundColor: '#ef7175' }}>
               <span className="animate-pulse inline-block mr-1">⚡</span>
               Stuck at check-in? We fix that in 30 minutes!
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Can't Check In?
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-gray-900">
+              Can&apos;t Check In?
               <br />
-              <span className="text-yellow-400">Approval in 30 Minutes</span>
+              <span style={{ color: '#ef7175' }}>Approval in 30 Minutes</span>
             </h1>
 
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
               Get your Vietnam E-Visa approval letter in 30 minutes. Pass airline check-in immediately. Full visa ready before you land.
             </p>
+
+            {/* Call to Action Slogans */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-gray-200">
+                <span className="text-lg">🏢</span>
+                <span className="font-semibold text-gray-900">Processed in Ho Chi Minh City</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-gray-200">
+                <span className="text-lg">🇻🇳</span>
+                <span className="font-semibold text-gray-900">Local Vietnamese Immigration Experts</span>
+              </div>
+            </div>
 
             {/* Timeline Cards */}
             <div className="max-w-2xl mx-auto mb-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-5">
+                <div className="bg-white/90 backdrop-blur border border-gray-200 rounded-xl p-5 shadow-lg">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#ef7175' }}>
                       <span className="text-2xl font-bold">30</span>
                     </div>
                     <div className="text-left">
-                      <div className="font-bold text-lg">30 Minutes</div>
-                      <div className="text-blue-200 text-sm">Approval letter for airline check-in</div>
+                      <div className="font-bold text-lg text-gray-900">30 Minutes</div>
+                      <div className="text-gray-600 text-sm">Approval letter for airline check-in</div>
                     </div>
                   </div>
                 </div>
-                <div className="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-5">
+                <div className="bg-white/90 backdrop-blur border border-gray-200 rounded-xl p-5 shadow-lg">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-yellow-500 flex items-center justify-center flex-shrink-0 text-blue-900">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#a4afbe' }}>
                       <span className="text-xl font-bold">1-2h</span>
                     </div>
                     <div className="text-left">
-                      <div className="font-bold text-lg">1-2 Hours</div>
-                      <div className="text-blue-200 text-sm">Full visa issued before you land</div>
+                      <div className="font-bold text-lg text-gray-900">1-2 Hours</div>
+                      <div className="text-gray-600 text-sm">Full visa issued before you land</div>
                     </div>
                   </div>
                 </div>
@@ -206,14 +232,14 @@ export default function Home() {
 
             {/* Price */}
             <div className="flex items-center justify-center gap-3 mb-6">
-              <span className="text-5xl font-bold text-yellow-400">${pricePerPerson}</span>
-              <span className="text-blue-200 text-xl">/person</span>
+              <span className="text-5xl font-bold" style={{ color: '#ef7175' }}>${pricePerPerson}</span>
+              <span className="text-gray-700 text-xl">/person</span>
             </div>
 
             {/* Info Button */}
             <button
               onClick={() => setShowVisaInfo(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 border border-white/30 text-white hover:bg-white/20 transition-all text-base font-medium"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/90 border border-gray-300 text-gray-800 hover:bg-white transition-all text-base font-medium shadow-md"
             >
               <span>📋</span>
               Learn about Vietnam Visa Requirements
@@ -227,19 +253,19 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
-              <div className="text-3xl font-bold text-blue-600">10,000+</div>
+              <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>10,000+</div>
               <div className="text-sm text-gray-500">Happy Customers</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-green-600">99%</div>
+              <div className="text-3xl font-bold text-gray-900">99%</div>
               <div className="text-sm text-gray-500">On-Time Delivery</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-blue-600">80+</div>
+              <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>80+</div>
               <div className="text-sm text-gray-500">Countries Supported</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-green-600">24/7</div>
+              <div className="text-3xl font-bold text-gray-900">24/7</div>
               <div className="text-sm text-gray-500">WhatsApp Support</div>
             </div>
           </div>
@@ -253,14 +279,14 @@ export default function Home() {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
               {/* Form Header */}
-              <div className="bg-blue-600 px-4 sm:px-6 py-4 sm:py-5">
+              <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ backgroundColor: '#ef7175' }}>
                 <h2 className="text-lg sm:text-xl font-bold text-white">
                   Start Your E-Visa Application
                 </h2>
-                <p className="text-blue-100 text-sm sm:text-base mt-1">Complete in under 5 minutes</p>
+                <p className="text-white/90 text-sm sm:text-base mt-1">Complete in under 5 minutes</p>
                 <a
                   href="#faq"
-                  className="inline-flex items-center gap-1 text-blue-200 hover:text-white text-xs sm:text-sm mt-2 transition-colors"
+                  className="inline-flex items-center gap-1 text-white/80 hover:text-white text-xs sm:text-sm mt-2 transition-colors"
                 >
                   <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
@@ -275,12 +301,13 @@ export default function Home() {
                   {/* Number of Applicants */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Number of Applicants <span className="text-red-500">*</span>
+                      Number of Applicants <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <select
                       value={applicants}
                       onChange={(e) => setApplicants(Number(e.target.value))}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
+                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                         <option key={n} value={n}>
@@ -293,12 +320,13 @@ export default function Home() {
                   {/* Purpose of Travel */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Purpose of Travel <span className="text-red-500">*</span>
+                      Purpose of Travel <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <select
                       value={formData.purpose}
                       onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
+                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     >
                       <option value="tourist">Tourist</option>
                       <option value="business">Business</option>
@@ -310,12 +338,13 @@ export default function Home() {
                 {/* Arrival Port */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Arrival Airport <span className="text-red-500">*</span>
+                    Arrival Airport <span style={{ color: '#ef7175' }}>*</span>
                   </label>
                   <select
                     value={formData.arrivalPort}
                     onChange={(e) => setFormData({ ...formData, arrivalPort: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
+                    style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                   >
                     <option value="">Select arrival airport</option>
                     {ENTRY_PORTS.map((port) => (
@@ -330,28 +359,30 @@ export default function Home() {
                   {/* Entry Date */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Entry Date <span className="text-red-500">*</span>
+                      Entry Date <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <input
                       type="date"
                       value={formData.entryDate}
                       onChange={(e) => setFormData({ ...formData, entryDate: e.target.value })}
                       min={new Date().toISOString().split("T")[0]}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
+                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     />
                   </div>
 
                   {/* Exit Date */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Exit Date <span className="text-red-500">*</span>
+                      Exit Date <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <input
                       type="date"
                       value={formData.exitDate}
                       onChange={(e) => setFormData({ ...formData, exitDate: e.target.value })}
                       min={formData.entryDate || new Date().toISOString().split("T")[0]}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
+                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     />
                   </div>
                 </div>
@@ -360,14 +391,15 @@ export default function Home() {
                   {/* Flight Number */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Flight Number <span className="text-red-500">*</span>
+                      Flight Number <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <input
                       type="text"
                       value={formData.flightNumber}
                       onChange={(e) => setFormData({ ...formData, flightNumber: e.target.value.toUpperCase() })}
                       placeholder="e.g. VN123, SQ456"
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     />
                   </div>
 
@@ -381,49 +413,51 @@ export default function Home() {
                       value={formData.hotelAddress}
                       onChange={(e) => setFormData({ ...formData, hotelAddress: e.target.value })}
                       placeholder="Hotel name or address"
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     />
                   </div>
                 </div>
 
                 {/* Service Type */}
-                <div className="bg-green-50 border-2 border-green-500 rounded-xl p-5">
+                <div className="rounded-xl p-5 border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
                   <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#ef7175' }}>
                       <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
                     <div className="flex-1">
-                      <div className="font-bold text-lg text-green-800">
+                      <div className="font-bold text-lg text-gray-900">
                         URGENT RESCUE - 30 Minutes
                       </div>
-                      <div className="text-green-700 text-sm">
+                      <div className="text-gray-700 text-sm">
                         30 min check-in approval • Full visa in 1-2 hours
                       </div>
                     </div>
-                    <div className="text-2xl font-bold text-green-700">
+                    <div className="text-2xl font-bold" style={{ color: '#ef7175' }}>
                       ${pricePerPerson}
                     </div>
                   </div>
                 </div>
 
                 {/* Price Summary */}
-                <div className="bg-gray-50 rounded-xl p-5 space-y-3">
+                <div className="rounded-xl p-5 space-y-3" style={{ backgroundColor: '#f5f5f5' }}>
                   <div className="flex justify-between text-gray-600">
                     <span>Service fee ({applicants} × ${pricePerPerson})</span>
                     <span>${totalPrice} USD</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold border-t border-gray-200 pt-3">
                     <span className="text-gray-900">Total</span>
-                    <span className="text-blue-600">${totalPrice} USD</span>
+                    <span style={{ color: '#ef7175' }}>${totalPrice} USD</span>
                   </div>
                 </div>
 
                 {/* CTA Button */}
                 <a
                   href={`/apply?applicants=${applicants}&purpose=${formData.purpose}&port=${formData.arrivalPort}&entry=${formData.entryDate}&exit=${formData.exitDate}&flight=${formData.flightNumber}&hotel=${encodeURIComponent(formData.hotelAddress)}`}
-                  className="block w-full py-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center"
+                  className="block w-full py-4 rounded-xl text-white font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center hover:opacity-90"
+                  style={{ backgroundColor: '#ef7175' }}
                 >
                   Continue to Applicant Details →
                 </a>
@@ -431,14 +465,14 @@ export default function Home() {
                 {/* Trust indicators */}
                 <div className="flex items-center justify-center gap-4 text-sm text-gray-500 pt-2 flex-wrap">
                   <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                     </svg>
                     Secure Payment
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     Money-back Guarantee
@@ -455,8 +489,8 @@ export default function Home() {
               <h3 className="font-bold text-lg text-gray-900 mb-4">Why Choose Us?</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#afcef6' }}>
+                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -466,8 +500,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#b4d5d5' }}>
+                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
                   </div>
@@ -477,8 +511,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#cdb4b6' }}>
+                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -488,15 +522,26 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
+              {/* Local Experts Badge */}
+              <div className="mt-5 pt-5 border-t border-gray-100">
+                <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: '#afcef6' }}>
+                  <span className="text-2xl">🇻🇳</span>
+                  <div>
+                    <div className="font-semibold text-gray-900 text-sm">Local Vietnamese Experts</div>
+                    <div className="text-xs text-gray-600">Processed in Ho Chi Minh City</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Price Comparison */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
               <h3 className="font-bold text-lg text-gray-900 mb-4">Price Comparison</h3>
               <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-200">
-                  <span className="font-medium text-green-800">Our price (30 min)</span>
-                  <span className="font-bold text-xl text-green-600">$149</span>
+                <div className="flex justify-between items-center p-3 rounded-lg border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
+                  <span className="font-medium text-gray-900">Our price (30 min)</span>
+                  <span className="font-bold text-xl" style={{ color: '#ef7175' }}>$149</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="text-gray-500">Competitor A (2h)</span>
@@ -510,14 +555,14 @@ export default function Home() {
             </div>
 
             {/* VOA Info */}
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-              <h3 className="font-bold text-lg text-amber-800 mb-3">
+            <div className="rounded-2xl p-6" style={{ backgroundColor: '#cdb4b6' }}>
+              <h3 className="font-bold text-lg text-gray-900 mb-3">
                 Important: Visa on Arrival
               </h3>
-              <p className="text-amber-700 text-sm mb-3">
+              <p className="text-gray-800 text-sm mb-3">
                 Vietnam does NOT issue visas at the airport without advance approval.
               </p>
-              <ul className="text-amber-700 text-sm space-y-1">
+              <ul className="text-gray-700 text-sm space-y-1">
                 <li>• Apply in advance for approval letter</li>
                 <li>• Airlines require this before boarding</li>
                 <li>• Without it, you cannot fly to Vietnam</li>
@@ -528,13 +573,13 @@ export default function Home() {
       </main>
 
       {/* FAQ Section */}
-      <section id="faq" className="bg-gray-100 py-10 sm:py-16">
+      <section id="faq" className="py-10 sm:py-16" style={{ backgroundColor: '#b4d5d5' }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
               Frequently Asked Questions
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base">
+            <p className="text-gray-700 text-sm sm:text-base">
               Everything you need to know about Vietnam visas
             </p>
           </div>
@@ -648,7 +693,7 @@ export default function Home() {
 
           {/* CTA after FAQ */}
           <div className="text-center mt-8 sm:mt-10">
-            <p className="text-gray-600 mb-4 text-sm sm:text-base">Still have questions?</p>
+            <p className="text-gray-700 mb-4 text-sm sm:text-base">Still have questions?</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={() => {
@@ -656,7 +701,8 @@ export default function Home() {
                     (window as unknown as { Askly: { open: () => void } }).Askly.open();
                   }
                 }}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-green-500 hover:bg-green-600 text-white font-medium rounded-xl transition-colors text-sm sm:text-base"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 text-white font-medium rounded-xl transition-colors text-sm sm:text-base hover:opacity-90"
+                style={{ backgroundColor: '#ef7175' }}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
@@ -682,12 +728,13 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-yellow-400 text-xl font-bold">V</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#ef7175' }}>
+                <span className="text-white text-xl font-bold">V</span>
               </div>
               <span className="text-xl font-bold text-white">VietnamVisaHelp.com</span>
             </div>
-            <p className="text-gray-500 mb-6">Express Vietnam E-Visa Service</p>
+            <p className="text-gray-500 mb-2">Express Vietnam E-Visa Service</p>
+            <p className="text-sm mb-6" style={{ color: '#afcef6' }}>Processed in Ho Chi Minh City by Local Vietnamese Experts</p>
             <div className="flex justify-center gap-6 mb-6 text-sm">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
