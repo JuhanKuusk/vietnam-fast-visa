@@ -221,7 +221,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       {/* Hero Section */}
       <header className="px-5 py-6 flex justify-between items-center max-w-6xl mx-auto">
-        <div className="text-2xl font-bold text-emerald-400">VietnamFastVisa</div>
+        <div className="text-2xl font-bold text-emerald-400">vietnamvisa1hour.com</div>
         <a
           href="https://wa.me/1234567890"
           className="flex items-center gap-2 text-base text-gray-300 hover:text-white"
@@ -261,7 +261,7 @@ export default function Home() {
                 Vietnam E-Visa
               </span>
               <br />
-              <span className="text-emerald-400">in 1.5 Hours</span>
+              <span className="text-emerald-400">in 1 Hour</span>
             </h1>
           </div>
 
@@ -282,11 +282,37 @@ export default function Home() {
             <span className="text-gray-400 text-xl">/person</span>
           </div>
 
+          {/* Timeline - Key USP */}
+          <div className="relative z-10 max-w-2xl mx-auto mb-8">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                  <div className="w-14 h-14 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold">40</span>
+                  </div>
+                  <div>
+                    <div className="text-emerald-400 font-bold text-lg">40 Minutes</div>
+                    <div className="text-gray-400 text-sm">Approval letter for airline check-in</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
+                  <div className="w-14 h-14 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xl font-bold">1-2h</span>
+                  </div>
+                  <div>
+                    <div className="text-blue-400 font-bold text-lg">1-2 Hours</div>
+                    <div className="text-gray-400 text-sm">Full visa issued before you land</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Value Props - Larger text */}
           <div className="relative z-10 flex flex-wrap justify-center gap-4 md:gap-8 text-base md:text-lg text-gray-300 mb-8">
             <div className="flex items-center gap-2">
               <span className="text-emerald-400 text-xl">✓</span>
-              <span>1.5 Hour Guarantee</span>
+              <span>1 Hour Guarantee</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-emerald-400 text-xl">✓</span>
@@ -412,10 +438,10 @@ export default function Home() {
                   </div>
                   <div className="flex-1">
                     <div className="font-bold text-lg text-emerald-400">
-                      EMERGENCY - 1.5 Hours
+                      EMERGENCY - 1 Hour
                     </div>
                     <div className="text-base text-gray-400">
-                      Fastest processing • WhatsApp updates
+                      40 min check-in approval • Full visa in 1-2h
                     </div>
                   </div>
                   <div className="text-2xl font-bold text-white">
@@ -468,7 +494,7 @@ export default function Home() {
             </h3>
             <div className="space-y-3 text-base">
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">Our price (1.5h)</span>
+                <span className="text-gray-400">Our price (1h)</span>
                 <span className="text-emerald-400 font-bold text-lg">$149</span>
               </div>
               <div className="flex justify-between items-center">

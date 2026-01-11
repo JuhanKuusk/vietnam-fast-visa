@@ -284,7 +284,7 @@ function getVisaRequirement(countryCode: string): {
   if (EVISA_COUNTRIES.find((c) => c.code === countryCode)) {
     return {
       type: "evisa",
-      message: "You are eligible for Vietnam E-Visa! We can process your visa in just 1.5 hours.",
+      message: "You are eligible for Vietnam E-Visa! We can process your visa in just 1 hour.",
       color: "text-blue-700",
       bgColor: "bg-blue-50 border-blue-200",
     };
@@ -384,7 +384,7 @@ function CitizenshipChecker({
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    Apply below - Get your visa in 1.5 hours!
+                    Apply below - Get your visa in 1 hour!
                   </div>
                 </div>
               )}
@@ -701,8 +701,8 @@ function ApplyForm() {
               <span className="text-yellow-400 text-xl font-bold">V</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Vietnam E-Visa</h1>
-              <p className="text-xs text-gray-500">Fast Processing Service</p>
+              <h1 className="text-xl font-bold text-gray-900">vietnamvisa1hour.com</h1>
+              <p className="text-xs text-gray-500">1 Hour Processing Service</p>
             </div>
           </a>
           <a
@@ -716,8 +716,61 @@ function ApplyForm() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* VOA Information Banner */}
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5 mb-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+              <svg className="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-bold text-amber-800 mb-2">What "Visa on Arrival" (VOA) Actually Means</h3>
+              <p className="text-amber-700 font-medium mb-3">
+                Vietnam does NOT issue visas at the airport without advance approval.
+              </p>
+              <div className="text-amber-900 space-y-2 text-sm">
+                <p><strong>"Visa on Arrival" means:</strong></p>
+                <ul className="list-disc list-inside space-y-1 ml-2">
+                  <li>You must apply <strong>in advance</strong> for an immigration approval letter</li>
+                  <li>The visa stamp is issued at the airport <strong>only after landing</strong></li>
+                  <li>Airlines require this approval letter <strong>before boarding</strong></li>
+                </ul>
+                <p className="mt-3 p-2 bg-amber-100 rounded-lg border border-amber-300">
+                  <strong>Without the approval letter, you cannot fly to Vietnam.</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Citizenship Checker - Shows visa requirements based on country */}
         <CitizenshipChecker />
+
+        {/* Processing Time Box */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
+          <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">Our Processing Speed</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-green-50 border border-green-200">
+              <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-xl font-bold">40</span>
+              </div>
+              <div>
+                <div className="text-green-700 font-bold text-lg">40 Minutes</div>
+                <div className="text-green-600 text-sm">Approval letter for airline check-in</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-blue-50 border border-blue-200">
+              <div className="w-14 h-14 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-lg font-bold">1-2h</span>
+              </div>
+              <div>
+                <div className="text-blue-700 font-bold text-lg">1-2 Hours</div>
+                <div className="text-blue-600 text-sm">Full visa issued before you land</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Progress Steps */}
         <div className="mb-8">
