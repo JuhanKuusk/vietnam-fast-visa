@@ -116,7 +116,7 @@ export default function Home() {
                 <span className="text-yellow-400 text-xl font-bold">V</span>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">vietnamvisa1hour.com</h1>
+                <h1 className="text-lg font-bold text-gray-900">VietnamVisaHelp.com</h1>
                 <p className="text-xs text-gray-500">Express Visa Service</p>
               </div>
             </div>
@@ -507,7 +507,7 @@ export default function Home() {
               <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
                 <span className="text-yellow-400 text-xl font-bold">V</span>
               </div>
-              <span className="text-xl font-bold text-white">vietnamvisa1hour.com</span>
+              <span className="text-xl font-bold text-white">VietnamVisaHelp.com</span>
             </div>
             <p className="text-gray-500 mb-6">Express Vietnam E-Visa Service</p>
             <div className="flex justify-center gap-6 mb-6 text-sm">
@@ -515,7 +515,7 @@ export default function Home() {
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
               <a href="#" className="hover:text-white transition-colors">Refund Policy</a>
             </div>
-            <p className="text-sm">© 2026 vietnamvisa1hour.com - All rights reserved</p>
+            <p className="text-sm">© 2026 VietnamVisaHelp.com - All rights reserved</p>
           </div>
         </div>
       </footer>
