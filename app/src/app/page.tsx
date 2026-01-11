@@ -253,15 +253,24 @@ export default function Home() {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
               {/* Form Header */}
-              <div className="bg-blue-600 px-6 py-5">
-                <h2 className="text-xl font-bold text-white">
+              <div className="bg-blue-600 px-4 sm:px-6 py-4 sm:py-5">
+                <h2 className="text-lg sm:text-xl font-bold text-white">
                   Start Your E-Visa Application
                 </h2>
-                <p className="text-blue-100 mt-1">Complete in under 5 minutes</p>
+                <p className="text-blue-100 text-sm sm:text-base mt-1">Complete in under 5 minutes</p>
+                <a
+                  href="#faq"
+                  className="inline-flex items-center gap-1 text-blue-200 hover:text-white text-xs sm:text-sm mt-2 transition-colors"
+                >
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                  </svg>
+                  Have questions? See FAQ below
+                </a>
               </div>
 
               {/* Form Body */}
-              <div className="p-6 space-y-5">
+              <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
                 <div className="grid md:grid-cols-2 gap-5">
                   {/* Number of Applicants */}
                   <div>
@@ -517,6 +526,156 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      {/* FAQ Section */}
+      <section id="faq" className="bg-gray-100 py-10 sm:py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-gray-600 text-sm sm:text-base">
+              Everything you need to know about Vietnam visas
+            </p>
+          </div>
+
+          <div className="space-y-3 sm:space-y-4">
+            {/* FAQ Item 1 */}
+            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  What is the 30-minute approval letter?
+                </span>
+                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                The approval letter is an official pre-authorization that allows you to check in with your airline. Airlines require this before letting you board a flight to Vietnam. We deliver this within 30 minutes so you can proceed with check-in immediately.
+              </div>
+            </details>
+
+            {/* FAQ Item 2 */}
+            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  Can I get a visa at the Vietnam airport?
+                </span>
+                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                <strong>No.</strong> Vietnam does NOT issue visas at the airport without prior approval. You must have a pre-approved visa letter before your airline will allow you to board. Without this, you cannot fly to Vietnam.
+              </div>
+            </details>
+
+            {/* FAQ Item 3 */}
+            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  I&apos;m stuck at check-in. Can you help now?
+                </span>
+                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                <strong>Yes!</strong> This is exactly what we specialize in. Apply now and we&apos;ll have your approval letter ready in 30 minutes. Contact us via chat or WhatsApp for immediate assistance.
+              </div>
+            </details>
+
+            {/* FAQ Item 4 */}
+            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  How long is the e-visa valid?
+                </span>
+                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                The Vietnam e-visa is valid for up to 90 days with single or multiple entry options. The visa allows stays of up to 90 days per visit.
+              </div>
+            </details>
+
+            {/* FAQ Item 5 */}
+            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  What documents do I need?
+                </span>
+                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                You only need: (1) A passport valid for at least 6 months, (2) A passport-style photo, (3) Your flight details. We&apos;ll guide you through the simple process.
+              </div>
+            </details>
+
+            {/* FAQ Item 6 */}
+            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  What if my visa is rejected?
+                </span>
+                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                We offer a <strong>100% money-back guarantee</strong> if your visa is rejected. We have a 99% approval rate and will work with you to ensure success.
+              </div>
+            </details>
+
+            {/* FAQ Item 7 */}
+            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  Do I need to pay again at the Vietnam airport?
+                </span>
+                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                No additional airport fees. Our price of $149 is all-inclusive. Once you have your e-visa, simply show it at immigration - no extra payments required.
+              </div>
+            </details>
+          </div>
+
+          {/* CTA after FAQ */}
+          <div className="text-center mt-8 sm:mt-10">
+            <p className="text-gray-600 mb-4 text-sm sm:text-base">Still have questions?</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as unknown as { Askly?: { open?: () => void } }).Askly?.open) {
+                    (window as unknown as { Askly: { open: () => void } }).Askly.open();
+                  }
+                }}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-green-500 hover:bg-green-600 text-white font-medium rounded-xl transition-colors text-sm sm:text-base"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                </svg>
+                Chat with us now
+              </button>
+              <a
+                href="https://wa.me/1234567890"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-xl transition-colors text-sm sm:text-base"
+              >
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                WhatsApp us
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12">
