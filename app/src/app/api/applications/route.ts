@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseServer } from "@/lib/supabase-server";
 import { applicationSchema } from "@/lib/validations";
-
-// Create Supabase client for server-side
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabaseServer();
     const body = await request.json();
 
     // Validate input
@@ -95,6 +90,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = getSupabaseServer();
     const searchParams = request.nextUrl.searchParams;
     const referenceNumber = searchParams.get("ref");
     const email = searchParams.get("email");

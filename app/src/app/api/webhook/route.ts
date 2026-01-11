@@ -1,21 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseServer } from "@/lib/supabase-server";
 import Stripe from "stripe";
 
 export async function POST(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  if (!supabaseUrl || !supabaseServiceKey || !webhookSecret) {
+  if (!webhookSecret) {
     return NextResponse.json(
-      { error: "Server configuration error" },
+      { error: "Stripe webhook not configured" },
       { status: 500 }
     );
   }
 
-  const supabase = createClient(supabaseUrl, supabaseServiceKey);
+  const supabase = getSupabaseServer();
   const stripe = getStripe();
 
   const body = await request.text();
