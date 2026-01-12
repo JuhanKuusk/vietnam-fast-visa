@@ -3,10 +3,21 @@
 import { useState } from "react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlightInfo } from "@/components/ui/flight-info";
+import { LanguageSelector } from "@/components/ui/language-selector";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Visa Info Modal Component
-function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () => void; t: ReturnType<typeof useLanguage>["t"] }) {
   if (!isOpen) return null;
+
+  const steps = [
+    { title: t.modal.step1Title, content: t.modal.step1Content },
+    { title: t.modal.step2Title, content: t.modal.step2Content },
+    { title: t.modal.step3Title, content: t.modal.step3Content },
+    { title: t.modal.step4Title, content: t.modal.step4Content },
+    { title: t.modal.step5Title, content: t.modal.step5Content },
+    { title: t.modal.step6Title, content: t.modal.step6Content },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -20,7 +31,7 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
       <div className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl">
         {/* Header */}
         <div className="sticky top-0 px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#ef7175' }}>
-          <h2 className="text-xl font-bold text-white">Vietnam Visa Guide</h2>
+          <h2 className="text-xl font-bold text-white">{t.modal.title}</h2>
           <button
             onClick={onClose}
             className="text-white/80 hover:text-white text-2xl p-2"
@@ -32,18 +43,11 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)] space-y-6">
           <p className="text-gray-600 text-base">
-            To enter Vietnam, travelers must have valid immigration approval before departure, unless they are from a visa-exempt country.
+            {t.modal.intro}
           </p>
 
           {/* Steps */}
-          {[
-            { title: "Check if You Need a Visa", content: "Determine your visa requirement based on your nationality. Some may enter visa-free, others need e-visa or visa on arrival." },
-            { title: "Choose the Correct Visa Type", content: "Select tourist, business, or visiting visa based on your travel purpose and length of stay." },
-            { title: "Submit Your Online Application", content: "Complete the form with passport details, personal information, travel dates, and entry point." },
-            { title: "Immigration Pre-Approval", content: "Your application is submitted to Vietnam Immigration for review. This is mandatory for all visas." },
-            { title: "Receive Your Approval Letter", content: "Once approved, you will receive an e-visa (PDF) or visa approval letter via email." },
-            { title: "Prepare for Travel", content: "Print your e-visa or approval letter, ensure passport is valid, and have return ticket ready." },
-          ].map((step, index) => (
+          {steps.map((step, index) => (
             <div key={index} className="space-y-2">
               <h3 className="text-lg font-bold text-gray-800 flex items-center gap-3">
                 <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm text-white" style={{ backgroundColor: '#ef7175' }}>{index + 1}</span>
@@ -55,8 +59,8 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
 
           {/* Important Notice */}
           <div className="rounded-xl p-5" style={{ backgroundColor: '#afcef6' }}>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Important: &quot;Visa on Arrival&quot;</h3>
-            <p className="text-gray-700">Vietnam does NOT issue visas at the airport without advance approval. A pre-approved visa letter is mandatory before travel.</p>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">{t.modal.importantTitle}</h3>
+            <p className="text-gray-700">{t.modal.importantText}</p>
           </div>
         </div>
 
@@ -67,7 +71,7 @@ function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
             className="w-full py-4 rounded-xl text-white font-bold text-lg transition-all hover:opacity-90"
             style={{ backgroundColor: '#ef7175' }}
           >
-            Got it, Start Application →
+            {t.modal.gotItButton}
           </button>
         </div>
       </div>
@@ -93,6 +97,7 @@ const ENTRY_PORTS = [
 ];
 
 export default function Home() {
+  const { t, isLoading } = useLanguage();
   const [applicants, setApplicants] = useState(1);
   const [formData, setFormData] = useState({
     purpose: "tourist",
@@ -110,6 +115,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#afcef6' }}>
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="flex items-center gap-3 px-6 py-4 bg-white rounded-xl shadow-lg">
+            <svg className="w-6 h-6 animate-spin" style={{ color: '#ef7175' }} fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-gray-700 font-medium">Translating...</span>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -120,21 +138,22 @@ export default function Home() {
                 <span className="text-white text-xl font-bold">V</span>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">VietnamVisaHelp.com</h1>
-                <p className="text-xs text-gray-500">Express Visa Service</p>
+                <h1 className="text-lg font-bold text-gray-900">{t.header.siteName}</h1>
+                <p className="text-xs text-gray-500">{t.header.tagline}</p>
               </div>
             </div>
 
-            {/* Contact */}
-            <div className="flex items-center gap-4">
+            {/* Contact & Language */}
+            <div className="flex items-center gap-3 sm:gap-4">
               <a
                 href="https://wa.me/1234567890"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors"
               >
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                <span className="hidden sm:inline">24/7 WhatsApp Support</span>
-                <span className="sm:hidden">Support</span>
+                <span className="hidden sm:inline">{t.header.support}</span>
+                <span className="sm:hidden">{t.header.supportShort}</span>
               </a>
+              <LanguageSelector />
             </div>
           </div>
         </div>
@@ -153,7 +172,7 @@ export default function Home() {
           <span className="w-2 h-2 md:w-3 md:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></span>
           <p className="text-white text-sm md:text-lg font-semibold">
             <EncryptedText
-              text='Denied boarding? "We can help now."'
+              text={t.banner.deniedBoarding}
               encryptedClassName="text-white/50"
               revealedClassName="text-white"
               revealDelayMs={40}
@@ -163,7 +182,7 @@ export default function Home() {
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
             </svg>
-            Chat Now
+            {t.banner.chatNow}
           </span>
           <svg className="w-5 h-5 md:hidden text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
@@ -178,29 +197,29 @@ export default function Home() {
             {/* Urgency Badge */}
             <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium text-white" style={{ backgroundColor: '#ef7175' }}>
               <span className="animate-pulse inline-block mr-1">⚡</span>
-              Stuck at check-in? We fix that in 30 minutes!
+              {t.hero.urgencyBadge}
             </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-gray-900">
-              Can&apos;t Check In?
+              {t.hero.headline1}
               <br />
-              <span style={{ color: '#ef7175' }}>Approval in 30 Minutes</span>
+              <span style={{ color: '#ef7175' }}>{t.hero.headline2}</span>
             </h1>
 
             <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
-              Get your Vietnam E-Visa approval letter in 30 minutes. Pass airline check-in immediately. Full visa ready before you land.
+              {t.hero.subtitle}
             </p>
 
             {/* Call to Action Slogans */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-gray-200">
                 <span className="text-lg">🏢</span>
-                <span className="font-semibold text-gray-900">Processed in Ho Chi Minh City</span>
+                <span className="font-semibold text-gray-900">{t.hero.processedIn}</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-gray-200">
                 <span className="text-lg">🇻🇳</span>
-                <span className="font-semibold text-gray-900">Local Vietnamese Immigration Experts</span>
+                <span className="font-semibold text-gray-900">{t.hero.localExperts}</span>
               </div>
             </div>
 
@@ -213,8 +232,8 @@ export default function Home() {
                       <span className="text-2xl font-bold">30</span>
                     </div>
                     <div className="text-left">
-                      <div className="font-bold text-lg text-gray-900">30 Minutes</div>
-                      <div className="text-gray-600 text-sm">Approval letter for airline check-in</div>
+                      <div className="font-bold text-lg text-gray-900">{t.hero.thirtyMinutes}</div>
+                      <div className="text-gray-600 text-sm">{t.hero.thirtyMinutesDesc}</div>
                     </div>
                   </div>
                 </div>
@@ -224,8 +243,8 @@ export default function Home() {
                       <span className="text-xl font-bold">1-2h</span>
                     </div>
                     <div className="text-left">
-                      <div className="font-bold text-lg text-gray-900">1-2 Hours</div>
-                      <div className="text-gray-600 text-sm">Full visa issued before you land</div>
+                      <div className="font-bold text-lg text-gray-900">{t.hero.oneToTwoHours}</div>
+                      <div className="text-gray-600 text-sm">{t.hero.oneToTwoHoursDesc}</div>
                     </div>
                   </div>
                 </div>
@@ -237,14 +256,14 @@ export default function Home() {
               <div className="bg-white/95 backdrop-blur rounded-2xl p-5 shadow-xl border border-gray-200">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xl">✈️</span>
-                  <span className="font-bold text-gray-900">Check Your Flight Status</span>
+                  <span className="font-bold text-gray-900">{t.hero.checkFlightStatus}</span>
                 </div>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={heroFlightNumber}
                     onChange={(e) => setHeroFlightNumber(e.target.value.toUpperCase())}
-                    placeholder="Enter flight number (e.g. VN123)"
+                    placeholder={t.hero.enterFlightNumber}
                     className="flex-1 px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
                     style={{ '--tw-ring-color': '#ef7175' } as React.CSSProperties}
                   />
@@ -260,7 +279,7 @@ export default function Home() {
             {/* Price */}
             <div className="flex items-center justify-center gap-3 mb-6">
               <span className="text-5xl font-bold" style={{ color: '#ef7175' }}>${pricePerPerson}</span>
-              <span className="text-gray-700 text-xl">/person</span>
+              <span className="text-gray-700 text-xl">{t.hero.perPerson}</span>
             </div>
 
             {/* Chat CTA Button */}
@@ -276,7 +295,7 @@ export default function Home() {
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
               </svg>
-              Chat With Us Now
+              {t.hero.chatWithUs}
             </button>
 
             {/* Info Button */}
@@ -285,7 +304,7 @@ export default function Home() {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/90 border border-gray-300 text-gray-800 hover:bg-white transition-all text-base font-medium shadow-md"
             >
               <span>📋</span>
-              Learn about Vietnam Visa Requirements
+              {t.hero.learnAboutVisa}
             </button>
           </div>
         </div>
@@ -297,19 +316,19 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
               <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>10,000+</div>
-              <div className="text-sm text-gray-500">Happy Customers</div>
+              <div className="text-sm text-gray-500">{t.trust.happyCustomers}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-gray-900">99%</div>
-              <div className="text-sm text-gray-500">On-Time Delivery</div>
+              <div className="text-sm text-gray-500">{t.trust.onTimeDelivery}</div>
             </div>
             <div>
               <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>80+</div>
-              <div className="text-sm text-gray-500">Countries Supported</div>
+              <div className="text-sm text-gray-500">{t.trust.countriesSupported}</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-gray-900">24/7</div>
-              <div className="text-sm text-gray-500">WhatsApp Support</div>
+              <div className="text-sm text-gray-500">{t.trust.whatsappSupport}</div>
             </div>
           </div>
         </div>
@@ -324,9 +343,9 @@ export default function Home() {
               {/* Form Header */}
               <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ backgroundColor: '#ef7175' }}>
                 <h2 className="text-lg sm:text-xl font-bold text-white">
-                  Start Your E-Visa Application
+                  {t.form.title}
                 </h2>
-                <p className="text-white/90 text-sm sm:text-base mt-1">Complete in under 5 minutes</p>
+                <p className="text-white/90 text-sm sm:text-base mt-1">{t.form.subtitle}</p>
                 <a
                   href="#faq"
                   className="inline-flex items-center gap-1 text-white/80 hover:text-white text-xs sm:text-sm mt-2 transition-colors"
@@ -334,7 +353,7 @@ export default function Home() {
                   <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                   </svg>
-                  Have questions? See FAQ below
+                  {t.form.faqLink}
                 </a>
               </div>
 
@@ -344,7 +363,7 @@ export default function Home() {
                   {/* Number of Applicants */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Number of Applicants <span style={{ color: '#ef7175' }}>*</span>
+                      {t.form.numberOfApplicants} <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <select
                       value={applicants}
@@ -354,7 +373,7 @@ export default function Home() {
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                         <option key={n} value={n}>
-                          {n} {n === 1 ? "person" : "people"}
+                          {n} {n === 1 ? t.form.person : t.form.people}
                         </option>
                       ))}
                     </select>
@@ -363,7 +382,7 @@ export default function Home() {
                   {/* Purpose of Travel */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Purpose of Travel <span style={{ color: '#ef7175' }}>*</span>
+                      {t.form.purposeOfTravel} <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <select
                       value={formData.purpose}
@@ -371,9 +390,9 @@ export default function Home() {
                       className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
                       style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     >
-                      <option value="tourist">Tourist</option>
-                      <option value="business">Business</option>
-                      <option value="visiting">Visiting relatives/friends</option>
+                      <option value="tourist">{t.form.tourist}</option>
+                      <option value="business">{t.form.business}</option>
+                      <option value="visiting">{t.form.visiting}</option>
                     </select>
                   </div>
                 </div>
@@ -381,7 +400,7 @@ export default function Home() {
                 {/* Arrival Port */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Arrival Airport <span style={{ color: '#ef7175' }}>*</span>
+                    {t.form.arrivalAirport} <span style={{ color: '#ef7175' }}>*</span>
                   </label>
                   <select
                     value={formData.arrivalPort}
@@ -389,7 +408,7 @@ export default function Home() {
                     className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
                     style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                   >
-                    <option value="">Select arrival airport</option>
+                    <option value="">{t.form.selectAirport}</option>
                     {ENTRY_PORTS.map((port) => (
                       <option key={port.code} value={port.code}>
                         {port.name}
@@ -402,7 +421,7 @@ export default function Home() {
                   {/* Entry Date */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Entry Date <span style={{ color: '#ef7175' }}>*</span>
+                      {t.form.entryDate} <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <input
                       type="date"
@@ -417,7 +436,7 @@ export default function Home() {
                   {/* Exit Date */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Exit Date <span style={{ color: '#ef7175' }}>*</span>
+                      {t.form.exitDate} <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <input
                       type="date"
@@ -434,13 +453,13 @@ export default function Home() {
                   {/* Flight Number */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Flight Number <span style={{ color: '#ef7175' }}>*</span>
+                      {t.form.flightNumber} <span style={{ color: '#ef7175' }}>*</span>
                     </label>
                     <input
                       type="text"
                       value={formData.flightNumber}
                       onChange={(e) => setFormData({ ...formData, flightNumber: e.target.value.toUpperCase() })}
-                      placeholder="e.g. VN123, SQ456"
+                      placeholder={t.form.flightPlaceholder}
                       className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
                       style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     />
@@ -449,13 +468,13 @@ export default function Home() {
                   {/* Hotel Address */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Address in Vietnam <span className="text-gray-400 font-normal">(Optional)</span>
+                      {t.form.addressInVietnam} <span className="text-gray-400 font-normal">{t.form.addressOptional}</span>
                     </label>
                     <input
                       type="text"
                       value={formData.hotelAddress}
                       onChange={(e) => setFormData({ ...formData, hotelAddress: e.target.value })}
-                      placeholder="Hotel name or address"
+                      placeholder={t.form.hotelPlaceholder}
                       className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
                       style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                     />
@@ -480,10 +499,10 @@ export default function Home() {
                     </div>
                     <div className="flex-1">
                       <div className="font-bold text-lg text-gray-900">
-                        URGENT RESCUE - 30 Minutes
+                        {t.form.urgentRescue}
                       </div>
                       <div className="text-gray-700 text-sm">
-                        30 min check-in approval • Full visa in 1-2 hours
+                        {t.form.urgentRescueDesc}
                       </div>
                     </div>
                     <div className="text-2xl font-bold" style={{ color: '#ef7175' }}>
@@ -495,11 +514,11 @@ export default function Home() {
                 {/* Price Summary */}
                 <div className="rounded-xl p-5 space-y-3" style={{ backgroundColor: '#f5f5f5' }}>
                   <div className="flex justify-between text-gray-600">
-                    <span>Service fee ({applicants} × ${pricePerPerson})</span>
+                    <span>{t.form.serviceFee} ({applicants} × ${pricePerPerson})</span>
                     <span>${totalPrice} USD</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold border-t border-gray-200 pt-3">
-                    <span className="text-gray-900">Total</span>
+                    <span className="text-gray-900">{t.form.total}</span>
                     <span style={{ color: '#ef7175' }}>${totalPrice} USD</span>
                   </div>
                 </div>
@@ -510,7 +529,7 @@ export default function Home() {
                   className="block w-full py-4 rounded-xl text-white font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center hover:opacity-90"
                   style={{ backgroundColor: '#ef7175' }}
                 >
-                  Continue to Applicant Details →
+                  {t.form.continueButton}
                 </a>
 
                 {/* Trust indicators */}
@@ -519,14 +538,14 @@ export default function Home() {
                     <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                     </svg>
-                    Secure Payment
+                    {t.form.securePayment}
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
                     <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    Money-back Guarantee
+                    {t.form.moneyBackGuarantee}
                   </span>
                 </div>
               </div>
@@ -537,7 +556,7 @@ export default function Home() {
           <div className="space-y-6">
             {/* Why Choose Us */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-lg text-gray-900 mb-4">Why Choose Us?</h3>
+              <h3 className="font-bold text-lg text-gray-900 mb-4">{t.sidebar.whyChooseUs}</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#afcef6' }}>
@@ -546,8 +565,8 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Fastest Processing</div>
-                    <div className="text-sm text-gray-500">Check-in approval in 30 minutes</div>
+                    <div className="font-medium text-gray-900">{t.sidebar.fastestProcessing}</div>
+                    <div className="text-sm text-gray-500">{t.sidebar.fastestProcessingDesc}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -557,8 +576,8 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">24/7 WhatsApp Support</div>
-                    <div className="text-sm text-gray-500">Real-time updates on your visa</div>
+                    <div className="font-medium text-gray-900">{t.sidebar.whatsappSupport}</div>
+                    <div className="text-sm text-gray-500">{t.sidebar.whatsappSupportDesc}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -568,8 +587,8 @@ export default function Home() {
                     </svg>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Money-back Guarantee</div>
-                    <div className="text-sm text-gray-500">Full refund if visa is rejected</div>
+                    <div className="font-medium text-gray-900">{t.sidebar.moneyBack}</div>
+                    <div className="text-sm text-gray-500">{t.sidebar.moneyBackDesc}</div>
                   </div>
                 </div>
               </div>
@@ -579,8 +598,8 @@ export default function Home() {
                 <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: '#afcef6' }}>
                   <span className="text-2xl">🇻🇳</span>
                   <div>
-                    <div className="font-semibold text-gray-900 text-sm">Local Vietnamese Experts</div>
-                    <div className="text-xs text-gray-600">Processed in Ho Chi Minh City</div>
+                    <div className="font-semibold text-gray-900 text-sm">{t.sidebar.localExperts}</div>
+                    <div className="text-xs text-gray-600">{t.sidebar.localExpertsDesc}</div>
                   </div>
                 </div>
               </div>
@@ -588,18 +607,18 @@ export default function Home() {
 
             {/* Price Comparison */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-lg text-gray-900 mb-4">Price Comparison</h3>
+              <h3 className="font-bold text-lg text-gray-900 mb-4">{t.sidebar.priceComparison}</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 rounded-lg border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
-                  <span className="font-medium text-gray-900">Our price (30 min)</span>
+                  <span className="font-medium text-gray-900">{t.sidebar.ourPrice}</span>
                   <span className="font-bold text-xl" style={{ color: '#ef7175' }}>$149</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-500">Competitor A (2h)</span>
+                  <span className="text-gray-500">{t.sidebar.competitorA}</span>
                   <span className="text-gray-400 line-through">$200</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-500">Competitor B (1-2h)</span>
+                  <span className="text-gray-500">{t.sidebar.competitorB}</span>
                   <span className="text-gray-400 line-through">$235</span>
                 </div>
               </div>
@@ -608,15 +627,15 @@ export default function Home() {
             {/* VOA Info */}
             <div className="rounded-2xl p-6" style={{ backgroundColor: '#cdb4b6' }}>
               <h3 className="font-bold text-lg text-gray-900 mb-3">
-                Important: Visa on Arrival
+                {t.sidebar.voaTitle}
               </h3>
               <p className="text-gray-800 text-sm mb-3">
-                Vietnam does NOT issue visas at the airport without advance approval.
+                {t.sidebar.voaText}
               </p>
               <ul className="text-gray-700 text-sm space-y-1">
-                <li>• Apply in advance for approval letter</li>
-                <li>• Airlines require this before boarding</li>
-                <li>• Without it, you cannot fly to Vietnam</li>
+                <li>• {t.sidebar.voaPoint1}</li>
+                <li>• {t.sidebar.voaPoint2}</li>
+                <li>• {t.sidebar.voaPoint3}</li>
               </ul>
             </div>
           </div>
@@ -628,123 +647,43 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
-              Frequently Asked Questions
+              {t.faq.title}
             </h2>
             <p className="text-gray-700 text-sm sm:text-base">
-              Everything you need to know about Vietnam visas
+              {t.faq.subtitle}
             </p>
           </div>
 
           <div className="space-y-3 sm:space-y-4">
-            {/* FAQ Item 1 */}
-            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
-              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
-                  What is the 30-minute approval letter?
-                </span>
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
-                The approval letter is an official pre-authorization that allows you to check in with your airline. Airlines require this before letting you board a flight to Vietnam. We deliver this within 30 minutes so you can proceed with check-in immediately.
-              </div>
-            </details>
-
-            {/* FAQ Item 2 */}
-            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
-              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
-                  Can I get a visa at the Vietnam airport?
-                </span>
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
-                <strong>No.</strong> Vietnam does NOT issue visas at the airport without prior approval. You must have a pre-approved visa letter before your airline will allow you to board. Without this, you cannot fly to Vietnam.
-              </div>
-            </details>
-
-            {/* FAQ Item 3 */}
-            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
-              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
-                  I&apos;m stuck at check-in. Can you help now?
-                </span>
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
-                <strong>Yes!</strong> This is exactly what we specialize in. Apply now and we&apos;ll have your approval letter ready in 30 minutes. Contact us via chat or WhatsApp for immediate assistance.
-              </div>
-            </details>
-
-            {/* FAQ Item 4 */}
-            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
-              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
-                  How long is the e-visa valid?
-                </span>
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
-                The Vietnam e-visa is valid for up to 90 days with single or multiple entry options. The visa allows stays of up to 90 days per visit.
-              </div>
-            </details>
-
-            {/* FAQ Item 5 */}
-            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
-              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
-                  What documents do I need?
-                </span>
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
-                You only need: (1) A passport valid for at least 6 months, (2) A passport-style photo, (3) Your flight details. We&apos;ll guide you through the simple process.
-              </div>
-            </details>
-
-            {/* FAQ Item 6 */}
-            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
-              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
-                  What if my visa is rejected?
-                </span>
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
-                We offer a <strong>100% money-back guarantee</strong> if your visa is rejected. We have a 99% approval rate and will work with you to ensure success.
-              </div>
-            </details>
-
-            {/* FAQ Item 7 */}
-            <details className="bg-white rounded-xl shadow-sm border border-gray-200 group">
-              <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
-                  Do I need to pay again at the Vietnam airport?
-                </span>
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
-                No additional airport fees. Our price of $149 is all-inclusive. Once you have your e-visa, simply show it at immigration - no extra payments required.
-              </div>
-            </details>
+            {/* FAQ Items */}
+            {[
+              { q: t.faq.q1, a: t.faq.a1 },
+              { q: t.faq.q2, a: t.faq.a2 },
+              { q: t.faq.q3, a: t.faq.a3 },
+              { q: t.faq.q4, a: t.faq.a4 },
+              { q: t.faq.q5, a: t.faq.a5 },
+              { q: t.faq.q6, a: t.faq.a6 },
+              { q: t.faq.q7, a: t.faq.a7 },
+            ].map((faq, index) => (
+              <details key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+                <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
+                  <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                    {faq.q}
+                  </span>
+                  <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
           </div>
 
           {/* CTA after FAQ */}
           <div className="text-center mt-8 sm:mt-10">
-            <p className="text-gray-700 mb-4 text-sm sm:text-base">Still have questions?</p>
+            <p className="text-gray-700 mb-4 text-sm sm:text-base">{t.faq.stillHaveQuestions}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={() => {
@@ -758,7 +697,7 @@ export default function Home() {
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
                 </svg>
-                Chat with us now
+                {t.faq.chatWithUsNow}
               </button>
               <a
                 href="https://wa.me/1234567890"
@@ -767,7 +706,7 @@ export default function Home() {
                 <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                 </svg>
-                WhatsApp us
+                {t.faq.whatsappUs}
               </a>
             </div>
           </div>
@@ -782,16 +721,16 @@ export default function Home() {
               <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#ef7175' }}>
                 <span className="text-white text-xl font-bold">V</span>
               </div>
-              <span className="text-xl font-bold text-white">VietnamVisaHelp.com</span>
+              <span className="text-xl font-bold text-white">{t.header.siteName}</span>
             </div>
-            <p className="text-gray-500 mb-2">Express Vietnam E-Visa Service</p>
-            <p className="text-sm mb-6" style={{ color: '#afcef6' }}>Processed in Ho Chi Minh City by Local Vietnamese Experts</p>
+            <p className="text-gray-500 mb-2">{t.footer.expressService}</p>
+            <p className="text-sm mb-6" style={{ color: '#afcef6' }}>{t.footer.processedBy}</p>
             <div className="flex justify-center gap-6 mb-6 text-sm">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Refund Policy</a>
+              <a href="#" className="hover:text-white transition-colors">{t.footer.privacyPolicy}</a>
+              <a href="#" className="hover:text-white transition-colors">{t.footer.termsOfService}</a>
+              <a href="#" className="hover:text-white transition-colors">{t.footer.refundPolicy}</a>
             </div>
-            <p className="text-sm">© 2026 VietnamVisaHelp.com - All rights reserved</p>
+            <p className="text-sm">{t.footer.copyright}</p>
           </div>
         </div>
       </footer>
@@ -809,7 +748,7 @@ export default function Home() {
       </a>
 
       {/* Visa Info Modal */}
-      <VisaInfoModal isOpen={showVisaInfo} onClose={() => setShowVisaInfo(false)} />
+      <VisaInfoModal isOpen={showVisaInfo} onClose={() => setShowVisaInfo(false)} t={t} />
     </div>
   );
 }
