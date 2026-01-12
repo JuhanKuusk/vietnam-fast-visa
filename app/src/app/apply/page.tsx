@@ -2,6 +2,8 @@
 
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSelector } from "@/components/ui/language-selector";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -235,7 +237,7 @@ const EVISA_COUNTRIES = [
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 // Function to determine visa requirements based on country code
-function getVisaRequirement(countryCode: string): {
+function getVisaRequirement(countryCode: string, citizenship: typeof import("@/lib/translations").translations.citizenship): {
   type: "visa_free" | "evisa" | "embassy_required";
   days?: number;
   message: string;
@@ -247,7 +249,7 @@ function getVisaRequirement(countryCode: string): {
     return {
       type: "visa_free",
       days: 45,
-      message: "You can enter Vietnam visa-free for up to 45 days!",
+      message: citizenship.visaFree45,
       color: "text-green-700",
       bgColor: "bg-green-50 border-green-200",
     };
@@ -256,7 +258,7 @@ function getVisaRequirement(countryCode: string): {
     return {
       type: "visa_free",
       days: 30,
-      message: "You can enter Vietnam visa-free for up to 30 days!",
+      message: citizenship.visaFree30,
       color: "text-green-700",
       bgColor: "bg-green-50 border-green-200",
     };
@@ -265,7 +267,7 @@ function getVisaRequirement(countryCode: string): {
     return {
       type: "visa_free",
       days: 21,
-      message: "You can enter Vietnam visa-free for up to 21 days!",
+      message: citizenship.visaFree21,
       color: "text-green-700",
       bgColor: "bg-green-50 border-green-200",
     };
@@ -274,7 +276,7 @@ function getVisaRequirement(countryCode: string): {
     return {
       type: "visa_free",
       days: 14,
-      message: "You can enter Vietnam visa-free for up to 14 days!",
+      message: citizenship.visaFree14,
       color: "text-green-700",
       bgColor: "bg-green-50 border-green-200",
     };
@@ -284,7 +286,7 @@ function getVisaRequirement(countryCode: string): {
   if (EVISA_COUNTRIES.find((c) => c.code === countryCode)) {
     return {
       type: "evisa",
-      message: "You are eligible for Vietnam E-Visa! Approval letter in just 30 minutes.",
+      message: citizenship.evisaEligible,
       color: "text-blue-700",
       bgColor: "bg-blue-50 border-blue-200",
     };
@@ -293,25 +295,49 @@ function getVisaRequirement(countryCode: string): {
   // Embassy visa required
   return {
     type: "embassy_required",
-    message: "You need to apply for a visa at the Vietnam Embassy or Consulate in your country.",
+    message: citizenship.embassyRequired,
     color: "text-orange-700",
     bgColor: "bg-orange-50 border-orange-200",
   };
 }
 
 // Citizenship Checker Component
+// Default fallback translations for citizenship section
+const citizenshipFallback = {
+  title: "Check Your Visa Requirements",
+  subtitle: "Select your citizenship to see what visa you need for Vietnam",
+  label: "Your Citizenship / Nationality",
+  searchPlaceholder: "Type to search or select...",
+  noCountriesFound: "No countries found",
+  citizens: "Citizens",
+  visaFree45: "You can enter Vietnam visa-free for up to 45 days!",
+  visaFree30: "You can enter Vietnam visa-free for up to 30 days!",
+  visaFree21: "You can enter Vietnam visa-free for up to 21 days!",
+  visaFree14: "You can enter Vietnam visa-free for up to 14 days!",
+  evisaEligible: "You are eligible for Vietnam E-Visa! Approval letter in just 30 minutes.",
+  embassyRequired: "You need to apply for a visa at the Vietnam Embassy or Consulate in your country.",
+  longerStay: "For stays longer than {days} days, you will need to apply for an E-Visa or visit a Vietnamese Embassy.",
+  evisaValid: "E-Visa is valid for 90 days with single or multiple entry options.",
+  applyBelow: "Apply below - Approval in 30 minutes!",
+};
+
 function CitizenshipChecker({
   onCountrySelect,
+  t,
 }: {
   onCountrySelect?: (code: string, requirement: ReturnType<typeof getVisaRequirement>) => void;
+  t: typeof import("@/lib/translations").translations;
 }) {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [visaResult, setVisaResult] = useState<ReturnType<typeof getVisaRequirement> | null>(null);
 
+  // Use fallback if translations not yet loaded
+  const citizenship = t?.citizenship ?? citizenshipFallback;
+
   const handleCountryChange = (code: string) => {
     setSelectedCountry(code);
     if (code) {
-      const requirement = getVisaRequirement(code);
+      const requirement = getVisaRequirement(code, citizenship);
       setVisaResult(requirement);
       onCountrySelect?.(code, requirement);
     } else {
@@ -324,18 +350,20 @@ function CitizenshipChecker({
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
       <div className="text-center mb-4">
-        <h2 className="text-xl font-bold text-gray-900">Check Your Visa Requirements</h2>
-        <p className="text-gray-600 text-sm mt-1">Select your citizenship to see what visa you need for Vietnam</p>
+        <h2 className="text-xl font-bold text-gray-900">{citizenship.title}</h2>
+        <p className="text-gray-600 text-sm mt-1">{citizenship.subtitle}</p>
       </div>
 
       <div className="max-w-md mx-auto">
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Your Citizenship / Nationality
+          {citizenship.label}
         </label>
         <CountrySelector
           value={selectedCountry}
           onChange={handleCountryChange}
           countries={ALL_COUNTRIES}
+          placeholder={citizenship.searchPlaceholder}
+          noResultsText={citizenship.noCountriesFound}
         />
       </div>
 
@@ -365,26 +393,26 @@ function CitizenshipChecker({
             )}
             <div className="flex-1">
               <h3 className={`font-semibold ${visaResult.color}`}>
-                {selectedCountryName} Citizens
+                {selectedCountryName} {citizenship.citizens}
               </h3>
               <p className={`mt-1 ${visaResult.color}`}>{visaResult.message}</p>
 
               {visaResult.type === "visa_free" && (
                 <p className="mt-2 text-sm text-gray-600">
-                  For stays longer than {visaResult.days} days, you will need to apply for an E-Visa or visit a Vietnamese Embassy.
+                  {citizenship.longerStay.replace("{days}", String(visaResult.days))}
                 </p>
               )}
 
               {visaResult.type === "evisa" && (
                 <div className="mt-3">
                   <p className="text-sm text-gray-600 mb-2">
-                    E-Visa is valid for 90 days with single or multiple entry options.
+                    {citizenship.evisaValid}
                   </p>
                   <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    Apply below - Approval in 30 minutes!
+                    {citizenship.applyBelow}
                   </div>
                 </div>
               )}
@@ -410,10 +438,14 @@ function CountrySelector({
   value,
   onChange,
   countries,
+  placeholder = "Type to search or select...",
+  noResultsText = "No countries found",
 }: {
   value: string;
   onChange: (code: string) => void;
   countries: { code: string; name: string }[];
+  placeholder?: string;
+  noResultsText?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -452,7 +484,7 @@ function CountrySelector({
         onChange={handleInputChange}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
-        placeholder="Type to search or select..."
+        placeholder={placeholder}
         className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
       />
       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -484,7 +516,7 @@ function CountrySelector({
             ))
           ) : (
             <div className="px-4 py-3 text-gray-500 text-base">
-              No countries found
+              {noResultsText}
             </div>
           )}
         </div>
@@ -499,11 +531,15 @@ function PhotoUploadSection({
   description,
   file,
   onFileChange,
+  uploadedText = "uploaded",
+  clickToUploadText = "Click to upload",
 }: {
   label: string;
   description: string;
   file: File | null;
   onFileChange: (file: File | null) => void;
+  uploadedText?: string;
+  clickToUploadText?: string;
 }) {
   if (file) {
     return (
@@ -521,7 +557,7 @@ function PhotoUploadSection({
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              {label} uploaded
+              {label} {uploadedText}
             </p>
             <p className="text-sm text-gray-600 truncate">{file.name}</p>
           </div>
@@ -558,7 +594,7 @@ function PhotoUploadSection({
           <svg className="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <p className="text-gray-700 font-medium">Click to upload</p>
+          <p className="text-gray-700 font-medium">{clickToUploadText}</p>
           <p className="text-sm text-gray-500 mt-1">{description}</p>
         </label>
       </div>
@@ -569,6 +605,7 @@ function PhotoUploadSection({
 function ApplyForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { t, isLoading: isTranslating } = useLanguage();
   const applicantCount = Number(searchParams.get("applicants")) || 1;
   const purpose = searchParams.get("purpose") || "tourist";
   const port = searchParams.get("port") || "";
@@ -693,6 +730,19 @@ function ApplyForm() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Translation Loading Overlay */}
+      {isTranslating && (
+        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
+          <div className="flex items-center gap-3">
+            <svg className="w-6 h-6 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-gray-600">{t.common.loading}</span>
+          </div>
+        </div>
+      )}
+
       {/* Official Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -701,17 +751,20 @@ function ApplyForm() {
               <span className="text-yellow-400 text-xl font-bold">V</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">VietnamVisaHelp.com</h1>
-              <p className="text-xs text-gray-500">30 Min Approval Letter</p>
+              <h1 className="text-xl font-bold text-gray-900">{t.applyHeader.siteName}</h1>
+              <p className="text-xs text-gray-500">{t.applyHeader.tagline}</p>
             </div>
           </a>
-          <a
-            href="https://wa.me/1234567890"
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors"
-          >
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span className="hidden sm:inline">24/7 Support</span>
-          </a>
+          <div className="flex items-center gap-4">
+            <LanguageSelector />
+            <a
+              href="https://wa.me/1234567890"
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors"
+            >
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              <span className="hidden sm:inline">{t.applyHeader.support}</span>
+            </a>
+          </div>
         </div>
       </header>
 
@@ -725,19 +778,19 @@ function ApplyForm() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-amber-800 mb-2">What "Visa on Arrival" (VOA) Actually Means</h3>
+              <h3 className="text-lg font-bold text-amber-800 mb-2">{t.voa.title}</h3>
               <p className="text-amber-700 font-medium mb-3">
-                Vietnam does NOT issue visas at the airport without advance approval.
+                {t.voa.warning}
               </p>
               <div className="text-amber-900 space-y-2 text-sm">
-                <p><strong>"Visa on Arrival" means:</strong></p>
+                <p><strong>{t.voa.means}</strong></p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>You must apply <strong>in advance</strong> for an immigration approval letter</li>
-                  <li>The visa stamp is issued at the airport <strong>only after landing</strong></li>
-                  <li>Airlines require this approval letter <strong>before boarding</strong></li>
+                  <li>{t.voa.point1}</li>
+                  <li>{t.voa.point2}</li>
+                  <li>{t.voa.point3}</li>
                 </ul>
                 <p className="mt-3 p-2 bg-amber-100 rounded-lg border border-amber-300">
-                  <strong>Without the approval letter, you cannot fly to Vietnam.</strong>
+                  <strong>{t.voa.noApproval}</strong>
                 </p>
               </div>
             </div>
@@ -745,19 +798,19 @@ function ApplyForm() {
         </div>
 
         {/* Citizenship Checker - Shows visa requirements based on country */}
-        <CitizenshipChecker />
+        <CitizenshipChecker t={t} />
 
         {/* Processing Time Box */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">Our Processing Speed</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">{t.processing.title}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-4 p-4 rounded-xl bg-green-50 border border-green-200">
               <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-xl font-bold">30</span>
               </div>
               <div>
-                <div className="text-green-700 font-bold text-lg">30 Minutes</div>
-                <div className="text-green-600 text-sm">Approval letter for airline check-in</div>
+                <div className="text-green-700 font-bold text-lg">{t.processing.thirtyMin}</div>
+                <div className="text-green-600 text-sm">{t.processing.thirtyMinDesc}</div>
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 rounded-xl bg-blue-50 border border-blue-200">
@@ -765,8 +818,8 @@ function ApplyForm() {
                 <span className="text-white text-lg font-bold">1-2h</span>
               </div>
               <div>
-                <div className="text-blue-700 font-bold text-lg">1-2 Hours</div>
-                <div className="text-blue-600 text-sm">Full visa issued before you land</div>
+                <div className="text-blue-700 font-bold text-lg">{t.processing.oneToTwo}</div>
+                <div className="text-blue-600 text-sm">{t.processing.oneToTwoDesc}</div>
               </div>
             </div>
           </div>
@@ -781,21 +834,21 @@ function ApplyForm() {
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
-              <span className="text-sm font-medium text-gray-900 hidden sm:inline">Trip Details</span>
+              <span className="text-sm font-medium text-gray-900 hidden sm:inline">{t.progress.tripDetails}</span>
             </div>
             <div className="w-8 sm:w-16 h-0.5 bg-blue-600"></div>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
                 2
               </div>
-              <span className="text-sm font-medium text-gray-900 hidden sm:inline">Your Information</span>
+              <span className="text-sm font-medium text-gray-900 hidden sm:inline">{t.progress.yourInfo}</span>
             </div>
             <div className="w-8 sm:w-16 h-0.5 bg-gray-300"></div>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-sm font-medium">
                 3
               </div>
-              <span className="text-sm font-medium text-gray-500 hidden sm:inline">Payment</span>
+              <span className="text-sm font-medium text-gray-500 hidden sm:inline">{t.progress.payment}</span>
             </div>
           </div>
         </div>
@@ -805,11 +858,11 @@ function ApplyForm() {
           {/* Form Header */}
           <div className="bg-blue-600 px-6 py-4">
             <h2 className="text-lg font-semibold text-white">
-              Applicant Information
+              {t.applyForm.applicantInfo}
             </h2>
             {applicantCount > 1 && (
               <p className="text-blue-100 text-sm mt-1">
-                Applicant {currentApplicant + 1} of {applicantCount}
+                {t.applyForm.applicantOf.replace("{current}", String(currentApplicant + 1)).replace("{total}", String(applicantCount))}
               </p>
             )}
           </div>
@@ -827,7 +880,7 @@ function ApplyForm() {
                       : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                   }`}
                 >
-                  Person {index + 1}
+                  {t.applyForm.person} {index + 1}
                   {applicants[index].fullName && (
                     <span className="ml-1 text-green-500">&#10003;</span>
                   )}
@@ -842,31 +895,31 @@ function ApplyForm() {
               {/* Full Name */}
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name (as on passport) <span className="text-red-500">*</span>
+                  {t.applyForm.fullName} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.fullName}
                   onChange={(e) => updateApplicant("fullName", e.target.value.toUpperCase())}
-                  placeholder="JOHN DOE"
+                  placeholder={t.applyForm.fullNamePlaceholder}
                   className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Enter exactly as shown on passport
+                  {t.applyForm.fullNameHint}
                 </p>
               </div>
 
               {/* Gender */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gender <span className="text-red-500">*</span>
+                  {t.applyForm.gender} <span className="text-red-500">*</span>
                 </label>
                 <div className="flex gap-3">
-                  {["Male", "Female"].map((gender) => (
+                  {[{ label: t.applyForm.male, value: "male" }, { label: t.applyForm.female, value: "female" }].map((gender) => (
                     <label
-                      key={gender}
+                      key={gender.value}
                       className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 cursor-pointer transition-all text-base ${
-                        currentData.gender === gender.toLowerCase()
+                        currentData.gender === gender.value
                           ? "bg-blue-50 border-blue-500 text-blue-700"
                           : "bg-white border-gray-300 text-gray-700 hover:border-gray-400"
                       }`}
@@ -874,12 +927,12 @@ function ApplyForm() {
                       <input
                         type="radio"
                         name={`gender-${currentApplicant}`}
-                        value={gender.toLowerCase()}
-                        checked={currentData.gender === gender.toLowerCase()}
+                        value={gender.value}
+                        checked={currentData.gender === gender.value}
                         onChange={(e) => updateApplicant("gender", e.target.value)}
                         className="sr-only"
                       />
-                      {gender}
+                      {gender.label}
                     </label>
                   ))}
                 </div>
@@ -888,7 +941,7 @@ function ApplyForm() {
               {/* Date of Birth */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Date of Birth <span className="text-red-500">*</span>
+                  {t.applyForm.dateOfBirth} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -902,25 +955,27 @@ function ApplyForm() {
               {/* Nationality */}
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nationality <span className="text-red-500">*</span>
+                  {t.applyForm.nationality} <span className="text-red-500">*</span>
                 </label>
                 <CountrySelector
                   value={currentData.nationality}
                   onChange={(code) => updateApplicant("nationality", code)}
                   countries={EVISA_COUNTRIES}
+                  placeholder={t.citizenship.searchPlaceholder}
+                  noResultsText={t.citizenship.noCountriesFound}
                 />
               </div>
 
               {/* Passport Number */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Passport Number <span className="text-red-500">*</span>
+                  {t.applyForm.passportNumber} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.passportNumber}
                   onChange={(e) => updateApplicant("passportNumber", e.target.value.toUpperCase())}
-                  placeholder="AB1234567"
+                  placeholder={t.applyForm.passportPlaceholder}
                   className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
                 />
               </div>
@@ -928,7 +983,7 @@ function ApplyForm() {
               {/* Passport Expiry */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Passport Expiry Date <span className="text-red-500">*</span>
+                  {t.applyForm.passportExpiry} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -938,40 +993,44 @@ function ApplyForm() {
                   className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Must be valid for at least 6 months
+                  {t.applyForm.passportExpiryHint}
                 </p>
               </div>
 
               {/* Document Uploads Section */}
               <div className="lg:col-span-2 border-t border-gray-200 pt-6 mt-2">
-                <h3 className="font-semibold text-gray-900 mb-4">Document Uploads</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">{t.applyForm.documentUploads}</h3>
               </div>
 
               {/* Passport Photo */}
               <div>
                 <PhotoUploadSection
-                  label="Passport Data Page"
-                  description="Clear photo showing all details"
+                  label={t.applyForm.passportDataPage}
+                  description={t.applyForm.passportPageDesc}
                   file={passportPhotos[currentApplicant]}
                   onFileChange={(file) => {
                     const files = [...passportPhotos];
                     files[currentApplicant] = file;
                     setPassportPhotos(files);
                   }}
+                  uploadedText={t.applyForm.uploaded}
+                  clickToUploadText={t.applyForm.clickToUpload}
                 />
               </div>
 
               {/* Portrait Photo */}
               <div>
                 <PhotoUploadSection
-                  label="Portrait Photo"
-                  description="White background, no glasses"
+                  label={t.applyForm.portraitPhoto}
+                  description={t.applyForm.portraitDesc}
                   file={portraitPhotos[currentApplicant]}
                   onFileChange={(file) => {
                     const files = [...portraitPhotos];
                     files[currentApplicant] = file;
                     setPortraitPhotos(files);
                   }}
+                  uploadedText={t.applyForm.uploaded}
+                  clickToUploadText={t.applyForm.clickToUpload}
                 />
               </div>
 
@@ -979,36 +1038,36 @@ function ApplyForm() {
               {currentApplicant === 0 && (
                 <>
                   <div className="lg:col-span-2 border-t border-gray-200 pt-6 mt-2">
-                    <h3 className="font-semibold text-gray-900 mb-4">Contact Information</h3>
+                    <h3 className="font-semibold text-gray-900 mb-4">{t.applyForm.contactInfo}</h3>
                   </div>
 
                   {/* Email */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address <span className="text-red-500">*</span>
+                      {t.applyForm.email} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
                       value={contactInfo.email}
                       onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
-                      placeholder="your@email.com"
+                      placeholder={t.applyForm.emailPlaceholder}
                       className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Visa will be sent to this email
+                      {t.applyForm.emailHint}
                     </p>
                   </div>
 
                   {/* Confirm Email */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Confirm Email <span className="text-red-500">*</span>
+                      {t.applyForm.confirmEmail} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
                       value={contactInfo.confirmEmail}
                       onChange={(e) => setContactInfo({ ...contactInfo, confirmEmail: e.target.value })}
-                      placeholder="your@email.com"
+                      placeholder={t.applyForm.emailPlaceholder}
                       className={`w-full px-4 py-3 rounded-lg bg-white border text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
                         contactInfo.confirmEmail && contactInfo.email !== contactInfo.confirmEmail
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
@@ -1016,24 +1075,24 @@ function ApplyForm() {
                       }`}
                     />
                     {contactInfo.confirmEmail && contactInfo.email !== contactInfo.confirmEmail && (
-                      <p className="text-xs text-red-500 mt-1">Emails do not match</p>
+                      <p className="text-xs text-red-500 mt-1">{t.applyForm.emailsMismatch}</p>
                     )}
                   </div>
 
                   {/* WhatsApp */}
                   <div className="lg:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      WhatsApp Number <span className="text-red-500">*</span>
+                      {t.applyForm.whatsapp} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
                       value={contactInfo.phone}
                       onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
-                      placeholder="+1 234 567 8900"
+                      placeholder={t.applyForm.whatsappPlaceholder}
                       className="w-full lg:w-1/2 px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Include country code for instant updates
+                      {t.applyForm.whatsappHint}
                     </p>
                   </div>
                 </>
@@ -1046,7 +1105,7 @@ function ApplyForm() {
                     onClick={() => setCurrentApplicant(currentApplicant - 1)}
                     className="flex-1 lg:flex-none lg:px-8 py-3 rounded-lg border border-gray-300 text-gray-700 text-base font-medium hover:bg-gray-50 transition-colors"
                   >
-                    Previous
+                    {t.applyForm.previous}
                   </button>
                 )}
 
@@ -1055,7 +1114,7 @@ function ApplyForm() {
                     onClick={() => setCurrentApplicant(currentApplicant + 1)}
                     className="flex-1 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-base transition-colors"
                   >
-                    Next Applicant
+                    {t.applyForm.nextApplicant}
                   </button>
                 ) : (
                   <button
@@ -1069,10 +1128,10 @@ function ApplyForm() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
-                        Processing...
+                        {t.applyForm.processing}
                       </span>
                     ) : (
-                      "Continue to Payment"
+                      t.applyForm.continuePayment
                     )}
                   </button>
                 )}
@@ -1089,7 +1148,7 @@ function ApplyForm() {
               <div className="lg:col-span-2 border-t border-gray-200 pt-5 mt-2">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-700 font-medium">
-                    Total ({applicantCount} {applicantCount === 1 ? "person" : "people"})
+                    {t.applyForm.total} ({applicantCount} {applicantCount === 1 ? t.applyForm.person1 : t.applyForm.people})
                   </span>
                   <span className="text-2xl font-bold text-blue-600">${totalPrice} USD</span>
                 </div>
@@ -1104,27 +1163,27 @@ function ApplyForm() {
             <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            <span>Secure & Encrypted</span>
+            <span>{t.applyTrust.secure}</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
             </svg>
-            <span>Fast Processing</span>
+            <span>{t.applyTrust.fast}</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            <span>Official E-Visa</span>
+            <span>{t.applyTrust.official}</span>
           </div>
         </div>
 
         {/* FAQ Section */}
         <div className="mt-16 mb-12">
           <div className="text-center mb-10">
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
-            <p className="text-gray-600 mt-2">Everything you need to know about Vietnam visas</p>
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">{t.applyFaq.title}</h2>
+            <p className="text-gray-600 mt-2">{t.applyFaq.subtitle}</p>
           </div>
 
           {/* FAQ Categories */}
@@ -1137,26 +1196,26 @@ function ApplyForm() {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clipRule="evenodd" />
                   </svg>
-                  Types of Vietnam Visas
+                  {t.applyFaq.visaTypesTitle}
                 </h3>
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">What types of visas are available for Vietnam?</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaTypesQ1}</h4>
                   <div className="text-gray-600 space-y-2">
-                    <p><strong>E-Visa (Electronic Visa):</strong> Single entry, valid for 90 days. Can be applied online. Available for citizens of 80 countries.</p>
-                    <p><strong>Visa on Arrival (VOA):</strong> Available at international airports only. Requires pre-approved visa letter.</p>
-                    <p><strong>Embassy Visa:</strong> Traditional visa obtained from Vietnamese embassy or consulate in your country.</p>
-                    <p><strong>Transit Visa:</strong> For travelers transiting through Vietnam (up to 5 days).</p>
+                    <p>{t.applyFaq.visaTypesA1Evisa}</p>
+                    <p>{t.applyFaq.visaTypesA1Voa}</p>
+                    <p>{t.applyFaq.visaTypesA1Embassy}</p>
+                    <p>{t.applyFaq.visaTypesA1Transit}</p>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">What is the E-Visa validity and duration of stay?</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaTypesQ2}</h4>
                   <div className="text-gray-600">
                     <ul className="list-disc list-inside space-y-1">
-                      <li><strong>Single Entry E-Visa:</strong> Valid for 90 days, maximum stay of 90 days</li>
-                      <li><strong>Multiple Entry E-Visa:</strong> Valid for 90 days, multiple entries allowed, 90 days stay per entry</li>
-                      <li>E-Visa can be extended once while in Vietnam</li>
+                      <li>{t.applyFaq.visaTypesA2Single}</li>
+                      <li>{t.applyFaq.visaTypesA2Multiple}</li>
+                      <li>{t.applyFaq.visaTypesA2Extend}</li>
                     </ul>
                   </div>
                 </div>
@@ -1170,38 +1229,38 @@ function ApplyForm() {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Visa-Free Entry
+                  {t.applyFaq.visaFreeTitle}
                 </h3>
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Which countries have visa-free access to Vietnam?</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaFreeQ1}</h4>
                   <div className="text-gray-600 space-y-4">
                     <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">45 Days Visa-Free (13 Countries):</p>
-                      <p>Germany, France, Italy, Spain, United Kingdom, Russia, Japan, South Korea, Denmark, Sweden, Norway, Finland, Belarus</p>
+                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree45Title}</p>
+                      <p>{t.applyFaq.visaFree45Countries}</p>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">30 Days Visa-Free:</p>
-                      <p>Thailand, Malaysia, Singapore, Indonesia, Laos, Cambodia, Myanmar, Brunei, Philippines</p>
+                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree30Title}</p>
+                      <p>{t.applyFaq.visaFree30Countries}</p>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">21 Days Visa-Free:</p>
-                      <p>Chile</p>
+                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree21Title}</p>
+                      <p>{t.applyFaq.visaFree21Countries}</p>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">14 Days Visa-Free:</p>
-                      <p>Kyrgyzstan</p>
+                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree14Title}</p>
+                      <p>{t.applyFaq.visaFree14Countries}</p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Important notes about visa-free entry:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaFreeQ2}</h4>
                   <ul className="text-gray-600 list-disc list-inside space-y-1">
-                    <li>Passport must be valid for at least 6 months from entry date</li>
-                    <li>Must have proof of onward travel (flight ticket)</li>
-                    <li>30-day gap required between visa-free entries</li>
-                    <li>Cannot be extended - must exit and re-enter or apply for visa</li>
+                    <li>{t.applyFaq.visaFreeNote1}</li>
+                    <li>{t.applyFaq.visaFreeNote2}</li>
+                    <li>{t.applyFaq.visaFreeNote3}</li>
+                    <li>{t.applyFaq.visaFreeNote4}</li>
                   </ul>
                 </div>
               </div>
@@ -1215,22 +1274,22 @@ function ApplyForm() {
                     <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
                     <path d="M10 4a1 1 0 011 1v4.586l2.707 2.707a1 1 0 01-1.414 1.414l-3-3A1 1 0 019 10V5a1 1 0 011-1z" />
                   </svg>
-                  E-Visa Eligible Countries (80 Countries)
+                  {t.applyFaq.evisaTitle}
                 </h3>
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="font-medium text-gray-900 mb-2">Europe:</p>
-                    <p className="text-sm text-gray-600">Albania, Austria, Azerbaijan, Belarus, Belgium, Bosnia, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Georgia, Germany, Greece, Hungary, Iceland, Ireland, Italy, Kazakhstan, Latvia, Lithuania, Luxembourg, Malta, Montenegro, Netherlands, North Macedonia, Norway, Poland, Portugal, Romania, Russia, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, Turkey, Ukraine, United Kingdom</p>
+                    <p className="font-medium text-gray-900 mb-2">{t.applyFaq.evisaEurope}</p>
+                    <p className="text-sm text-gray-600">{t.applyFaq.evisaEuropeCountries}</p>
                   </div>
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="font-medium text-gray-900 mb-2">Asia & Oceania:</p>
-                    <p className="text-sm text-gray-600">Australia, Brunei, China, India, Indonesia, Japan, South Korea, Mongolia, Myanmar, New Zealand, Philippines, Singapore, Taiwan, Thailand, Timor-Leste, Uzbekistan</p>
+                    <p className="font-medium text-gray-900 mb-2">{t.applyFaq.evisaAsia}</p>
+                    <p className="text-sm text-gray-600">{t.applyFaq.evisaAsiaCountries}</p>
                   </div>
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="font-medium text-gray-900 mb-2">Americas & Middle East:</p>
-                    <p className="text-sm text-gray-600">Argentina, Brazil, Canada, Chile, Colombia, Cuba, Mexico, Panama, Peru, United States, Uruguay, Venezuela, UAE, Qatar, Saudi Arabia</p>
+                    <p className="font-medium text-gray-900 mb-2">{t.applyFaq.evisaAmericas}</p>
+                    <p className="text-sm text-gray-600">{t.applyFaq.evisaAmericasCountries}</p>
                   </div>
                 </div>
               </div>
@@ -1243,26 +1302,26 @@ function ApplyForm() {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                   </svg>
-                  Visa on Arrival (VOA)
+                  {t.applyFaq.voaTitle}
                 </h3>
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">What is Visa on Arrival?</h4>
-                  <p className="text-gray-600">Visa on Arrival allows you to get your visa stamp at Vietnamese international airports. You need a pre-approved visa letter before traveling.</p>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.voaQ1}</h4>
+                  <p className="text-gray-600">{t.applyFaq.voaA1}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Requirements for VOA:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.voaQ2}</h4>
                   <ul className="text-gray-600 list-disc list-inside space-y-1">
-                    <li>Pre-approved visa letter (we can arrange this)</li>
-                    <li>Passport valid for 6+ months</li>
-                    <li>2 passport-sized photos (4x6cm)</li>
-                    <li>Completed visa application form (NA1)</li>
-                    <li>Stamping fee: $25 USD (single entry) or $50 USD (multiple entry) - paid at airport</li>
+                    <li>{t.applyFaq.voaReq1}</li>
+                    <li>{t.applyFaq.voaReq2}</li>
+                    <li>{t.applyFaq.voaReq3}</li>
+                    <li>{t.applyFaq.voaReq4}</li>
+                    <li>{t.applyFaq.voaReq5}</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Airports accepting VOA:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.voaQ3}</h4>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-600">
                     <span className="bg-gray-100 px-3 py-1 rounded">Hanoi (HAN)</span>
                     <span className="bg-gray-100 px-3 py-1 rounded">Ho Chi Minh (SGN)</span>
@@ -1282,29 +1341,29 @@ function ApplyForm() {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                   </svg>
-                  Arrival Procedures
+                  {t.applyFaq.arrivalTitle}
                 </h3>
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Step-by-step arrival process with E-Visa:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.arrivalQ1}</h4>
                   <ol className="text-gray-600 list-decimal list-inside space-y-2">
-                    <li><strong>Print your E-Visa:</strong> Print at least 2 copies of your approved E-Visa</li>
-                    <li><strong>Arrival card:</strong> Complete the arrival/departure card on the plane or at the airport</li>
-                    <li><strong>Immigration queue:</strong> Join the queue for foreign passport holders</li>
-                    <li><strong>Present documents:</strong> Show passport, E-Visa printout, and arrival card</li>
-                    <li><strong>Biometrics:</strong> Fingerprints and photo may be taken</li>
-                    <li><strong>Entry stamp:</strong> Officer stamps your passport - keep arrival card attached</li>
-                    <li><strong>Customs:</strong> Proceed to baggage claim and customs</li>
+                    <li>{t.applyFaq.arrivalStep1}</li>
+                    <li>{t.applyFaq.arrivalStep2}</li>
+                    <li>{t.applyFaq.arrivalStep3}</li>
+                    <li>{t.applyFaq.arrivalStep4}</li>
+                    <li>{t.applyFaq.arrivalStep5}</li>
+                    <li>{t.applyFaq.arrivalStep6}</li>
+                    <li>{t.applyFaq.arrivalStep7}</li>
                   </ol>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">What to declare at customs:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.arrivalQ2}</h4>
                   <ul className="text-gray-600 list-disc list-inside space-y-1">
-                    <li>Cash over $5,000 USD (or equivalent)</li>
-                    <li>Items for commercial purposes</li>
-                    <li>Restricted items (medications, food products)</li>
-                    <li>Expensive electronics or jewelry</li>
+                    <li>{t.applyFaq.customsItem1}</li>
+                    <li>{t.applyFaq.customsItem2}</li>
+                    <li>{t.applyFaq.customsItem3}</li>
+                    <li>{t.applyFaq.customsItem4}</li>
                   </ul>
                 </div>
               </div>
@@ -1317,58 +1376,58 @@ function ApplyForm() {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                   </svg>
-                  Processing Times & Requirements
+                  {t.applyFaq.processingTitle}
                 </h3>
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">E-Visa processing times:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.processingQ1}</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                      <p className="font-bold text-red-700 text-xl">1.5 Hours</p>
-                      <p className="text-red-600 text-sm">Rush Processing</p>
-                      <p className="text-gray-500 text-xs mt-1">Our fast service</p>
+                      <p className="font-bold text-red-700 text-xl">{t.applyFaq.rushTime}</p>
+                      <p className="text-red-600 text-sm">{t.applyFaq.rushLabel}</p>
+                      <p className="text-gray-500 text-xs mt-1">{t.applyFaq.rushNote}</p>
                     </div>
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-                      <p className="font-bold text-yellow-700 text-xl">1-3 Days</p>
-                      <p className="text-yellow-600 text-sm">Standard Processing</p>
-                      <p className="text-gray-500 text-xs mt-1">Official government</p>
+                      <p className="font-bold text-yellow-700 text-xl">{t.applyFaq.standardTime}</p>
+                      <p className="text-yellow-600 text-sm">{t.applyFaq.standardLabel}</p>
+                      <p className="text-gray-500 text-xs mt-1">{t.applyFaq.standardNote}</p>
                     </div>
                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-                      <p className="font-bold text-gray-700 text-xl">3-5 Days</p>
-                      <p className="text-gray-600 text-sm">Embassy Visa</p>
-                      <p className="text-gray-500 text-xs mt-1">Traditional method</p>
+                      <p className="font-bold text-gray-700 text-xl">{t.applyFaq.embassyTime}</p>
+                      <p className="text-gray-600 text-sm">{t.applyFaq.embassyLabel}</p>
+                      <p className="text-gray-500 text-xs mt-1">{t.applyFaq.embassyNote}</p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Required documents:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.processingQ2}</h4>
                   <ul className="text-gray-600 list-disc list-inside space-y-1">
-                    <li>Passport scan (data page) - valid for 6+ months</li>
-                    <li>Passport-style photo (4x6cm, white background, no glasses)</li>
-                    <li>Travel itinerary (entry/exit dates, port of entry)</li>
-                    <li>Email address for visa delivery</li>
+                    <li>{t.applyFaq.docReq1}</li>
+                    <li>{t.applyFaq.docReq2}</li>
+                    <li>{t.applyFaq.docReq3}</li>
+                    <li>{t.applyFaq.docReq4}</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Photo requirements:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.processingQ3}</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <p className="font-medium text-green-800 mb-2">Acceptable:</p>
+                      <p className="font-medium text-green-800 mb-2">{t.applyFaq.photoAcceptable}</p>
                       <ul className="text-green-700 text-sm space-y-1">
-                        <li>White or light background</li>
-                        <li>Face clearly visible, looking straight</li>
-                        <li>Natural expression, mouth closed</li>
-                        <li>Recent photo (within 6 months)</li>
+                        <li>{t.applyFaq.photoAccept1}</li>
+                        <li>{t.applyFaq.photoAccept2}</li>
+                        <li>{t.applyFaq.photoAccept3}</li>
+                        <li>{t.applyFaq.photoAccept4}</li>
                       </ul>
                     </div>
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <p className="font-medium text-red-800 mb-2">Not Acceptable:</p>
+                      <p className="font-medium text-red-800 mb-2">{t.applyFaq.photoNotAcceptable}</p>
                       <ul className="text-red-700 text-sm space-y-1">
-                        <li>Sunglasses or tinted glasses</li>
-                        <li>Hats or head coverings (except religious)</li>
-                        <li>Blurry or pixelated images</li>
-                        <li>Shadows on face</li>
+                        <li>{t.applyFaq.photoReject1}</li>
+                        <li>{t.applyFaq.photoReject2}</li>
+                        <li>{t.applyFaq.photoReject3}</li>
+                        <li>{t.applyFaq.photoReject4}</li>
                       </ul>
                     </div>
                   </div>
@@ -1383,30 +1442,30 @@ function ApplyForm() {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
-                  Special Cases & Extensions
+                  {t.applyFaq.specialTitle}
                 </h3>
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Can I extend my visa in Vietnam?</h4>
-                  <p className="text-gray-600">Yes, E-Visa can be extended once for an additional 90 days. Apply through Vietnam Immigration Department at least 5-7 days before expiry. Cost is approximately $100-150 USD.</p>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ1}</h4>
+                  <p className="text-gray-600">{t.applyFaq.specialA1}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Phu Quoc Island - Special visa exemption:</h4>
-                  <p className="text-gray-600">All nationalities can visit Phu Quoc Island for up to 30 days without a visa if arriving directly by international flight and staying only on the island.</p>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ2}</h4>
+                  <p className="text-gray-600">{t.applyFaq.specialA2}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Business visa requirements:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ3}</h4>
                   <ul className="text-gray-600 list-disc list-inside space-y-1">
-                    <li>Invitation letter from Vietnamese company</li>
-                    <li>Business registration of the host company</li>
-                    <li>Purpose of visit documentation</li>
-                    <li>May require work permit for extended stays</li>
+                    <li>{t.applyFaq.businessReq1}</li>
+                    <li>{t.applyFaq.businessReq2}</li>
+                    <li>{t.applyFaq.businessReq3}</li>
+                    <li>{t.applyFaq.businessReq4}</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">What if my visa is rejected?</h4>
-                  <p className="text-gray-600">Common rejection reasons include: incomplete information, passport validity issues, or unclear photos. We review all applications before submission to minimize rejections. If rejected, we provide full refund or free resubmission.</p>
+                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ4}</h4>
+                  <p className="text-gray-600">{t.applyFaq.specialA4}</p>
                 </div>
               </div>
             </div>
@@ -1430,13 +1489,23 @@ function ApplyForm() {
   );
 }
 
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center gap-3">
+        <svg className="w-6 h-6 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span className="text-blue-600 text-lg">Loading...</span>
+      </div>
+    </div>
+  );
+}
+
 export default function ApplyPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-blue-600 text-lg">Loading...</div>
-      </div>
-    }>
+    <Suspense fallback={<LoadingFallback />}>
       <ApplyForm />
     </Suspense>
   );
