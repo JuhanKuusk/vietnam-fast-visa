@@ -20,8 +20,10 @@ interface FlightData {
     gate?: string;
   };
   status: string;
+  checkInOpeningTime: string;
   checkInClosingTime: string;
-  checkInStatus: "open" | "closing_soon" | "closed" | "unknown";
+  checkInStatus: "open" | "closing_soon" | "closed" | "not_open_yet" | "unknown";
+  minutesUntilCheckInOpens: number | null;
   minutesUntilCheckInCloses: number | null;
 }
 
@@ -137,13 +139,19 @@ export async function GET(request: NextRequest) {
       departureTime.setHours(departureTime.getHours() + 3);
     }
 
-    // Calculate check-in closing time (typically 45 minutes before departure for international)
+    // Calculate check-in times
+    // Check-in typically opens 3 hours before departure for international flights
+    // Check-in closes 45 minutes before departure
+    const checkInOpeningTime = new Date(departureTime.getTime() - 3 * 60 * 60 * 1000);
     const checkInClosingTime = new Date(departureTime.getTime() - 45 * 60 * 1000);
     const now = new Date();
+    const minutesUntilOpen = Math.floor((checkInOpeningTime.getTime() - now.getTime()) / (1000 * 60));
     const minutesUntilClose = Math.floor((checkInClosingTime.getTime() - now.getTime()) / (1000 * 60));
 
     let checkInStatus: FlightData["checkInStatus"] = "unknown";
-    if (minutesUntilClose > 60) {
+    if (minutesUntilOpen > 0) {
+      checkInStatus = "not_open_yet";
+    } else if (minutesUntilClose > 60) {
       checkInStatus = "open";
     } else if (minutesUntilClose > 0) {
       checkInStatus = "closing_soon";
@@ -180,8 +188,10 @@ export async function GET(request: NextRequest) {
         gate: flight.arrival?.gate,
       },
       status: flight.status || "Scheduled",
+      checkInOpeningTime: checkInOpeningTime.toISOString(),
       checkInClosingTime: checkInClosingTime.toISOString(),
       checkInStatus,
+      minutesUntilCheckInOpens: minutesUntilOpen > 0 ? minutesUntilOpen : null,
       minutesUntilCheckInCloses: minutesUntilClose > 0 ? minutesUntilClose : null,
     };
 
@@ -197,18 +207,21 @@ export async function GET(request: NextRequest) {
 
 // Mock data for development/demo when no API key is configured
 function getMockFlightData(flightNumber: string, date: string | null): FlightData {
-  const flightDate = date ? new Date(date) : new Date();
-
   // Set departure time to 3 hours from now for demo
   const departureTime = new Date();
   departureTime.setHours(departureTime.getHours() + 3);
 
+  // Check-in opens 3 hours before, closes 45 minutes before
+  const checkInOpeningTime = new Date(departureTime.getTime() - 3 * 60 * 60 * 1000);
   const checkInClosingTime = new Date(departureTime.getTime() - 45 * 60 * 1000);
   const now = new Date();
+  const minutesUntilOpen = Math.floor((checkInOpeningTime.getTime() - now.getTime()) / (1000 * 60));
   const minutesUntilClose = Math.floor((checkInClosingTime.getTime() - now.getTime()) / (1000 * 60));
 
   let checkInStatus: FlightData["checkInStatus"] = "open";
-  if (minutesUntilClose <= 60 && minutesUntilClose > 0) {
+  if (minutesUntilOpen > 0) {
+    checkInStatus = "not_open_yet";
+  } else if (minutesUntilClose <= 60 && minutesUntilClose > 0) {
     checkInStatus = "closing_soon";
   } else if (minutesUntilClose <= 0) {
     checkInStatus = "closed";
@@ -245,8 +258,10 @@ function getMockFlightData(flightNumber: string, date: string | null): FlightDat
       terminal: "2",
     },
     status: "On Time",
+    checkInOpeningTime: checkInOpeningTime.toISOString(),
     checkInClosingTime: checkInClosingTime.toISOString(),
     checkInStatus,
+    minutesUntilCheckInOpens: minutesUntilOpen > 0 ? minutesUntilOpen : null,
     minutesUntilCheckInCloses: minutesUntilClose > 0 ? minutesUntilClose : null,
   };
 }
