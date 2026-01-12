@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
+import { FlightInfo } from "@/components/ui/flight-info";
 
 // Visa Info Modal Component
 function VisaInfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -434,6 +435,14 @@ export default function Home() {
                     />
                   </div>
                 </div>
+
+                {/* Flight Info - Shows check-in time and gate when flight number is entered */}
+                {formData.flightNumber && formData.flightNumber.length >= 3 && (
+                  <FlightInfo
+                    flightNumber={formData.flightNumber}
+                    date={formData.entryDate}
+                  />
+                )}
 
                 {/* Service Type */}
                 <div className="rounded-xl p-5 border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
