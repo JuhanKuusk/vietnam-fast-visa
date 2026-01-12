@@ -326,9 +326,11 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent }: FlightInfoPr
                 type="email"
                 value={notifyEmail}
                 onChange={(e) => setNotifyEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="your@email.com"
                 className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
+                pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+                title="Please enter a valid email address (e.g., name@example.com)"
               />
               <button
                 type="submit"
