@@ -90,8 +90,54 @@ export async function GET(request: NextRequest) {
     // Get the first flight result
     const flight = data[0];
 
+    // Debug: log the flight data structure
+    console.log("AeroDataBox flight data:", JSON.stringify(flight.departure, null, 2));
+
+    // Parse departure time - handle various date formats from API
+    // AeroDataBox returns scheduledTimeLocal as an object with "dateTime" property
+    let departureTimeStr: string | undefined;
+
+    if (typeof flight.departure?.scheduledTimeLocal === "string") {
+      departureTimeStr = flight.departure.scheduledTimeLocal;
+    } else if (flight.departure?.scheduledTimeLocal?.dateTime) {
+      departureTimeStr = flight.departure.scheduledTimeLocal.dateTime;
+    } else if (typeof flight.departure?.scheduledTime === "string") {
+      departureTimeStr = flight.departure.scheduledTime;
+    } else if (flight.departure?.scheduledTime?.dateTime) {
+      departureTimeStr = flight.departure.scheduledTime.dateTime;
+    } else if (typeof flight.departure?.scheduledTimeUtc === "string") {
+      departureTimeStr = flight.departure.scheduledTimeUtc;
+    } else if (flight.departure?.scheduledTimeUtc?.dateTime) {
+      departureTimeStr = flight.departure.scheduledTimeUtc.dateTime;
+    }
+
+    let departureTime: Date;
+
+    if (departureTimeStr && typeof departureTimeStr === "string") {
+      // Try parsing the date string
+      departureTime = new Date(departureTimeStr);
+
+      // If invalid, try to handle format like "2026-01-12 14:30"
+      if (isNaN(departureTime.getTime())) {
+        // Replace space with T for ISO format
+        const isoFormatted = departureTimeStr.replace(" ", "T");
+        departureTime = new Date(isoFormatted);
+      }
+    } else {
+      // Fallback: use current time + 3 hours
+      departureTime = new Date();
+      departureTime.setHours(departureTime.getHours() + 3);
+    }
+
+    // Validate the date is valid
+    if (isNaN(departureTime.getTime())) {
+      console.error("Could not parse departure time:", departureTimeStr);
+      // Use fallback time
+      departureTime = new Date();
+      departureTime.setHours(departureTime.getHours() + 3);
+    }
+
     // Calculate check-in closing time (typically 45 minutes before departure for international)
-    const departureTime = new Date(flight.departure?.scheduledTime || flight.departure?.scheduledTimeUtc);
     const checkInClosingTime = new Date(departureTime.getTime() - 45 * 60 * 1000);
     const now = new Date();
     const minutesUntilClose = Math.floor((checkInClosingTime.getTime() - now.getTime()) / (1000 * 60));
@@ -105,19 +151,31 @@ export async function GET(request: NextRequest) {
       checkInStatus = "closed";
     }
 
+    // Helper to extract time string from API response
+    const extractTimeString = (timeObj: unknown): string => {
+      if (typeof timeObj === "string") return timeObj;
+      if (timeObj && typeof timeObj === "object") {
+        const obj = timeObj as Record<string, unknown>;
+        if (typeof obj.local === "string") return obj.local;
+        if (typeof obj.dateTime === "string") return obj.dateTime;
+        if (typeof obj.utc === "string") return obj.utc;
+      }
+      return new Date().toISOString();
+    };
+
     const flightData: FlightData = {
       flightNumber: `${airlineCode}${flightNum}`.toUpperCase(),
       airline: flight.airline?.name || airlineCode,
       departure: {
         airport: flight.departure?.airport?.name || flight.departure?.airport?.iata || "Unknown",
-        scheduledTime: flight.departure?.scheduledTime || flight.departure?.scheduledTimeUtc,
+        scheduledTime: departureTime.toISOString(),
         terminal: flight.departure?.terminal,
         gate: flight.departure?.gate,
-        actualTime: flight.departure?.actualTime || flight.departure?.actualTimeUtc,
+        actualTime: flight.departure?.actualTime ? extractTimeString(flight.departure.actualTime) : undefined,
       },
       arrival: {
         airport: flight.arrival?.airport?.name || flight.arrival?.airport?.iata || "Unknown",
-        scheduledTime: flight.arrival?.scheduledTime || flight.arrival?.scheduledTimeUtc,
+        scheduledTime: extractTimeString(flight.arrival?.scheduledTimeLocal || flight.arrival?.scheduledTime || flight.arrival?.scheduledTimeUtc),
         terminal: flight.arrival?.terminal,
         gate: flight.arrival?.gate,
       },
