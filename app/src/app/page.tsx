@@ -103,6 +103,7 @@ export default function Home() {
     hotelAddress: "",
   });
   const [showVisaInfo, setShowVisaInfo] = useState(false);
+  const [heroFlightNumber, setHeroFlightNumber] = useState("");
 
   const pricePerPerson = 149;
   const totalPrice = pricePerPerson * applicants;
@@ -228,6 +229,31 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Flight Check Box */}
+            <div className="max-w-md mx-auto mb-8">
+              <div className="bg-white/95 backdrop-blur rounded-2xl p-5 shadow-xl border border-gray-200">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xl">✈️</span>
+                  <span className="font-bold text-gray-900">Check Your Flight Status</span>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={heroFlightNumber}
+                    onChange={(e) => setHeroFlightNumber(e.target.value.toUpperCase())}
+                    placeholder="Enter flight number (e.g. VN123)"
+                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
+                    style={{ '--tw-ring-color': '#ef7175' } as React.CSSProperties}
+                  />
+                </div>
+                {heroFlightNumber && heroFlightNumber.length >= 3 && (
+                  <FlightInfo
+                    flightNumber={heroFlightNumber}
+                  />
+                )}
               </div>
             </div>
 
