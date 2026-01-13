@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
+import { PhoneVerification } from "@/components/ui/phone-verification";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -617,6 +618,8 @@ function ApplyForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showVerification, setShowVerification] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
 
   const [currentApplicant, setCurrentApplicant] = useState(0);
   const [applicants, setApplicants] = useState<ApplicantData[]>(
@@ -1098,6 +1101,53 @@ function ApplyForm() {
                 </>
               )}
 
+              {/* Phone Verification Section */}
+              {currentApplicant === applicantCount - 1 && contactInfo.phone && !isPhoneVerified && (
+                <div className="lg:col-span-2 border-t border-gray-200 pt-6 mt-2">
+                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    {t.applyForm.verifyPhone || "Verify Your Phone Number"}
+                  </h3>
+                  {showVerification ? (
+                    <PhoneVerification
+                      phoneNumber={contactInfo.phone}
+                      onVerified={() => {
+                        setIsPhoneVerified(true);
+                        setShowVerification(false);
+                      }}
+                      onCancel={() => setShowVerification(false)}
+                    />
+                  ) : (
+                    <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                      <p className="text-blue-800 mb-4">
+                        {t.applyForm.verifyPhoneDesc || "Please verify your phone number to continue. We'll send you a verification code."}
+                      </p>
+                      <button
+                        onClick={() => setShowVerification(true)}
+                        className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        {t.applyForm.verifyNow || "Verify Phone Number"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Verified Badge */}
+              {isPhoneVerified && (
+                <div className="lg:col-span-2 flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-green-700 font-medium">{t.applyForm.phoneVerified || "Phone number verified!"}</span>
+                </div>
+              )}
+
               {/* Navigation Buttons */}
               <div className="lg:col-span-2 flex gap-4 pt-6">
                 {applicantCount > 1 && currentApplicant > 0 && (
@@ -1119,7 +1169,7 @@ function ApplyForm() {
                 ) : (
                   <button
                     onClick={handleSubmit}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !isPhoneVerified}
                     className="flex-1 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                   >
                     {isSubmitting ? (
