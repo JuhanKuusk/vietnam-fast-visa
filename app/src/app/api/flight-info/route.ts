@@ -95,35 +95,53 @@ export async function GET(request: NextRequest) {
     // Debug: log the flight data structure
     console.log("AeroDataBox flight data:", JSON.stringify(flight.departure, null, 2));
 
-    // Parse departure time - handle various date formats from API
-    // AeroDataBox returns scheduledTimeLocal as an object with "dateTime" property
+    // Parse departure time - prefer UTC time for accurate calculations
+    // AeroDataBox returns scheduledTime as object with "utc" and "local" properties
     let departureTimeStr: string | undefined;
 
-    if (typeof flight.departure?.scheduledTimeLocal === "string") {
-      departureTimeStr = flight.departure.scheduledTimeLocal;
-    } else if (flight.departure?.scheduledTimeLocal?.dateTime) {
-      departureTimeStr = flight.departure.scheduledTimeLocal.dateTime;
-    } else if (typeof flight.departure?.scheduledTime === "string") {
-      departureTimeStr = flight.departure.scheduledTime;
-    } else if (flight.departure?.scheduledTime?.dateTime) {
-      departureTimeStr = flight.departure.scheduledTime.dateTime;
+    // Prefer UTC time for calculations (avoids timezone issues)
+    if (flight.departure?.scheduledTime?.utc) {
+      departureTimeStr = flight.departure.scheduledTime.utc;
     } else if (typeof flight.departure?.scheduledTimeUtc === "string") {
       departureTimeStr = flight.departure.scheduledTimeUtc;
-    } else if (flight.departure?.scheduledTimeUtc?.dateTime) {
-      departureTimeStr = flight.departure.scheduledTimeUtc.dateTime;
+    } else if (flight.departure?.scheduledTimeUtc?.utc) {
+      departureTimeStr = flight.departure.scheduledTimeUtc.utc;
+    } else if (flight.departure?.scheduledTime?.local) {
+      departureTimeStr = flight.departure.scheduledTime.local;
+    } else if (typeof flight.departure?.scheduledTimeLocal === "string") {
+      departureTimeStr = flight.departure.scheduledTimeLocal;
+    } else if (flight.departure?.scheduledTimeLocal?.local) {
+      departureTimeStr = flight.departure.scheduledTimeLocal.local;
+    }
+
+    // Also get local time for display purposes
+    let departureLocalStr: string | undefined;
+    if (flight.departure?.scheduledTime?.local) {
+      departureLocalStr = flight.departure.scheduledTime.local;
+    } else if (typeof flight.departure?.scheduledTimeLocal === "string") {
+      departureLocalStr = flight.departure.scheduledTimeLocal;
+    } else if (flight.departure?.scheduledTimeLocal?.local) {
+      departureLocalStr = flight.departure.scheduledTimeLocal.local;
     }
 
     let departureTime: Date;
 
     if (departureTimeStr && typeof departureTimeStr === "string") {
-      // Try parsing the date string
-      departureTime = new Date(departureTimeStr);
+      // Handle UTC format like "2026-01-12 07:35Z"
+      let timeStr = departureTimeStr;
+      // Replace space with T for ISO format
+      if (timeStr.includes(" ")) {
+        timeStr = timeStr.replace(" ", "T");
+      }
+      // Ensure Z suffix for UTC times
+      if (!timeStr.includes("+") && !timeStr.includes("Z") && !timeStr.match(/[+-]\d{2}:\d{2}$/)) {
+        timeStr += "Z";
+      }
+      departureTime = new Date(timeStr);
 
-      // If invalid, try to handle format like "2026-01-12 14:30"
+      // If still invalid, try original string
       if (isNaN(departureTime.getTime())) {
-        // Replace space with T for ISO format
-        const isoFormatted = departureTimeStr.replace(" ", "T");
-        departureTime = new Date(isoFormatted);
+        departureTime = new Date(departureTimeStr);
       }
     } else {
       // Fallback: use current time + 3 hours
@@ -138,6 +156,9 @@ export async function GET(request: NextRequest) {
       departureTime = new Date();
       departureTime.setHours(departureTime.getHours() + 3);
     }
+
+    // For display, use local time if available
+    const displayDepartureTime = departureLocalStr ? departureLocalStr : departureTime.toISOString();
 
     // Calculate check-in times
     // Check-in typically opens 3 hours before departure for international flights
@@ -176,7 +197,7 @@ export async function GET(request: NextRequest) {
       airline: flight.airline?.name || airlineCode,
       departure: {
         airport: flight.departure?.airport?.name || flight.departure?.airport?.iata || "Unknown",
-        scheduledTime: departureTime.toISOString(),
+        scheduledTime: displayDepartureTime,
         terminal: flight.departure?.terminal,
         gate: flight.departure?.gate,
         actualTime: flight.departure?.actualTime ? extractTimeString(flight.departure.actualTime) : undefined,
