@@ -116,6 +116,7 @@ function PaymentForm() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"stripe" | "paypal" | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => {
     // Get application ID from session storage
@@ -275,8 +276,35 @@ function PaymentForm() {
 
               {!error && (
                 <>
+                  {/* Terms and Conditions Checkbox */}
+                  <div className="bg-white/5 rounded-xl p-5 border border-white/10">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={termsAccepted}
+                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                        className="mt-1 w-5 h-5 rounded border-gray-600 bg-gray-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-gray-900"
+                      />
+                      <span className="text-sm text-gray-300 leading-relaxed">
+                        I confirm that all information provided is accurate, and I agree to the{" "}
+                        <a href="/terms" target="_blank" className="text-emerald-400 hover:text-emerald-300 underline">
+                          Terms of Use
+                        </a>
+                        ,{" "}
+                        <a href="/privacy" target="_blank" className="text-emerald-400 hover:text-emerald-300 underline">
+                          Privacy Policy
+                        </a>
+                        , and{" "}
+                        <a href="/refund" target="_blank" className="text-emerald-400 hover:text-emerald-300 underline">
+                          Refund Policy
+                        </a>
+                        . I understand that VietnamVisaHelp.com is not a government agency and does not guarantee visa approval.
+                      </span>
+                    </label>
+                  </div>
+
                   {/* Payment Method Selection */}
-                  <div>
+                  <div className={!termsAccepted ? "opacity-50 pointer-events-none" : ""}>
                     <label className="block text-base font-medium text-gray-300 mb-4">
                       Select Payment Method
                     </label>
