@@ -79,6 +79,188 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
   );
 }
 
+// Visa-free countries with duration
+const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
+const VISA_FREE_30_DAYS = ["TH", "MY", "SG", "ID", "LA", "KH", "MM", "BN", "PH"];
+const VISA_FREE_21_DAYS = ["CL"];
+const VISA_FREE_14_DAYS = ["KG"];
+
+// All countries for the selector
+const ALL_COUNTRIES = [
+  { code: "AF", name: "Afghanistan" },
+  { code: "AL", name: "Albania" },
+  { code: "DZ", name: "Algeria" },
+  { code: "AD", name: "Andorra" },
+  { code: "AO", name: "Angola" },
+  { code: "AR", name: "Argentina" },
+  { code: "AM", name: "Armenia" },
+  { code: "AU", name: "Australia" },
+  { code: "AT", name: "Austria" },
+  { code: "AZ", name: "Azerbaijan" },
+  { code: "BH", name: "Bahrain" },
+  { code: "BD", name: "Bangladesh" },
+  { code: "BY", name: "Belarus" },
+  { code: "BE", name: "Belgium" },
+  { code: "BZ", name: "Belize" },
+  { code: "BJ", name: "Benin" },
+  { code: "BT", name: "Bhutan" },
+  { code: "BO", name: "Bolivia" },
+  { code: "BA", name: "Bosnia and Herzegovina" },
+  { code: "BW", name: "Botswana" },
+  { code: "BR", name: "Brazil" },
+  { code: "BN", name: "Brunei" },
+  { code: "BG", name: "Bulgaria" },
+  { code: "KH", name: "Cambodia" },
+  { code: "CM", name: "Cameroon" },
+  { code: "CA", name: "Canada" },
+  { code: "CL", name: "Chile" },
+  { code: "CN", name: "China" },
+  { code: "CO", name: "Colombia" },
+  { code: "CR", name: "Costa Rica" },
+  { code: "HR", name: "Croatia" },
+  { code: "CU", name: "Cuba" },
+  { code: "CY", name: "Cyprus" },
+  { code: "CZ", name: "Czech Republic" },
+  { code: "DK", name: "Denmark" },
+  { code: "EC", name: "Ecuador" },
+  { code: "EG", name: "Egypt" },
+  { code: "SV", name: "El Salvador" },
+  { code: "EE", name: "Estonia" },
+  { code: "ET", name: "Ethiopia" },
+  { code: "FJ", name: "Fiji" },
+  { code: "FI", name: "Finland" },
+  { code: "FR", name: "France" },
+  { code: "GE", name: "Georgia" },
+  { code: "DE", name: "Germany" },
+  { code: "GH", name: "Ghana" },
+  { code: "GR", name: "Greece" },
+  { code: "GT", name: "Guatemala" },
+  { code: "HN", name: "Honduras" },
+  { code: "HK", name: "Hong Kong" },
+  { code: "HU", name: "Hungary" },
+  { code: "IS", name: "Iceland" },
+  { code: "IN", name: "India" },
+  { code: "ID", name: "Indonesia" },
+  { code: "IR", name: "Iran" },
+  { code: "IQ", name: "Iraq" },
+  { code: "IE", name: "Ireland" },
+  { code: "IL", name: "Israel" },
+  { code: "IT", name: "Italy" },
+  { code: "JM", name: "Jamaica" },
+  { code: "JP", name: "Japan" },
+  { code: "JO", name: "Jordan" },
+  { code: "KZ", name: "Kazakhstan" },
+  { code: "KE", name: "Kenya" },
+  { code: "KW", name: "Kuwait" },
+  { code: "KG", name: "Kyrgyzstan" },
+  { code: "LA", name: "Laos" },
+  { code: "LV", name: "Latvia" },
+  { code: "LB", name: "Lebanon" },
+  { code: "LY", name: "Libya" },
+  { code: "LT", name: "Lithuania" },
+  { code: "LU", name: "Luxembourg" },
+  { code: "MO", name: "Macau" },
+  { code: "MK", name: "North Macedonia" },
+  { code: "MG", name: "Madagascar" },
+  { code: "MY", name: "Malaysia" },
+  { code: "MV", name: "Maldives" },
+  { code: "MT", name: "Malta" },
+  { code: "MX", name: "Mexico" },
+  { code: "MD", name: "Moldova" },
+  { code: "MC", name: "Monaco" },
+  { code: "MN", name: "Mongolia" },
+  { code: "ME", name: "Montenegro" },
+  { code: "MA", name: "Morocco" },
+  { code: "MZ", name: "Mozambique" },
+  { code: "MM", name: "Myanmar" },
+  { code: "NA", name: "Namibia" },
+  { code: "NP", name: "Nepal" },
+  { code: "NL", name: "Netherlands" },
+  { code: "NZ", name: "New Zealand" },
+  { code: "NI", name: "Nicaragua" },
+  { code: "NG", name: "Nigeria" },
+  { code: "NO", name: "Norway" },
+  { code: "OM", name: "Oman" },
+  { code: "PK", name: "Pakistan" },
+  { code: "PS", name: "Palestine" },
+  { code: "PA", name: "Panama" },
+  { code: "PY", name: "Paraguay" },
+  { code: "PE", name: "Peru" },
+  { code: "PH", name: "Philippines" },
+  { code: "PL", name: "Poland" },
+  { code: "PT", name: "Portugal" },
+  { code: "QA", name: "Qatar" },
+  { code: "RO", name: "Romania" },
+  { code: "RU", name: "Russia" },
+  { code: "RW", name: "Rwanda" },
+  { code: "SA", name: "Saudi Arabia" },
+  { code: "SN", name: "Senegal" },
+  { code: "RS", name: "Serbia" },
+  { code: "SG", name: "Singapore" },
+  { code: "SK", name: "Slovakia" },
+  { code: "SI", name: "Slovenia" },
+  { code: "ZA", name: "South Africa" },
+  { code: "KR", name: "South Korea" },
+  { code: "ES", name: "Spain" },
+  { code: "LK", name: "Sri Lanka" },
+  { code: "SD", name: "Sudan" },
+  { code: "SE", name: "Sweden" },
+  { code: "CH", name: "Switzerland" },
+  { code: "SY", name: "Syria" },
+  { code: "TW", name: "Taiwan" },
+  { code: "TJ", name: "Tajikistan" },
+  { code: "TZ", name: "Tanzania" },
+  { code: "TH", name: "Thailand" },
+  { code: "TL", name: "Timor-Leste" },
+  { code: "TN", name: "Tunisia" },
+  { code: "TR", name: "Turkey" },
+  { code: "TM", name: "Turkmenistan" },
+  { code: "UG", name: "Uganda" },
+  { code: "UA", name: "Ukraine" },
+  { code: "AE", name: "United Arab Emirates" },
+  { code: "GB", name: "United Kingdom" },
+  { code: "US", name: "United States" },
+  { code: "UY", name: "Uruguay" },
+  { code: "UZ", name: "Uzbekistan" },
+  { code: "VE", name: "Venezuela" },
+  { code: "YE", name: "Yemen" },
+  { code: "ZM", name: "Zambia" },
+  { code: "ZW", name: "Zimbabwe" },
+].sort((a, b) => a.name.localeCompare(b.name));
+
+// E-Visa eligible countries (80 countries)
+const EVISA_COUNTRIES = [
+  "AL", "AT", "AZ", "BY", "BE", "BA", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "GE", "DE", "GR", "HU", "IS", "IE", "IT", "KZ", "LV", "LT", "LU", "MT", "ME", "NL", "MK", "NO", "PL", "PT", "RO", "RU", "RS", "SK", "SI", "ES", "SE", "CH", "TR", "UA", "GB",
+  "AU", "BN", "CN", "IN", "ID", "JP", "KR", "MN", "MM", "NZ", "PH", "SG", "TW", "TH", "TL", "UZ",
+  "AE", "QA", "SA",
+  "AR", "BR", "CA", "CL", "CO", "CU", "MX", "PA", "PE", "US", "UY", "VE"
+];
+
+// Function to determine visa requirements
+function getVisaRequirement(countryCode: string): {
+  type: "visa_free" | "evisa" | "embassy_required";
+  days?: number;
+  color: string;
+  bgColor: string;
+} {
+  if (VISA_FREE_45_DAYS.includes(countryCode)) {
+    return { type: "visa_free", days: 45, color: "text-green-700", bgColor: "bg-green-50 border-green-200" };
+  }
+  if (VISA_FREE_30_DAYS.includes(countryCode)) {
+    return { type: "visa_free", days: 30, color: "text-green-700", bgColor: "bg-green-50 border-green-200" };
+  }
+  if (VISA_FREE_21_DAYS.includes(countryCode)) {
+    return { type: "visa_free", days: 21, color: "text-green-700", bgColor: "bg-green-50 border-green-200" };
+  }
+  if (VISA_FREE_14_DAYS.includes(countryCode)) {
+    return { type: "visa_free", days: 14, color: "text-green-700", bgColor: "bg-green-50 border-green-200" };
+  }
+  if (EVISA_COUNTRIES.includes(countryCode)) {
+    return { type: "evisa", color: "text-blue-700", bgColor: "bg-blue-50 border-blue-200" };
+  }
+  return { type: "embassy_required", color: "text-orange-700", bgColor: "bg-orange-50 border-orange-200" };
+}
+
 // Entry ports
 const ENTRY_PORTS = [
   { code: "SGN", name: "Tan Son Nhat Int. Airport (Ho Chi Minh City)", type: "airport" },
@@ -106,9 +288,18 @@ export default function Home() {
     exitDate: "",
     flightNumber: "",
     hotelAddress: "",
+    nationality: "",
   });
   const [showVisaInfo, setShowVisaInfo] = useState(false);
   const [heroFlightNumber, setHeroFlightNumber] = useState("");
+  const [nationalitySearch, setNationalitySearch] = useState("");
+  const [showNationalityDropdown, setShowNationalityDropdown] = useState(false);
+
+  const visaRequirement = formData.nationality ? getVisaRequirement(formData.nationality) : null;
+  const selectedCountryName = ALL_COUNTRIES.find(c => c.code === formData.nationality)?.name;
+  const filteredCountries = ALL_COUNTRIES.filter(country =>
+    country.name.toLowerCase().includes(nationalitySearch.toLowerCase())
+  );
 
   const pricePerPerson = 149;
   const totalPrice = pricePerPerson * applicants;
@@ -448,6 +639,127 @@ export default function Home() {
                     />
                   </div>
                 </div>
+
+                {/* Nationality / Citizenship - Visa Checker */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.form?.nationality || "Your Nationality/Citizenship"} <span style={{ color: '#ef7175' }}>*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={formData.nationality ? selectedCountryName : nationalitySearch}
+                      onChange={(e) => {
+                        setNationalitySearch(e.target.value);
+                        setFormData({ ...formData, nationality: "" });
+                        setShowNationalityDropdown(true);
+                      }}
+                      onFocus={() => setShowNationalityDropdown(true)}
+                      placeholder={t.form?.selectNationality || "Search your country..."}
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
+                    />
+                    {formData.nationality && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData({ ...formData, nationality: "" });
+                          setNationalitySearch("");
+                        }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        ✕
+                      </button>
+                    )}
+                    {showNationalityDropdown && !formData.nationality && (
+                      <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        {filteredCountries.slice(0, 10).map((country) => (
+                          <button
+                            key={country.code}
+                            type="button"
+                            onClick={() => {
+                              setFormData({ ...formData, nationality: country.code });
+                              setNationalitySearch("");
+                              setShowNationalityDropdown(false);
+                            }}
+                            className="w-full px-4 py-3 text-left hover:bg-gray-50 text-gray-900 border-b border-gray-100 last:border-b-0"
+                          >
+                            {country.name}
+                          </button>
+                        ))}
+                        {filteredCountries.length === 0 && (
+                          <div className="px-4 py-3 text-gray-500">{t.form?.noCountryFound || "No country found"}</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Visa Requirement Info Banner */}
+                {visaRequirement && (
+                  <div className={`rounded-xl p-4 border ${visaRequirement.bgColor}`}>
+                    {visaRequirement.type === "visa_free" && (
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                          <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className={`font-bold ${visaRequirement.color}`}>
+                            {t.form?.visaFree || "Visa-Free Entry"} - {visaRequirement.days} {t.form?.days || "days"}
+                          </div>
+                          <div className="text-gray-600 text-sm mt-1">
+                            {t.form?.visaFreeDesc || `Citizens of ${selectedCountryName} can enter Vietnam without a visa for up to ${visaRequirement.days} days.`}
+                          </div>
+                          <div className="text-gray-600 text-sm mt-2">
+                            <span className="font-medium">{t.form?.stayingLonger || "Staying longer?"}</span> {t.form?.needVisaForLonger || "You'll need a visa for stays exceeding the visa-free period."}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {visaRequirement.type === "evisa" && (
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.581.814l-4.419-3.35-4.419 3.35A1 1 0 014 16V4zm2 0v10.586l3.419-2.59a1 1 0 011.162 0L14 14.586V4H6z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className={`font-bold ${visaRequirement.color}`}>
+                            {t.form?.evisaRequired || "E-Visa Required"}
+                          </div>
+                          <div className="text-gray-600 text-sm mt-1">
+                            {t.form?.evisaDesc || `Citizens of ${selectedCountryName} need an e-visa or visa on arrival to enter Vietnam. We can help you get it fast!`}
+                          </div>
+                          <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium" style={{ color: '#ef7175' }}>
+                            <span>✓</span> {t.form?.weCanHelp || "We process your e-visa in 30 minutes"}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {visaRequirement.type === "embassy_required" && (
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                          <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className={`font-bold ${visaRequirement.color}`}>
+                            {t.form?.embassyRequired || "Embassy Visa Required"}
+                          </div>
+                          <div className="text-gray-600 text-sm mt-1">
+                            {t.form?.embassyDesc || `Citizens of ${selectedCountryName} must apply for a visa at a Vietnamese embassy before travel.`}
+                          </div>
+                          <div className="mt-2 text-sm text-gray-600">
+                            {t.form?.contactUsHelp || "Contact us for assistance with your visa application."}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="grid md:grid-cols-2 gap-5">
                   {/* Flight Number */}

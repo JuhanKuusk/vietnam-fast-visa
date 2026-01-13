@@ -82,6 +82,21 @@ export const translations = {
     continueButton: "Continue to Applicant Details →",
     securePayment: "Secure Payment",
     moneyBackGuarantee: "Money-back Guarantee",
+    // Nationality/Citizenship checker
+    nationality: "Your Nationality/Citizenship",
+    selectNationality: "Search your country...",
+    noCountryFound: "No country found",
+    visaFree: "Visa-Free Entry",
+    days: "days",
+    visaFreeDesc: "You can enter Vietnam without a visa for the duration shown above.",
+    stayingLonger: "Staying longer?",
+    needVisaForLonger: "You'll need a visa for stays exceeding the visa-free period.",
+    evisaRequired: "E-Visa Required",
+    evisaDesc: "You need an e-visa or visa on arrival to enter Vietnam. We can help you get it fast!",
+    weCanHelp: "We process your e-visa in 30 minutes",
+    embassyRequired: "Embassy Visa Required",
+    embassyDesc: "You must apply for a visa at a Vietnamese embassy before travel.",
+    contactUsHelp: "Contact us for assistance with your visa application.",
   },
 
   // Sidebar
