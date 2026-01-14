@@ -282,6 +282,29 @@ export const translations = {
     phoneVerified: "Phone number verified!",
   },
 
+  // Phone Verification
+  verification: {
+    title: "Verify Your Phone",
+    chooseMethod: "Choose how you'd like to receive your verification code:",
+    sms: "SMS",
+    smsDesc: "Receive code via text message",
+    whatsapp: "WhatsApp",
+    whatsappDesc: "Receive code via WhatsApp message",
+    cancel: "Cancel",
+    codeSentTo: "We sent a verification code to your",
+    phone: "phone",
+    enterCode: "Please enter it below:",
+    enterCodePlaceholder: "Enter 6-digit code",
+    verifyCode: "Verify Code",
+    verifying: "Verifying...",
+    resendCode: "Resend code",
+    tryDifferent: "Try different method",
+    invalidCode: "Invalid verification code. Please try again.",
+    codeSent: "Verification code sent!",
+    sendFailed: "Failed to send verification code. Please try again.",
+    verifyFailed: "Failed to verify code. Please try again.",
+  },
+
   // Apply Page - Trust Badges
   applyTrust: {
     secure: "Secure & Encrypted",

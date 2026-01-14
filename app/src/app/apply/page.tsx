@@ -1118,6 +1118,7 @@ function ApplyForm() {
                         setShowVerification(false);
                       }}
                       onCancel={() => setShowVerification(false)}
+                      translations={t.verification}
                     />
                   ) : (
                     <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">

@@ -2,17 +2,64 @@
 
 import { useState } from "react";
 
+interface VerificationTranslations {
+  title: string;
+  chooseMethod: string;
+  sms: string;
+  smsDesc: string;
+  whatsapp: string;
+  whatsappDesc: string;
+  cancel: string;
+  codeSentTo: string;
+  phone: string;
+  enterCode: string;
+  enterCodePlaceholder: string;
+  verifyCode: string;
+  verifying: string;
+  resendCode: string;
+  tryDifferent: string;
+  invalidCode: string;
+  codeSent: string;
+  sendFailed: string;
+  verifyFailed: string;
+}
+
+const defaultTranslations: VerificationTranslations = {
+  title: "Verify Your Phone",
+  chooseMethod: "Choose how you'd like to receive your verification code:",
+  sms: "SMS",
+  smsDesc: "Receive code via text message",
+  whatsapp: "WhatsApp",
+  whatsappDesc: "Receive code via WhatsApp message",
+  cancel: "Cancel",
+  codeSentTo: "We sent a verification code to your",
+  phone: "phone",
+  enterCode: "Please enter it below:",
+  enterCodePlaceholder: "Enter 6-digit code",
+  verifyCode: "Verify Code",
+  verifying: "Verifying...",
+  resendCode: "Resend code",
+  tryDifferent: "Try different method",
+  invalidCode: "Invalid verification code. Please try again.",
+  codeSent: "Verification code sent!",
+  sendFailed: "Failed to send verification code. Please try again.",
+  verifyFailed: "Failed to verify code. Please try again.",
+};
+
 interface PhoneVerificationProps {
   phoneNumber: string;
   onVerified: () => void;
   onCancel?: () => void;
+  translations?: VerificationTranslations;
 }
 
 export function PhoneVerification({
   phoneNumber,
   onVerified,
   onCancel,
+  translations = defaultTranslations,
 }: PhoneVerificationProps) {
+  const t = translations;
   const [step, setStep] = useState<"method" | "code">("method");
   const [channel, setChannel] = useState<"sms" | "whatsapp">("sms");
   const [code, setCode] = useState("");
@@ -38,14 +85,14 @@ export function PhoneVerification({
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Failed to send verification code");
+        setError(data.error || t.sendFailed);
         return;
       }
 
       setCodeSent(true);
       setStep("code");
     } catch {
-      setError("Failed to send verification code. Please try again.");
+      setError(t.sendFailed);
     } finally {
       setLoading(false);
     }
@@ -53,7 +100,7 @@ export function PhoneVerification({
 
   const verifyCode = async () => {
     if (!code || code.length < 4) {
-      setError("Please enter the verification code");
+      setError(t.enterCodePlaceholder);
       return;
     }
 
@@ -73,17 +120,17 @@ export function PhoneVerification({
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Failed to verify code");
+        setError(data.error || t.verifyFailed);
         return;
       }
 
       if (data.valid) {
         onVerified();
       } else {
-        setError("Invalid verification code. Please try again.");
+        setError(t.invalidCode);
       }
     } catch {
-      setError("Failed to verify code. Please try again.");
+      setError(t.verifyFailed);
     } finally {
       setLoading(false);
     }
@@ -114,7 +161,7 @@ export function PhoneVerification({
           </svg>
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900">Verify Your Phone</h3>
+          <h3 className="font-semibold text-gray-900">{t.title}</h3>
           <p className="text-sm text-gray-500">{phoneNumber}</p>
         </div>
       </div>
@@ -122,7 +169,7 @@ export function PhoneVerification({
       {step === "method" && !codeSent && (
         <div className="space-y-3">
           <p className="text-sm text-gray-600 mb-4">
-            Choose how you&apos;d like to receive your verification code:
+            {t.chooseMethod}
           </p>
 
           {/* SMS Option */}
@@ -147,9 +194,9 @@ export function PhoneVerification({
               </svg>
             </div>
             <div className="text-left">
-              <div className="font-medium text-gray-900">SMS</div>
+              <div className="font-medium text-gray-900">{t.sms}</div>
               <div className="text-xs text-gray-500">
-                Receive code via text message
+                {t.smsDesc}
               </div>
             </div>
             {loading && channel === "sms" && (
@@ -191,9 +238,9 @@ export function PhoneVerification({
               </svg>
             </div>
             <div className="text-left">
-              <div className="font-medium text-gray-900">WhatsApp</div>
+              <div className="font-medium text-gray-900">{t.whatsapp}</div>
               <div className="text-xs text-gray-500">
-                Receive code via WhatsApp message
+                {t.whatsappDesc}
               </div>
             </div>
             {loading && channel === "whatsapp" && (
@@ -224,7 +271,7 @@ export function PhoneVerification({
               onClick={onCancel}
               className="w-full mt-2 py-2 text-sm text-gray-500 hover:text-gray-700"
             >
-              Cancel
+              {t.cancel}
             </button>
           )}
         </div>
@@ -233,9 +280,8 @@ export function PhoneVerification({
       {step === "code" && (
         <div className="space-y-4">
           <p className="text-sm text-gray-600">
-            We sent a verification code to your{" "}
-            {channel === "whatsapp" ? "WhatsApp" : "phone"}. Please enter it
-            below:
+            {t.codeSentTo}{" "}
+            {channel === "whatsapp" ? t.whatsapp : t.phone}. {t.enterCode}
           </p>
 
           <div>
@@ -250,7 +296,7 @@ export function PhoneVerification({
                 setCode(value);
                 setError(null);
               }}
-              placeholder="Enter 6-digit code"
+              placeholder={t.enterCodePlaceholder}
               className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
               autoFocus
             />
@@ -299,7 +345,7 @@ export function PhoneVerification({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                Verifying...
+                {t.verifying}
               </>
             ) : (
               <>
@@ -316,7 +362,7 @@ export function PhoneVerification({
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Verify Code
+                {t.verifyCode}
               </>
             )}
           </button>
@@ -327,7 +373,7 @@ export function PhoneVerification({
               disabled={loading}
               className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
             >
-              Resend code
+              {t.resendCode}
             </button>
             <button
               onClick={() => {
@@ -337,7 +383,7 @@ export function PhoneVerification({
               }}
               className="text-gray-500 hover:text-gray-700"
             >
-              Try different method
+              {t.tryDifferent}
             </button>
           </div>
         </div>
