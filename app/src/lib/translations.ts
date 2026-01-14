@@ -533,7 +533,8 @@ export const translations = {
     // Weekend/Holiday
     weekendTitle: "Weekend & Holiday Urgent Visa",
     weekendSubtitle: "Need a visa on Saturday, Sunday, or a public holiday?",
-    weekendCutoff: "Book by 2:30 PM → Ready by 6:00 PM same day",
+    weekendCutoff1: "Apply by 9:00 AM → Visa ready by 1:00 PM",
+    weekendCutoff2: "Apply by 2:00 PM → Visa ready by 6:00 PM",
     weekendTimezone: "All times Vietnam Time (GMT+7)",
     weekendButton: "Get Weekend Visa",
     // Info Note
