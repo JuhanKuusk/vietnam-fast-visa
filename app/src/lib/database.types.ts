@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          id: string
+          email: string
+          password_hash: string
+          role: Database["public"]["Enums"]["admin_role"]
+          name: string
+          created_at: string | null
+          last_login_at: string | null
+        }
+        Insert: {
+          id?: string
+          email: string
+          password_hash: string
+          role?: Database["public"]["Enums"]["admin_role"]
+          name: string
+          created_at?: string | null
+          last_login_at?: string | null
+        }
+        Update: {
+          id?: string
+          email?: string
+          password_hash?: string
+          role?: Database["public"]["Enums"]["admin_role"]
+          name?: string
+          created_at?: string | null
+          last_login_at?: string | null
+        }
+        Relationships: []
+      }
       applicants: {
         Row: {
           application_id: string
@@ -81,6 +111,9 @@ export type Database = {
           status: Database["public"]["Enums"]["application_status"] | null
           updated_at: string | null
           whatsapp: string
+          visa_speed: string | null
+          stripe_product_id: string | null
+          notes: string | null
         }
         Insert: {
           amount_usd?: number
@@ -100,6 +133,9 @@ export type Database = {
           status?: Database["public"]["Enums"]["application_status"] | null
           updated_at?: string | null
           whatsapp: string
+          visa_speed?: string | null
+          stripe_product_id?: string | null
+          notes?: string | null
         }
         Update: {
           amount_usd?: number
@@ -119,8 +155,108 @@ export type Database = {
           status?: Database["public"]["Enums"]["application_status"] | null
           updated_at?: string | null
           whatsapp?: string
+          visa_speed?: string | null
+          stripe_product_id?: string | null
+          notes?: string | null
         }
         Relationships: []
+      }
+      visa_products: {
+        Row: {
+          id: string
+          name: string
+          speed_type: string
+          price_usd: number
+          stripe_product_id: string | null
+          stripe_price_id: string | null
+          description: string | null
+          is_active: boolean
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          speed_type: string
+          price_usd: number
+          stripe_product_id?: string | null
+          stripe_price_id?: string | null
+          description?: string | null
+          is_active?: boolean
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          speed_type?: string
+          price_usd?: number
+          stripe_product_id?: string | null
+          stripe_price_id?: string | null
+          description?: string | null
+          is_active?: boolean
+          created_at?: string | null
+        }
+        Relationships: []
+      }
+      visa_documents: {
+        Row: {
+          id: string
+          application_id: string
+          applicant_id: string
+          document_url: string
+          uploaded_by: string | null
+          uploaded_at: string | null
+          sent_to_whatsapp: boolean
+          sent_to_email: boolean
+          whatsapp_sent_at: string | null
+          email_sent_at: string | null
+        }
+        Insert: {
+          id?: string
+          application_id: string
+          applicant_id: string
+          document_url: string
+          uploaded_by?: string | null
+          uploaded_at?: string | null
+          sent_to_whatsapp?: boolean
+          sent_to_email?: boolean
+          whatsapp_sent_at?: string | null
+          email_sent_at?: string | null
+        }
+        Update: {
+          id?: string
+          application_id?: string
+          applicant_id?: string
+          document_url?: string
+          uploaded_by?: string | null
+          uploaded_at?: string | null
+          sent_to_whatsapp?: boolean
+          sent_to_email?: boolean
+          whatsapp_sent_at?: string | null
+          email_sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visa_documents_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "visa_documents_applicant_id_fkey"
+            columns: ["applicant_id"]
+            isOneToOne: false
+            referencedRelation: "applicants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "visa_documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -130,6 +266,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      admin_role: "admin" | "partner"
       application_status:
         | "pending_payment"
         | "payment_received"
