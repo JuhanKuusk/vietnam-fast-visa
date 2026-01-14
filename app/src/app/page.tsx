@@ -4,6 +4,7 @@ import { useState } from "react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlightInfo } from "@/components/ui/flight-info";
 import { LanguageSelector } from "@/components/ui/language-selector";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 // Visa Info Modal Component
@@ -28,7 +29,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl">
+      <div className="relative bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl">
         {/* Header */}
         <div className="sticky top-0 px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#ef7175' }}>
           <h2 className="text-xl font-bold text-white">{t.modal.title}</h2>
@@ -42,30 +43,30 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
 
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(85vh-140px)] space-y-6">
-          <p className="text-gray-600 text-base">
+          <p className="text-gray-600 dark:text-gray-300 text-base">
             {t.modal.intro}
           </p>
 
           {/* Steps */}
           {steps.map((step, index) => (
             <div key={index} className="space-y-2">
-              <h3 className="text-lg font-bold text-gray-800 flex items-center gap-3">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 flex items-center gap-3">
                 <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm text-white" style={{ backgroundColor: '#ef7175' }}>{index + 1}</span>
                 {step.title}
               </h3>
-              <p className="text-gray-600 pl-11">{step.content}</p>
+              <p className="text-gray-600 dark:text-gray-300 pl-11">{step.content}</p>
             </div>
           ))}
 
           {/* Important Notice */}
-          <div className="rounded-xl p-5" style={{ backgroundColor: '#afcef6' }}>
-            <h3 className="text-lg font-bold text-gray-900 mb-2">{t.modal.importantTitle}</h3>
-            <p className="text-gray-700">{t.modal.importantText}</p>
+          <div className="rounded-xl p-5 bg-blue-100 dark:bg-blue-900/30">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">{t.modal.importantTitle}</h3>
+            <p className="text-gray-700 dark:text-gray-300">{t.modal.importantText}</p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4">
+        <div className="sticky bottom-0 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 px-6 py-4">
           <button
             onClick={onClose}
             className="w-full py-4 rounded-xl text-white font-bold text-lg transition-all hover:opacity-90"
@@ -317,7 +318,7 @@ export default function Home() {
   const pricePerPerson = 149;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#afcef6' }}>
+    <div className="min-h-screen bg-blue-100 dark:bg-gray-900">
       {/* Loading Overlay */}
       {isLoading && (
         <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
@@ -332,7 +333,7 @@ export default function Home() {
       )}
 
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
@@ -341,21 +342,22 @@ export default function Home() {
                 <span className="text-white text-xl font-bold">V</span>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">{t.header.siteName}</h1>
-                <p className="text-xs text-gray-500">{t.header.tagline}</p>
+                <h1 className="text-lg font-bold text-gray-900 dark:text-white">{t.header.siteName}</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{t.header.tagline}</p>
               </div>
             </div>
 
-            {/* Contact & Language */}
-            <div className="flex items-center gap-3 sm:gap-4">
+            {/* Contact, Theme Toggle & Language */}
+            <div className="flex items-center gap-2 sm:gap-4">
               <a
                 href="https://wa.me/1234567890"
-                className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors"
+                className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
               >
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                 <span className="hidden sm:inline">{t.header.support}</span>
                 <span className="sm:hidden">{t.header.supportShort}</span>
               </a>
+              <ThemeToggle />
               <LanguageSelector />
             </div>
           </div>
@@ -408,7 +410,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="text-white py-12 md:py-16" style={{ background: 'linear-gradient(135deg, #a4afbe 0%, #b4d5d5 50%, #afcef6 100%)' }}>
+      <section className="text-white py-12 md:py-16 bg-gradient-to-br from-gray-200 via-blue-100 to-blue-200 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             {/* Urgency Badge */}
@@ -418,65 +420,65 @@ export default function Home() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-gray-900">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-gray-900 dark:text-white">
               {t.hero.headline1}
               <br />
               <span style={{ color: '#ef7175' }}>{t.hero.headline2}</span>
             </h1>
 
-            <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
               {t.hero.subtitle}
             </p>
 
             {/* Call to Action Slogans */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-gray-200">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-200 dark:border-gray-700">
                 <span className="text-lg">🏢</span>
-                <span className="font-semibold text-gray-900">{t.hero.processedIn}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">{t.hero.processedIn}</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-gray-200">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-200 dark:border-gray-700">
                 <span className="text-lg">🇻🇳</span>
-                <span className="font-semibold text-gray-900">{t.hero.localExperts}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">{t.hero.localExperts}</span>
               </div>
             </div>
 
             {/* Timeline Cards */}
             <div className="max-w-2xl mx-auto mb-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white/90 backdrop-blur border border-gray-200 rounded-xl p-5 shadow-lg">
+                <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-lg">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#ef7175' }}>
                       <span className="text-2xl font-bold">30</span>
                     </div>
                     <div className="text-left">
-                      <div className="font-bold text-lg text-gray-900">{t.hero.thirtyMinutes}</div>
-                      <div className="text-gray-600 text-sm">{t.hero.thirtyMinutesDesc}</div>
+                      <div className="font-bold text-lg text-gray-900 dark:text-white">{t.hero.thirtyMinutes}</div>
+                      <div className="text-gray-600 dark:text-gray-300 text-sm">{t.hero.thirtyMinutesDesc}</div>
                     </div>
                   </div>
                 </div>
-                <div className="bg-white/90 backdrop-blur border border-gray-200 rounded-xl p-5 shadow-lg">
+                <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-lg">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#a4afbe' }}>
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white bg-gray-400 dark:bg-gray-600">
                       <span className="text-xl font-bold">1-2h</span>
                     </div>
                     <div className="text-left">
-                      <div className="font-bold text-lg text-gray-900">{t.hero.oneToTwoHours}</div>
-                      <div className="text-gray-600 text-sm">{t.hero.oneToTwoHoursDesc}</div>
+                      <div className="font-bold text-lg text-gray-900 dark:text-white">{t.hero.oneToTwoHours}</div>
+                      <div className="text-gray-600 dark:text-gray-300 text-sm">{t.hero.oneToTwoHoursDesc}</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Operating Hours Notice */}
-              <div className="mt-4 bg-white/90 backdrop-blur border border-gray-200 rounded-xl p-4 shadow-lg">
+              <div className="mt-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg">
                 <div className="flex items-start gap-3">
                   <span className="text-xl flex-shrink-0">🕐</span>
                   <div className="text-left">
-                    <div className="font-semibold text-gray-900 text-sm">{t.operatingHours?.title || "30-Min & 1.5-Hour Express Service Hours"}</div>
-                    <div className="text-gray-600 text-xs mt-1">
+                    <div className="font-semibold text-gray-900 dark:text-white text-sm">{t.operatingHours?.title || "30-Min & 1.5-Hour Express Service Hours"}</div>
+                    <div className="text-gray-600 dark:text-gray-300 text-xs mt-1">
                       <span className="font-medium">{t.operatingHours?.weekdaysOnly || "Weekdays only:"}</span> {t.operatingHours?.vietnamTime || "8:00 AM - 5:00 PM (Vietnam Time, GMT+7)"}
                     </div>
-                    <div className="text-gray-500 text-xs mt-1">
+                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
                       <span className="font-medium">{t.operatingHours?.fromBali || "From Bali/Indonesia:"}</span> {t.operatingHours?.baliTime || "9:00 AM - 6:00 PM (WITA, GMT+8)"}
                     </div>
                   </div>
@@ -486,10 +488,10 @@ export default function Home() {
 
             {/* Flight Check Box */}
             <div className="max-w-md mx-auto mb-8">
-              <div className="bg-white/95 backdrop-blur rounded-2xl p-5 shadow-xl border border-gray-200">
+              <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur rounded-2xl p-5 shadow-xl border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xl">✈️</span>
-                  <span className="font-bold text-gray-900">{t.hero.checkFlightStatus}</span>
+                  <span className="font-bold text-gray-900 dark:text-white">{t.hero.checkFlightStatus}</span>
                 </div>
                 <div className="flex gap-2">
                   <input
@@ -497,7 +499,7 @@ export default function Home() {
                     value={heroFlightNumber}
                     onChange={(e) => setHeroFlightNumber(e.target.value.toUpperCase())}
                     placeholder={t.hero.enterFlightNumber}
-                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
+                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
                     style={{ '--tw-ring-color': '#ef7175' } as React.CSSProperties}
                   />
                 </div>
@@ -513,9 +515,9 @@ export default function Home() {
             <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-3">
                 <span className="text-5xl font-bold" style={{ color: '#ef7175' }}>${pricePerPerson}</span>
-                <span className="text-gray-700 text-xl">{t.hero.perPerson}</span>
+                <span className="text-gray-700 dark:text-gray-300 text-xl">{t.hero.perPerson}</span>
               </div>
-              <div className="text-gray-600 text-sm mt-2">
+              <div className="text-gray-600 dark:text-gray-400 text-sm mt-2">
                 {t.heroPrice?.fullVisaDesc || "1.5-Hour Full Visa | Check-in approval letter in 30 min"}
               </div>
             </div>
@@ -539,7 +541,7 @@ export default function Home() {
             {/* Info Button */}
             <button
               onClick={() => setShowVisaInfo(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/90 border border-gray-300 text-gray-800 hover:bg-white transition-all text-base font-medium shadow-md"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700 transition-all text-base font-medium shadow-md"
             >
               <span>📋</span>
               {t.hero.learnAboutVisa}
@@ -549,24 +551,24 @@ export default function Home() {
       </section>
 
       {/* Trust Badges */}
-      <section className="bg-white border-b border-gray-200 py-6">
+      <section className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
               <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>10,000+</div>
-              <div className="text-sm text-gray-500">{t.trust.happyCustomers}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.happyCustomers}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900">99%</div>
-              <div className="text-sm text-gray-500">{t.trust.onTimeDelivery}</div>
+              <div className="text-3xl font-bold text-gray-900 dark:text-white">99%</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.onTimeDelivery}</div>
             </div>
             <div>
               <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>80+</div>
-              <div className="text-sm text-gray-500">{t.trust.countriesSupported}</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.countriesSupported}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900">24/7</div>
-              <div className="text-sm text-gray-500">{t.trust.whatsappSupport}</div>
+              <div className="text-3xl font-bold text-gray-900 dark:text-white">24/7</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.whatsappSupport}</div>
             </div>
           </div>
         </div>
@@ -577,7 +579,7 @@ export default function Home() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Application Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
               {/* Form Header */}
               <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ backgroundColor: '#ef7175' }}>
                 <h2 className="text-lg sm:text-xl font-bold text-white">
@@ -598,10 +600,10 @@ export default function Home() {
               {/* Form Body */}
               <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
                 {/* Flight Number - First Box */}
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xl">✈️</span>
-                    <span className="font-bold text-gray-900">{t.form?.yourFlightNumber || "Your Flight Number"}</span>
+                    <span className="font-bold text-gray-900 dark:text-white">{t.form?.yourFlightNumber || "Your Flight Number"}</span>
                   </div>
                   <input
                     type="text"
@@ -614,7 +616,7 @@ export default function Home() {
                       }
                     }}
                     placeholder={t.form.flightPlaceholder}
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-all"
                     style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                   />
                   {/* Flight Info - Shows check-in time and gate when flight number is entered */}
@@ -627,16 +629,16 @@ export default function Home() {
                 </div>
 
                 {/* Check Your Visa Requirements - Second Box */}
-                <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-xl">🛂</span>
-                    <span className="font-bold text-gray-900">{t.form?.checkVisaRequirements || "Check Your Visa Requirements"}</span>
+                    <span className="font-bold text-gray-900 dark:text-white">{t.form?.checkVisaRequirements || "Check Your Visa Requirements"}</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Nationality / Citizenship */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         {t.form?.nationality || "Your Nationality"} <span style={{ color: '#ef7175' }}>*</span>
                       </label>
                       <div className="relative">
@@ -650,7 +652,7 @@ export default function Home() {
                           }}
                           onFocus={() => setShowNationalityDropdown(true)}
                           placeholder={t.form?.selectNationality || "Search your country..."}
-                          className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-all"
                           style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                         />
                         {formData.nationality && (
@@ -660,13 +662,13 @@ export default function Home() {
                               setFormData({ ...formData, nationality: "" });
                               setNationalitySearch("");
                             }}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
                           >
                             ✕
                           </button>
                         )}
                         {showNationalityDropdown && !formData.nationality && (
-                          <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                          <div className="absolute z-20 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                             {filteredCountries.slice(0, 10).map((country) => (
                               <button
                                 key={country.code}
@@ -676,13 +678,13 @@ export default function Home() {
                                   setNationalitySearch("");
                                   setShowNationalityDropdown(false);
                                 }}
-                                className="w-full px-4 py-3 text-left hover:bg-gray-50 text-gray-900 border-b border-gray-100 last:border-b-0"
+                                className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                               >
                                 {country.name}
                               </button>
                             ))}
                             {filteredCountries.length === 0 && (
-                              <div className="px-4 py-3 text-gray-500">{t.form?.noCountryFound || "No country found"}</div>
+                              <div className="px-4 py-3 text-gray-500 dark:text-gray-400">{t.form?.noCountryFound || "No country found"}</div>
                             )}
                           </div>
                         )}
@@ -691,13 +693,13 @@ export default function Home() {
 
                     {/* Purpose of Visit */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         {t.form?.purposeOfVisit || "Purpose of Visit"} <span style={{ color: '#ef7175' }}>*</span>
                       </label>
                       <select
                         value={formData.purpose}
                         onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer"
+                        className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer"
                         style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
                       >
                         {purposeOptions.map((option) => (
@@ -808,78 +810,78 @@ export default function Home() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Why Choose Us */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-lg text-gray-900 mb-4">{t.sidebar.whyChooseUs}</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-4">{t.sidebar.whyChooseUs}</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#afcef6' }}>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100 dark:bg-blue-900/30">
                     <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">{t.sidebar.fastestProcessing}</div>
-                    <div className="text-sm text-gray-500">{t.sidebar.fastestProcessingDesc}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">{t.sidebar.fastestProcessing}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{t.sidebar.fastestProcessingDesc}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#b4d5d5' }}>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-teal-100 dark:bg-teal-900/30">
                     <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">{t.sidebar.whatsappSupport}</div>
-                    <div className="text-sm text-gray-500">{t.sidebar.whatsappSupportDesc}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">{t.sidebar.whatsappSupport}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{t.sidebar.whatsappSupportDesc}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#cdb4b6' }}>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-pink-100 dark:bg-pink-900/30">
                     <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">{t.sidebar.moneyBack}</div>
-                    <div className="text-sm text-gray-500">{t.sidebar.moneyBackDesc}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">{t.sidebar.moneyBack}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{t.sidebar.moneyBackDesc}</div>
                   </div>
                 </div>
               </div>
 
               {/* Local Experts Badge */}
-              <div className="mt-5 pt-5 border-t border-gray-100">
-                <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: '#afcef6' }}>
+              <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700">
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30">
                   <span className="text-2xl">🇻🇳</span>
                   <div>
-                    <div className="font-semibold text-gray-900 text-sm">{t.sidebar.localExperts}</div>
-                    <div className="text-xs text-gray-600">{t.sidebar.localExpertsDesc}</div>
+                    <div className="font-semibold text-gray-900 dark:text-white text-sm">{t.sidebar.localExperts}</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">{t.sidebar.localExpertsDesc}</div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Price Comparison */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-              <h3 className="font-bold text-lg text-gray-900 mb-4">{t.sidebar.priceComparison}</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-4">{t.sidebar.priceComparison}</h3>
               <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 rounded-lg border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
+                <div className="flex justify-between items-center p-3 rounded-lg border-2 bg-blue-100 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800">
                   <div>
-                    <span className="font-medium text-gray-900 block">{t.sidebar.ourPrice}</span>
-                    <span className="text-xs text-gray-600">{t.heroPrice?.expressLabel || "1.5-Hour Express"}</span>
+                    <span className="font-medium text-gray-900 dark:text-white block">{t.sidebar.ourPrice}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">{t.heroPrice?.expressLabel || "1.5-Hour Express"}</span>
                   </div>
                   <span className="font-bold text-xl" style={{ color: '#ef7175' }}>$149</span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-500">{t.sidebar.competitorA}</span>
-                  <span className="text-gray-400 line-through">$200</span>
+                <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorA}</span>
+                  <span className="text-gray-400 dark:text-gray-500 line-through">$200</span>
                 </div>
-                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <span className="text-gray-500">{t.sidebar.competitorB}</span>
-                  <span className="text-gray-400 line-through">$235</span>
+                <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorB}</span>
+                  <span className="text-gray-400 dark:text-gray-500 line-through">$235</span>
                 </div>
               </div>
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <div className="flex items-start gap-2 text-xs text-gray-500">
+              <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <div className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
                   <span className="flex-shrink-0">🕐</span>
                   <span>{t.operatingHours?.expressServiceNote || "Express service: Weekdays 8AM-5PM Vietnam Time (9AM-6PM Bali)"}</span>
                 </div>
@@ -887,14 +889,14 @@ export default function Home() {
             </div>
 
             {/* VOA Info */}
-            <div className="rounded-2xl p-6" style={{ backgroundColor: '#cdb4b6' }}>
-              <h3 className="font-bold text-lg text-gray-900 mb-3">
+            <div className="rounded-2xl p-6 bg-pink-100 dark:bg-pink-900/20">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3">
                 {t.sidebar.voaTitle}
               </h3>
-              <p className="text-gray-800 text-sm mb-3">
+              <p className="text-gray-800 dark:text-gray-300 text-sm mb-3">
                 {t.sidebar.voaText}
               </p>
-              <ul className="text-gray-700 text-sm space-y-1">
+              <ul className="text-gray-700 dark:text-gray-300 text-sm space-y-1">
                 <li>• {t.sidebar.voaPoint1}</li>
                 <li>• {t.sidebar.voaPoint2}</li>
                 <li>• {t.sidebar.voaPoint3}</li>
@@ -905,22 +907,22 @@ export default function Home() {
       </main>
 
       {/* Non-Urgent Visa Options Section */}
-      <section className="py-12 sm:py-16 bg-gray-50">
+      <section className="py-12 sm:py-16 bg-gray-50 dark:bg-gray-800/50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium mb-4">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               {t.nonUrgent?.planningAhead || "Planning Ahead?"}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3">
               {t.nonUrgent?.title || "Need Vietnam Visa? For Non-Urgent Travelers"}
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               {t.nonUrgent?.subtitle || "Choose the processing time that fits your schedule. Single-entry visa valid for 1-3 months."}
             </p>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
               {t.nonUrgent?.timezoneNote || "Processing times do not include weekends. All times are Vietnam local time."}
             </p>
           </div>
@@ -928,33 +930,33 @@ export default function Home() {
           {/* Visa Options Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 4-Hour Express Service */}
-            <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-200 p-6 relative overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-blue-200 dark:border-blue-800 p-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
                 {t.nonUrgent?.fastest || "FASTEST"}
               </div>
               <div className="text-center mb-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-3">
+                  <svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">{t.nonUrgent?.fourHourTitle || "4-Hour Express"}</h3>
-                <p className="text-blue-600 font-semibold">{t.nonUrgent?.fourHourSubtitle || "Same Day Delivery"}</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t.nonUrgent?.fourHourTitle || "4-Hour Express"}</h3>
+                <p className="text-blue-600 dark:text-blue-400 font-semibold">{t.nonUrgent?.fourHourSubtitle || "Same Day Delivery"}</p>
               </div>
               <div className="space-y-3 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.fourHourFeature1 || "Visa ready in 4 hours"}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.fourHourFeature2 || "Perfect for urgent travel"}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
@@ -971,8 +973,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900">$135</span>
-                <span className="text-gray-500 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">$135</span>
+                <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
                 href="/apply?speed=4-hour"
@@ -984,38 +986,38 @@ export default function Home() {
             </div>
 
             {/* 1-Day Service */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
               <div className="text-center mb-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-16 h-16 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-3">
+                  <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">{t.nonUrgent?.oneDayTitle || "1-Day Service"}</h3>
-                <p className="text-green-600 font-semibold">{t.nonUrgent?.oneDaySubtitle || "Next Business Day"}</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t.nonUrgent?.oneDayTitle || "1-Day Service"}</h3>
+                <p className="text-green-600 dark:text-green-400 font-semibold">{t.nonUrgent?.oneDaySubtitle || "Next Business Day"}</p>
               </div>
               <div className="space-y-3 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.oneDayFeature1 || "Visa ready in 1 day"}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.oneDayFeature2 || "Great for last-minute trips"}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.oneDayFeature3 || "Email & WhatsApp delivery"}
                 </div>
               </div>
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                <div className="text-xs text-green-800">
+              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-4">
+                <div className="text-xs text-green-800 dark:text-green-300">
                   <span className="font-semibold block mb-1">{t.nonUrgent?.fourHourCutoff || "Cut-off Times:"}</span>
                   <div className="space-y-1">
                     <div>{t.nonUrgent?.oneDayCutoff1 || "Book by 10:00 AM → Ready by 6:00 PM same day"}</div>
@@ -1024,8 +1026,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900">$111</span>
-                <span className="text-gray-500 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">$111</span>
+                <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
                 href="/apply?speed=1-day"
@@ -1036,48 +1038,48 @@ export default function Home() {
             </div>
 
             {/* 2-Day Service */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 relative">
-              <div className="absolute top-0 right-0 bg-gray-700 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 relative">
+              <div className="absolute top-0 right-0 bg-gray-700 dark:bg-gray-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
                 {t.nonUrgent?.bestValue || "BEST VALUE"}
               </div>
               <div className="text-center mb-4">
-                <div className="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-16 h-16 mx-auto rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mb-3">
+                  <svg className="w-8 h-8 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">{t.nonUrgent?.twoDayTitle || "2-Day Service"}</h3>
-                <p className="text-gray-600 font-semibold">{t.nonUrgent?.twoDaySubtitle || "Standard Processing"}</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t.nonUrgent?.twoDayTitle || "2-Day Service"}</h3>
+                <p className="text-gray-600 dark:text-gray-300 font-semibold">{t.nonUrgent?.twoDaySubtitle || "Standard Processing"}</p>
               </div>
               <div className="space-y-3 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.twoDayFeature1 || "Visa ready in 2 business days"}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.twoDayFeature2 || "Perfect for planned trips"}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                   {t.nonUrgent?.twoDayFeature3 || "Email delivery"}
                 </div>
               </div>
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                <div className="text-xs text-gray-700">
+              <div className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg p-3 mb-4">
+                <div className="text-xs text-gray-700 dark:text-gray-300">
                   <span className="font-semibold block mb-1">{t.nonUrgent?.twoDayCutoff || "Cut-off Time:"}</span>
                   <div>{t.nonUrgent?.twoDayCutoff1 || "Book by 4:00 PM → Ready by 6:00 PM next working day"}</div>
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900">$99</span>
-                <span className="text-gray-500 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">$99</span>
+                <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
                 href="/apply?speed=2-day"
@@ -1091,17 +1093,17 @@ export default function Home() {
           {/* Add-on Options */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Duration Upgrade */}
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">{t.nonUrgent?.extendedDuration || "Extended Duration"}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{t.nonUrgent?.extendedDurationDesc || "Upgrade to 1-3 months validity"}</p>
-                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium">
+                  <h4 className="font-semibold text-gray-900 dark:text-white">{t.nonUrgent?.extendedDuration || "Extended Duration"}</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.extendedDurationDesc || "Upgrade to 1-3 months validity"}</p>
+                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-sm font-medium">
                     +$50
                   </div>
                 </div>
@@ -1109,17 +1111,17 @@ export default function Home() {
             </div>
 
             {/* Multi-Entry Option */}
-            <div className="bg-white rounded-xl p-5 border border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">{t.nonUrgent?.multiEntry || "Multi-Entry Visa"}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{t.nonUrgent?.multiEntryDesc || "Enter Vietnam multiple times"}</p>
-                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-indigo-100 text-indigo-800 text-sm font-medium">
+                  <h4 className="font-semibold text-gray-900 dark:text-white">{t.nonUrgent?.multiEntry || "Multi-Entry Visa"}</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.multiEntryDesc || "Enter Vietnam multiple times"}</p>
+                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 text-sm font-medium">
                     +$45
                   </div>
                 </div>
@@ -1162,11 +1164,11 @@ export default function Home() {
           </div>
 
           {/* Info Note */}
-          <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
+          <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-1">{t.nonUrgent?.allPackagesInclude || "All visa packages include:"}</h4>
-                <ul className="text-sm text-gray-600 space-y-1">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{t.nonUrgent?.allPackagesInclude || "All visa packages include:"}</h4>
+                <ul className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li className="flex items-center gap-2">
                     <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -1188,7 +1190,7 @@ export default function Home() {
                 </ul>
               </div>
               <div className="text-center md:text-right">
-                <p className="text-sm text-gray-500 mb-2">{t.nonUrgent?.need30MinVisa || "Need urgent visa in 30 minutes?"}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t.nonUrgent?.need30MinVisa || "Need urgent visa in 30 minutes?"}</p>
                 <a
                   href="/apply"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white font-semibold transition-all hover:opacity-90"
@@ -1206,13 +1208,13 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-10 sm:py-16" style={{ backgroundColor: '#b4d5d5' }}>
+      <section id="faq" className="py-10 sm:py-16 bg-[#b4d5d5] dark:bg-gray-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
               {t.faq.title}
             </h2>
-            <p className="text-gray-700 text-sm sm:text-base">
+            <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
               {t.faq.subtitle}
             </p>
           </div>
@@ -1228,16 +1230,16 @@ export default function Home() {
               { q: t.faq.q6, a: t.faq.a6 },
               { q: t.faq.q7, a: t.faq.a7 },
             ].map((faq, index) => (
-              <details key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 group">
+              <details key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 group">
                 <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
-                  <span className="font-medium text-gray-900 text-sm sm:text-base pr-4">
+                  <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base pr-4">
                     {faq.q}
                   </span>
-                  <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-5 h-5 text-gray-500 dark:text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 text-sm sm:text-base">
+                <div className="px-4 sm:px-5 pb-4 sm:pb-5 text-gray-600 dark:text-gray-300 text-sm sm:text-base">
                   {faq.a}
                 </div>
               </details>
@@ -1246,7 +1248,7 @@ export default function Home() {
 
           {/* CTA after FAQ */}
           <div className="text-center mt-8 sm:mt-10">
-            <p className="text-gray-700 mb-4 text-sm sm:text-base">{t.faq.stillHaveQuestions}</p>
+            <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm sm:text-base">{t.faq.stillHaveQuestions}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={() => {
@@ -1264,7 +1266,7 @@ export default function Home() {
               </button>
               <a
                 href="https://wa.me/1234567890"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium rounded-xl transition-colors text-sm sm:text-base"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-xl transition-colors text-sm sm:text-base"
               >
                 <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
