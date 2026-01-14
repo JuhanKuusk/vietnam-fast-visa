@@ -30,9 +30,10 @@ interface FlightInfoProps {
   flightNumber: string;
   date?: string;
   onCheckInUrgent?: () => void;
+  onFlightData?: (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string }) => void;
 }
 
-export function FlightInfo({ flightNumber, date, onCheckInUrgent }: FlightInfoProps) {
+export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }: FlightInfoProps) {
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +72,18 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent }: FlightInfoPr
         if (data.checkInStatus === "closing_soon" && onCheckInUrgent) {
           onCheckInUrgent();
         }
+
+        // Pass flight data to parent for pre-filling apply form
+        if (onFlightData && data.arrival) {
+          // Extract airport code from string like "Noi Bai International (HAN)"
+          const arrivalAirportMatch = data.arrival.airport.match(/\(([A-Z]{3})\)/);
+          const arrivalAirportCode = arrivalAirportMatch ? arrivalAirportMatch[1] : "";
+          onFlightData({
+            arrivalAirport: data.arrival.airport,
+            arrivalAirportCode,
+            departureAirport: data.departure.airport,
+          });
+        }
       } catch {
         setError("Failed to fetch flight information");
         setFlightData(null);
@@ -82,7 +95,7 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent }: FlightInfoPr
     // Debounce the API call
     const timeoutId = setTimeout(fetchFlightInfo, 500);
     return () => clearTimeout(timeoutId);
-  }, [flightNumber, date, onCheckInUrgent]);
+  }, [flightNumber, date, onCheckInUrgent, onFlightData]);
 
   if (!flightNumber || flightNumber.length < 3) {
     return null;

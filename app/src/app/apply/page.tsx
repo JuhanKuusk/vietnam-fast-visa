@@ -302,6 +302,56 @@ function getVisaRequirement(countryCode: string, citizenship: typeof import("@/l
   };
 }
 
+// Entry Ports (Airports and Border Checkpoints)
+const ENTRY_PORTS = [
+  // International Airports
+  { code: "SGN", name: "Tan Son Nhat Int. Airport (Ho Chi Minh City)", type: "airport" },
+  { code: "HAN", name: "Noi Bai Int. Airport (Hanoi)", type: "airport" },
+  { code: "DAD", name: "Da Nang Int. Airport", type: "airport" },
+  { code: "CXR", name: "Cam Ranh Int. Airport (Nha Trang)", type: "airport" },
+  { code: "PQC", name: "Phu Quoc Int. Airport", type: "airport" },
+  { code: "HPH", name: "Cat Bi Int. Airport (Hai Phong)", type: "airport" },
+  { code: "VCA", name: "Can Tho Int. Airport", type: "airport" },
+  { code: "HUI", name: "Phu Bai Int. Airport (Hue)", type: "airport" },
+  { code: "VDO", name: "Van Don Int. Airport", type: "airport" },
+  { code: "THD", name: "Tho Xuan Int. Airport", type: "airport" },
+  { code: "VDH", name: "Dong Hoi Int. Airport", type: "airport" },
+  { code: "UIH", name: "Phu Cat Int. Airport", type: "airport" },
+  { code: "DLI", name: "Lien Khuong Int. Airport (Da Lat)", type: "airport" },
+  // Land Border Gates
+  { code: "MOCLB", name: "Moc Bai Land Border (Tay Ninh)", type: "land" },
+  { code: "LONGL", name: "Lao Bao Land Border (Quang Tri)", type: "land" },
+  { code: "HUTIL", name: "Huu Nghi Land Border (Lang Son)", type: "land" },
+  { code: "CAOTL", name: "Cao Treo Land Border (Ha Tinh)", type: "land" },
+  { code: "XAMAN", name: "Xa Mat Land Border (Tay Ninh)", type: "land" },
+  // Seaports
+  { code: "HCMSP", name: "Ho Chi Minh City Seaport", type: "seaport" },
+  { code: "HANSP", name: "Hai Phong Seaport", type: "seaport" },
+  { code: "DANSP", name: "Da Nang Seaport", type: "seaport" },
+  { code: "NHASP", name: "Nha Trang Seaport", type: "seaport" },
+  { code: "QUASP", name: "Quang Ninh Seaport (Ha Long)", type: "seaport" },
+];
+
+// Vietnam Cities/Provinces
+const VIETNAM_CITIES = [
+  { code: "HN", name: "Hanoi" },
+  { code: "HCM", name: "Ho Chi Minh City" },
+  { code: "DN", name: "Da Nang" },
+  { code: "HP", name: "Hai Phong" },
+  { code: "CT", name: "Can Tho" },
+  { code: "NT", name: "Nha Trang (Khanh Hoa)" },
+  { code: "DL", name: "Da Lat (Lam Dong)" },
+  { code: "HL", name: "Ha Long (Quang Ninh)" },
+  { code: "HUE", name: "Hue (Thua Thien Hue)" },
+  { code: "HA", name: "Hoi An (Quang Nam)" },
+  { code: "PQ", name: "Phu Quoc (Kien Giang)" },
+  { code: "VT", name: "Vung Tau (Ba Ria-Vung Tau)" },
+  { code: "ST", name: "Sa Pa (Lao Cai)" },
+  { code: "QN", name: "Quy Nhon (Binh Dinh)" },
+  { code: "PT", name: "Phan Thiet (Binh Thuan)" },
+  { code: "OTHER", name: "Other" },
+];
+
 // Citizenship Checker Component
 // Default fallback translations for citizenship section
 const citizenshipFallback = {
@@ -432,6 +482,19 @@ interface ApplicantData {
   dateOfBirth: string;
   passportExpiry: string;
   gender: string;
+  religion: string;
+}
+
+interface TravelDetails {
+  applicantCount: number;
+  purpose: string;
+  entryDate: string;
+  exitDate: string;
+  entryPort: string;
+  exitPort: string;
+  addressInVietnam: string;
+  cityProvince: string;
+  flightNumber: string;
 }
 
 // Searchable Country Selector Component
@@ -607,44 +670,91 @@ function ApplyForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { t, isLoading: isTranslating } = useLanguage();
-  const applicantCount = Number(searchParams.get("applicants")) || 1;
-  const purpose = searchParams.get("purpose") || "tourist";
-  const port = searchParams.get("port") || "";
-  const entryDate = searchParams.get("entry") || "";
-  const exitDate = searchParams.get("exit") || "";
+
+  // Get initial values from URL params (from home page)
+  const initialFlight = searchParams.get("flight") || "";
+  const initialNationality = searchParams.get("nationality") || "";
+  const initialPurpose = searchParams.get("purpose") || "tourism";
+  const initialEntryPort = searchParams.get("entryPort") || "";
 
   const pricePerPerson = 149;
-  const totalPrice = pricePerPerson * applicantCount;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [showVerification, setShowVerification] = useState(false);
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
 
+  // Travel Details State - pre-fill from URL params
+  const [travelDetails, setTravelDetails] = useState<TravelDetails>({
+    applicantCount: 1,
+    purpose: initialPurpose,
+    entryDate: "",
+    exitDate: "",
+    entryPort: initialEntryPort,
+    exitPort: "",
+    addressInVietnam: "",
+    cityProvince: "",
+    flightNumber: initialFlight,
+  });
+
+  const totalPrice = pricePerPerson * travelDetails.applicantCount;
+
+  // Calculate length of stay
+  const lengthOfStay = travelDetails.entryDate && travelDetails.exitDate
+    ? Math.ceil((new Date(travelDetails.exitDate).getTime() - new Date(travelDetails.entryDate).getTime()) / (1000 * 60 * 60 * 24))
+    : 0;
+
   const [currentApplicant, setCurrentApplicant] = useState(0);
-  const [applicants, setApplicants] = useState<ApplicantData[]>(
-    Array(applicantCount).fill(null).map(() => ({
-      fullName: "",
-      nationality: "",
-      passportNumber: "",
-      dateOfBirth: "",
-      passportExpiry: "",
-      gender: "",
-    }))
-  );
+  const [applicants, setApplicants] = useState<ApplicantData[]>([{
+    fullName: "",
+    nationality: initialNationality,
+    passportNumber: "",
+    dateOfBirth: "",
+    passportExpiry: "",
+    gender: "",
+    religion: "",
+  }]);
+
+  // Update applicants array when count changes
+  const updateApplicantCount = (count: number) => {
+    setTravelDetails({ ...travelDetails, applicantCount: count });
+    if (count > applicants.length) {
+      // Add more applicants
+      const newApplicants = [...applicants];
+      for (let i = applicants.length; i < count; i++) {
+        newApplicants.push({
+          fullName: "",
+          nationality: "",
+          passportNumber: "",
+          dateOfBirth: "",
+          passportExpiry: "",
+          gender: "",
+          religion: "",
+        });
+      }
+      setApplicants(newApplicants);
+    } else if (count < applicants.length) {
+      // Remove extra applicants
+      setApplicants(applicants.slice(0, count));
+      if (currentApplicant >= count) {
+        setCurrentApplicant(count - 1);
+      }
+    }
+  };
 
   const [contactInfo, setContactInfo] = useState({
     email: "",
-    phone: "",
+    mobile: "",
+    whatsapp: "",
+    whatsappSameAsMobile: true,
     confirmEmail: "",
   });
 
-  const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>(
-    Array(applicantCount).fill(null)
-  );
-  const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>(
-    Array(applicantCount).fill(null)
-  );
+  // Computed phone value for verification (use mobile)
+  const phoneForVerification = contactInfo.mobile;
+
+  const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>([null]);
+  const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>([null]);
 
   const updateApplicant = (field: keyof ApplicantData, value: string) => {
     const updated = [...applicants];
@@ -662,10 +772,28 @@ function ApplyForm() {
     setSubmitError(null);
 
     try {
+      // Validate travel details
+      if (!travelDetails.entryDate || !travelDetails.exitDate) {
+        setSubmitError("Please provide entry and exit dates");
+        setIsSubmitting(false);
+        return;
+      }
+      if (!travelDetails.entryPort || !travelDetails.exitPort) {
+        setSubmitError("Please select entry and exit checkpoints");
+        setIsSubmitting(false);
+        return;
+      }
+      if (!travelDetails.addressInVietnam || !travelDetails.cityProvince) {
+        setSubmitError("Please provide your temporary address in Vietnam");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Validate applicants
       for (let i = 0; i < applicants.length; i++) {
         const applicant = applicants[i];
         if (!applicant.fullName || !applicant.nationality || !applicant.passportNumber ||
-            !applicant.dateOfBirth || !applicant.gender) {
+            !applicant.dateOfBirth || !applicant.gender || !applicant.religion) {
           setSubmitError(`Please complete all required fields for applicant ${i + 1}`);
           setCurrentApplicant(i);
           setIsSubmitting(false);
@@ -673,8 +801,8 @@ function ApplyForm() {
         }
       }
 
-      if (!contactInfo.email || !contactInfo.phone) {
-        setSubmitError("Please provide email and WhatsApp number");
+      if (!contactInfo.email || !contactInfo.mobile) {
+        setSubmitError("Please provide email and mobile phone number");
         setCurrentApplicant(0);
         setIsSubmitting(false);
         return;
@@ -689,11 +817,15 @@ function ApplyForm() {
 
       const applicationData = {
         tripDetails: {
-          applicants: applicantCount,
-          purpose: purpose as "tourist" | "business" | "visiting",
-          arrivalPort: port,
-          entryDate: entryDate,
-          exitDate: exitDate,
+          applicants: travelDetails.applicantCount,
+          purpose: travelDetails.purpose as "tourist" | "business" | "visiting",
+          entryPort: travelDetails.entryPort,
+          exitPort: travelDetails.exitPort,
+          entryDate: travelDetails.entryDate,
+          exitDate: travelDetails.exitDate,
+          addressInVietnam: travelDetails.addressInVietnam,
+          cityProvince: travelDetails.cityProvince,
+          flightNumber: travelDetails.flightNumber,
         },
         applicants: applicants.map((applicant) => ({
           fullName: applicant.fullName,
@@ -701,8 +833,10 @@ function ApplyForm() {
           passportNumber: applicant.passportNumber,
           dateOfBirth: applicant.dateOfBirth,
           gender: applicant.gender as "male" | "female",
+          religion: applicant.religion,
           email: contactInfo.email,
-          whatsapp: contactInfo.phone,
+          mobile: contactInfo.mobile,
+          whatsapp: contactInfo.whatsappSameAsMobile ? contactInfo.mobile : contactInfo.whatsapp,
         })),
       };
 
@@ -722,7 +856,7 @@ function ApplyForm() {
       sessionStorage.setItem("referenceNumber", result.referenceNumber);
       sessionStorage.setItem("totalAmount", String(result.amount));
 
-      router.push(`/payment?applicants=${applicantCount}&ref=${result.referenceNumber}`);
+      router.push(`/payment?applicants=${travelDetails.applicantCount}&ref=${result.referenceNumber}`);
     } catch (error) {
       console.error("Submission error:", error);
       setSubmitError(error instanceof Error ? error.message : "An unexpected error occurred");
@@ -833,9 +967,7 @@ function ApplyForm() {
           <div className="flex items-center justify-center gap-2 sm:gap-4">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+                1
               </div>
               <span className="text-sm font-medium text-gray-900 hidden sm:inline">{t.progress.tripDetails}</span>
             </div>
@@ -856,22 +988,220 @@ function ApplyForm() {
           </div>
         </div>
 
-        {/* Form Card */}
+        {/* Travel Details Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+          <div className="bg-green-600 px-6 py-4">
+            <h2 className="text-lg font-semibold text-white">
+              {t.travelDetails?.title || "Travel Details"}
+            </h2>
+            <p className="text-green-100 text-sm mt-1">
+              {t.travelDetails?.subtitle || "Please provide your trip information"}
+            </p>
+          </div>
+
+          <div className="p-6 lg:p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Number of Applicants */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.numberOfApplicants || "Number of Applicants"} <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={travelDetails.applicantCount}
+                  onChange={(e) => updateApplicantCount(Number(e.target.value))}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                    <option key={n} value={n}>
+                      {n} {n === 1 ? (t.travelDetails?.person || "person") : (t.travelDetails?.people || "people")}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Purpose of Travel */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.purposeOfTravel || "Purpose of Travel"} <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={travelDetails.purpose}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, purpose: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="tourist">{t.travelDetails?.tourist || "Tourism"}</option>
+                  <option value="business">{t.travelDetails?.business || "Business"}</option>
+                  <option value="visiting">{t.travelDetails?.visiting || "Visiting relatives/friends"}</option>
+                </select>
+              </div>
+
+              {/* Entry Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.entryDate || "Intended Date of Entry"} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={travelDetails.entryDate}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, entryDate: e.target.value })}
+                  min={new Date().toISOString().split("T")[0]}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {t.travelDetails?.entryDateHint || "You must enter Vietnam on or after this date"}
+                </p>
+              </div>
+
+              {/* Exit Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.exitDate || "Intended Date of Exit"} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={travelDetails.exitDate}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, exitDate: e.target.value })}
+                  min={travelDetails.entryDate || new Date().toISOString().split("T")[0]}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+                {lengthOfStay > 0 && (
+                  <p className="text-xs text-blue-600 mt-1 font-medium">
+                    {t.travelDetails?.lengthOfStay || "Length of Stay"}: {lengthOfStay} {t.travelDetails?.days || "days"}
+                  </p>
+                )}
+              </div>
+
+              {/* Entry Port */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.entryPort || "Entry Checkpoint"} <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={travelDetails.entryPort}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, entryPort: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="">{t.travelDetails?.selectPort || "Select checkpoint..."}</option>
+                  <optgroup label="International Airports">
+                    {ENTRY_PORTS.filter(p => p.type === "airport").map((port) => (
+                      <option key={port.code} value={port.code}>{port.name}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Land Border Gates">
+                    {ENTRY_PORTS.filter(p => p.type === "land").map((port) => (
+                      <option key={port.code} value={port.code}>{port.name}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Seaports">
+                    {ENTRY_PORTS.filter(p => p.type === "seaport").map((port) => (
+                      <option key={port.code} value={port.code}>{port.name}</option>
+                    ))}
+                  </optgroup>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  {t.travelDetails?.entryPortHint || "Select the airport/border where you will enter Vietnam"}
+                </p>
+              </div>
+
+              {/* Exit Port */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.exitPort || "Exit Checkpoint"} <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={travelDetails.exitPort}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, exitPort: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="">{t.travelDetails?.selectPort || "Select checkpoint..."}</option>
+                  <optgroup label="International Airports">
+                    {ENTRY_PORTS.filter(p => p.type === "airport").map((port) => (
+                      <option key={port.code} value={port.code}>{port.name}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Land Border Gates">
+                    {ENTRY_PORTS.filter(p => p.type === "land").map((port) => (
+                      <option key={port.code} value={port.code}>{port.name}</option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Seaports">
+                    {ENTRY_PORTS.filter(p => p.type === "seaport").map((port) => (
+                      <option key={port.code} value={port.code}>{port.name}</option>
+                    ))}
+                  </optgroup>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  {t.travelDetails?.exitPortHint || "Select the airport/border where you will leave Vietnam"}
+                </p>
+              </div>
+
+              {/* Temporary Address in Vietnam */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.addressInVietnam || "Temporary Address in Vietnam"} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={travelDetails.addressInVietnam}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, addressInVietnam: e.target.value })}
+                  placeholder={t.travelDetails?.addressPlaceholder || "e.g. Sheraton Hotel, 88 Dong Khoi Street"}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {t.travelDetails?.addressHint || "Hotel name or address where you will stay"}
+                </p>
+              </div>
+
+              {/* City/Province */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.cityProvince || "City/Province"} <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={travelDetails.cityProvince}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, cityProvince: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="">{t.travelDetails?.selectCity || "Select city/province..."}</option>
+                  {VIETNAM_CITIES.map((city) => (
+                    <option key={city.code} value={city.code}>{city.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Flight Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.travelDetails?.flightNumber || "Flight Number"} <span className="text-gray-400 font-normal">{t.travelDetails?.flightOptional || "(Optional)"}</span>
+                </label>
+                <input
+                  type="text"
+                  value={travelDetails.flightNumber}
+                  onChange={(e) => setTravelDetails({ ...travelDetails, flightNumber: e.target.value.toUpperCase() })}
+                  placeholder={t.travelDetails?.flightPlaceholder || "e.g. VN123, SQ456"}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Applicant Info Form Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           {/* Form Header */}
           <div className="bg-blue-600 px-6 py-4">
             <h2 className="text-lg font-semibold text-white">
               {t.applyForm.applicantInfo}
             </h2>
-            {applicantCount > 1 && (
+            {travelDetails.applicantCount > 1 && (
               <p className="text-blue-100 text-sm mt-1">
-                {t.applyForm.applicantOf.replace("{current}", String(currentApplicant + 1)).replace("{total}", String(applicantCount))}
+                {t.applyForm.applicantOf.replace("{current}", String(currentApplicant + 1)).replace("{total}", String(travelDetails.applicantCount))}
               </p>
             )}
           </div>
 
           {/* Applicant Tabs */}
-          {applicantCount > 1 && (
+          {travelDetails.applicantCount > 1 && (
             <div className="flex border-b border-gray-200 overflow-x-auto bg-gray-50">
               {applicants.map((_, index) => (
                 <button
@@ -953,6 +1283,23 @@ function ApplyForm() {
                   max={new Date().toISOString().split("T")[0]}
                   className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
+              </div>
+
+              {/* Religion */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {t.applyForm.religion || "Religion"} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.religion}
+                  onChange={(e) => updateApplicant("religion", e.target.value)}
+                  placeholder={t.applyForm.religionPlaceholder || "e.g. None, Christian, Muslim, Buddhist"}
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {t.applyForm.religionHint || "Enter your religion or 'None' if not applicable"}
+                </p>
               </div>
 
               {/* Nationality */}
@@ -1082,27 +1429,65 @@ function ApplyForm() {
                     )}
                   </div>
 
-                  {/* WhatsApp */}
-                  <div className="lg:col-span-2">
+                  {/* Mobile Phone */}
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.applyForm.whatsapp} <span className="text-red-500">*</span>
+                      {t.applyForm.mobile} <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
-                      value={contactInfo.phone}
-                      onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
-                      placeholder={t.applyForm.whatsappPlaceholder}
-                      className="w-full lg:w-1/2 px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      value={contactInfo.mobile}
+                      onChange={(e) => setContactInfo({ ...contactInfo, mobile: e.target.value })}
+                      placeholder={t.applyForm.mobilePlaceholder}
+                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      {t.applyForm.whatsappHint}
+                      {t.applyForm.mobileHint}
                     </p>
+                  </div>
+
+                  {/* WhatsApp Same as Mobile Checkbox + WhatsApp Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t.applyForm.whatsapp} <span className="text-gray-400 font-normal">{t.applyForm.whatsappOptional}</span>
+                    </label>
+
+                    {/* Checkbox */}
+                    <label className="flex items-center gap-3 mb-3 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={contactInfo.whatsappSameAsMobile}
+                        onChange={(e) => setContactInfo({
+                          ...contactInfo,
+                          whatsappSameAsMobile: e.target.checked,
+                          whatsapp: e.target.checked ? "" : contactInfo.whatsapp
+                        })}
+                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2 cursor-pointer"
+                      />
+                      <span className="text-sm text-gray-700">{t.applyForm.whatsappSameAsMobile}</span>
+                    </label>
+
+                    {/* WhatsApp input - only show when checkbox is unchecked */}
+                    {!contactInfo.whatsappSameAsMobile && (
+                      <>
+                        <input
+                          type="tel"
+                          value={contactInfo.whatsapp}
+                          onChange={(e) => setContactInfo({ ...contactInfo, whatsapp: e.target.value })}
+                          placeholder={t.applyForm.whatsappPlaceholder}
+                          className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          {t.applyForm.whatsappHint}
+                        </p>
+                      </>
+                    )}
                   </div>
                 </>
               )}
 
               {/* Phone Verification Section */}
-              {currentApplicant === applicantCount - 1 && contactInfo.phone && !isPhoneVerified && (
+              {currentApplicant === travelDetails.applicantCount - 1 && phoneForVerification && !isPhoneVerified && (
                 <div className="lg:col-span-2 border-t border-gray-200 pt-6 mt-2">
                   <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1112,7 +1497,7 @@ function ApplyForm() {
                   </h3>
                   {showVerification ? (
                     <PhoneVerification
-                      phoneNumber={contactInfo.phone}
+                      phoneNumber={phoneForVerification}
                       onVerified={() => {
                         setIsPhoneVerified(true);
                         setShowVerification(false);
@@ -1151,7 +1536,7 @@ function ApplyForm() {
 
               {/* Navigation Buttons */}
               <div className="lg:col-span-2 flex gap-4 pt-6">
-                {applicantCount > 1 && currentApplicant > 0 && (
+                {travelDetails.applicantCount > 1 && currentApplicant > 0 && (
                   <button
                     onClick={() => setCurrentApplicant(currentApplicant - 1)}
                     className="flex-1 lg:flex-none lg:px-8 py-3 rounded-lg border border-gray-300 text-gray-700 text-base font-medium hover:bg-gray-50 transition-colors"
@@ -1160,7 +1545,7 @@ function ApplyForm() {
                   </button>
                 )}
 
-                {applicantCount > 1 && currentApplicant < applicantCount - 1 ? (
+                {travelDetails.applicantCount > 1 && currentApplicant < travelDetails.applicantCount - 1 ? (
                   <button
                     onClick={() => setCurrentApplicant(currentApplicant + 1)}
                     className="flex-1 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-base transition-colors"
@@ -1199,7 +1584,7 @@ function ApplyForm() {
               <div className="lg:col-span-2 border-t border-gray-200 pt-5 mt-2">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-700 font-medium">
-                    {t.applyForm.total} ({applicantCount} {applicantCount === 1 ? t.applyForm.person1 : t.applyForm.people})
+                    {t.applyForm.total} ({travelDetails.applicantCount} {travelDetails.applicantCount === 1 ? t.applyForm.person1 : t.applyForm.people})
                   </span>
                   <span className="text-2xl font-bold text-blue-600">${totalPrice} USD</span>
                 </div>

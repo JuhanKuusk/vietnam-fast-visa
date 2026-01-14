@@ -280,20 +280,33 @@ const ENTRY_PORTS = [
 
 export default function Home() {
   const { t, isLoading } = useLanguage();
-  const [applicants, setApplicants] = useState(1);
   const [formData, setFormData] = useState({
-    purpose: "tourist",
-    arrivalPort: "",
-    entryDate: "",
-    exitDate: "",
     flightNumber: "",
-    hotelAddress: "",
     nationality: "",
+    purpose: "tourism",
   });
   const [showVisaInfo, setShowVisaInfo] = useState(false);
   const [heroFlightNumber, setHeroFlightNumber] = useState("");
   const [nationalitySearch, setNationalitySearch] = useState("");
   const [showNationalityDropdown, setShowNationalityDropdown] = useState(false);
+  const [flightArrivalData, setFlightArrivalData] = useState<{
+    arrivalAirport: string;
+    arrivalAirportCode: string;
+    departureAirport: string;
+  } | null>(null);
+
+  // Purpose of visit options
+  const purposeOptions = [
+    { value: "tourism", label: t.form?.purposeTourism || "Tourism" },
+    { value: "business", label: t.form?.purposeBusiness || "Business" },
+    { value: "visiting", label: t.form?.purposeVisiting || "Visiting relatives" },
+    { value: "short_term", label: t.form?.purposeShortTerm || "Short-term activities" },
+  ];
+
+  // Handle flight data from FlightInfo component
+  const handleFlightData = (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string }) => {
+    setFlightArrivalData(data);
+  };
 
   const visaRequirement = formData.nationality ? getVisaRequirement(formData.nationality) : null;
   const selectedCountryName = ALL_COUNTRIES.find(c => c.code === formData.nationality)?.name;
@@ -302,7 +315,6 @@ export default function Home() {
   );
 
   const pricePerPerson = 149;
-  const totalPrice = pricePerPerson * applicants;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#afcef6' }}>
@@ -550,294 +562,188 @@ export default function Home() {
 
               {/* Form Body */}
               <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
-                <div className="grid md:grid-cols-2 gap-5">
-                  {/* Number of Applicants */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.form.numberOfApplicants} <span style={{ color: '#ef7175' }}>*</span>
-                    </label>
-                    <select
-                      value={applicants}
-                      onChange={(e) => setApplicants(Number(e.target.value))}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
-                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                    >
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                        <option key={n} value={n}>
-                          {n} {n === 1 ? t.form.person : t.form.people}
-                        </option>
-                      ))}
-                    </select>
+                {/* Flight Number - First Box */}
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl">✈️</span>
+                    <span className="font-bold text-gray-900">{t.form?.yourFlightNumber || "Your Flight Number"}</span>
                   </div>
-
-                  {/* Purpose of Travel */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.form.purposeOfTravel} <span style={{ color: '#ef7175' }}>*</span>
-                    </label>
-                    <select
-                      value={formData.purpose}
-                      onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
-                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                    >
-                      <option value="tourist">{t.form.tourist}</option>
-                      <option value="business">{t.form.business}</option>
-                      <option value="visiting">{t.form.visiting}</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Arrival Port */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t.form.arrivalAirport} <span style={{ color: '#ef7175' }}>*</span>
-                  </label>
-                  <select
-                    value={formData.arrivalPort}
-                    onChange={(e) => setFormData({ ...formData, arrivalPort: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
+                  <input
+                    type="text"
+                    value={formData.flightNumber}
+                    onChange={(e) => {
+                      setFormData({ ...formData, flightNumber: e.target.value.toUpperCase() });
+                      // Reset flight data when changing flight number
+                      if (e.target.value.length < 3) {
+                        setFlightArrivalData(null);
+                      }
+                    }}
+                    placeholder={t.form.flightPlaceholder}
+                    className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
                     style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                  >
-                    <option value="">{t.form.selectAirport}</option>
-                    {ENTRY_PORTS.map((port) => (
-                      <option key={port.code} value={port.code}>
-                        {port.name}
-                      </option>
-                    ))}
-                  </select>
+                  />
+                  {/* Flight Info - Shows check-in time and gate when flight number is entered */}
+                  {formData.flightNumber && formData.flightNumber.length >= 3 && (
+                    <FlightInfo
+                      flightNumber={formData.flightNumber}
+                      onFlightData={handleFlightData}
+                    />
+                  )}
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-5">
-                  {/* Entry Date */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.form.entryDate} <span style={{ color: '#ef7175' }}>*</span>
-                    </label>
-                    <input
-                      type="date"
-                      value={formData.entryDate}
-                      onChange={(e) => setFormData({ ...formData, entryDate: e.target.value })}
-                      min={new Date().toISOString().split("T")[0]}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
-                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                    />
+                {/* Check Your Visa Requirements - Second Box */}
+                <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-xl">🛂</span>
+                    <span className="font-bold text-gray-900">{t.form?.checkVisaRequirements || "Check Your Visa Requirements"}</span>
                   </div>
 
-                  {/* Exit Date */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.form.exitDate} <span style={{ color: '#ef7175' }}>*</span>
-                    </label>
-                    <input
-                      type="date"
-                      value={formData.exitDate}
-                      onChange={(e) => setFormData({ ...formData, exitDate: e.target.value })}
-                      min={formData.entryDate || new Date().toISOString().split("T")[0]}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all"
-                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                    />
-                  </div>
-                </div>
-
-                {/* Nationality / Citizenship - Visa Checker */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t.form?.nationality || "Your Nationality/Citizenship"} <span style={{ color: '#ef7175' }}>*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={formData.nationality ? selectedCountryName : nationalitySearch}
-                      onChange={(e) => {
-                        setNationalitySearch(e.target.value);
-                        setFormData({ ...formData, nationality: "" });
-                        setShowNationalityDropdown(true);
-                      }}
-                      onFocus={() => setShowNationalityDropdown(true)}
-                      placeholder={t.form?.selectNationality || "Search your country..."}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
-                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                    />
-                    {formData.nationality && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setFormData({ ...formData, nationality: "" });
-                          setNationalitySearch("");
-                        }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        ✕
-                      </button>
-                    )}
-                    {showNationalityDropdown && !formData.nationality && (
-                      <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                        {filteredCountries.slice(0, 10).map((country) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Nationality / Citizenship */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t.form?.nationality || "Your Nationality"} <span style={{ color: '#ef7175' }}>*</span>
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={formData.nationality ? selectedCountryName : nationalitySearch}
+                          onChange={(e) => {
+                            setNationalitySearch(e.target.value);
+                            setFormData({ ...formData, nationality: "" });
+                            setShowNationalityDropdown(true);
+                          }}
+                          onFocus={() => setShowNationalityDropdown(true)}
+                          placeholder={t.form?.selectNationality || "Search your country..."}
+                          className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
+                          style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
+                        />
+                        {formData.nationality && (
                           <button
-                            key={country.code}
                             type="button"
                             onClick={() => {
-                              setFormData({ ...formData, nationality: country.code });
+                              setFormData({ ...formData, nationality: "" });
                               setNationalitySearch("");
-                              setShowNationalityDropdown(false);
                             }}
-                            className="w-full px-4 py-3 text-left hover:bg-gray-50 text-gray-900 border-b border-gray-100 last:border-b-0"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                           >
-                            {country.name}
+                            ✕
                           </button>
-                        ))}
-                        {filteredCountries.length === 0 && (
-                          <div className="px-4 py-3 text-gray-500">{t.form?.noCountryFound || "No country found"}</div>
+                        )}
+                        {showNationalityDropdown && !formData.nationality && (
+                          <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            {filteredCountries.slice(0, 10).map((country) => (
+                              <button
+                                key={country.code}
+                                type="button"
+                                onClick={() => {
+                                  setFormData({ ...formData, nationality: country.code });
+                                  setNationalitySearch("");
+                                  setShowNationalityDropdown(false);
+                                }}
+                                className="w-full px-4 py-3 text-left hover:bg-gray-50 text-gray-900 border-b border-gray-100 last:border-b-0"
+                              >
+                                {country.name}
+                              </button>
+                            ))}
+                            {filteredCountries.length === 0 && (
+                              <div className="px-4 py-3 text-gray-500">{t.form?.noCountryFound || "No country found"}</div>
+                            )}
+                          </div>
                         )}
                       </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Visa Requirement Info Banner */}
-                {visaRequirement && (
-                  <div className={`rounded-xl p-4 border ${visaRequirement.bgColor}`}>
-                    {visaRequirement.type === "visa_free" && (
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                          <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className={`font-bold ${visaRequirement.color}`}>
-                            {t.form?.visaFree || "Visa-Free Entry"} - {visaRequirement.days} {t.form?.days || "days"}
-                          </div>
-                          <div className="text-gray-600 text-sm mt-1">
-                            {t.form?.visaFreeDesc || `Citizens of ${selectedCountryName} can enter Vietnam without a visa for up to ${visaRequirement.days} days.`}
-                          </div>
-                          <div className="text-gray-600 text-sm mt-2">
-                            <span className="font-medium">{t.form?.stayingLonger || "Staying longer?"}</span> {t.form?.needVisaForLonger || "You'll need a visa for stays exceeding the visa-free period."}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {visaRequirement.type === "evisa" && (
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.581.814l-4.419-3.35-4.419 3.35A1 1 0 014 16V4zm2 0v10.586l3.419-2.59a1 1 0 011.162 0L14 14.586V4H6z" clipRule="evenodd" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className={`font-bold ${visaRequirement.color}`}>
-                            {t.form?.evisaRequired || "E-Visa Required"}
-                          </div>
-                          <div className="text-gray-600 text-sm mt-1">
-                            {t.form?.evisaDesc || `Citizens of ${selectedCountryName} need an e-visa or visa on arrival to enter Vietnam. We can help you get it fast!`}
-                          </div>
-                          <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium" style={{ color: '#ef7175' }}>
-                            <span>✓</span> {t.form?.weCanHelp || "We process your e-visa in 30 minutes"}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {visaRequirement.type === "embassy_required" && (
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                          <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className={`font-bold ${visaRequirement.color}`}>
-                            {t.form?.embassyRequired || "Embassy Visa Required"}
-                          </div>
-                          <div className="text-gray-600 text-sm mt-1">
-                            {t.form?.embassyDesc || `Citizens of ${selectedCountryName} must apply for a visa at a Vietnamese embassy before travel.`}
-                          </div>
-                          <div className="mt-2 text-sm text-gray-600">
-                            {t.form?.contactUsHelp || "Contact us for assistance with your visa application."}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <div className="grid md:grid-cols-2 gap-5">
-                  {/* Flight Number */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.form.flightNumber} <span style={{ color: '#ef7175' }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.flightNumber}
-                      onChange={(e) => setFormData({ ...formData, flightNumber: e.target.value.toUpperCase() })}
-                      placeholder={t.form.flightPlaceholder}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
-                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                    />
-                  </div>
-
-                  {/* Hotel Address */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.form.addressInVietnam} <span className="text-gray-400 font-normal">{t.form.addressOptional}</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.hotelAddress}
-                      onChange={(e) => setFormData({ ...formData, hotelAddress: e.target.value })}
-                      placeholder={t.form.hotelPlaceholder}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all"
-                      style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
-                    />
-                  </div>
-                </div>
-
-                {/* Flight Info - Shows check-in time and gate when flight number is entered */}
-                {formData.flightNumber && formData.flightNumber.length >= 3 && (
-                  <FlightInfo
-                    flightNumber={formData.flightNumber}
-                    date={formData.entryDate}
-                  />
-                )}
-
-                {/* Service Type */}
-                <div className="rounded-xl p-5 border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#ef7175' }}>
-                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
                     </div>
-                    <div className="flex-1">
-                      <div className="font-bold text-lg text-gray-900">
-                        {t.form.urgentRescue}
-                      </div>
-                      <div className="text-gray-700 text-sm">
-                        {t.form.urgentRescueDesc}
-                      </div>
-                    </div>
-                    <div className="text-2xl font-bold" style={{ color: '#ef7175' }}>
-                      ${pricePerPerson}
+
+                    {/* Purpose of Visit */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t.form?.purposeOfVisit || "Purpose of Visit"} <span style={{ color: '#ef7175' }}>*</span>
+                      </label>
+                      <select
+                        value={formData.purpose}
+                        onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
+                        className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer"
+                        style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
+                      >
+                        {purposeOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
-                </div>
 
-                {/* Price Summary */}
-                <div className="rounded-xl p-5 space-y-3" style={{ backgroundColor: '#f5f5f5' }}>
-                  <div className="flex justify-between text-gray-600">
-                    <span>{t.form.serviceFee} ({applicants} × ${pricePerPerson})</span>
-                    <span>${totalPrice} USD</span>
-                  </div>
-                  <div className="flex justify-between text-xl font-bold border-t border-gray-200 pt-3">
-                    <span className="text-gray-900">{t.form.total}</span>
-                    <span style={{ color: '#ef7175' }}>${totalPrice} USD</span>
-                  </div>
+                  {/* Visa Requirement Info Banner */}
+                  {visaRequirement && (
+                    <div className={`mt-4 rounded-xl p-4 border ${visaRequirement.bgColor}`}>
+                      {visaRequirement.type === "visa_free" && (
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className={`font-bold ${visaRequirement.color}`}>
+                              {t.form?.visaFree || "Visa-Free Entry"} - {visaRequirement.days} {t.form?.days || "days"}
+                            </div>
+                            <div className="text-gray-600 text-sm mt-1">
+                              {t.form?.visaFreeDesc || `Citizens of ${selectedCountryName} can enter Vietnam without a visa for up to ${visaRequirement.days} days.`}
+                            </div>
+                            <div className="text-gray-600 text-sm mt-2">
+                              <span className="font-medium">{t.form?.stayingLonger || "Staying longer?"}</span> {t.form?.needVisaForLonger || "You'll need a visa for stays exceeding the visa-free period."}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {visaRequirement.type === "evisa" && (
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.581.814l-4.419-3.35-4.419 3.35A1 1 0 014 16V4zm2 0v10.586l3.419-2.59a1 1 0 011.162 0L14 14.586V4H6z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className={`font-bold ${visaRequirement.color}`}>
+                              {t.form?.evisaRequired || "E-Visa Required"}
+                            </div>
+                            <div className="text-gray-600 text-sm mt-1">
+                              {t.form?.evisaDesc || `Citizens of ${selectedCountryName} need an e-visa or visa on arrival to enter Vietnam. We can help you get it fast!`}
+                            </div>
+                            <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium" style={{ color: '#ef7175' }}>
+                              <span>✓</span> {t.form?.weCanHelp || "We process your e-visa in 30 minutes"}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {visaRequirement.type === "embassy_required" && (
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                            <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className={`font-bold ${visaRequirement.color}`}>
+                              {t.form?.embassyRequired || "Embassy Visa Required"}
+                            </div>
+                            <div className="text-gray-600 text-sm mt-1">
+                              {t.form?.embassyDesc || `Citizens of ${selectedCountryName} must apply for a visa at a Vietnamese embassy before travel.`}
+                            </div>
+                            <div className="mt-2 text-sm text-gray-600">
+                              {t.form?.contactUsHelp || "Contact us for assistance with your visa application."}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* CTA Button */}
                 <a
-                  href={`/apply?applicants=${applicants}&purpose=${formData.purpose}&port=${formData.arrivalPort}&entry=${formData.entryDate}&exit=${formData.exitDate}&flight=${formData.flightNumber}&hotel=${encodeURIComponent(formData.hotelAddress)}`}
+                  href={`/apply?applicants=1&purpose=${formData.purpose}&flight=${formData.flightNumber}&nationality=${formData.nationality}${flightArrivalData?.arrivalAirportCode ? `&entryPort=${flightArrivalData.arrivalAirportCode}` : ''}`}
                   className="block w-full py-4 rounded-xl text-white font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center hover:opacity-90"
                   style={{ backgroundColor: '#ef7175' }}
                 >

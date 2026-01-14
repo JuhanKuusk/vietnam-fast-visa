@@ -78,6 +78,14 @@ export async function POST(request: NextRequest) {
           { status: 429 }
         );
       }
+
+      // Trial account limitation - phone not verified
+      if (twilioError.code === 21608) {
+        return NextResponse.json(
+          { error: "Phone number not verified. Please contact support or try a different number." },
+          { status: 403 }
+        );
+      }
     }
 
     return NextResponse.json(
