@@ -103,10 +103,10 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
 
   if (loading) {
     return (
-      <div className="mt-3 p-4 rounded-xl bg-gray-50 border border-gray-200 animate-pulse">
+      <div className="mt-3 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 animate-pulse">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-gray-300"></div>
-          <div className="h-4 bg-gray-300 rounded w-32"></div>
+          <div className="w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
         </div>
       </div>
     );
@@ -141,15 +141,15 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
   const getStatusColor = (status: FlightData["checkInStatus"]) => {
     switch (status) {
       case "open":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 border-green-200 dark:border-green-700";
       case "closing_soon":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+        return "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-700";
       case "closed":
-        return "bg-red-100 text-red-800 border-red-200";
+        return "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 border-red-200 dark:border-red-700";
       case "not_open_yet":
-        return "bg-blue-100 text-blue-800 border-blue-200";
+        return "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-700";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700";
     }
   };
 
@@ -229,17 +229,17 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
   };
 
   return (
-    <div className={`mt-3 p-4 rounded-xl border-2 ${flightData.checkInStatus === "closing_soon" ? "border-yellow-400 bg-yellow-50" : flightData.checkInStatus === "closed" ? "border-red-400 bg-red-50" : "border-gray-200 bg-white"}`}>
+    <div className={`mt-3 p-4 rounded-xl border-2 transition-colors ${flightData.checkInStatus === "closing_soon" ? "border-yellow-400 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-900/30" : flightData.checkInStatus === "closed" ? "border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-900/30" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"}`}>
       {/* Flight Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-lg">✈️</span>
           <div>
-            <span className="font-bold text-gray-900">{flightData.flightNumber}</span>
-            <span className="text-gray-500 text-sm ml-2">{flightData.airline}</span>
+            <span className="font-bold text-gray-900 dark:text-gray-100">{flightData.flightNumber}</span>
+            <span className="text-gray-500 dark:text-gray-400 text-sm ml-2">{flightData.airline}</span>
           </div>
         </div>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${flightData.status === "On Time" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${flightData.status === "On Time" ? "bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300" : "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300"}`}>
           {flightData.status}
         </span>
       </div>
@@ -247,32 +247,32 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
       {/* Route */}
       <div className="flex items-center gap-3 mb-3 text-sm">
         <div className="flex-1">
-          <div className="font-medium text-gray-900">{flightData.departure.airport.split("(")[0].trim()}</div>
-          <div className="text-gray-500 text-xs">{formatTime(flightData.departure.scheduledTime)}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-100">{flightData.departure.airport.split("(")[0].trim()}</div>
+          <div className="text-gray-500 dark:text-gray-400 text-xs">{formatTime(flightData.departure.scheduledTime)}</div>
         </div>
-        <div className="flex items-center text-gray-400">
-          <div className="w-8 h-px bg-gray-300"></div>
+        <div className="flex items-center text-gray-400 dark:text-gray-500">
+          <div className="w-8 h-px bg-gray-300 dark:bg-gray-600"></div>
           <span className="mx-1">→</span>
-          <div className="w-8 h-px bg-gray-300"></div>
+          <div className="w-8 h-px bg-gray-300 dark:bg-gray-600"></div>
         </div>
         <div className="flex-1 text-right">
-          <div className="font-medium text-gray-900">{flightData.arrival.airport.split("(")[0].trim()}</div>
-          <div className="text-gray-500 text-xs">{formatTime(flightData.arrival.scheduledTime)}</div>
+          <div className="font-medium text-gray-900 dark:text-gray-100">{flightData.arrival.airport.split("(")[0].trim()}</div>
+          <div className="text-gray-500 dark:text-gray-400 text-xs">{formatTime(flightData.arrival.scheduledTime)}</div>
         </div>
       </div>
 
       {/* Gate & Terminal Info */}
       <div className="grid grid-cols-2 gap-2 mb-3 text-sm">
         {flightData.departure.terminal && (
-          <div className="bg-gray-50 rounded-lg p-2">
-            <span className="text-gray-500 text-xs">Terminal</span>
-            <div className="font-semibold text-gray-900">{flightData.departure.terminal}</div>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2">
+            <span className="text-gray-500 dark:text-gray-400 text-xs">Terminal</span>
+            <div className="font-semibold text-gray-900 dark:text-gray-100">{flightData.departure.terminal}</div>
           </div>
         )}
         {flightData.departure.gate && (
-          <div className="bg-gray-50 rounded-lg p-2">
-            <span className="text-gray-500 text-xs">Gate</span>
-            <div className="font-semibold text-gray-900">{flightData.departure.gate}</div>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2">
+            <span className="text-gray-500 dark:text-gray-400 text-xs">Gate</span>
+            <div className="font-semibold text-gray-900 dark:text-gray-100">{flightData.departure.gate}</div>
           </div>
         )}
       </div>
@@ -316,9 +316,9 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
       )}
 
       {/* Email Notification Subscription */}
-      <div className="mt-4 pt-4 border-t border-gray-200">
+      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
         {subscribeSuccess ? (
-          <div className="flex items-center gap-2 p-3 rounded-lg bg-green-50 border border-green-200 text-green-800">
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-800 dark:text-green-200">
             <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
@@ -326,7 +326,7 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
           </div>
         ) : (
           <form onSubmit={handleSubscribe} className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               <span className="flex items-center gap-1">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -340,7 +340,7 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
                 value={notifyEmail}
                 onChange={(e) => setNotifyEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="flex-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
                 pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
                 title="Please enter a valid email address (e.g., name@example.com)"
@@ -361,9 +361,9 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
               </button>
             </div>
             {subscribeError && (
-              <p className="text-xs text-red-600">{subscribeError}</p>
+              <p className="text-xs text-red-600 dark:text-red-400">{subscribeError}</p>
             )}
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               We&apos;ll email you if your flight status, gate, or time changes.
             </p>
           </form>

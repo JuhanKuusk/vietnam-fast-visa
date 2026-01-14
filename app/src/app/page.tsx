@@ -499,7 +499,7 @@ export default function Home() {
                     value={heroFlightNumber}
                     onChange={(e) => setHeroFlightNumber(e.target.value.toUpperCase())}
                     placeholder={t.hero.enterFlightNumber}
-                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:border-transparent transition-all"
+                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:border-transparent"
                   />
                 </div>
                 {heroFlightNumber && heroFlightNumber.length >= 3 && (
@@ -615,7 +615,7 @@ export default function Home() {
                       }
                     }}
                     placeholder={t.form.flightPlaceholder}
-                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all"
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
                   />
                   {/* Flight Info - Shows check-in time and gate when flight number is entered */}
                   {formData.flightNumber && formData.flightNumber.length >= 3 && (
