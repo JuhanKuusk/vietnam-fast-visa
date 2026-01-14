@@ -488,6 +488,79 @@ export const translations = {
     loading: "Loading...",
   },
 
+  // Non-Urgent Visa Section
+  nonUrgent: {
+    planningAhead: "Planning Ahead?",
+    title: "Need Vietnam Visa? For Non-Urgent Travelers",
+    subtitle: "Choose the processing time that fits your schedule. Single-entry visa valid for 1-3 months.",
+    timezoneNote: "Processing times do not include weekends. All times are Vietnam local time.",
+    // 4-Hour Express
+    fourHourTitle: "4-Hour Express",
+    fourHourSubtitle: "Same Day Delivery",
+    fourHourFeature1: "Visa ready in 4 hours",
+    fourHourFeature2: "Perfect for urgent travel",
+    fourHourFeature3: "Email & WhatsApp delivery",
+    fourHourCutoff: "Cut-off Times:",
+    fourHourCutoff1: "Book by 8:00 AM → Ready by 1:00 PM",
+    fourHourCutoff2: "Book by 2:00 PM → Ready by 6:00 PM",
+    fourHourButton: "Get 4-Hour Visa",
+    fastest: "FASTEST",
+    // 1-Day Service
+    oneDayTitle: "1-Day Service",
+    oneDaySubtitle: "Next Business Day",
+    oneDayFeature1: "Visa ready in 1 day",
+    oneDayFeature2: "Great for last-minute trips",
+    oneDayFeature3: "Email & WhatsApp delivery",
+    oneDayCutoff1: "Book by 10:00 AM → Ready by 6:00 PM same day",
+    oneDayCutoff2: "Book by 4:00 PM → Ready by 1:00 PM next day",
+    oneDayButton: "Get 1-Day Visa",
+    // 2-Day Service
+    twoDayTitle: "2-Day Service",
+    twoDaySubtitle: "Standard Processing",
+    twoDayFeature1: "Visa ready in 2 business days",
+    twoDayFeature2: "Perfect for planned trips",
+    twoDayFeature3: "Email delivery",
+    twoDayCutoff: "Cut-off Time:",
+    twoDayCutoff1: "Book by 4:00 PM → Ready by 6:00 PM next working day",
+    twoDayButton: "Get 2-Day Visa",
+    bestValue: "BEST VALUE",
+    perPerson: "/person",
+    // Add-on Options
+    extendedDuration: "Extended Duration",
+    extendedDurationDesc: "Upgrade to 1-3 months validity",
+    multiEntry: "Multi-Entry Visa",
+    multiEntryDesc: "Enter Vietnam multiple times",
+    // Weekend/Holiday
+    weekendTitle: "Weekend & Holiday Urgent Visa",
+    weekendSubtitle: "Need a visa on Saturday, Sunday, or a public holiday?",
+    weekendCutoff: "Book by 2:30 PM → Ready by 6:00 PM same day",
+    weekendTimezone: "All times Vietnam Time (GMT+7)",
+    weekendButton: "Get Weekend Visa",
+    // Info Note
+    allPackagesInclude: "All visa packages include:",
+    singleEntry30Days: "Single-entry visa (30 days standard)",
+    support247: "24/7 customer support",
+    moneyBackGuarantee: "Money-back guarantee if rejected",
+    need30MinVisa: "Need urgent visa in 30 minutes?",
+    get30MinEmergency: "Get 30-Min Emergency Visa",
+  },
+
+  // Operating Hours
+  operatingHours: {
+    title: "30-Min & 1.5-Hour Express Service Hours",
+    weekdaysOnly: "Weekdays only:",
+    vietnamTime: "8:00 AM - 5:00 PM (Vietnam Time, GMT+7)",
+    fromBali: "From Bali/Indonesia:",
+    baliTime: "9:00 AM - 6:00 PM (WITA, GMT+8)",
+    expressServiceNote: "Express service: Weekdays 8AM-5PM Vietnam Time (9AM-6PM Bali)",
+  },
+
+  // Hero Price Section
+  heroPrice: {
+    fullVisaDesc: "1.5-Hour Full Visa | Check-in approval letter in 30 min",
+    expressLabel: "1.5-Hour Express",
+  },
+
   // Legal Pages
   legal: {
     // Common

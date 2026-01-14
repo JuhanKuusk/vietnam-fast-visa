@@ -472,12 +472,12 @@ export default function Home() {
                 <div className="flex items-start gap-3">
                   <span className="text-xl flex-shrink-0">🕐</span>
                   <div className="text-left">
-                    <div className="font-semibold text-gray-900 text-sm">30-Min & 1.5-Hour Express Service Hours</div>
+                    <div className="font-semibold text-gray-900 text-sm">{t.operatingHours?.title || "30-Min & 1.5-Hour Express Service Hours"}</div>
                     <div className="text-gray-600 text-xs mt-1">
-                      <span className="font-medium">Weekdays only:</span> 8:00 AM - 5:00 PM (Vietnam Time, GMT+7)
+                      <span className="font-medium">{t.operatingHours?.weekdaysOnly || "Weekdays only:"}</span> {t.operatingHours?.vietnamTime || "8:00 AM - 5:00 PM (Vietnam Time, GMT+7)"}
                     </div>
                     <div className="text-gray-500 text-xs mt-1">
-                      <span className="font-medium">From Bali/Indonesia:</span> 9:00 AM - 6:00 PM (WITA, GMT+8)
+                      <span className="font-medium">{t.operatingHours?.fromBali || "From Bali/Indonesia:"}</span> {t.operatingHours?.baliTime || "9:00 AM - 6:00 PM (WITA, GMT+8)"}
                     </div>
                   </div>
                 </div>
@@ -516,7 +516,7 @@ export default function Home() {
                 <span className="text-gray-700 text-xl">{t.hero.perPerson}</span>
               </div>
               <div className="text-gray-600 text-sm mt-2">
-                1.5-Hour Full Visa | Check-in approval letter in 30 min
+                {t.heroPrice?.fullVisaDesc || "1.5-Hour Full Visa | Check-in approval letter in 30 min"}
               </div>
             </div>
 
@@ -865,7 +865,7 @@ export default function Home() {
                 <div className="flex justify-between items-center p-3 rounded-lg border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
                   <div>
                     <span className="font-medium text-gray-900 block">{t.sidebar.ourPrice}</span>
-                    <span className="text-xs text-gray-600">1.5-Hour Express</span>
+                    <span className="text-xs text-gray-600">{t.heroPrice?.expressLabel || "1.5-Hour Express"}</span>
                   </div>
                   <span className="font-bold text-xl" style={{ color: '#ef7175' }}>$149</span>
                 </div>
@@ -881,7 +881,7 @@ export default function Home() {
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <div className="flex items-start gap-2 text-xs text-gray-500">
                   <span className="flex-shrink-0">🕐</span>
-                  <span>Express service: Weekdays 8AM-5PM Vietnam Time (9AM-6PM Bali)</span>
+                  <span>{t.operatingHours?.expressServiceNote || "Express service: Weekdays 8AM-5PM Vietnam Time (9AM-6PM Bali)"}</span>
                 </div>
               </div>
             </div>
@@ -912,16 +912,16 @@ export default function Home() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              Planning Ahead?
+              {t.nonUrgent?.planningAhead || "Planning Ahead?"}
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-              Need Vietnam Visa? For Non-Urgent Travelers
+              {t.nonUrgent?.title || "Need Vietnam Visa? For Non-Urgent Travelers"}
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Choose the processing time that fits your schedule. Single-entry visa valid for 1-3 months.
+              {t.nonUrgent?.subtitle || "Choose the processing time that fits your schedule. Single-entry visa valid for 1-3 months."}
             </p>
             <p className="text-sm text-gray-500 mt-2">
-              Processing times do not include weekends. All times are Vietnam local time.
+              {t.nonUrgent?.timezoneNote || "Processing times do not include weekends. All times are Vietnam local time."}
             </p>
           </div>
 
@@ -930,7 +930,7 @@ export default function Home() {
             {/* 4-Hour Express Service */}
             <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-200 p-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                FASTEST
+                {t.nonUrgent?.fastest || "FASTEST"}
               </div>
               <div className="text-center mb-4">
                 <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center mb-3">
@@ -938,48 +938,48 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">4-Hour Express</h3>
-                <p className="text-blue-600 font-semibold">Same Day Delivery</p>
+                <h3 className="text-xl font-bold text-gray-900">{t.nonUrgent?.fourHourTitle || "4-Hour Express"}</h3>
+                <p className="text-blue-600 font-semibold">{t.nonUrgent?.fourHourSubtitle || "Same Day Delivery"}</p>
               </div>
               <div className="space-y-3 mb-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Visa ready in 4 hours
+                  {t.nonUrgent?.fourHourFeature1 || "Visa ready in 4 hours"}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Perfect for urgent travel
+                  {t.nonUrgent?.fourHourFeature2 || "Perfect for urgent travel"}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Email & WhatsApp delivery
+                  {t.nonUrgent?.fourHourFeature3 || "Email & WhatsApp delivery"}
                 </div>
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                 <div className="text-xs text-blue-800">
-                  <span className="font-semibold block mb-1">Cut-off Times:</span>
+                  <span className="font-semibold block mb-1">{t.nonUrgent?.fourHourCutoff || "Cut-off Times:"}</span>
                   <div className="space-y-1">
-                    <div>Book by 8:00 AM → Ready by 1:00 PM</div>
-                    <div>Book by 2:00 PM → Ready by 6:00 PM</div>
+                    <div>{t.nonUrgent?.fourHourCutoff1 || "Book by 8:00 AM → Ready by 1:00 PM"}</div>
+                    <div>{t.nonUrgent?.fourHourCutoff2 || "Book by 2:00 PM → Ready by 6:00 PM"}</div>
                   </div>
                 </div>
               </div>
               <div className="text-center mb-4">
                 <span className="text-3xl font-bold text-gray-900">$135</span>
-                <span className="text-gray-500 text-sm">/person</span>
+                <span className="text-gray-500 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
                 href="/apply?speed=4-hour"
                 className="block w-full py-3 rounded-xl text-white font-bold text-center transition-all hover:opacity-90"
                 style={{ backgroundColor: '#ef7175' }}
               >
-                Get 4-Hour Visa
+                {t.nonUrgent?.fourHourButton || "Get 4-Hour Visa"}
               </a>
             </div>
 
@@ -991,54 +991,54 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">1-Day Service</h3>
-                <p className="text-green-600 font-semibold">Next Business Day</p>
+                <h3 className="text-xl font-bold text-gray-900">{t.nonUrgent?.oneDayTitle || "1-Day Service"}</h3>
+                <p className="text-green-600 font-semibold">{t.nonUrgent?.oneDaySubtitle || "Next Business Day"}</p>
               </div>
               <div className="space-y-3 mb-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Visa ready in 1 day
+                  {t.nonUrgent?.oneDayFeature1 || "Visa ready in 1 day"}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Great for last-minute trips
+                  {t.nonUrgent?.oneDayFeature2 || "Great for last-minute trips"}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Email & WhatsApp delivery
+                  {t.nonUrgent?.oneDayFeature3 || "Email & WhatsApp delivery"}
                 </div>
               </div>
               <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
                 <div className="text-xs text-green-800">
-                  <span className="font-semibold block mb-1">Cut-off Times:</span>
+                  <span className="font-semibold block mb-1">{t.nonUrgent?.fourHourCutoff || "Cut-off Times:"}</span>
                   <div className="space-y-1">
-                    <div>Book by 10:00 AM → Ready by 6:00 PM same day</div>
-                    <div>Book by 4:00 PM → Ready by 1:00 PM next day</div>
+                    <div>{t.nonUrgent?.oneDayCutoff1 || "Book by 10:00 AM → Ready by 6:00 PM same day"}</div>
+                    <div>{t.nonUrgent?.oneDayCutoff2 || "Book by 4:00 PM → Ready by 1:00 PM next day"}</div>
                   </div>
                 </div>
               </div>
               <div className="text-center mb-4">
                 <span className="text-3xl font-bold text-gray-900">$111</span>
-                <span className="text-gray-500 text-sm">/person</span>
+                <span className="text-gray-500 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
                 href="/apply?speed=1-day"
                 className="block w-full py-3 rounded-xl text-white font-bold text-center transition-all hover:opacity-90 bg-green-600 hover:bg-green-700"
               >
-                Get 1-Day Visa
+                {t.nonUrgent?.oneDayButton || "Get 1-Day Visa"}
               </a>
             </div>
 
             {/* 2-Day Service */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 relative">
               <div className="absolute top-0 right-0 bg-gray-700 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                BEST VALUE
+                {t.nonUrgent?.bestValue || "BEST VALUE"}
               </div>
               <div className="text-center mb-4">
                 <div className="w-16 h-16 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-3">
@@ -1046,44 +1046,44 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">2-Day Service</h3>
-                <p className="text-gray-600 font-semibold">Standard Processing</p>
+                <h3 className="text-xl font-bold text-gray-900">{t.nonUrgent?.twoDayTitle || "2-Day Service"}</h3>
+                <p className="text-gray-600 font-semibold">{t.nonUrgent?.twoDaySubtitle || "Standard Processing"}</p>
               </div>
               <div className="space-y-3 mb-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Visa ready in 2 business days
+                  {t.nonUrgent?.twoDayFeature1 || "Visa ready in 2 business days"}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Perfect for planned trips
+                  {t.nonUrgent?.twoDayFeature2 || "Perfect for planned trips"}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Email delivery
+                  {t.nonUrgent?.twoDayFeature3 || "Email delivery"}
                 </div>
               </div>
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
                 <div className="text-xs text-gray-700">
-                  <span className="font-semibold block mb-1">Cut-off Time:</span>
-                  <div>Book by 4:00 PM → Ready by 6:00 PM next working day</div>
+                  <span className="font-semibold block mb-1">{t.nonUrgent?.twoDayCutoff || "Cut-off Time:"}</span>
+                  <div>{t.nonUrgent?.twoDayCutoff1 || "Book by 4:00 PM → Ready by 6:00 PM next working day"}</div>
                 </div>
               </div>
               <div className="text-center mb-4">
                 <span className="text-3xl font-bold text-gray-900">$99</span>
-                <span className="text-gray-500 text-sm">/person</span>
+                <span className="text-gray-500 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
                 href="/apply?speed=2-day"
                 className="block w-full py-3 rounded-xl text-white font-bold text-center transition-all hover:opacity-90 bg-gray-700 hover:bg-gray-800"
               >
-                Get 2-Day Visa
+                {t.nonUrgent?.twoDayButton || "Get 2-Day Visa"}
               </a>
             </div>
           </div>
@@ -1099,8 +1099,8 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Extended Duration</h4>
-                  <p className="text-sm text-gray-600 mt-1">Upgrade to 1-3 months validity</p>
+                  <h4 className="font-semibold text-gray-900">{t.nonUrgent?.extendedDuration || "Extended Duration"}</h4>
+                  <p className="text-sm text-gray-600 mt-1">{t.nonUrgent?.extendedDurationDesc || "Upgrade to 1-3 months validity"}</p>
                   <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium">
                     +$50
                   </div>
@@ -1117,8 +1117,8 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Multi-Entry Visa</h4>
-                  <p className="text-sm text-gray-600 mt-1">Enter Vietnam multiple times</p>
+                  <h4 className="font-semibold text-gray-900">{t.nonUrgent?.multiEntry || "Multi-Entry Visa"}</h4>
+                  <p className="text-sm text-gray-600 mt-1">{t.nonUrgent?.multiEntryDesc || "Enter Vietnam multiple times"}</p>
                   <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-indigo-100 text-indigo-800 text-sm font-medium">
                     +$45
                   </div>
@@ -1133,29 +1133,29 @@ export default function Home() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">🚨</span>
-                  <h4 className="font-bold text-xl">Weekend & Holiday Urgent Visa</h4>
+                  <h4 className="font-bold text-xl">{t.nonUrgent?.weekendTitle || "Weekend & Holiday Urgent Visa"}</h4>
                 </div>
-                <p className="text-white/90 text-sm">Need a visa on Saturday, Sunday, or a public holiday?</p>
+                <p className="text-white/90 text-sm">{t.nonUrgent?.weekendSubtitle || "Need a visa on Saturday, Sunday, or a public holiday?"}</p>
                 <div className="mt-3 space-y-1 text-sm">
                   <div className="flex items-center gap-2">
                     <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span>Book by 2:30 PM → Ready by 6:00 PM same day</span>
+                    <span>{t.nonUrgent?.weekendCutoff || "Book by 2:30 PM → Ready by 6:00 PM same day"}</span>
                   </div>
                   <div className="flex items-center gap-2 text-white/80 text-xs">
-                    <span className="ml-6">All times Vietnam Time (GMT+7)</span>
+                    <span className="ml-6">{t.nonUrgent?.weekendTimezone || "All times Vietnam Time (GMT+7)"}</span>
                   </div>
                 </div>
               </div>
               <div className="text-center md:text-right">
                 <div className="text-4xl font-bold">$249</div>
-                <div className="text-white/80 text-sm">/person</div>
+                <div className="text-white/80 text-sm">{t.nonUrgent?.perPerson || "/person"}</div>
                 <a
                   href="/apply?speed=weekend"
                   className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white text-orange-600 font-bold transition-all hover:bg-gray-100"
                 >
-                  Get Weekend Visa
+                  {t.nonUrgent?.weekendButton || "Get Weekend Visa"}
                 </a>
               </div>
             </div>
@@ -1165,30 +1165,30 @@ export default function Home() {
           <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-1">All visa packages include:</h4>
+                <h4 className="font-semibold text-gray-900 mb-1">{t.nonUrgent?.allPackagesInclude || "All visa packages include:"}</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
                   <li className="flex items-center gap-2">
                     <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    Single-entry visa (30 days standard)
+                    {t.nonUrgent?.singleEntry30Days || "Single-entry visa (30 days standard)"}
                   </li>
                   <li className="flex items-center gap-2">
                     <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    24/7 customer support
+                    {t.nonUrgent?.support247 || "24/7 customer support"}
                   </li>
                   <li className="flex items-center gap-2">
                     <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    Money-back guarantee if rejected
+                    {t.nonUrgent?.moneyBackGuarantee || "Money-back guarantee if rejected"}
                   </li>
                 </ul>
               </div>
               <div className="text-center md:text-right">
-                <p className="text-sm text-gray-500 mb-2">Need urgent visa in 30 minutes?</p>
+                <p className="text-sm text-gray-500 mb-2">{t.nonUrgent?.need30MinVisa || "Need urgent visa in 30 minutes?"}</p>
                 <a
                   href="/apply"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white font-semibold transition-all hover:opacity-90"
@@ -1197,7 +1197,7 @@ export default function Home() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  Get 30-Min Emergency Visa
+                  {t.nonUrgent?.get30MinEmergency || "Get 30-Min Emergency Visa"}
                 </a>
               </div>
             </div>
