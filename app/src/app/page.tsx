@@ -466,6 +466,22 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
+              {/* Operating Hours Notice */}
+              <div className="mt-4 bg-white/90 backdrop-blur border border-gray-200 rounded-xl p-4 shadow-lg">
+                <div className="flex items-start gap-3">
+                  <span className="text-xl flex-shrink-0">🕐</span>
+                  <div className="text-left">
+                    <div className="font-semibold text-gray-900 text-sm">30-Min & 1.5-Hour Express Service Hours</div>
+                    <div className="text-gray-600 text-xs mt-1">
+                      <span className="font-medium">Weekdays only:</span> 8:00 AM - 5:00 PM (Vietnam Time, GMT+7)
+                    </div>
+                    <div className="text-gray-500 text-xs mt-1">
+                      <span className="font-medium">From Bali/Indonesia:</span> 9:00 AM - 6:00 PM (WITA, GMT+8)
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Flight Check Box */}
@@ -494,9 +510,14 @@ export default function Home() {
             </div>
 
             {/* Price */}
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <span className="text-5xl font-bold" style={{ color: '#ef7175' }}>${pricePerPerson}</span>
-              <span className="text-gray-700 text-xl">{t.hero.perPerson}</span>
+            <div className="text-center mb-6">
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-5xl font-bold" style={{ color: '#ef7175' }}>${pricePerPerson}</span>
+                <span className="text-gray-700 text-xl">{t.hero.perPerson}</span>
+              </div>
+              <div className="text-gray-600 text-sm mt-2">
+                1.5-Hour Full Visa | Check-in approval letter in 30 min
+              </div>
             </div>
 
             {/* Chat CTA Button */}
@@ -842,7 +863,10 @@ export default function Home() {
               <h3 className="font-bold text-lg text-gray-900 mb-4">{t.sidebar.priceComparison}</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 rounded-lg border-2" style={{ backgroundColor: '#afcef6', borderColor: '#a4afbe' }}>
-                  <span className="font-medium text-gray-900">{t.sidebar.ourPrice}</span>
+                  <div>
+                    <span className="font-medium text-gray-900 block">{t.sidebar.ourPrice}</span>
+                    <span className="text-xs text-gray-600">1.5-Hour Express</span>
+                  </div>
                   <span className="font-bold text-xl" style={{ color: '#ef7175' }}>$149</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -852,6 +876,12 @@ export default function Home() {
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="text-gray-500">{t.sidebar.competitorB}</span>
                   <span className="text-gray-400 line-through">$235</span>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="flex items-start gap-2 text-xs text-gray-500">
+                  <span className="flex-shrink-0">🕐</span>
+                  <span>Express service: Weekdays 8AM-5PM Vietnam Time (9AM-6PM Bali)</span>
                 </div>
               </div>
             </div>
