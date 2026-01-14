@@ -1088,8 +1088,81 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Add-on Options */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Duration Upgrade */}
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900">Extended Duration</h4>
+                  <p className="text-sm text-gray-600 mt-1">Upgrade to 1-3 months validity</p>
+                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium">
+                    +$50
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Multi-Entry Option */}
+            <div className="bg-white rounded-xl p-5 border border-gray-200">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900">Multi-Entry Visa</h4>
+                  <p className="text-sm text-gray-600 mt-1">Enter Vietnam multiple times</p>
+                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-indigo-100 text-indigo-800 text-sm font-medium">
+                    +$45
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Weekend/Holiday Urgent Visa */}
+          <div className="mt-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-6 text-white">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">🚨</span>
+                  <h4 className="font-bold text-xl">Weekend & Holiday Urgent Visa</h4>
+                </div>
+                <p className="text-white/90 text-sm">Need a visa on Saturday, Sunday, or a public holiday?</p>
+                <div className="mt-3 space-y-1 text-sm">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Book by 2:30 PM → Ready by 6:00 PM same day</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/80 text-xs">
+                    <span className="ml-6">All times Vietnam Time (GMT+7)</span>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center md:text-right">
+                <div className="text-4xl font-bold">$249</div>
+                <div className="text-white/80 text-sm">/person</div>
+                <a
+                  href="/apply?speed=weekend"
+                  className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white text-orange-600 font-bold transition-all hover:bg-gray-100"
+                >
+                  Get Weekend Visa
+                </a>
+              </div>
+            </div>
+          </div>
+
           {/* Info Note */}
-          <div className="mt-8 bg-white rounded-xl p-6 border border-gray-200">
+          <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">All visa packages include:</h4>
@@ -1098,7 +1171,7 @@ export default function Home() {
                     <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    Single-entry visa (1-3 months validity)
+                    Single-entry visa (30 days standard)
                   </li>
                   <li className="flex items-center gap-2">
                     <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
