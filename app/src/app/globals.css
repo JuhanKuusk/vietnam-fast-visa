@@ -2,30 +2,36 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  --primary: #ef7175;
-  --primary-dark: #e13530;
-  --secondary: #afcef6;
-  --accent: #a4afbe;
-  --muted: #cdb4b6;
+  --foreground: #1a1a1a;
+  --primary: #c41e3a;
+  --primary-hover: #a01830;
+  --secondary: #f8f9fa;
+  --accent: #6c757d;
+  --muted: #6c757d;
   --card-bg: #ffffff;
   --card-border: #e5e7eb;
   --input-bg: #ffffff;
   --input-border: #d1d5db;
+  --section-alt: #f8f9fa;
+  --success: #198754;
+  --warning: #ffc107;
 }
 
 .dark {
-  --background: #111827;
-  --foreground: #f3f4f6;
-  --primary: #ef7175;
-  --primary-dark: #f87171;
-  --secondary: #1e3a5f;
-  --accent: #374151;
-  --muted: #4b5563;
-  --card-bg: #1f2937;
-  --card-border: #374151;
-  --input-bg: #374151;
-  --input-border: #4b5563;
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  --primary: #dc3545;
+  --primary-hover: #c82333;
+  --secondary: #1e293b;
+  --accent: #94a3b8;
+  --muted: #64748b;
+  --card-bg: #1e293b;
+  --card-border: #334155;
+  --input-bg: #1e293b;
+  --input-border: #475569;
+  --section-alt: #1e293b;
+  --success: #22c55e;
+  --warning: #eab308;
 }
 
 @theme inline {
@@ -38,12 +44,21 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* Custom utility classes for theme colors */
+/* Smooth transition for theme changes */
+html {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Theme utility classes */
 .bg-theme-primary {
   background-color: var(--primary);
+}
+
+.bg-theme-primary:hover {
+  background-color: var(--primary-hover);
 }
 
 .bg-theme-secondary {
@@ -62,16 +77,6 @@ body {
   color: var(--primary);
 }
 
-/* Smooth transition for theme changes */
-* {
-  transition-property: background-color, border-color;
-  transition-duration: 200ms;
-  transition-timing-function: ease-in-out;
-}
-
-/* Exclude elements that shouldn't transition */
-*:focus,
-button:active,
-a:active {
-  transition-duration: 0ms;
+.bg-theme-section-alt {
+  background-color: var(--section-alt);
 }

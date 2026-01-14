@@ -31,7 +31,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
       {/* Modal */}
       <div className="relative bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="sticky top-0 px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#ef7175' }}>
+        <div className="sticky top-0 px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#c41e3a' }}>
           <h2 className="text-xl font-bold text-white">{t.modal.title}</h2>
           <button
             onClick={onClose}
@@ -51,7 +51,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
           {steps.map((step, index) => (
             <div key={index} className="space-y-2">
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm text-white" style={{ backgroundColor: '#ef7175' }}>{index + 1}</span>
+                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm text-white" style={{ backgroundColor: '#c41e3a' }}>{index + 1}</span>
                 {step.title}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 pl-11">{step.content}</p>
@@ -59,7 +59,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
           ))}
 
           {/* Important Notice */}
-          <div className="rounded-xl p-5 bg-blue-100 dark:bg-blue-900/30">
+          <div className="rounded-xl p-5 bg-gray-100 dark:bg-gray-700">
             <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">{t.modal.importantTitle}</h3>
             <p className="text-gray-700 dark:text-gray-300">{t.modal.importantText}</p>
           </div>
@@ -70,7 +70,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
           <button
             onClick={onClose}
             className="w-full py-4 rounded-xl text-white font-bold text-lg transition-all hover:opacity-90"
-            style={{ backgroundColor: '#ef7175' }}
+            style={{ backgroundColor: '#c41e3a' }}
           >
             {t.modal.gotItButton}
           </button>
@@ -318,12 +318,12 @@ export default function Home() {
   const pricePerPerson = 149;
 
   return (
-    <div className="min-h-screen bg-blue-100 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       {/* Loading Overlay */}
       {isLoading && (
         <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="flex items-center gap-3 px-6 py-4 bg-white rounded-xl shadow-lg">
-            <svg className="w-6 h-6 animate-spin" style={{ color: '#ef7175' }} fill="none" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 animate-spin" style={{ color: '#c41e3a' }} fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -338,7 +338,7 @@ export default function Home() {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#ef7175' }}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#c41e3a' }}>
                 <span className="text-white text-xl font-bold">V</span>
               </div>
               <div>
@@ -365,7 +365,7 @@ export default function Home() {
       </header>
 
       {/* Denied Boarding Banner - Shows on all devices */}
-      <div className="py-3 md:py-4 px-4" style={{ backgroundColor: '#e13530' }}>
+      <div className="py-3 md:py-4 px-4 bg-red-700 dark:bg-red-800">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 w-full">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 md:w-3 md:h-3 bg-white rounded-full animate-pulse flex-shrink-0"></span>
@@ -410,11 +410,11 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="text-white py-12 md:py-16 bg-gradient-to-br from-gray-200 via-blue-100 to-blue-200 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900">
+      <section className="text-white py-12 md:py-16 bg-gray-100 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             {/* Urgency Badge */}
-            <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium text-white" style={{ backgroundColor: '#ef7175' }}>
+            <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium text-white" style={{ backgroundColor: '#c41e3a' }}>
               <span className="animate-pulse inline-block mr-1">⚡</span>
               {t.hero.urgencyBadge}
             </div>
@@ -423,7 +423,7 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-gray-900 dark:text-white">
               {t.hero.headline1}
               <br />
-              <span style={{ color: '#ef7175' }}>{t.hero.headline2}</span>
+              <span style={{ color: '#c41e3a' }}>{t.hero.headline2}</span>
             </h1>
 
             <p className="text-xl text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
@@ -447,7 +447,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-lg">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#ef7175' }}>
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#c41e3a' }}>
                       <span className="text-2xl font-bold">30</span>
                     </div>
                     <div className="text-left">
@@ -499,8 +499,7 @@ export default function Home() {
                     value={heroFlightNumber}
                     onChange={(e) => setHeroFlightNumber(e.target.value.toUpperCase())}
                     placeholder={t.hero.enterFlightNumber}
-                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                    style={{ '--tw-ring-color': '#ef7175' } as React.CSSProperties}
+                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:border-transparent transition-all"
                   />
                 </div>
                 {heroFlightNumber && heroFlightNumber.length >= 3 && (
@@ -514,7 +513,7 @@ export default function Home() {
             {/* Price */}
             <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-3">
-                <span className="text-5xl font-bold" style={{ color: '#ef7175' }}>${pricePerPerson}</span>
+                <span className="text-5xl font-bold" style={{ color: '#c41e3a' }}>${pricePerPerson}</span>
                 <span className="text-gray-700 dark:text-gray-300 text-xl">{t.hero.perPerson}</span>
               </div>
               <div className="text-gray-600 dark:text-gray-400 text-sm mt-2">
@@ -530,7 +529,7 @@ export default function Home() {
                 }
               }}
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 mb-4"
-              style={{ backgroundColor: '#e13530' }}
+              style={{ backgroundColor: '#c41e3a' }}
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
@@ -555,7 +554,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
-              <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>10,000+</div>
+              <div className="text-3xl font-bold" style={{ color: '#c41e3a' }}>10,000+</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.happyCustomers}</div>
             </div>
             <div>
@@ -563,7 +562,7 @@ export default function Home() {
               <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.onTimeDelivery}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold" style={{ color: '#ef7175' }}>80+</div>
+              <div className="text-3xl font-bold" style={{ color: '#c41e3a' }}>80+</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.countriesSupported}</div>
             </div>
             <div>
@@ -581,7 +580,7 @@ export default function Home() {
           <div className="lg:col-span-2">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
               {/* Form Header */}
-              <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ backgroundColor: '#ef7175' }}>
+              <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ backgroundColor: '#c41e3a' }}>
                 <h2 className="text-lg sm:text-xl font-bold text-white">
                   {t.form.title}
                 </h2>
@@ -616,8 +615,7 @@ export default function Home() {
                       }
                     }}
                     placeholder={t.form.flightPlaceholder}
-                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-all"
-                    style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all"
                   />
                   {/* Flight Info - Shows check-in time and gate when flight number is entered */}
                   {formData.flightNumber && formData.flightNumber.length >= 3 && (
@@ -629,7 +627,7 @@ export default function Home() {
                 </div>
 
                 {/* Check Your Visa Requirements - Second Box */}
-                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
+                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-xl">🛂</span>
                     <span className="font-bold text-gray-900 dark:text-white">{t.form?.checkVisaRequirements || "Check Your Visa Requirements"}</span>
@@ -639,7 +637,7 @@ export default function Home() {
                     {/* Nationality / Citizenship */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t.form?.nationality || "Your Nationality"} <span style={{ color: '#ef7175' }}>*</span>
+                        {t.form?.nationality || "Your Nationality"} <span style={{ color: '#c41e3a' }}>*</span>
                       </label>
                       <div className="relative">
                         <input
@@ -652,8 +650,7 @@ export default function Home() {
                           }}
                           onFocus={() => setShowNationalityDropdown(true)}
                           placeholder={t.form?.selectNationality || "Search your country..."}
-                          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-all"
-                          style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
+                          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all"
                         />
                         {formData.nationality && (
                           <button
@@ -694,13 +691,12 @@ export default function Home() {
                     {/* Purpose of Visit */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t.form?.purposeOfVisit || "Purpose of Visit"} <span style={{ color: '#ef7175' }}>*</span>
+                        {t.form?.purposeOfVisit || "Purpose of Visit"} <span style={{ color: '#c41e3a' }}>*</span>
                       </label>
                       <select
                         value={formData.purpose}
                         onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer"
-                        style={{ '--tw-ring-color': '#afcef6' } as React.CSSProperties}
+                        className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all appearance-none cursor-pointer"
                       >
                         {purposeOptions.map((option) => (
                           <option key={option.value} value={option.value}>
@@ -748,7 +744,7 @@ export default function Home() {
                             <div className="text-gray-600 text-sm mt-1">
                               {t.form?.evisaDesc || `Citizens of ${selectedCountryName} need an e-visa or visa on arrival to enter Vietnam. We can help you get it fast!`}
                             </div>
-                            <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium" style={{ color: '#ef7175' }}>
+                            <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium" style={{ color: '#c41e3a' }}>
                               <span>✓</span> {t.form?.weCanHelp || "We process your e-visa in 30 minutes"}
                             </div>
                           </div>
@@ -782,7 +778,7 @@ export default function Home() {
                 <a
                   href={`/apply?applicants=1&purpose=${formData.purpose}&flight=${formData.flightNumber}&nationality=${formData.nationality}${flightArrivalData?.arrivalAirportCode ? `&entryPort=${flightArrivalData.arrivalAirportCode}` : ''}`}
                   className="block w-full py-4 rounded-xl text-white font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center hover:opacity-90"
-                  style={{ backgroundColor: '#ef7175' }}
+                  style={{ backgroundColor: '#c41e3a' }}
                 >
                   {t.form.continueButton}
                 </a>
@@ -790,14 +786,14 @@ export default function Home() {
                 {/* Trust indicators */}
                 <div className="flex items-center justify-center gap-4 text-sm text-gray-500 pt-2 flex-wrap">
                   <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                     </svg>
                     {t.form.securePayment}
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     {t.form.moneyBackGuarantee}
@@ -814,8 +810,8 @@ export default function Home() {
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-4">{t.sidebar.whyChooseUs}</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100 dark:bg-blue-900/30">
-                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gray-100 dark:bg-gray-700">
+                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -825,8 +821,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-teal-100 dark:bg-teal-900/30">
-                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gray-100 dark:bg-gray-700">
+                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
                   </div>
@@ -836,8 +832,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-pink-100 dark:bg-pink-900/30">
-                    <svg className="w-4 h-4" style={{ color: '#ef7175' }} fill="currentColor" viewBox="0 0 20 20">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gray-100 dark:bg-gray-700">
+                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -850,7 +846,7 @@ export default function Home() {
 
               {/* Local Experts Badge */}
               <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700">
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
                   <span className="text-2xl">🇻🇳</span>
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white text-sm">{t.sidebar.localExperts}</div>
@@ -864,12 +860,12 @@ export default function Home() {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-4">{t.sidebar.priceComparison}</h3>
               <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 rounded-lg border-2 bg-blue-100 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800">
+                <div className="flex justify-between items-center p-3 rounded-lg border-2 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
                   <div>
                     <span className="font-medium text-gray-900 dark:text-white block">{t.sidebar.ourPrice}</span>
                     <span className="text-xs text-gray-600 dark:text-gray-400">{t.heroPrice?.expressLabel || "1.5-Hour Express"}</span>
                   </div>
-                  <span className="font-bold text-xl" style={{ color: '#ef7175' }}>$149</span>
+                  <span className="font-bold text-xl" style={{ color: '#c41e3a' }}>$149</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorA}</span>
@@ -889,7 +885,7 @@ export default function Home() {
             </div>
 
             {/* VOA Info */}
-            <div className="rounded-2xl p-6 bg-pink-100 dark:bg-pink-900/20">
+            <div className="rounded-2xl p-6 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3">
                 {t.sidebar.voaTitle}
               </h3>
@@ -910,7 +906,7 @@ export default function Home() {
       <section className="py-12 sm:py-16 bg-gray-50 dark:bg-gray-800/50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium mb-4">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -963,8 +959,8 @@ export default function Home() {
                   {t.nonUrgent?.fourHourFeature3 || "Email & WhatsApp delivery"}
                 </div>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-                <div className="text-xs text-blue-800">
+              <div className="bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-3 mb-4">
+                <div className="text-xs text-gray-700 dark:text-gray-300">
                   <span className="font-semibold block mb-1">{t.nonUrgent?.fourHourCutoff || "Cut-off Times:"}</span>
                   <div className="space-y-1">
                     <div>{t.nonUrgent?.fourHourCutoff1 || "Book by 8:00 AM → Ready by 1:00 PM"}</div>
@@ -979,7 +975,7 @@ export default function Home() {
               <a
                 href="/apply?speed=4-hour"
                 className="block w-full py-3 rounded-xl text-white font-bold text-center transition-all hover:opacity-90"
-                style={{ backgroundColor: '#ef7175' }}
+                style={{ backgroundColor: '#c41e3a' }}
               >
                 {t.nonUrgent?.fourHourButton || "Get 4-Hour Visa"}
               </a>
@@ -1095,15 +1091,15 @@ export default function Home() {
             {/* Duration Upgrade */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white">{t.nonUrgent?.extendedDuration || "Extended Duration"}</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.extendedDurationDesc || "Upgrade to 1-3 months validity"}</p>
-                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-sm font-medium">
+                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium">
                     +$50
                   </div>
                 </div>
@@ -1113,15 +1109,15 @@ export default function Home() {
             {/* Multi-Entry Option */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white">{t.nonUrgent?.multiEntry || "Multi-Entry Visa"}</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.multiEntryDesc || "Enter Vietnam multiple times"}</p>
-                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 text-sm font-medium">
+                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium">
                     +$45
                   </div>
                 </div>
@@ -1130,7 +1126,7 @@ export default function Home() {
           </div>
 
           {/* Weekend/Holiday Urgent Visa */}
-          <div className="mt-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl p-6 text-white">
+          <div className="mt-6 rounded-xl p-6 text-white" style={{ backgroundColor: '#c41e3a' }}>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -1161,7 +1157,8 @@ export default function Home() {
                 <div className="text-white/80 text-sm">{t.nonUrgent?.perPerson || "/person"}</div>
                 <a
                   href="/apply?speed=weekend"
-                  className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white text-orange-600 font-bold transition-all hover:bg-gray-100"
+                  className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white font-bold transition-all hover:bg-gray-100"
+                  style={{ color: '#c41e3a' }}
                 >
                   {t.nonUrgent?.weekendButton || "Get Weekend Visa"}
                 </a>
@@ -1200,7 +1197,7 @@ export default function Home() {
                 <a
                   href="/apply"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white font-semibold transition-all hover:opacity-90"
-                  style={{ backgroundColor: '#ef7175' }}
+                  style={{ backgroundColor: '#c41e3a' }}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -1214,7 +1211,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-10 sm:py-16 bg-[#b4d5d5] dark:bg-gray-800">
+      <section id="faq" className="py-10 sm:py-16 bg-gray-100 dark:bg-slate-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">
@@ -1263,7 +1260,7 @@ export default function Home() {
                   }
                 }}
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 text-white font-medium rounded-xl transition-colors text-sm sm:text-base hover:opacity-90"
-                style={{ backgroundColor: '#ef7175' }}
+                style={{ backgroundColor: '#c41e3a' }}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
@@ -1289,13 +1286,13 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#ef7175' }}>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#c41e3a' }}>
                 <span className="text-white text-xl font-bold">V</span>
               </div>
               <span className="text-xl font-bold text-white">{t.header.siteName}</span>
             </div>
             <p className="text-gray-500 mb-2">{t.footer.expressService}</p>
-            <p className="text-sm mb-6" style={{ color: '#afcef6' }}>{t.footer.processedBy}</p>
+            <p className="text-sm text-gray-400 mb-6">{t.footer.processedBy}</p>
             <div className="flex justify-center gap-6 mb-6 text-sm">
               <a href="#" className="hover:text-white transition-colors">{t.footer.privacyPolicy}</a>
               <a href="#" className="hover:text-white transition-colors">{t.footer.termsOfService}</a>
