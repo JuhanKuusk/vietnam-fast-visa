@@ -36,9 +36,18 @@ export default function RootLayout({
 
         {/* Askly Chat Widget */}
         <Script
-          src="https://chat.askly.me/cw/chat/latest.js"
-          tw-client-key="ubfeimuozup98jkokndvfgss"
-          strategy="lazyOnload"
+          id="askly-chat"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var script = document.createElement('script');
+                script.src = 'https://chat.askly.me/cw/chat/latest.js';
+                script.setAttribute('tw-client-key', 'ubfeimuozup98jkokndvfgss');
+                document.body.appendChild(script);
+              })();
+            `
+          }}
         />
       </body>
     </html>

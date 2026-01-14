@@ -23,8 +23,10 @@ export const translations = {
 
   // Banner
   banner: {
-    deniedBoarding: 'Denied boarding? "We can help now."',
+    deniedBoarding: "Denied Boarding and can not Check-in?",
     chatNow: "Chat Now",
+    instantSupport: "Instant Online Support",
+    askWhatsApp: "Ask thru WhatsApp",
   },
 
   // Hero Section
