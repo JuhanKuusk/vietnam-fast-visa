@@ -56,3 +56,9 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+
+# Video files
+*.mp4
+*.mov
+*.avi
+*.mkv
