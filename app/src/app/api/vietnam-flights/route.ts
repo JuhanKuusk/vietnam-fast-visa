@@ -20,11 +20,8 @@ interface DayFlights {
 
 export async function GET(request: NextRequest) {
   const apiKey = process.env.AERODATABOX_API_KEY;
-
-  // Get today and tomorrow dates in UTC
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const searchParams = request.nextUrl.searchParams;
+  const requestedDate = searchParams.get("date"); // Optional: specific date in YYYY-MM-DD format
 
   const formatDate = (d: Date) => d.toISOString().split("T")[0];
   const formatDateDisplay = (d: Date) =>
@@ -34,6 +31,49 @@ export async function GET(request: NextRequest) {
       day: "numeric",
       year: "numeric",
     });
+
+  // If a specific date is requested, only return that date
+  if (requestedDate) {
+    const dateObj = new Date(requestedDate + "T12:00:00Z"); // Use noon UTC to avoid timezone issues
+
+    if (!apiKey) {
+      return NextResponse.json({
+        success: true,
+        days: [
+          {
+            date: requestedDate,
+            dateFormatted: formatDateDisplay(dateObj),
+            flights: getMockFlightsForDate(requestedDate),
+          },
+        ],
+      });
+    }
+
+    try {
+      const flights = await fetchFlightsForDate(requestedDate, apiKey);
+      return NextResponse.json({
+        success: true,
+        days: [
+          {
+            date: requestedDate,
+            dateFormatted: formatDateDisplay(dateObj),
+            flights,
+          },
+        ],
+      });
+    } catch (error) {
+      console.error("Vietnam flights fetch error:", error);
+      return NextResponse.json(
+        { error: "Failed to fetch flight information" },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Default: return today and tomorrow
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const todayStr = formatDate(today);
   const tomorrowStr = formatDate(tomorrow);
@@ -46,12 +86,12 @@ export async function GET(request: NextRequest) {
         {
           date: todayStr,
           dateFormatted: formatDateDisplay(today),
-          flights: getMockFlights(),
+          flights: getMockFlightsForDate(todayStr),
         },
         {
           date: tomorrowStr,
           dateFormatted: formatDateDisplay(tomorrow),
-          flights: getMockFlights(),
+          flights: getMockFlightsForDate(tomorrowStr),
         },
       ],
     });
@@ -172,29 +212,18 @@ async function fetchFlightsForDate(
   return flights;
 }
 
-function getMockFlights(): Flight[] {
-  return [
-    {
-      flightNumber: "VJ 900",
-      airline: "VietJet Air",
-      airlineCode: "VJ",
-      departureTime: "13:10",
-      destination: "Hanoi",
-      destinationCode: "HAN",
-    },
+// Mock flights vary by day of week for realistic demo data
+function getMockFlightsForDate(dateStr: string): Flight[] {
+  const date = new Date(dateStr + "T12:00:00Z");
+  const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
+
+  // Base flights that always operate
+  const baseFlights: Flight[] = [
     {
       flightNumber: "VJ 894",
       airline: "VietJet Air",
       airlineCode: "VJ",
       departureTime: "14:05",
-      destination: "Ho Chi Minh City",
-      destinationCode: "SGN",
-    },
-    {
-      flightNumber: "VJ 898",
-      airline: "VietJet Air",
-      airlineCode: "VJ",
-      departureTime: "15:35",
       destination: "Ho Chi Minh City",
       destinationCode: "SGN",
     },
@@ -206,13 +235,45 @@ function getMockFlights(): Flight[] {
       destination: "Ho Chi Minh City",
       destinationCode: "SGN",
     },
-    {
-      flightNumber: "VJ 998",
-      airline: "VietJet Air",
-      airlineCode: "VJ",
-      departureTime: "17:25",
-      destination: "Hanoi",
-      destinationCode: "HAN",
-    },
   ];
+
+  // Additional flights based on day of week
+  const additionalFlights: Record<number, Flight[]> = {
+    0: [ // Sunday
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "08:30", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VJ 896", airline: "VietJet Air", airlineCode: "VJ", departureTime: "19:45", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+    ],
+    1: [ // Monday
+      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN" },
+    ],
+    2: [ // Tuesday
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "13:10", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VN 642", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "20:15", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+    ],
+    3: [ // Wednesday
+      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+      { flightNumber: "VJ 902", airline: "VietJet Air", airlineCode: "VJ", departureTime: "09:00", destination: "Da Nang", destinationCode: "DAD" },
+      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN" },
+    ],
+    4: [ // Thursday
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "13:10", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VN 644", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "11:30", destination: "Hanoi", destinationCode: "HAN" },
+    ],
+    5: [ // Friday
+      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VJ 904", airline: "VietJet Air", airlineCode: "VJ", departureTime: "21:00", destination: "Cam Ranh (Nha Trang)", destinationCode: "CXR" },
+    ],
+    6: [ // Saturday
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "08:30", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VJ 902", airline: "VietJet Air", airlineCode: "VJ", departureTime: "12:45", destination: "Da Nang", destinationCode: "DAD" },
+      { flightNumber: "VN 646", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "18:30", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+    ],
+  };
+
+  const allFlights = [...baseFlights, ...(additionalFlights[dayOfWeek] || [])];
+
+  // Sort by departure time
+  return allFlights.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
 }
