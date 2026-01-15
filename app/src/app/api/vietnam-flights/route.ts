@@ -91,78 +91,83 @@ async function fetchFlightsForDate(
   const flights: Flight[] = [];
 
   // DPS = Denpasar (Ngurah Rai) ICAO: WADD
-  // Fetch departures from Denpasar for 00:00-23:59 on the given date
-  const fromTime = `${date}T00:00`;
-  const toTime = `${date}T23:59`;
+  // AeroDataBox API has a 12-hour maximum limit, so we need to split the day into two requests
+  const timeRanges = [
+    { from: `${date}T00:00`, to: `${date}T11:59` },
+    { from: `${date}T12:00`, to: `${date}T23:59` },
+  ];
 
-  try {
-    const response = await fetch(
-      `https://aerodatabox.p.rapidapi.com/flights/airports/icao/WADD/${fromTime}/${toTime}?direction=Departure&withCancelled=false&withCodeshared=false&withCargo=false&withPrivate=false`,
-      {
-        headers: {
-          "X-RapidAPI-Key": apiKey,
-          "X-RapidAPI-Host": "aerodatabox.p.rapidapi.com",
-        },
-        next: { revalidate: 3600 }, // Cache for 1 hour
-      }
-    );
-
-    if (!response.ok) {
-      console.error(`API error for ${date}: ${response.status}`);
-      return [];
-    }
-
-    const data = await response.json();
-
-    if (!data.departures) {
-      return [];
-    }
-
-    // Filter for Vietnam-bound flights
-    for (const dep of data.departures) {
-      const arrivalIcao = dep.arrival?.airport?.icao;
-
-      if (arrivalIcao && VIETNAM_AIRPORTS.includes(arrivalIcao)) {
-        // Extract local departure time
-        let departureTime = "";
-        if (dep.departure?.scheduledTime?.local) {
-          // Format: "2026-01-15 13:10" -> "13:10"
-          const localTime = dep.departure.scheduledTime.local;
-          departureTime = localTime.includes(" ")
-            ? localTime.split(" ")[1]
-            : localTime.substring(11, 16);
+  for (const { from: fromTime, to: toTime } of timeRanges) {
+    try {
+      const response = await fetch(
+        `https://aerodatabox.p.rapidapi.com/flights/airports/icao/WADD/${fromTime}/${toTime}?direction=Departure&withCancelled=false&withCodeshared=false&withCargo=false&withPrivate=false`,
+        {
+          headers: {
+            "X-RapidAPI-Key": apiKey,
+            "X-RapidAPI-Host": "aerodatabox.p.rapidapi.com",
+          },
+          next: { revalidate: 3600 }, // Cache for 1 hour
         }
+      );
 
-        // Map destination
-        const destinationMap: Record<string, { name: string; code: string }> = {
-          VVNB: { name: "Hanoi", code: "HAN" },
-          VVTS: { name: "Ho Chi Minh City", code: "SGN" },
-          VVDN: { name: "Da Nang", code: "DAD" },
-          VVCR: { name: "Cam Ranh (Nha Trang)", code: "CXR" },
-          VVPQ: { name: "Phu Quoc", code: "PQC" },
-        };
-
-        const dest = destinationMap[arrivalIcao] || {
-          name: dep.arrival?.airport?.name || "Vietnam",
-          code: dep.arrival?.airport?.iata || "VN",
-        };
-
-        flights.push({
-          flightNumber: dep.number || "Unknown",
-          airline: dep.airline?.name || "Unknown Airline",
-          airlineCode: dep.airline?.iata || dep.number?.substring(0, 2) || "XX",
-          departureTime,
-          destination: dest.name,
-          destinationCode: dest.code,
-        });
+      if (!response.ok) {
+        console.error(`API error for ${date} (${fromTime}-${toTime}): ${response.status}`);
+        continue;
       }
-    }
 
-    // Sort by departure time
-    flights.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
-  } catch (error) {
-    console.error(`Error fetching flights for ${date}:`, error);
+      const data = await response.json();
+
+      if (!data.departures) {
+        continue;
+      }
+
+      // Filter for Vietnam-bound flights
+      // Note: AeroDataBox API returns destination as movement.airport for departures
+      for (const dep of data.departures) {
+        const arrivalIcao = dep.movement?.airport?.icao;
+
+        if (arrivalIcao && VIETNAM_AIRPORTS.includes(arrivalIcao)) {
+          // Extract local departure time from movement.scheduledTime
+          let departureTime = "";
+          if (dep.movement?.scheduledTime?.local) {
+            // Format: "2026-01-15 13:10+08:00" -> "13:10"
+            const localTime = dep.movement.scheduledTime.local;
+            departureTime = localTime.includes(" ")
+              ? localTime.split(" ")[1].substring(0, 5)
+              : localTime.substring(11, 16);
+          }
+
+          // Map destination
+          const destinationMap: Record<string, { name: string; code: string }> = {
+            VVNB: { name: "Hanoi", code: "HAN" },
+            VVTS: { name: "Ho Chi Minh City", code: "SGN" },
+            VVDN: { name: "Da Nang", code: "DAD" },
+            VVCR: { name: "Cam Ranh (Nha Trang)", code: "CXR" },
+            VVPQ: { name: "Phu Quoc", code: "PQC" },
+          };
+
+          const dest = destinationMap[arrivalIcao] || {
+            name: dep.movement?.airport?.name || "Vietnam",
+            code: dep.movement?.airport?.iata || "VN",
+          };
+
+          flights.push({
+            flightNumber: dep.number || "Unknown",
+            airline: dep.airline?.name || "Unknown Airline",
+            airlineCode: dep.airline?.iata || dep.number?.substring(0, 2) || "XX",
+            departureTime,
+            destination: dest.name,
+            destinationCode: dest.code,
+          });
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching flights for ${date} (${fromTime}-${toTime}):`, error);
+    }
   }
+
+  // Sort by departure time
+  flights.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
 
   return flights;
 }
