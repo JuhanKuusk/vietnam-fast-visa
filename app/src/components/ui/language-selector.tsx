@@ -50,7 +50,7 @@ export function LanguageSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+        <div className="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50 max-w-[calc(100vw-2rem)]">
           {(Object.keys(languages) as SupportedLanguage[]).map((langCode) => {
             const lang = languages[langCode];
             const isSelected = langCode === language;
@@ -62,12 +62,12 @@ export function LanguageSelector() {
                   setLanguage(langCode);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-gray-50 transition-colors ${
-                  isSelected ? "bg-gray-50" : ""
+                className={`w-full flex items-center gap-3 px-3 sm:px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                  isSelected ? "bg-gray-50 dark:bg-gray-700" : ""
                 }`}
               >
-                <span className="text-xl">{lang.flag}</span>
-                <span className={`flex-1 text-sm ${isSelected ? "font-semibold text-gray-900" : "text-gray-700"}`}>
+                <span className="text-lg sm:text-xl">{lang.flag}</span>
+                <span className={`flex-1 text-sm ${isSelected ? "font-semibold text-gray-900 dark:text-white" : "text-gray-700 dark:text-gray-300"}`}>
                   {lang.nativeName}
                 </span>
                 {isSelected && (
