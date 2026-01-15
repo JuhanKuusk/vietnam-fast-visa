@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 interface SessionData {
@@ -20,7 +20,7 @@ interface SessionData {
   metadata?: Record<string, string>;
 }
 
-export default function TestSuccessPage() {
+function TestSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const [session, setSession] = useState<SessionData | null>(null);
@@ -39,7 +39,7 @@ export default function TestSuccessPage() {
           }
           setLoading(false);
         })
-        .catch((err) => {
+        .catch(() => {
           setError("Failed to load payment details");
           setLoading(false);
         });
@@ -202,5 +202,22 @@ export default function TestSuccessPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function TestSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-green-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <TestSuccessContent />
+    </Suspense>
   );
 }

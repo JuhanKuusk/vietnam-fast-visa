@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { SparklesCore } from "@/components/ui/sparkles";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Applicant {
   id: string;
@@ -45,6 +46,7 @@ function OrderConfirmedContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const paymentIntent = searchParams.get("payment_intent");
+  const { t } = useLanguage();
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -54,7 +56,6 @@ function OrderConfirmedContent() {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        // Try session_id first, then payment_intent, then applicationId from session storage
         let url = "/api/order-details?";
         if (sessionId) {
           url += `session_id=${sessionId}`;
@@ -121,13 +122,13 @@ function OrderConfirmedContent() {
 
   const getVisaSpeedLabel = (speed: string | null) => {
     const speeds: Record<string, string> = {
-      "30-min": "30-Minute Express",
-      "4-hour": "4-Hour Express",
-      "1-day": "1-Day Service",
-      "2-day": "2-Day Service",
-      weekend: "Weekend/Holiday Service",
+      "30-min": t.orderConfirmation.serviceType30Min,
+      "4-hour": t.orderConfirmation.serviceType4Hour,
+      "1-day": t.orderConfirmation.serviceType1Day,
+      "2-day": t.orderConfirmation.serviceType2Day,
+      weekend: t.orderConfirmation.serviceTypeWeekend,
     };
-    return speed ? speeds[speed] || speed : "Standard Processing";
+    return speed ? speeds[speed] || speed : t.orderConfirmation.serviceTypeStandard;
   };
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "1234567890";
@@ -137,7 +138,7 @@ function OrderConfirmedContent() {
       <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400 mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading your order details...</p>
+          <p className="text-gray-400">{t.common.loading}</p>
         </div>
       </div>
     );
@@ -148,22 +149,22 @@ function OrderConfirmedContent() {
       <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center p-5">
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">!</div>
-          <h1 className="text-2xl font-bold text-white mb-4">Order Not Found</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">{t.orderConfirmation.orderNotFound}</h1>
           <p className="text-gray-400 mb-6">
-            {error || "We couldn't find your order details. Please contact support if you completed a payment."}
+            {error || t.orderConfirmation.orderNotFoundDesc}
           </p>
           <div className="space-y-3">
             <a
               href={`https://wa.me/${whatsappNumber}?text=Hi, I need help finding my order.`}
               className="block w-full py-3 px-6 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-400 transition-colors"
             >
-              Contact Support
+              {t.common.contactSupport}
             </a>
             <a
               href="/"
               className="block w-full py-3 px-6 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors"
             >
-              Back to Home
+              {t.common.backToHome}
             </a>
           </div>
         </div>
@@ -185,7 +186,7 @@ function OrderConfirmedContent() {
           className="flex items-center gap-2 text-base text-gray-300 hover:text-white"
         >
           <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-          Need help?
+          {t.header.supportShort}
         </a>
       </header>
 
@@ -210,21 +211,21 @@ function OrderConfirmedContent() {
             </div>
 
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Thank You for Your Payment!
+              {t.orderConfirmation.thankYouTitle}
             </h1>
 
             <p className="text-xl text-gray-400 mb-8">
-              Your visa application is now being processed
+              {t.orderConfirmation.processingMessage}
             </p>
 
             {/* Countdown Timer */}
             <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-8">
-              <p className="text-base text-gray-400 mb-2">Estimated delivery time</p>
+              <p className="text-base text-gray-400 mb-2">{t.orderConfirmation.estimatedDelivery}</p>
               <div className="text-4xl md:text-5xl font-bold text-emerald-400 font-mono">
                 {formatTime(countdown)}
               </div>
               <p className="text-sm text-gray-500 mt-2">
-                You will receive your visa via email & WhatsApp
+                {t.orderConfirmation.deliveryNote}
               </p>
             </div>
           </div>
@@ -236,47 +237,47 @@ function OrderConfirmedContent() {
             <div className="p-6 space-y-6">
               {/* Reference Number */}
               <div className="text-center p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
-                <p className="text-base text-gray-400 mb-2">Reference Number</p>
+                <p className="text-base text-gray-400 mb-2">{t.orderConfirmation.referenceNumber}</p>
                 <p className="text-2xl font-bold text-emerald-400 font-mono">
                   {application.reference_number}
                 </p>
                 <p className="text-sm text-gray-500 mt-2">
-                  Save this for tracking your application
+                  {t.orderConfirmation.saveReference}
                 </p>
               </div>
 
               {/* Order Summary */}
               <div className="bg-white/5 rounded-xl p-5 space-y-4">
                 <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                  <span>Order Summary</span>
+                  <span>{t.orderConfirmation.orderSummary}</span>
                 </h3>
 
                 <div className="grid grid-cols-2 gap-4 text-base">
                   <div>
-                    <p className="text-gray-500">Service Type</p>
+                    <p className="text-gray-500">{t.orderConfirmation.serviceType}</p>
                     <p className="text-white font-medium">{getVisaSpeedLabel(application.visa_speed)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Total Paid</p>
+                    <p className="text-gray-500">{t.orderConfirmation.totalPaid}</p>
                     <p className="text-emerald-400 font-bold text-lg">
                       {payment ? formatAmount(payment.amount, payment.currency) : `$${application.amount_usd}`}
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Entry Date</p>
+                    <p className="text-gray-500">{t.orderConfirmation.entryDate}</p>
                     <p className="text-white">{formatDate(application.entry_date)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Exit Date</p>
+                    <p className="text-gray-500">{t.orderConfirmation.exitDate}</p>
                     <p className="text-white">{formatDate(application.exit_date)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Entry Port</p>
+                    <p className="text-gray-500">{t.orderConfirmation.entryPort}</p>
                     <p className="text-white">{application.entry_port}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Applicants</p>
-                    <p className="text-white">{applicants?.length || 1} person(s)</p>
+                    <p className="text-gray-500">{t.orderConfirmation.applicantsCount}</p>
+                    <p className="text-white">{applicants?.length || 1} {t.orderConfirmation.persons}</p>
                   </div>
                 </div>
               </div>
@@ -284,7 +285,7 @@ function OrderConfirmedContent() {
               {/* Applicant Details */}
               {applicants && applicants.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-white">Applicant Details</h3>
+                  <h3 className="text-lg font-semibold text-white">{t.orderConfirmation.applicantDetails}</h3>
                   {applicants.map((applicant, index) => (
                     <div
                       key={applicant.id}
@@ -298,19 +299,19 @@ function OrderConfirmedContent() {
                       </div>
                       <div className="grid grid-cols-2 gap-3 text-sm">
                         <div>
-                          <p className="text-gray-500">Nationality</p>
+                          <p className="text-gray-500">{t.orderConfirmation.nationality}</p>
                           <p className="text-white">{applicant.nationality}</p>
                         </div>
                         <div>
-                          <p className="text-gray-500">Passport Number</p>
+                          <p className="text-gray-500">{t.orderConfirmation.passportNumber}</p>
                           <p className="text-white font-mono">{applicant.passport_number}</p>
                         </div>
                         <div>
-                          <p className="text-gray-500">Date of Birth</p>
+                          <p className="text-gray-500">{t.orderConfirmation.dateOfBirth}</p>
                           <p className="text-white">{formatDate(applicant.date_of_birth)}</p>
                         </div>
                         <div>
-                          <p className="text-gray-500">Gender</p>
+                          <p className="text-gray-500">{t.orderConfirmation.gender}</p>
                           <p className="text-white capitalize">{applicant.gender}</p>
                         </div>
                       </div>
@@ -321,12 +322,12 @@ function OrderConfirmedContent() {
 
               {/* Delivery Information */}
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-5">
-                <h3 className="font-semibold text-lg text-blue-400 mb-3">Delivery Information</h3>
+                <h3 className="font-semibold text-lg text-blue-400 mb-3">{t.orderConfirmation.deliveryInfo}</h3>
                 <div className="space-y-2 text-base">
                   <div className="flex items-center gap-3">
                     <span className="text-xl">@</span>
                     <div>
-                      <p className="text-gray-500 text-sm">Email</p>
+                      <p className="text-gray-500 text-sm">{t.orderConfirmation.email}</p>
                       <p className="text-white">{application.email}</p>
                     </div>
                   </div>
@@ -337,7 +338,7 @@ function OrderConfirmedContent() {
                       </svg>
                     </span>
                     <div>
-                      <p className="text-gray-500 text-sm">WhatsApp</p>
+                      <p className="text-gray-500 text-sm">{t.orderConfirmation.whatsApp}</p>
                       <p className="text-white">{application.whatsapp}</p>
                     </div>
                   </div>
@@ -346,7 +347,7 @@ function OrderConfirmedContent() {
 
               {/* Status Timeline */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">Application Status</h3>
+                <h3 className="text-lg font-semibold text-white">{t.orderConfirmation.applicationStatus}</h3>
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
@@ -354,8 +355,8 @@ function OrderConfirmedContent() {
                       <span className="text-white text-lg">✓</span>
                     </div>
                     <div>
-                      <p className="font-medium text-white text-lg">Payment Received</p>
-                      <p className="text-base text-gray-400">Just now</p>
+                      <p className="font-medium text-white text-lg">{t.orderConfirmation.paymentReceived}</p>
+                      <p className="text-base text-gray-400">{t.orderConfirmation.justNow}</p>
                     </div>
                   </div>
 
@@ -364,8 +365,8 @@ function OrderConfirmedContent() {
                       <span className="text-white text-lg">...</span>
                     </div>
                     <div>
-                      <p className="font-medium text-white text-lg">Processing Visa</p>
-                      <p className="text-base text-gray-400">In progress...</p>
+                      <p className="font-medium text-white text-lg">{t.orderConfirmation.processingVisa}</p>
+                      <p className="text-base text-gray-400">{t.orderConfirmation.inProgress}</p>
                     </div>
                   </div>
 
@@ -374,8 +375,8 @@ function OrderConfirmedContent() {
                       <span className="text-gray-400 text-lg">o</span>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-400 text-lg">Visa Approved</p>
-                      <p className="text-base text-gray-500">Pending</p>
+                      <p className="font-medium text-gray-400 text-lg">{t.orderConfirmation.visaApproved}</p>
+                      <p className="text-base text-gray-500">{t.orderConfirmation.pending}</p>
                     </div>
                   </div>
 
@@ -384,8 +385,8 @@ function OrderConfirmedContent() {
                       <span className="text-gray-400 text-lg">o</span>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-400 text-lg">Delivered via Email & WhatsApp</p>
-                      <p className="text-base text-gray-500">Pending</p>
+                      <p className="font-medium text-gray-400 text-lg">{t.orderConfirmation.deliveredViaEmailWhatsApp}</p>
+                      <p className="text-base text-gray-500">{t.orderConfirmation.pending}</p>
                     </div>
                   </div>
                 </div>
@@ -393,23 +394,23 @@ function OrderConfirmedContent() {
 
               {/* What's Next */}
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-5">
-                <h3 className="font-semibold text-lg text-amber-400 mb-3">What Happens Next?</h3>
+                <h3 className="font-semibold text-lg text-amber-400 mb-3">{t.orderConfirmation.whatHappensNext}</h3>
                 <ul className="space-y-2 text-base text-gray-300">
                   <li className="flex items-start gap-2">
                     <span className="text-amber-400 font-bold">1.</span>
-                    Our team is processing your visa application right now
+                    {t.orderConfirmation.step1}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-amber-400 font-bold">2.</span>
-                    You'll receive WhatsApp updates on your application progress
+                    {t.orderConfirmation.step2}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-amber-400 font-bold">3.</span>
-                    Your approved visa will be sent to {application.email}
+                    {t.orderConfirmation.step3} {application.email}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-amber-400 font-bold">4.</span>
-                    Print the visa and present it at Vietnam immigration
+                    {t.orderConfirmation.step4}
                   </li>
                 </ul>
               </div>
@@ -417,7 +418,7 @@ function OrderConfirmedContent() {
               {/* Contact Support */}
               <div className="text-center space-y-4">
                 <p className="text-base text-gray-400">
-                  Questions? Contact our 24/7 support team
+                  {t.common.questionsContact}
                 </p>
                 <a
                   href={`https://wa.me/${whatsappNumber}?text=Hi, I need help with my visa application. Reference: ${application.reference_number}`}
@@ -426,7 +427,7 @@ function OrderConfirmedContent() {
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                   </svg>
-                  Chat on WhatsApp
+                  {t.common.chatOnWhatsApp}
                 </a>
               </div>
 
@@ -436,7 +437,7 @@ function OrderConfirmedContent() {
                   href="/"
                   className="text-base text-gray-400 hover:text-white transition-colors"
                 >
-                  Back to Home
+                  {t.common.backToHome}
                 </a>
               </div>
             </div>
@@ -460,11 +461,13 @@ function OrderConfirmedContent() {
 }
 
 export default function OrderConfirmedPage() {
+  const { t } = useLanguage();
+
   return (
     <Suspense
       fallback={
         <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
-          <div className="text-emerald-400 text-xl">Loading...</div>
+          <div className="text-emerald-400 text-xl">{t.common.loading}</div>
         </div>
       }
     >

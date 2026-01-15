@@ -486,6 +486,106 @@ export const translations = {
   // Common
   common: {
     loading: "Loading...",
+    backToHome: "Back to Home",
+    contactSupport: "Contact Support",
+    questionsContact: "Questions? Contact our 24/7 support team",
+    chatOnWhatsApp: "Chat on WhatsApp",
+  },
+
+  // Order Confirmation Page
+  orderConfirmation: {
+    // Header
+    thankYouTitle: "Thank You for Your Payment!",
+    processingMessage: "Your visa application is now being processed",
+    estimatedDelivery: "Estimated delivery time",
+    deliveryNote: "You will receive your visa via email & WhatsApp",
+    // Reference
+    referenceNumber: "Reference Number",
+    saveReference: "Save this for tracking your application",
+    // Order Summary
+    orderSummary: "Order Summary",
+    serviceType: "Service Type",
+    totalPaid: "Total Paid",
+    entryDate: "Entry Date",
+    exitDate: "Exit Date",
+    entryPort: "Entry Port",
+    applicantsCount: "Applicants",
+    persons: "person(s)",
+    // Applicant Details
+    applicantDetails: "Applicant Details",
+    nationality: "Nationality",
+    passportNumber: "Passport Number",
+    dateOfBirth: "Date of Birth",
+    gender: "Gender",
+    // Delivery Info
+    deliveryInfo: "Delivery Information",
+    email: "Email",
+    whatsApp: "WhatsApp",
+    // Status Timeline
+    applicationStatus: "Application Status",
+    paymentReceived: "Payment Received",
+    justNow: "Just now",
+    processingVisa: "Processing Visa",
+    inProgress: "In progress...",
+    visaApproved: "Visa Approved",
+    pending: "Pending",
+    deliveredViaEmailWhatsApp: "Delivered via Email & WhatsApp",
+    // What's Next
+    whatHappensNext: "What Happens Next?",
+    step1: "Our team is processing your visa application right now",
+    step2: "You'll receive WhatsApp updates on your progress",
+    step3: "Your approved visa will be sent to",
+    step4: "Print the visa and present it at Vietnam immigration",
+    // Error states
+    orderNotFound: "Order Not Found",
+    orderNotFoundDesc: "We couldn't find your order details. Please contact support if you completed a payment.",
+    // Service Types
+    serviceType30Min: "30-Minute Express",
+    serviceType4Hour: "4-Hour Express",
+    serviceType1Day: "1-Day Service",
+    serviceType2Day: "2-Day Service",
+    serviceTypeWeekend: "Weekend/Holiday Service",
+    serviceTypeStandard: "Standard Processing",
+  },
+
+  // Payment Confirmation Email
+  confirmationEmail: {
+    subject: "Payment Confirmed",
+    headerTitle: "Payment Received!",
+    headerSubtitle: "Thank you for your order",
+    orderDetailsTitle: "Order Details",
+    referenceNumber: "Reference Number:",
+    serviceType: "Service Type:",
+    amountPaid: "Amount Paid:",
+    applicantsTitle: "Applicant(s)",
+    travelDetailsTitle: "Travel Details",
+    entryDate: "Entry Date:",
+    exitDate: "Exit Date:",
+    entryPort: "Entry Port:",
+    whatHappensNextTitle: "What Happens Next?",
+    step1: "Our team is processing your visa application right now",
+    step2: "You'll receive WhatsApp updates on your progress",
+    step3: "Your approved visa will be sent to this email",
+    step4: "Print the visa and present it at Vietnam immigration",
+    questionsText: "Questions? Contact our 24/7 support team",
+    chatWhatsApp: "Chat on WhatsApp",
+    footerCopyright: "Vietnam Fast Visa. All rights reserved.",
+  },
+
+  // Visa Ready Email
+  visaReadyEmail: {
+    subject: "Your Vietnam Visa is Ready",
+    headerTitle: "Your Vietnam Visa is Ready!",
+    greeting: "Dear",
+    greatNews: "Great news! Your Vietnam visa has been approved and is attached to this email.",
+    referenceNumber: "Reference Number:",
+    importantInstructions: "Important Instructions:",
+    instruction1: "Print the attached visa document or save it on your phone",
+    instruction2: "Present this document at Vietnam immigration upon arrival",
+    instruction3: "Keep a digital copy as backup",
+    questionsText: "If you have any questions, feel free to contact us via WhatsApp or email.",
+    safeTravels: "Safe travels!",
+    teamSignature: "Vietnam Fast Visa Team",
   },
 
   // Non-Urgent Visa Section
