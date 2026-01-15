@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { PhoneVerification } from "@/components/ui/phone-verification";
 
 // Visa-free countries with duration
@@ -940,26 +941,27 @@ function ApplyForm() {
       )}
 
       {/* Official Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <a href="/" className="flex items-center gap-3">
             <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
               <span className="text-yellow-400 text-xl font-bold">V</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">{t.applyHeader.siteName}</h1>
-              <p className="text-xs text-gray-500">{t.applyHeader.tagline}</p>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">{t.applyHeader.siteName}</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{t.applyHeader.tagline}</p>
             </div>
           </a>
           <div className="flex items-center gap-4">
-            <LanguageSelector />
             <a
               href="https://wa.me/1234567890"
-              className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors"
+              className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
             >
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               <span className="hidden sm:inline">{t.applyHeader.support}</span>
             </a>
+            <ThemeToggle />
+            <LanguageSelector />
           </div>
         </div>
       </header>

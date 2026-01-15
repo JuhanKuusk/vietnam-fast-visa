@@ -38,7 +38,7 @@ export const translations = {
     processedIn: "Processed in Ho Chi Minh City",
     localExperts: "Local Vietnamese Immigration Experts",
     thirtyMinutes: "30 Minutes",
-    thirtyMinutesDesc: "Approval letter for airline check-in",
+    thirtyMinutesDesc: "Formal Air Travel Approval and Airline Check-In Authorization Document",
     oneToTwoHours: "1.5 Hours",
     oneToTwoHoursDesc: "The official E-Visa will be completed and issued through WhatsApp and email before landing.",
     checkFlightStatus: "Check Your Flight Status",
@@ -231,7 +231,7 @@ export const translations = {
   processing: {
     title: "Our Processing Speed",
     thirtyMin: "30 Minutes",
-    thirtyMinDesc: "Approval letter for airline check-in",
+    thirtyMinDesc: "Formal Air Travel Approval and Airline Check-In Authorization Document",
     oneToTwo: "1.5 Hours",
     oneToTwoDesc: "The official E-Visa will be completed and issued through WhatsApp and email before landing.",
   },

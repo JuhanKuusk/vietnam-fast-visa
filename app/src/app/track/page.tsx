@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface Applicant {
   id: string;
@@ -93,19 +94,22 @@ export default function TrackPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: "#ef7175" }}>
               <span className="text-white text-xl font-bold">V</span>
             </div>
-            <span className="text-xl font-bold text-gray-900">Vietnam Fast Visa</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white">Vietnam Fast Visa</span>
           </Link>
-          <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
-            Back to Home
-          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Link href="/" className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+              Back to Home
+            </Link>
+          </div>
         </div>
       </header>
 

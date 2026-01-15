@@ -9,6 +9,8 @@ interface Flight {
   departureTime: string;
   destination: string;
   destinationCode: string;
+  isDirect: boolean;
+  stopover?: string;
 }
 
 interface DayFlights {
@@ -96,8 +98,13 @@ export function DirectFlights() {
     return "bg-gray-500 text-white";
   };
 
-  // Filter flights (all flights from Denpasar to Vietnam are direct in real data)
-  const filteredFlights = flightData?.flights || [];
+  // Filter flights based on selected filter type
+  const filteredFlights = (flightData?.flights || []).filter((flight) => {
+    if (flightType === "direct") {
+      return flight.isDirect;
+    }
+    return true; // "all" shows all flights
+  });
 
   const LoadingState = () => (
     <div className="p-6 flex items-center justify-center">
@@ -277,9 +284,22 @@ export function DirectFlights() {
                             </svg>
                             <div className="w-8 h-[2px] bg-gray-300 dark:bg-gray-600"></div>
                           </div>
-                          <span className="text-[10px] text-green-600 dark:text-green-400 font-medium">
-                            Direct
-                          </span>
+                          {flight.isDirect ? (
+                            <span className="text-[10px] text-green-600 dark:text-green-400 font-medium">
+                              Direct
+                            </span>
+                          ) : (
+                            <div className="flex flex-col items-center">
+                              <span className="text-[10px] text-orange-600 dark:text-orange-400 font-medium">
+                                1 Stop
+                              </span>
+                              {flight.stopover && (
+                                <span className="text-[9px] text-gray-500 dark:text-gray-400">
+                                  {flight.stopover}
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <div className="text-center">
                           <div

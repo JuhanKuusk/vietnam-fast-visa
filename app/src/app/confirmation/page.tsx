@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SparklesCore } from "@/components/ui/sparkles";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function ConfirmationPage() {
   const [referenceNumber] = useState(() => {
@@ -34,13 +35,16 @@ export default function ConfirmationPage() {
         <a href="/" className="text-2xl font-bold text-emerald-400">
           VietnamFastVisa
         </a>
-        <a
-          href="https://wa.me/1234567890"
-          className="flex items-center gap-2 text-base text-gray-300 hover:text-white"
-        >
-          <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-          Need help?
-        </a>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <a
+            href="https://wa.me/1234567890"
+            className="flex items-center gap-2 text-base text-gray-300 hover:text-white"
+          >
+            <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+            Need help?
+          </a>
+        </div>
       </header>
 
       <main className="px-5 pb-24">

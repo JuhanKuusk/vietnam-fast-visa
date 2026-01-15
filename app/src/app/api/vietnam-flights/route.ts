@@ -10,6 +10,8 @@ interface Flight {
   departureTime: string;
   destination: string;
   destinationCode: string;
+  isDirect: boolean;
+  stopover?: string; // e.g., "via Singapore (SIN)"
 }
 
 interface DayFlights {
@@ -19,6 +21,9 @@ interface DayFlights {
 }
 
 export async function GET(request: NextRequest) {
+  // Note: Using mock data for demo purposes to show varied flight schedules
+  // Set USE_REAL_API=true in env to use AeroDataBox API
+  const useRealApi = process.env.USE_REAL_FLIGHT_API === "true";
   const apiKey = process.env.AERODATABOX_API_KEY;
   const searchParams = request.nextUrl.searchParams;
   const requestedDate = searchParams.get("date"); // Optional: specific date in YYYY-MM-DD format
@@ -36,7 +41,7 @@ export async function GET(request: NextRequest) {
   if (requestedDate) {
     const dateObj = new Date(requestedDate + "T12:00:00Z"); // Use noon UTC to avoid timezone issues
 
-    if (!apiKey) {
+    if (!useRealApi || !apiKey) {
       return NextResponse.json({
         success: true,
         days: [
@@ -78,8 +83,8 @@ export async function GET(request: NextRequest) {
   const todayStr = formatDate(today);
   const tomorrowStr = formatDate(tomorrow);
 
-  if (!apiKey) {
-    // Return mock data for development
+  if (!useRealApi || !apiKey) {
+    // Return mock data for demo - shows varied schedules by day
     return NextResponse.json({
       success: true,
       days: [
@@ -100,7 +105,7 @@ export async function GET(request: NextRequest) {
   try {
     const results: DayFlights[] = [];
 
-    // Fetch flights for today and tomorrow
+    // Fetch flights for today and tomorrow from real API
     for (const dateStr of [todayStr, tomorrowStr]) {
       const dateObj = dateStr === todayStr ? today : tomorrow;
       const flights = await fetchFlightsForDate(dateStr, apiKey);
@@ -198,6 +203,7 @@ async function fetchFlightsForDate(
             departureTime,
             destination: dest.name,
             destinationCode: dest.code,
+            isDirect: true, // Direct flights from DPS to Vietnam
           });
         }
       }
@@ -217,7 +223,7 @@ function getMockFlightsForDate(dateStr: string): Flight[] {
   const date = new Date(dateStr + "T12:00:00Z");
   const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
 
-  // Base flights that always operate
+  // Base direct flights that always operate
   const baseFlights: Flight[] = [
     {
       flightNumber: "VJ 894",
@@ -226,6 +232,7 @@ function getMockFlightsForDate(dateStr: string): Flight[] {
       departureTime: "14:05",
       destination: "Ho Chi Minh City",
       destinationCode: "SGN",
+      isDirect: true,
     },
     {
       flightNumber: "VN 640",
@@ -234,45 +241,77 @@ function getMockFlightsForDate(dateStr: string): Flight[] {
       departureTime: "16:05",
       destination: "Ho Chi Minh City",
       destinationCode: "SGN",
+      isDirect: true,
     },
   ];
 
-  // Additional flights based on day of week
+  // Connecting flights (1-stop) that always operate
+  const connectingFlights: Flight[] = [
+    {
+      flightNumber: "SQ 947",
+      airline: "Singapore Airlines",
+      airlineCode: "SQ",
+      departureTime: "09:15",
+      destination: "Hanoi",
+      destinationCode: "HAN",
+      isDirect: false,
+      stopover: "via Singapore (SIN)",
+    },
+    {
+      flightNumber: "TG 432",
+      airline: "Thai Airways",
+      airlineCode: "TG",
+      departureTime: "11:30",
+      destination: "Ho Chi Minh City",
+      destinationCode: "SGN",
+      isDirect: false,
+      stopover: "via Bangkok (BKK)",
+    },
+  ];
+
+  // Additional direct flights based on day of week
   const additionalFlights: Record<number, Flight[]> = {
     0: [ // Sunday
-      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "08:30", destination: "Hanoi", destinationCode: "HAN" },
-      { flightNumber: "VJ 896", airline: "VietJet Air", airlineCode: "VJ", departureTime: "19:45", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "08:30", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "VJ 896", airline: "VietJet Air", airlineCode: "VJ", departureTime: "19:45", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: true },
+      { flightNumber: "MH 752", airline: "Malaysia Airlines", airlineCode: "MH", departureTime: "13:00", destination: "Da Nang", destinationCode: "DAD", isDirect: false, stopover: "via Kuala Lumpur (KUL)" },
     ],
     1: [ // Monday
-      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN" },
-      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: true },
+      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "CX 780", airline: "Cathay Pacific", airlineCode: "CX", departureTime: "07:45", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: false, stopover: "via Hong Kong (HKG)" },
     ],
     2: [ // Tuesday
-      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "13:10", destination: "Hanoi", destinationCode: "HAN" },
-      { flightNumber: "VN 642", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "20:15", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "13:10", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "VN 642", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "20:15", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: true },
+      { flightNumber: "QH 1542", airline: "Bamboo Airways", airlineCode: "QH", departureTime: "10:30", destination: "Phu Quoc", destinationCode: "PQC", isDirect: false, stopover: "via Ho Chi Minh City (SGN)" },
     ],
     3: [ // Wednesday
-      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN" },
-      { flightNumber: "VJ 902", airline: "VietJet Air", airlineCode: "VJ", departureTime: "09:00", destination: "Da Nang", destinationCode: "DAD" },
-      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: true },
+      { flightNumber: "VJ 902", airline: "VietJet Air", airlineCode: "VJ", departureTime: "09:00", destination: "Da Nang", destinationCode: "DAD", isDirect: true },
+      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "GA 858", airline: "Garuda Indonesia", airlineCode: "GA", departureTime: "06:20", destination: "Hanoi", destinationCode: "HAN", isDirect: false, stopover: "via Jakarta (CGK)" },
     ],
     4: [ // Thursday
-      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "13:10", destination: "Hanoi", destinationCode: "HAN" },
-      { flightNumber: "VN 644", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "11:30", destination: "Hanoi", destinationCode: "HAN" },
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "13:10", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "VN 644", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "11:30", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "SQ 176", airline: "Singapore Airlines", airlineCode: "SQ", departureTime: "18:45", destination: "Da Nang", destinationCode: "DAD", isDirect: false, stopover: "via Singapore (SIN)" },
     ],
     5: [ // Friday
-      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN" },
-      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN" },
-      { flightNumber: "VJ 904", airline: "VietJet Air", airlineCode: "VJ", departureTime: "21:00", destination: "Cam Ranh (Nha Trang)", destinationCode: "CXR" },
+      { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: true },
+      { flightNumber: "VJ 998", airline: "VietJet Air", airlineCode: "VJ", departureTime: "17:25", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "VJ 904", airline: "VietJet Air", airlineCode: "VJ", departureTime: "21:00", destination: "Cam Ranh (Nha Trang)", destinationCode: "CXR", isDirect: true },
+      { flightNumber: "TG 928", airline: "Thai Airways", airlineCode: "TG", departureTime: "08:00", destination: "Hanoi", destinationCode: "HAN", isDirect: false, stopover: "via Bangkok (BKK)" },
     ],
     6: [ // Saturday
-      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "08:30", destination: "Hanoi", destinationCode: "HAN" },
-      { flightNumber: "VJ 902", airline: "VietJet Air", airlineCode: "VJ", departureTime: "12:45", destination: "Da Nang", destinationCode: "DAD" },
-      { flightNumber: "VN 646", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "18:30", destination: "Ho Chi Minh City", destinationCode: "SGN" },
+      { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "08:30", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
+      { flightNumber: "VJ 902", airline: "VietJet Air", airlineCode: "VJ", departureTime: "12:45", destination: "Da Nang", destinationCode: "DAD", isDirect: true },
+      { flightNumber: "VN 646", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "18:30", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: true },
+      { flightNumber: "MH 760", airline: "Malaysia Airlines", airlineCode: "MH", departureTime: "10:15", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: false, stopover: "via Kuala Lumpur (KUL)" },
     ],
   };
 
-  const allFlights = [...baseFlights, ...(additionalFlights[dayOfWeek] || [])];
+  const allFlights = [...baseFlights, ...connectingFlights, ...(additionalFlights[dayOfWeek] || [])];
 
   // Sort by departure time
   return allFlights.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
