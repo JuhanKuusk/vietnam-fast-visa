@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase-server";
-import { applicationSchema } from "@/lib/validations";
+import { applicationSchema, VISA_SPEED_PRICING } from "@/lib/validations";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,10 +16,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { tripDetails, applicants, language } = validationResult.data;
+    const { tripDetails, applicants, language, visaSpeed } = validationResult.data;
 
-    // Calculate total amount
-    const pricePerPerson = 149;
+    // Calculate total amount based on visa speed
+    const pricePerPerson = VISA_SPEED_PRICING[visaSpeed];
     const totalAmount = pricePerPerson * applicants.length;
 
     // Get email and WhatsApp from first applicant
@@ -31,13 +31,14 @@ export async function POST(request: NextRequest) {
       .insert({
         entry_date: tripDetails.entryDate,
         exit_date: tripDetails.exitDate,
-        entry_port: tripDetails.arrivalPort,
+        entry_port: tripDetails.entryPort,
         email: primaryApplicant.email,
         whatsapp: primaryApplicant.whatsapp,
         amount_usd: totalAmount,
         status: "pending_payment",
         payment_status: "pending",
         language: language || "EN",
+        visa_speed: visaSpeed,
       })
       .select()
       .single();

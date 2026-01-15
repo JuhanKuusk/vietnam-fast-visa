@@ -4,7 +4,7 @@ import { z } from "zod";
 export const tripDetailsSchema = z.object({
   applicants: z.number().min(1).max(10),
   purpose: z.enum(["tourist", "business", "visiting"]),
-  arrivalPort: z.string().min(1, "Please select an arrival port"),
+  entryPort: z.string().min(1, "Please select an entry port"),
   entryDate: z.string().min(1, "Please select an entry date"),
   exitDate: z.string().min(1, "Please select an exit date"),
 });
@@ -31,11 +31,25 @@ export const applicantSchema = z.object({
     .regex(/^\+?[0-9]+$/, "Please enter a valid phone number"),
 });
 
+// Visa speed options
+export const visaSpeedSchema = z.enum(["30-min", "4-hour", "1-day", "2-day", "weekend"]);
+export type VisaSpeed = z.infer<typeof visaSpeedSchema>;
+
+// Visa speed pricing (in USD)
+export const VISA_SPEED_PRICING: Record<VisaSpeed, number> = {
+  "30-min": 149,
+  "4-hour": 99,
+  "1-day": 69,
+  "2-day": 49,
+  "weekend": 179,
+};
+
 // Application submission validation
 export const applicationSchema = z.object({
   tripDetails: tripDetailsSchema,
   applicants: z.array(applicantSchema).min(1, "At least one applicant is required"),
   language: z.enum(["EN", "ES", "PT", "FR", "RU"]).optional().default("EN"),
+  visaSpeed: visaSpeedSchema.optional().default("30-min"),
 });
 
 // Payment validation

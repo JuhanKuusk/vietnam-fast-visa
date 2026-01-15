@@ -12,6 +12,59 @@ const VISA_FREE_30_DAYS = ["TH", "MY", "SG", "ID", "LA", "KH", "MM", "BN", "PH"]
 const VISA_FREE_21_DAYS = ["CL"];
 const VISA_FREE_14_DAYS = ["KG"];
 
+// Visa speed options with pricing
+type VisaSpeedKey = "30-min" | "4-hour" | "1-day" | "2-day" | "weekend";
+
+const VISA_SPEEDS: Record<VisaSpeedKey, {
+  name: string;
+  nameKey: string;
+  description: string;
+  descriptionKey: string;
+  price: number;
+  processingTime: string;
+}> = {
+  "30-min": {
+    name: "30-Minute Express Visa",
+    nameKey: "speed30MinName",
+    description: "Fastest processing - visa ready in 30 minutes",
+    descriptionKey: "speed30MinDesc",
+    price: 149,
+    processingTime: "30 minutes",
+  },
+  "4-hour": {
+    name: "4-Hour Express Visa",
+    nameKey: "speed4HourName",
+    description: "Quick processing - visa ready in 4 hours",
+    descriptionKey: "speed4HourDesc",
+    price: 99,
+    processingTime: "4 hours",
+  },
+  "1-day": {
+    name: "1-Day Standard Visa",
+    nameKey: "speed1DayName",
+    description: "Standard processing - visa ready in 1 business day",
+    descriptionKey: "speed1DayDesc",
+    price: 69,
+    processingTime: "1 business day",
+  },
+  "2-day": {
+    name: "2-Day Economy Visa",
+    nameKey: "speed2DayName",
+    description: "Economy processing - visa ready in 2 business days",
+    descriptionKey: "speed2DayDesc",
+    price: 49,
+    processingTime: "2 business days",
+  },
+  "weekend": {
+    name: "Weekend & Holiday Visa",
+    nameKey: "speedWeekendName",
+    description: "Special weekend/holiday processing",
+    descriptionKey: "speedWeekendDesc",
+    price: 179,
+    processingTime: "Same day (weekends/holidays)",
+  },
+};
+
 // All countries for the selector (including non-eligible)
 const ALL_COUNTRIES = [
   { code: "AF", name: "Afghanistan" },
@@ -676,8 +729,12 @@ function ApplyForm() {
   const initialNationality = searchParams.get("nationality") || "";
   const initialPurpose = searchParams.get("purpose") || "tourism";
   const initialEntryPort = searchParams.get("entryPort") || "";
+  const speedParam = searchParams.get("speed") || "30-min";
 
-  const pricePerPerson = 149;
+  // Get visa speed configuration (default to 30-min if invalid)
+  const visaSpeed = (Object.keys(VISA_SPEEDS).includes(speedParam) ? speedParam : "30-min") as VisaSpeedKey;
+  const visaSpeedConfig = VISA_SPEEDS[visaSpeed];
+  const pricePerPerson = visaSpeedConfig.price;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -839,6 +896,7 @@ function ApplyForm() {
           whatsapp: contactInfo.whatsappSameAsMobile ? contactInfo.mobile : contactInfo.whatsapp,
         })),
         language, // Include user's language preference for email translations
+        visaSpeed, // Include selected visa speed for pricing
       };
 
       const response = await fetch("/api/applications", {
@@ -907,6 +965,40 @@ function ApplyForm() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Selected Visa Speed Banner */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl p-5 mb-6 text-white shadow-lg">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold">{visaSpeedConfig.name}</h2>
+                <p className="text-blue-100 text-sm">{visaSpeedConfig.description}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-bold">${pricePerPerson}</div>
+              <div className="text-blue-200 text-sm">per person</div>
+            </div>
+          </div>
+          {visaSpeed !== "30-min" && (
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <a
+                href="/apply?speed=30-min"
+                className="text-sm text-blue-100 hover:text-white flex items-center gap-1"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Need it faster? Upgrade to 30-Minute Express ($149)
+              </a>
+            </div>
+          )}
+        </div>
+
         {/* VOA Information Banner */}
         <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5 mb-6">
           <div className="flex items-start gap-4">

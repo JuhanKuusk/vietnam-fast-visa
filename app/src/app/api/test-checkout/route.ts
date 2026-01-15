@@ -5,12 +5,19 @@ export async function POST() {
   try {
     const stripe = getStripe();
 
-    // Create a Checkout Session with the test product
+    // Create a Checkout Session with inline price data (USD)
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
         {
-          price: "price_1Spf01GaGXQvGoxvuV8xIiCh", // Test product 1 EUR
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "Vietnam E-Visa Test",
+              description: "Test payment - $1 USD",
+            },
+            unit_amount: 100, // $1.00 in cents
+          },
           quantity: 1,
         },
       ],
