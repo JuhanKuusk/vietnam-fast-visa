@@ -415,7 +415,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             {/* Urgency Badge */}
-            <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium text-white" style={{ backgroundColor: '#c41e3a' }}>
+            <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium" style={{ backgroundColor: '#8EE1EC', color: '#0E273C' }}>
               <span className="animate-pulse inline-block mr-1">⚡</span>
               {t.hero.urgencyBadge}
             </div>
@@ -424,7 +424,7 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
               <span style={{ color: '#c52e3a' }}>{t.hero.headline1}</span>
               <br />
-              <span style={{ color: '#57D0B2' }}>{t.hero.headline2}</span>
+              <span style={{ color: '#5eca52' }}>{t.hero.headline2}</span>
             </h1>
 
             <p className="text-xl text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
