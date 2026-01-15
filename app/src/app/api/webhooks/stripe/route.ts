@@ -1,7 +1,71 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseServer } from "@/lib/supabase-server";
+import { sendPaymentConfirmationEmail } from "@/lib/resend";
 import Stripe from "stripe";
+
+// Helper to send confirmation email
+async function sendConfirmationEmail(
+  supabase: ReturnType<typeof getSupabaseServer>,
+  applicationId: string,
+  amountCents: number,
+  currency: string
+) {
+  try {
+    // Fetch application with applicants
+    const { data: application, error: appError } = await supabase
+      .from("applications")
+      .select("*")
+      .eq("id", applicationId)
+      .single();
+
+    if (appError || !application) {
+      console.error("Failed to fetch application for email:", appError);
+      return;
+    }
+
+    const { data: applicants } = await supabase
+      .from("applicants")
+      .select("full_name")
+      .eq("application_id", applicationId);
+
+    const applicantNames = applicants?.map((a) => a.full_name) || ["Applicant"];
+
+    // Format amount
+    const amount = (amountCents / 100).toLocaleString("en-US", {
+      style: "currency",
+      currency: currency.toUpperCase(),
+    });
+
+    // Format dates
+    const formatDate = (dateStr: string) =>
+      new Date(dateStr).toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
+    const result = await sendPaymentConfirmationEmail({
+      to: application.email,
+      referenceNumber: application.reference_number,
+      applicantNames,
+      amountPaid: amount,
+      visaSpeed: application.visa_speed,
+      entryDate: formatDate(application.entry_date),
+      exitDate: formatDate(application.exit_date),
+      entryPort: application.entry_port,
+    });
+
+    if (result.success) {
+      console.log(`Confirmation email sent to ${application.email}`);
+    } else {
+      console.error("Failed to send confirmation email:", result.error);
+    }
+  } catch (error) {
+    console.error("Error sending confirmation email:", error);
+  }
+}
 
 export async function POST(request: NextRequest) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -66,6 +130,13 @@ export async function POST(request: NextRequest) {
           console.error("Failed to update application:", error);
         } else {
           console.log(`Checkout completed for application ${applicationId}`);
+          // Send confirmation email
+          await sendConfirmationEmail(
+            supabase,
+            applicationId,
+            session.amount_total || 0,
+            session.currency || "usd"
+          );
         }
       }
       break;
@@ -91,6 +162,13 @@ export async function POST(request: NextRequest) {
           console.error("Failed to update application:", error);
         } else {
           console.log(`Payment succeeded for application ${applicationId}`);
+          // Send confirmation email
+          await sendConfirmationEmail(
+            supabase,
+            applicationId,
+            paymentIntent.amount,
+            paymentIntent.currency
+          );
         }
       }
       break;
