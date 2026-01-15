@@ -15,7 +15,7 @@ export async function POST() {
         },
       ],
       mode: "payment",
-      success_url: `https://vietnamvisahelp.com/test-success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `https://vietnamvisahelp.com/order-confirmed?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `https://vietnamvisahelp.com/test-cancel`,
       metadata: {
         test: "true",

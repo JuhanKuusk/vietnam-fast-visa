@@ -41,7 +41,7 @@ function CheckoutForm({
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/confirmation`,
+        return_url: `${window.location.origin}/order-confirmed`,
       },
       redirect: "if_required",
     });
@@ -50,8 +50,8 @@ function CheckoutForm({
       setErrorMessage(error.message || "Payment failed");
       setIsProcessing(false);
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
-      // Payment successful, redirect to confirmation
-      router.push("/confirmation");
+      // Payment successful, redirect to order-confirmed
+      router.push(`/order-confirmed?payment_intent=${paymentIntent.id}`);
     }
   };
 
@@ -157,7 +157,7 @@ function PaymentForm() {
   // Demo mode: allow proceeding without Stripe keys
   const handleDemoPayment = () => {
     sessionStorage.setItem("paymentComplete", "true");
-    router.push("/confirmation");
+    router.push("/order-confirmed");
   };
 
   return (
