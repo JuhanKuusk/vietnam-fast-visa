@@ -313,8 +313,7 @@ export async function sendPaymentConfirmationEmail({
               <ol style="margin: 0; padding-left: 20px; color: #78350f;">
                 <li style="margin-bottom: 8px;">${t.step1}</li>
                 <li style="margin-bottom: 8px;">${t.step2}</li>
-                <li style="margin-bottom: 8px;">${t.step3}</li>
-                <li>${t.step4}</li>
+                <li>${t.step3}</li>
               </ol>
             </div>
 
