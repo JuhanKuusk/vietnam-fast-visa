@@ -421,10 +421,10 @@ export default function Home() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-gray-900 dark:text-white">
-              {t.hero.headline1}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+              <span style={{ color: '#c52e3a' }}>{t.hero.headline1}</span>
               <br />
-              <span style={{ color: '#c41e3a' }}>{t.hero.headline2}</span>
+              <span style={{ color: '#57D0B2' }}>{t.hero.headline2}</span>
             </h1>
 
             <p className="text-xl text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
@@ -448,7 +448,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-lg">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#c41e3a' }}>
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-gray-800" style={{ backgroundColor: '#A7E8D7' }}>
                       <span className="text-2xl font-bold">30</span>
                     </div>
                     <div className="text-left">
@@ -459,7 +459,7 @@ export default function Home() {
                 </div>
                 <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-lg">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white bg-gray-400 dark:bg-gray-600">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#57D0B2' }}>
                       <span className="text-xl font-bold">1-2h</span>
                     </div>
                     <div className="text-left">
