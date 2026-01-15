@@ -565,7 +565,7 @@ export const translations = {
     whatHappensNextTitle: "What Happens Next?",
     step1: "Our team is processing your visa application right now",
     step2: "You'll receive WhatsApp updates on your progress",
-    step3: "Your approved visa will be sent to this email",
+    step3: "Your approved visa will be sent to this email and to your WhatsApp",
     step4: "Print the visa and present it at Vietnam immigration",
     questionsText: "Questions? Contact our 24/7 support team",
     chatWhatsApp: "Chat on WhatsApp",
