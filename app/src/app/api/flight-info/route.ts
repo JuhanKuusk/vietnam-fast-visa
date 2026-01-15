@@ -47,11 +47,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Normalize flight number: remove spaces and trim (e.g., "VJ 894" -> "VJ894")
+    const normalizedFlightNumber = flightNumber.replace(/\s+/g, "").trim();
+
     // Parse flight number (e.g., "VN123" -> airline: "VN", number: "123")
-    const match = flightNumber.match(/^([A-Z]{2,3})(\d+)$/i);
+    const match = normalizedFlightNumber.match(/^([A-Z]{2,3})(\d+)$/i);
     if (!match) {
       return NextResponse.json(
-        { error: "Invalid flight number format. Use format like VN123 or SQ456" },
+        { error: "Invalid flight number format. Use format like VN123 or VJ 894" },
         { status: 400 }
       );
     }
@@ -228,6 +231,9 @@ export async function GET(request: NextRequest) {
 
 // Mock data for development/demo when no API key is configured
 function getMockFlightData(flightNumber: string, date: string | null): FlightData {
+  // Normalize flight number: remove spaces
+  const normalizedFlightNumber = flightNumber.replace(/\s+/g, "").trim();
+
   // Set departure time to 3 hours from now for demo
   const departureTime = new Date();
   departureTime.setHours(departureTime.getHours() + 3);
@@ -248,8 +254,8 @@ function getMockFlightData(flightNumber: string, date: string | null): FlightDat
     checkInStatus = "closed";
   }
 
-  // Parse airline code from flight number
-  const match = flightNumber.match(/^([A-Z]{2,3})/i);
+  // Parse airline code from normalized flight number
+  const match = normalizedFlightNumber.match(/^([A-Z]{2,3})/i);
   const airlineCode = match ? match[1].toUpperCase() : "XX";
 
   const airlines: Record<string, string> = {
@@ -265,7 +271,7 @@ function getMockFlightData(flightNumber: string, date: string | null): FlightDat
   };
 
   return {
-    flightNumber: flightNumber.toUpperCase(),
+    flightNumber: normalizedFlightNumber.toUpperCase(),
     airline: airlines[airlineCode] || `${airlineCode} Airlines`,
     departure: {
       airport: "Singapore Changi Airport (SIN)",
