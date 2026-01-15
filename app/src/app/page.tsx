@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlightInfo } from "@/components/ui/flight-info";
 import { DirectFlights } from "@/components/ui/direct-flights";
@@ -305,10 +305,10 @@ export default function Home() {
     { value: "short_term", label: t.form?.purposeShortTerm || "Short-term activities" },
   ];
 
-  // Handle flight data from FlightInfo component
-  const handleFlightData = (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string }) => {
+  // Handle flight data from FlightInfo component - memoized to prevent infinite re-renders
+  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string }) => {
     setFlightArrivalData(data);
-  };
+  }, []);
 
   const visaRequirement = formData.nationality ? getVisaRequirement(formData.nationality) : null;
   const selectedCountryName = ALL_COUNTRIES.find(c => c.code === formData.nationality)?.name;
