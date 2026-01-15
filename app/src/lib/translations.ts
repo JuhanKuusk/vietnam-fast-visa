@@ -39,8 +39,8 @@ export const translations = {
     localExperts: "Local Vietnamese Immigration Experts",
     thirtyMinutes: "30 Minutes",
     thirtyMinutesDesc: "Approval letter for airline check-in",
-    oneToTwoHours: "1-2 Hours",
-    oneToTwoHoursDesc: "Full visa issued before you land",
+    oneToTwoHours: "1.5 Hours",
+    oneToTwoHoursDesc: "The official E-Visa will be completed and issued through WhatsApp and email before landing.",
     checkFlightStatus: "Check Your Flight Status",
     enterFlightNumber: "Enter flight number (e.g. VN123)",
     perPerson: "/person",
@@ -232,8 +232,8 @@ export const translations = {
     title: "Our Processing Speed",
     thirtyMin: "30 Minutes",
     thirtyMinDesc: "Approval letter for airline check-in",
-    oneToTwo: "1-2 Hours",
-    oneToTwoDesc: "Full visa issued before you land",
+    oneToTwo: "1.5 Hours",
+    oneToTwoDesc: "The official E-Visa will be completed and issued through WhatsApp and email before landing.",
   },
 
   // Apply Page - Progress Steps
