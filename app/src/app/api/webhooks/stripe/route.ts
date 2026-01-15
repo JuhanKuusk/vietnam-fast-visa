@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseServer } from "@/lib/supabase-server";
 import { sendPaymentConfirmationEmail } from "@/lib/resend";
+import { SupportedLanguage } from "@/lib/translations";
 import Stripe from "stripe";
 
 // Helper to send confirmation email
@@ -46,6 +47,9 @@ async function sendConfirmationEmail(
         day: "numeric",
       });
 
+    // Get user's language preference (default to EN)
+    const language = (application.language as SupportedLanguage) || "EN";
+
     const result = await sendPaymentConfirmationEmail({
       to: application.email,
       referenceNumber: application.reference_number,
@@ -55,10 +59,11 @@ async function sendConfirmationEmail(
       entryDate: formatDate(application.entry_date),
       exitDate: formatDate(application.exit_date),
       entryPort: application.entry_port,
+      language,
     });
 
     if (result.success) {
-      console.log(`Confirmation email sent to ${application.email}`);
+      console.log(`Confirmation email sent to ${application.email} in ${language}`);
     } else {
       console.error("Failed to send confirmation email:", result.error);
     }

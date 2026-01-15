@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import twilio from "twilio";
 import { getCurrentUser } from "@/lib/auth";
 import { sendVisaDocumentEmail } from "@/lib/resend";
+import { SupportedLanguage } from "@/lib/translations";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -100,11 +101,15 @@ Thank you for using Vietnam Fast Visa! 🇻🇳`,
 
     // Send Email with PDF attachment
     try {
+      // Get user's language preference (default to EN)
+      const language = (application.language as SupportedLanguage) || "EN";
+
       const emailResult = await sendVisaDocumentEmail({
         to: application.email,
         applicantName: applicant.full_name,
         referenceNumber: application.reference_number,
         documentUrl: document.document_url,
+        language,
       });
 
       if (emailResult.success) {

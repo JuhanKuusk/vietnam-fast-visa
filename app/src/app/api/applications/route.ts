@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { tripDetails, applicants } = validationResult.data;
+    const { tripDetails, applicants, language } = validationResult.data;
 
     // Calculate total amount
     const pricePerPerson = 149;
@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
         amount_usd: totalAmount,
         status: "pending_payment",
         payment_status: "pending",
+        language: language || "EN",
       })
       .select()
       .single();

@@ -35,6 +35,7 @@ export const applicantSchema = z.object({
 export const applicationSchema = z.object({
   tripDetails: tripDetailsSchema,
   applicants: z.array(applicantSchema).min(1, "At least one applicant is required"),
+  language: z.enum(["EN", "ES", "PT", "FR", "RU"]).optional().default("EN"),
 });
 
 // Payment validation

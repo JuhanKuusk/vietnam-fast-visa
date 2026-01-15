@@ -669,7 +669,7 @@ function PhotoUploadSection({
 function ApplyForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { t, isLoading: isTranslating } = useLanguage();
+  const { t, isLoading: isTranslating, language } = useLanguage();
 
   // Get initial values from URL params (from home page)
   const initialFlight = searchParams.get("flight") || "";
@@ -838,6 +838,7 @@ function ApplyForm() {
           mobile: contactInfo.mobile,
           whatsapp: contactInfo.whatsappSameAsMobile ? contactInfo.mobile : contactInfo.whatsapp,
         })),
+        language, // Include user's language preference for email translations
       };
 
       const response = await fetch("/api/applications", {
