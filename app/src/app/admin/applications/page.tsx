@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -16,8 +16,74 @@ interface Application {
   entry_date: string;
   exit_date: string;
   created_at: string;
+  paid_at: string | null;
   applicants: { id: string; full_name: string; nationality: string }[];
 }
+
+// Deadline thresholds in minutes based on visa speed
+const DEADLINE_THRESHOLDS: Record<string, number> = {
+  "30-min": 30,
+  "4-hour": 240,
+  "1-day": 1440, // 24 hours
+  "2-day": 2880, // 48 hours
+  "weekend": 4320, // 72 hours
+};
+
+// Get time since payment and urgency level
+function getTimeSincePayment(paidAt: string | null, visaSpeed: string): {
+  elapsed: string;
+  minutes: number;
+  urgency: "ok" | "warning" | "critical" | "overdue";
+} {
+  if (!paidAt) {
+    return { elapsed: "-", minutes: 0, urgency: "ok" };
+  }
+
+  const now = new Date();
+  const paymentTime = new Date(paidAt);
+  const diffMs = now.getTime() - paymentTime.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+
+  // Format elapsed time
+  let elapsed: string;
+  if (diffMinutes < 60) {
+    elapsed = `${diffMinutes}m`;
+  } else if (diffMinutes < 1440) {
+    const hours = Math.floor(diffMinutes / 60);
+    const mins = diffMinutes % 60;
+    elapsed = mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+  } else {
+    const days = Math.floor(diffMinutes / 1440);
+    const hours = Math.floor((diffMinutes % 1440) / 60);
+    elapsed = hours > 0 ? `${days}d ${hours}h` : `${days}d`;
+  }
+
+  // Determine urgency based on visa speed deadline
+  const deadline = DEADLINE_THRESHOLDS[visaSpeed] || 90; // Default 1.5h for unknown
+  const warningThreshold = deadline * 0.7; // 70% of deadline
+  const criticalThreshold = deadline * 0.9; // 90% of deadline
+
+  let urgency: "ok" | "warning" | "critical" | "overdue";
+  if (diffMinutes >= deadline) {
+    urgency = "overdue";
+  } else if (diffMinutes >= criticalThreshold) {
+    urgency = "critical";
+  } else if (diffMinutes >= warningThreshold) {
+    urgency = "warning";
+  } else {
+    urgency = "ok";
+  }
+
+  return { elapsed, minutes: diffMinutes, urgency };
+}
+
+// Urgency badge colors
+const urgencyColors: Record<string, string> = {
+  ok: "bg-green-100 text-green-800",
+  warning: "bg-yellow-100 text-yellow-800",
+  critical: "bg-orange-100 text-orange-800",
+  overdue: "bg-red-100 text-red-800 animate-pulse",
+};
 
 interface Pagination {
   page: number;
@@ -30,6 +96,7 @@ export default function AdminApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(true);
+  const [, setTick] = useState(0); // Force re-render for timer updates
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -37,31 +104,48 @@ export default function AdminApplicationsPage() {
   const currentStatus = searchParams.get("status") || "";
   const currentSearch = searchParams.get("search") || "";
 
-  useEffect(() => {
-    async function fetchApplications() {
-      setLoading(true);
-      try {
-        const params = new URLSearchParams();
-        params.set("page", currentPage.toString());
-        params.set("limit", "20");
-        if (currentStatus) params.set("status", currentStatus);
-        if (currentSearch) params.set("search", currentSearch);
+  const fetchApplications = useCallback(async (showLoading = true) => {
+    if (showLoading) setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.set("page", currentPage.toString());
+      params.set("limit", "20");
+      if (currentStatus) params.set("status", currentStatus);
+      if (currentSearch) params.set("search", currentSearch);
 
-        const response = await fetch(`/api/admin/applications?${params}`);
-        if (response.ok) {
-          const data = await response.json();
-          setApplications(data.applications || []);
-          setPagination(data.pagination);
-        }
-      } catch (error) {
-        console.error("Failed to fetch applications:", error);
-      } finally {
-        setLoading(false);
+      const response = await fetch(`/api/admin/applications?${params}`);
+      if (response.ok) {
+        const data = await response.json();
+        setApplications(data.applications || []);
+        setPagination(data.pagination);
       }
+    } catch (error) {
+      console.error("Failed to fetch applications:", error);
+    } finally {
+      setLoading(false);
     }
-
-    fetchApplications();
   }, [currentPage, currentStatus, currentSearch]);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
+
+  // Auto-refresh every 30 seconds for new applications
+  useEffect(() => {
+    const refreshInterval = setInterval(() => {
+      fetchApplications(false);
+    }, 30000);
+    return () => clearInterval(refreshInterval);
+  }, [fetchApplications]);
+
+  // Update timer display every minute
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 60000);
+    return () => clearInterval(timerInterval);
+  }, []);
 
   const updateFilters = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -150,6 +234,7 @@ export default function AdminApplicationsPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Speed</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">⏱️ Time</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Travel Dates</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
@@ -158,13 +243,20 @@ export default function AdminApplicationsPage() {
                 <tbody className="divide-y divide-gray-200">
                   {applications.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="px-6 py-12 text-center text-gray-500">
+                      <td colSpan={10} className="px-6 py-12 text-center text-gray-500">
                         No applications found
                       </td>
                     </tr>
                   ) : (
-                    applications.map((app) => (
-                      <tr key={app.id} className="hover:bg-gray-50">
+                    applications.map((app) => {
+                      const timeInfo = app.payment_status === "completed" && !["delivered", "approved", "rejected"].includes(app.status)
+                        ? getTimeSincePayment(app.paid_at, app.visa_speed)
+                        : null;
+                      const rowBg = timeInfo?.urgency === "overdue" ? "bg-red-50 hover:bg-red-100" :
+                                    timeInfo?.urgency === "critical" ? "bg-orange-50 hover:bg-orange-100" :
+                                    "hover:bg-gray-50";
+                      return (
+                      <tr key={app.id} className={rowBg}>
                         <td className="px-6 py-4">
                           <Link
                             href={`/admin/applications/${app.id}`}
@@ -200,6 +292,20 @@ export default function AdminApplicationsPage() {
                         <td className="px-6 py-4 text-sm text-gray-600">
                           {app.visa_speed || "-"}
                         </td>
+                        <td className="px-6 py-4">
+                          {timeInfo ? (
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${urgencyColors[timeInfo.urgency]}`}
+                              title={`Deadline: ${DEADLINE_THRESHOLDS[app.visa_speed] || 90} minutes`}
+                            >
+                              {timeInfo.urgency === "overdue" && "🚨 "}
+                              {timeInfo.urgency === "critical" && "⚠️ "}
+                              {timeInfo.elapsed}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-gray-400">-</span>
+                          )}
+                        </td>
                         <td className="px-6 py-4 text-gray-900 font-medium">
                           ${app.amount_usd}
                         </td>
@@ -211,7 +317,8 @@ export default function AdminApplicationsPage() {
                           {new Date(app.created_at).toLocaleDateString()}
                         </td>
                       </tr>
-                    ))
+                      );
+                    })
                   )}
                 </tbody>
               </table>
