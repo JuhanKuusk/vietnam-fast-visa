@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
+import { Logo } from "@/components/ui/logo";
 
 export function Footer() {
   const { t } = useLanguage();
@@ -13,24 +14,23 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand Section */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-yellow-400 text-xl font-bold">V</span>
-              </div>
-              <div>
-                <h3 className="text-white font-bold">VietnamVisaHelp.com</h3>
-                <p className="text-xs text-gray-400">30 Min Approval Letter</p>
-              </div>
+            <div className="mb-4">
+              <Logo size="md" showTagline={true} />
             </div>
             <p className="text-sm text-gray-400">
               {t.legal?.footerDescription || "Fast, reliable Vietnam visa assistance service. Get your approval letter in 30 minutes."}
             </p>
           </div>
 
-          {/* Legal Links */}
+          {/* Company & Legal Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">{t.legal?.legalLinks || "Legal"}</h4>
+            <h4 className="text-white font-semibold mb-4">{t.legal?.legalLinks || "Company & Legal"}</h4>
             <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/about" className="hover:text-white transition-colors font-medium">
+                  About Us
+                </Link>
+              </li>
               <li>
                 <Link href="/terms" className="hover:text-white transition-colors">
                   {t.legal?.termsTitle || "Terms of Use"}
@@ -69,8 +69,8 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="https://wa.me/84123456789" className="hover:text-white transition-colors">
-                  WhatsApp: +84 123 456 789
+                <a href="https://wa.me/3725035137" className="hover:text-white transition-colors">
+                  WhatsApp: +372 503 5137
                 </a>
               </li>
             </ul>

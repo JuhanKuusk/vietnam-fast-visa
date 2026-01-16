@@ -151,7 +151,7 @@ export const translations = {
     q6: "What if my visa is rejected?",
     a6: "We offer a 100% money-back guarantee if your visa is rejected. We have a 99% approval rate and will work with you to ensure success.",
     q7: "Do I need to pay again at the Vietnam airport?",
-    a7: "No additional airport fees. Our price of $149 is all-inclusive. Once you have your e-visa, simply show it at immigration - no extra payments required.",
+    a7: "No additional airport fees. Our price of $179 is all-inclusive. Once you have your e-visa, simply show it at immigration - no extra payments required.",
   },
 
   // Footer
@@ -673,6 +673,21 @@ export const translations = {
     footerDescription: "Fast, reliable Vietnam visa assistance service. Get your approval letter in 30 minutes.",
     importantDisclaimer: "Important Disclaimer",
     disclaimerBannerText: "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities.",
+
+    // About Us page
+    aboutTitle: "About Us",
+    aboutIntro: "Vietnam Visa Help is a professional visa support service specializing in Vietnam e-Visa applications and related travel documentation. Through our website, www.vietnamvisahelp.com, we assist travelers from around the world with fast, accurate, and reliable visa solutions for entry into Vietnam.",
+    expressProcessing: "Express Processing",
+    expressProcessingText: "We are particularly known for our urgent visa processing services, offering expedited options with processing times as fast as one hour, as well as standard processing for travelers who plan ahead. Our services cover a wide range of Vietnam visa options, including tourist e-Visas, business e-Visas, single-entry and multiple-entry visas, and other Vietnam entry permits depending on travel purpose and nationality.",
+    comprehensiveSupport: "Comprehensive Support",
+    comprehensiveSupportText: "In addition to visa applications, we provide supplementary support services such as application review, error correction, document guidance, arrival assistance, and visa-related travel consultation to ensure a smooth and stress-free experience for our clients.",
+    localExpertise: "Local Vietnamese Expertise",
+    localExpertiseText: "All visa applications are carefully reviewed and processed in Ho Chi Minh City by local Vietnamese visa experts, ensuring compliance with current Vietnamese immigration regulations and minimizing the risk of delays or rejections. Our local expertise allows us to stay up to date with policy changes and processing requirements.",
+    ourMission: "Our Mission",
+    ourMissionText: "Our mission is to make the Vietnam visa process simple, transparent, and efficient—whether you need an emergency visa at short notice or a standard application with professional support.",
+    applyNow: "Apply for Your Visa Now",
+    home: "Home",
+    fastReliableService: "Fast & Reliable Service",
 
     // Terms of Use
     termsTitle: "Terms of Use",

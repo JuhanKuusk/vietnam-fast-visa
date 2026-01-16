@@ -37,7 +37,7 @@ export type VisaSpeed = z.infer<typeof visaSpeedSchema>;
 
 // Visa speed pricing (in USD)
 export const VISA_SPEED_PRICING: Record<VisaSpeed, number> = {
-  "30-min": 149,
+  "30-min": 179,
   "4-hour": 99,
   "1-day": 69,
   "2-day": 49,

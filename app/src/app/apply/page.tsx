@@ -29,7 +29,7 @@ const VISA_SPEEDS: Record<VisaSpeedKey, {
     nameKey: "speed30MinName",
     description: "Fastest processing - visa ready in 30 minutes",
     descriptionKey: "speed30MinDesc",
-    price: 149,
+    price: 179,
     processingTime: "30 minutes",
   },
   "4-hour": {
@@ -954,7 +954,7 @@ function ApplyForm() {
           </a>
           <div className="flex items-center gap-4">
             <a
-              href="https://wa.me/1234567890"
+              href="https://wa.me/3725035137"
               className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
             >
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -995,7 +995,7 @@ function ApplyForm() {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Need it faster? Upgrade to 30-Minute Express ($149)
+                Need it faster? Upgrade to 30-Minute Express ($179)
               </a>
             </div>
           )}
@@ -2007,7 +2007,7 @@ function ApplyForm() {
 
       {/* WhatsApp Button */}
       <a
-        href="https://wa.me/1234567890?text=Hi, I need help with my visa application!"
+        href="https://wa.me/3725035137?text=Hi, I need help with my visa application!"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110 z-50"

@@ -132,7 +132,7 @@ function OrderConfirmedContent() {
     return speed ? speeds[speed] || speed : t.orderConfirmation.serviceTypeStandard;
   };
 
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "1234567890";
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "3725035137";
 
   if (loading) {
     return (

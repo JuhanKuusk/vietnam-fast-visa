@@ -244,7 +244,7 @@ export async function sendPaymentConfirmationEmail({
 
   try {
     const { error } = await emailClient.emails.send({
-      from: "Vietnam Fast Visa <visa@vietnamfastvisa.com>",
+      from: "VietnamVisaHelp <support@vietnamvisahelp.com>",
       to: [to],
       subject: `${t.subject} - ${referenceNumber}`,
       html: `
@@ -319,7 +319,7 @@ export async function sendPaymentConfirmationEmail({
 
             <div style="text-align: center; padding: 20px 0;">
               <p style="color: #666; margin-bottom: 15px;">${t.questionsText}</p>
-              <a href="https://wa.me/1234567890?text=Hi, I need help with my visa. Reference: ${referenceNumber}" style="display: inline-block; padding: 12px 30px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">${t.chatWhatsApp}</a>
+              <a href="https://wa.me/3725035137?text=Hi, I need help with my visa. Reference: ${referenceNumber}" style="display: inline-block; padding: 12px 30px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">${t.chatWhatsApp}</a>
             </div>
           </div>
 
@@ -374,7 +374,7 @@ export async function sendVisaDocumentEmail({
     const pdfBase64 = Buffer.from(pdfBuffer).toString("base64");
 
     const { error } = await emailClient.emails.send({
-      from: "Vietnam Fast Visa <visa@vietnamfastvisa.com>",
+      from: "VietnamVisaHelp <support@vietnamvisahelp.com>",
       to: [to],
       subject: `${t.subject} - ${referenceNumber}`,
       html: `

@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Footer } from "@/components/ui/footer";
+import { Logo } from "@/components/ui/logo";
 
 export default function CookiesPage() {
   const { t } = useLanguage();
@@ -13,15 +15,9 @@ export default function CookiesPage() {
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <a href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-              <span className="text-yellow-400 text-xl font-bold">V</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">VietnamVisaHelp.com</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">30 Min Approval Letter</p>
-            </div>
-          </a>
+          <Link href="/" className="hover:opacity-90 transition-opacity">
+            <Logo size="md" />
+          </Link>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <LanguageSelector />

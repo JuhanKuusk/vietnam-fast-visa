@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -37,21 +36,6 @@ export default function RootLayout({
           </LanguageProvider>
         </ThemeProvider>
 
-        {/* Askly Chat Widget */}
-        <Script
-          id="askly-chat"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var script = document.createElement('script');
-                script.src = 'https://chat.askly.me/cw/chat/latest.js';
-                script.setAttribute('tw-client-key', 'ubfeimuozup98jkokndvfgss');
-                document.body.appendChild(script);
-              })();
-            `
-          }}
-        />
       </body>
     </html>
   );
