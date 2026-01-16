@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Logo } from "@/components/ui/logo";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Applicant {
@@ -179,8 +180,8 @@ function OrderConfirmedContent() {
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white">
       {/* Header */}
       <header className="px-5 py-6 flex justify-between items-center max-w-6xl mx-auto">
-        <a href="/" className="text-2xl font-bold text-emerald-400">
-          VietnamFastVisa
+        <a href="/" className="hover:opacity-90 transition-opacity">
+          <Logo size="md" variant="light" />
         </a>
         <div className="flex items-center gap-4">
           <ThemeToggle />

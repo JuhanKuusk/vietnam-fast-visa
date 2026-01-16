@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/contexts/AdminContext";
+import { Logo } from "@/components/ui/logo";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -32,10 +33,9 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "#ef7175" }}>
-            <span className="text-white text-3xl font-bold">V</span>
+          <div className="flex justify-center mb-4">
+            <Logo size="lg" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Vietnam Fast Visa</h1>
           <p className="text-gray-600 mt-1">Admin Panel</p>
         </div>
 

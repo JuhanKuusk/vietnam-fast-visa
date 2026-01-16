@@ -4,9 +4,10 @@ interface LogoProps {
   size?: "sm" | "md" | "lg";
   showTagline?: boolean;
   className?: string;
+  variant?: "auto" | "light" | "dark"; // auto uses dark mode detection, light/dark forces specific colors
 }
 
-export function Logo({ size = "md", showTagline = true, className = "" }: LogoProps) {
+export function Logo({ size = "md", showTagline = true, className = "", variant = "auto" }: LogoProps) {
   const sizes = {
     sm: { icon: 32, text: "text-sm", tagline: "text-[10px]" },
     md: { icon: 40, text: "text-base", tagline: "text-xs" },
@@ -49,14 +50,14 @@ export function Logo({ size = "md", showTagline = true, className = "" }: LogoPr
       {/* Text */}
       <div className="flex flex-col">
         <span className={`${text} font-bold leading-tight`}>
-          <span className="text-gray-800 dark:text-gray-100">Vietnam</span>
+          <span className={variant === "light" ? "text-gray-100" : variant === "dark" ? "text-gray-800" : "text-gray-800 dark:text-gray-100"}>Vietnam</span>
           {" "}
           <span className="text-[#c41e3a]">Visa</span>
           {" "}
-          <span className="text-gray-800 dark:text-gray-100">Help</span>
+          <span className={variant === "light" ? "text-gray-100" : variant === "dark" ? "text-gray-800" : "text-gray-800 dark:text-gray-100"}>Help</span>
         </span>
         {showTagline && (
-          <span className={`${tagline} text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium`}>
+          <span className={`${tagline} ${variant === "light" ? "text-gray-300" : variant === "dark" ? "text-gray-500" : "text-gray-500 dark:text-gray-400"} uppercase tracking-wide font-medium`}>
             Check-in Approval with 30 min
           </span>
         )}
