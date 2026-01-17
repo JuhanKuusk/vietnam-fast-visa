@@ -934,9 +934,19 @@ function ApplyForm() {
             current.placeOfBirth = country.name;
           }
         }
+        // Auto-fill issuing authority with nationality (same as passport issuing country)
+        if (!current.issuingAuthority) {
+          current.issuingAuthority = data.nationality;
+        }
       }
       if (data.passportNumber) current.passportNumber = data.passportNumber;
       if (data.passportExpiry) current.passportExpiry = data.passportExpiry;
+      // Auto-fill date of issue if available from passport scan
+      if (data.dateOfIssue) current.dateOfIssue = data.dateOfIssue;
+      // Also use issuingAuthority from passport scan if available (fallback)
+      if (data.issuingAuthority && !current.issuingAuthority) {
+        current.issuingAuthority = data.issuingAuthority;
+      }
 
       updated[currentApplicant] = current;
       setApplicants(updated);
@@ -1711,13 +1721,16 @@ function ApplyForm() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Issuing Authority/Place of issue
                 </label>
-                <input
-                  type="text"
+                <select
                   value={currentData.issuingAuthority}
                   onChange={(e) => updateApplicant("issuingAuthority", e.target.value)}
-                  placeholder="Enter Issuing Authority/Place of issue"
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="">Select country...</option>
+                  {ALL_COUNTRIES.map((country) => (
+                    <option key={country.code} value={country.code}>{country.name}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Passport Type */}
