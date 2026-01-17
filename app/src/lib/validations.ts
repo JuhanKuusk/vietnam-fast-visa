@@ -7,6 +7,7 @@ export const tripDetailsSchema = z.object({
   entryPort: z.string().min(1, "Please select an entry port"),
   entryDate: z.string().min(1, "Please select an entry date"),
   exitDate: z.string().min(1, "Please select an exit date"),
+  entryType: z.enum(["single", "multiple"]).optional().default("single"),
 });
 
 // Applicant validation (Step 2)
@@ -23,6 +24,7 @@ export const applicantSchema = z.object({
     .regex(/^[A-Z0-9]+$/, "Passport number must contain only letters and numbers"),
   dateOfBirth: z.string().min(1, "Please enter your date of birth"),
   gender: z.enum(["male", "female"]),
+  religion: z.enum(["christian", "muslim", "buddhist", "none"]),
   email: z.string().email("Please enter a valid email address"),
   whatsapp: z
     .string()
@@ -41,14 +43,17 @@ export const VISA_SPEED_PRICING: Record<VisaSpeed, number> = {
   "4-hour": 99,
   "1-day": 69,
   "2-day": 49,
-  "weekend": 179,
+  "weekend": 249,
 };
+
+// Multi-entry fee (additional per person)
+export const MULTI_ENTRY_FEE = 30;
 
 // Application submission validation
 export const applicationSchema = z.object({
   tripDetails: tripDetailsSchema,
   applicants: z.array(applicantSchema).min(1, "At least one applicant is required"),
-  language: z.enum(["EN", "ES", "PT", "FR", "RU"]).optional().default("EN"),
+  language: z.enum(["EN", "ES", "PT", "FR", "RU", "HI"]).optional().default("EN"),
   visaSpeed: visaSpeedSchema.optional().default("30-min"),
 });
 

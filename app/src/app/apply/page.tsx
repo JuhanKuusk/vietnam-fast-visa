@@ -5,7 +5,9 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { PhoneVerification } from "@/components/ui/phone-verification";
+// PhoneVerification removed - using email verification only
+// import { PhoneVerification } from "@/components/ui/phone-verification";
+import { Logo } from "@/components/ui/logo";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -61,7 +63,7 @@ const VISA_SPEEDS: Record<VisaSpeedKey, {
     nameKey: "speedWeekendName",
     description: "Special weekend/holiday processing",
     descriptionKey: "speedWeekendDesc",
-    price: 179,
+    price: 249,
     processingTime: "Same day (weekends/holidays)",
   },
 };
@@ -386,6 +388,31 @@ const ENTRY_PORTS = [
   { code: "QUASP", name: "Quang Ninh Seaport (Ha Long)", type: "seaport" },
 ];
 
+// Passport Types
+const PASSPORT_TYPES = [
+  { code: "ordinary", name: "Ordinary passport" },
+  { code: "diplomatic", name: "Diplomatic passport" },
+  { code: "official", name: "Official passport" },
+  { code: "other", name: "Other" },
+];
+
+// Vietnam International Airports (for e-visa entry/exit)
+const VIETNAM_AIRPORTS = [
+  { code: "SGN", name: "Tan Son Nhat Int. Airport (Ho Chi Minh City)" },
+  { code: "HAN", name: "Noi Bai Int. Airport (Hanoi)" },
+  { code: "DAD", name: "Da Nang Int. Airport" },
+  { code: "CXR", name: "Cam Ranh Int. Airport (Nha Trang)" },
+  { code: "PQC", name: "Phu Quoc Int. Airport" },
+  { code: "HPH", name: "Cat Bi Int. Airport (Hai Phong)" },
+  { code: "VCA", name: "Can Tho Int. Airport" },
+  { code: "HUI", name: "Phu Bai Int. Airport (Hue)" },
+  { code: "VDO", name: "Van Don Int. Airport" },
+  { code: "THD", name: "Tho Xuan Int. Airport" },
+  { code: "VDH", name: "Dong Hoi Int. Airport" },
+  { code: "UIH", name: "Phu Cat Int. Airport" },
+  { code: "DLI", name: "Lien Khuong Int. Airport (Da Lat)" },
+];
+
 // Vietnam Cities/Provinces
 const VIETNAM_CITIES = [
   { code: "HN", name: "Hanoi" },
@@ -422,7 +449,7 @@ const citizenshipFallback = {
   evisaEligible: "You are eligible for Vietnam E-Visa! Approval letter in just 30 minutes.",
   embassyRequired: "You need to apply for a visa at the Vietnam Embassy or Consulate in your country.",
   longerStay: "For stays longer than {days} days, you will need to apply for an E-Visa or visit a Vietnamese Embassy.",
-  evisaValid: "E-Visa is valid for 90 days with single or multiple entry options.",
+  evisaValid: "E-Visa is valid for 30-90 days with single or multiple entry.",
   applyBelow: "Apply below - Approval in 30 minutes!",
 };
 
@@ -453,14 +480,14 @@ function CitizenshipChecker({
   const selectedCountryName = ALL_COUNTRIES.find((c) => c.code === selectedCountry)?.name;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
       <div className="text-center mb-4">
-        <h2 className="text-xl font-bold text-gray-900">{citizenship.title}</h2>
-        <p className="text-gray-600 text-sm mt-1">{citizenship.subtitle}</p>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{citizenship.title}</h2>
+        <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{citizenship.subtitle}</p>
       </div>
 
       <div className="max-w-md mx-auto">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           {citizenship.label}
         </label>
         <CountrySelector
@@ -503,14 +530,14 @@ function CitizenshipChecker({
               <p className={`mt-1 ${visaResult.color}`}>{visaResult.message}</p>
 
               {visaResult.type === "visa_free" && (
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                   {citizenship.longerStay.replace("{days}", String(visaResult.days))}
                 </p>
               )}
 
               {visaResult.type === "evisa" && (
                 <div className="mt-3">
-                  <p className="text-sm text-gray-600 mb-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                     {citizenship.evisaValid}
                   </p>
                   <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
@@ -537,6 +564,18 @@ interface ApplicantData {
   passportExpiry: string;
   gender: string;
   religion: string;
+  placeOfBirth: string;
+  passportType: string;
+  issuingAuthority: string;
+  dateOfIssue: string;
+  permanentAddress: string;
+  contactAddress: string;
+  telephoneNumber: string;
+  // Emergency contact
+  emergencyFullName: string;
+  emergencyAddress: string;
+  emergencyPhone: string;
+  emergencyRelationship: string;
 }
 
 interface TravelDetails {
@@ -549,6 +588,7 @@ interface TravelDetails {
   addressInVietnam: string;
   cityProvince: string;
   flightNumber: string;
+  entryType: "single" | "multiple";
 }
 
 // Searchable Country Selector Component
@@ -603,7 +643,7 @@ function CountrySelector({
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         placeholder={placeholder}
-        className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+        className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
       />
       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
         <svg
@@ -616,24 +656,24 @@ function CountrySelector({
         </svg>
       </div>
       {isOpen && (
-        <div className="absolute z-50 w-full mt-1 max-h-60 overflow-y-auto rounded-lg bg-white border border-gray-200 shadow-lg">
+        <div className="absolute z-50 w-full mt-1 max-h-60 overflow-y-auto rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg">
           {filteredCountries.length > 0 ? (
             filteredCountries.map((country) => (
               <button
                 key={country.code}
                 type="button"
                 onClick={() => handleSelect(country.code)}
-                className={`w-full px-4 py-3 text-left text-base hover:bg-blue-50 transition-colors ${
+                className={`w-full px-4 py-3 text-left text-base hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors ${
                   value === country.code
-                    ? "bg-blue-50 text-blue-700 font-medium"
-                    : "text-gray-700"
+                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-medium"
+                    : "text-gray-700 dark:text-gray-300"
                 }`}
               >
                 {country.name}
               </button>
             ))
           ) : (
-            <div className="px-4 py-3 text-gray-500 text-base">
+            <div className="px-4 py-3 text-gray-500 dark:text-gray-400 text-base">
               {noResultsText}
             </div>
           )}
@@ -677,7 +717,7 @@ function PhotoUploadSection({
               </svg>
               {label} {uploadedText}
             </p>
-            <p className="text-sm text-gray-600 truncate">{file.name}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{file.name}</p>
           </div>
           <button
             onClick={() => onFileChange(null)}
@@ -694,7 +734,7 @@ function PhotoUploadSection({
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
         {label} <span className="text-red-500">*</span>
       </label>
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
@@ -712,8 +752,8 @@ function PhotoUploadSection({
           <svg className="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <p className="text-gray-700 font-medium">{clickToUploadText}</p>
-          <p className="text-sm text-gray-500 mt-1">{description}</p>
+          <p className="text-gray-700 dark:text-gray-300 font-medium">{clickToUploadText}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{description}</p>
         </label>
       </div>
     </div>
@@ -739,8 +779,14 @@ function ApplyForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [showVerification, setShowVerification] = useState(false);
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  // Phone verification disabled - will be re-enabled when Twilio account is verified
+  // const [showVerification, setShowVerification] = useState(false);
+  // const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+
+  // Passport scanning state
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanError, setScanError] = useState<string | null>(null);
+  const [scanSuccess, setScanSuccess] = useState(false);
 
   // Travel Details State - pre-fill from URL params
   const [travelDetails, setTravelDetails] = useState<TravelDetails>({
@@ -753,9 +799,13 @@ function ApplyForm() {
     addressInVietnam: "",
     cityProvince: "",
     flightNumber: initialFlight,
+    entryType: "single",
   });
 
-  const totalPrice = pricePerPerson * travelDetails.applicantCount;
+  // Multi-entry adds $30 per person
+  const multiEntryFee = travelDetails.entryType === "multiple" ? 30 : 0;
+  const pricePerPersonWithEntry = pricePerPerson + multiEntryFee;
+  const totalPrice = pricePerPersonWithEntry * travelDetails.applicantCount;
 
   // Calculate length of stay
   const lengthOfStay = travelDetails.entryDate && travelDetails.exitDate
@@ -771,6 +821,17 @@ function ApplyForm() {
     passportExpiry: "",
     gender: "",
     religion: "",
+    placeOfBirth: "",
+    passportType: "ordinary",
+    issuingAuthority: "",
+    dateOfIssue: "",
+    permanentAddress: "",
+    contactAddress: "",
+    telephoneNumber: "",
+    emergencyFullName: "",
+    emergencyAddress: "",
+    emergencyPhone: "",
+    emergencyRelationship: "",
   }]);
 
   // Update applicants array when count changes
@@ -788,6 +849,17 @@ function ApplyForm() {
           passportExpiry: "",
           gender: "",
           religion: "",
+          placeOfBirth: "",
+          passportType: "ordinary",
+          issuingAuthority: "",
+          dateOfIssue: "",
+          permanentAddress: "",
+          contactAddress: "",
+          telephoneNumber: "",
+          emergencyFullName: "",
+          emergencyAddress: "",
+          emergencyPhone: "",
+          emergencyRelationship: "",
         });
       }
       setApplicants(newApplicants);
@@ -808,8 +880,8 @@ function ApplyForm() {
     confirmEmail: "",
   });
 
-  // Computed phone value for verification (use mobile)
-  const phoneForVerification = contactInfo.mobile;
+  // Phone verification disabled - will be re-enabled when Twilio account is verified
+  // const phoneForVerification = contactInfo.mobile;
 
   const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>([null]);
   const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>([null]);
@@ -818,6 +890,67 @@ function ApplyForm() {
     const updated = [...applicants];
     updated[currentApplicant] = { ...updated[currentApplicant], [field]: value };
     setApplicants(updated);
+  };
+
+  // Scan passport and auto-fill form fields
+  const scanPassport = async () => {
+    const passportFile = passportPhotos[currentApplicant];
+    if (!passportFile) return;
+
+    setIsScanning(true);
+    setScanError(null);
+    setScanSuccess(false);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", passportFile);
+
+      const response = await fetch("/api/passport-scan", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        setScanError(result.error || t.applyForm.scanError);
+        return;
+      }
+
+      // Auto-fill the form fields with extracted data
+      const data = result.data;
+      const updated = [...applicants];
+      const current = { ...updated[currentApplicant] };
+
+      if (data.fullName) current.fullName = data.fullName;
+      if (data.dateOfBirth) current.dateOfBirth = data.dateOfBirth;
+      if (data.gender) current.gender = data.gender;
+      if (data.nationality) {
+        current.nationality = data.nationality;
+        // Auto-fill place of birth with nationality country name if not already set
+        if (!current.placeOfBirth) {
+          const country = EVISA_COUNTRIES.find(c => c.code === data.nationality);
+          if (country) {
+            current.placeOfBirth = country.name;
+          }
+        }
+      }
+      if (data.passportNumber) current.passportNumber = data.passportNumber;
+      if (data.passportExpiry) current.passportExpiry = data.passportExpiry;
+
+      updated[currentApplicant] = current;
+      setApplicants(updated);
+      setScanSuccess(true);
+
+      // Clear success message after 5 seconds
+      setTimeout(() => setScanSuccess(false), 5000);
+
+    } catch (error) {
+      console.error("Passport scan error:", error);
+      setScanError(t.applyForm.scanError);
+    } finally {
+      setIsScanning(false);
+    }
   };
 
   const currentData = applicants[currentApplicant];
@@ -851,7 +984,10 @@ function ApplyForm() {
       for (let i = 0; i < applicants.length; i++) {
         const applicant = applicants[i];
         if (!applicant.fullName || !applicant.nationality || !applicant.passportNumber ||
-            !applicant.dateOfBirth || !applicant.gender || !applicant.religion) {
+            !applicant.dateOfBirth || !applicant.gender || !applicant.religion ||
+            !applicant.placeOfBirth || !applicant.passportType || !applicant.permanentAddress ||
+            !applicant.contactAddress || !applicant.telephoneNumber || !applicant.emergencyFullName ||
+            !applicant.emergencyAddress || !applicant.emergencyPhone || !applicant.emergencyRelationship) {
           setSubmitError(`Please complete all required fields for applicant ${i + 1}`);
           setCurrentApplicant(i);
           setIsSubmitting(false);
@@ -884,6 +1020,7 @@ function ApplyForm() {
           addressInVietnam: travelDetails.addressInVietnam,
           cityProvince: travelDetails.cityProvince,
           flightNumber: travelDetails.flightNumber,
+          entryType: travelDetails.entryType,
         },
         applicants: applicants.map((applicant) => ({
           fullName: applicant.fullName,
@@ -926,16 +1063,16 @@ function ApplyForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Translation Loading Overlay */}
       {isTranslating && (
-        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-white/80 dark:bg-gray-900/80 z-50 flex items-center justify-center">
           <div className="flex items-center gap-3">
             <svg className="w-6 h-6 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <span className="text-gray-600">{t.common.loading}</span>
+            <span className="text-gray-600 dark:text-gray-400">{t.common.loading}</span>
           </div>
         </div>
       )}
@@ -944,18 +1081,12 @@ function ApplyForm() {
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <a href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-              <span className="text-yellow-400 text-xl font-bold">V</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">{t.applyHeader.siteName}</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{t.applyHeader.tagline}</p>
-            </div>
+            <Logo size="md" />
           </a>
           <div className="flex items-center gap-4">
             <a
               href="https://wa.me/3725035137"
-              className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+              className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
             >
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               <span className="hidden sm:inline">{t.applyHeader.support}</span>
@@ -1029,12 +1160,12 @@ function ApplyForm() {
           </div>
         </div>
 
-        {/* Citizenship Checker - Shows visa requirements based on country */}
-        <CitizenshipChecker t={t} />
+        {/* Citizenship Checker - Only show if nationality not already provided from homepage */}
+        {!initialNationality && <CitizenshipChecker t={t} />}
 
         {/* Processing Time Box */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">{t.processing.title}</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 text-center">{t.processing.title}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center gap-4 p-4 rounded-xl bg-green-50 border border-green-200">
               <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
@@ -1064,27 +1195,27 @@ function ApplyForm() {
               <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
                 1
               </div>
-              <span className="text-sm font-medium text-gray-900 hidden sm:inline">{t.progress.tripDetails}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white hidden sm:inline">{t.progress.tripDetails}</span>
             </div>
             <div className="w-8 sm:w-16 h-0.5 bg-blue-600"></div>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
                 2
               </div>
-              <span className="text-sm font-medium text-gray-900 hidden sm:inline">{t.progress.yourInfo}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white hidden sm:inline">{t.progress.yourInfo}</span>
             </div>
             <div className="w-8 sm:w-16 h-0.5 bg-gray-300"></div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-sm font-medium">
+              <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 dark:text-gray-400 text-sm font-medium">
                 3
               </div>
-              <span className="text-sm font-medium text-gray-500 hidden sm:inline">{t.progress.payment}</span>
+              <span className="text-sm font-medium text-gray-500 dark:text-gray-400 hidden sm:inline">{t.progress.payment}</span>
             </div>
           </div>
         </div>
 
         {/* Travel Details Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
           <div className="bg-green-600 px-6 py-4">
             <h2 className="text-lg font-semibold text-white">
               {t.travelDetails?.title || "Travel Details"}
@@ -1098,13 +1229,13 @@ function ApplyForm() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Number of Applicants */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.numberOfApplicants || "Number of Applicants"} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={travelDetails.applicantCount}
                   onChange={(e) => updateApplicantCount(Number(e.target.value))}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
                     <option key={n} value={n}>
@@ -1116,13 +1247,13 @@ function ApplyForm() {
 
               {/* Purpose of Travel */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.purposeOfTravel || "Purpose of Travel"} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={travelDetails.purpose}
                   onChange={(e) => setTravelDetails({ ...travelDetails, purpose: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
                   <option value="tourist">{t.travelDetails?.tourist || "Tourism"}</option>
                   <option value="business">{t.travelDetails?.business || "Business"}</option>
@@ -1130,9 +1261,42 @@ function ApplyForm() {
                 </select>
               </div>
 
+              {/* Entry Type - Single or Multiple */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.travelDetails?.entryType || "Entry Type"} <span className="text-red-500">*</span>
+                </label>
+                <div className="space-y-2">
+                  <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <input
+                      type="radio"
+                      name="entryType"
+                      value="single"
+                      checked={travelDetails.entryType === "single"}
+                      onChange={(e) => setTravelDetails({ ...travelDetails, entryType: e.target.value as "single" | "multiple" })}
+                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <span className="ml-3 text-gray-900 dark:text-white">{t.travelDetails?.singleEntry || "Single Entry"}</span>
+                    <span className="ml-auto text-sm text-gray-500 dark:text-gray-400">{t.travelDetails?.included || "Included"}</span>
+                  </label>
+                  <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <input
+                      type="radio"
+                      name="entryType"
+                      value="multiple"
+                      checked={travelDetails.entryType === "multiple"}
+                      onChange={(e) => setTravelDetails({ ...travelDetails, entryType: e.target.value as "single" | "multiple" })}
+                      className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <span className="ml-3 text-gray-900 dark:text-white">{t.travelDetails?.multipleEntry || "Multiple Entry"}</span>
+                    <span className="ml-auto text-sm text-green-600 dark:text-green-400 font-medium">+$30{t.travelDetails?.perPerson || "/person"}</span>
+                  </label>
+                </div>
+              </div>
+
               {/* Entry Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.entryDate || "Intended Date of Entry"} <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -1140,16 +1304,16 @@ function ApplyForm() {
                   value={travelDetails.entryDate}
                   onChange={(e) => setTravelDetails({ ...travelDetails, entryDate: e.target.value })}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {t.travelDetails?.entryDateHint || "You must enter Vietnam on or after this date"}
                 </p>
               </div>
 
               {/* Exit Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.exitDate || "Intended Date of Exit"} <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -1157,7 +1321,7 @@ function ApplyForm() {
                   value={travelDetails.exitDate}
                   onChange={(e) => setTravelDetails({ ...travelDetails, exitDate: e.target.value })}
                   min={travelDetails.entryDate || new Date().toISOString().split("T")[0]}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
                 {lengthOfStay > 0 && (
                   <p className="text-xs text-blue-600 mt-1 font-medium">
@@ -1166,73 +1330,43 @@ function ApplyForm() {
                 )}
               </div>
 
-              {/* Entry Port */}
+              {/* Intended Airport of Entry */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.travelDetails?.entryPort || "Entry Checkpoint"} <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Intended airport of entry <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={travelDetails.entryPort}
                   onChange={(e) => setTravelDetails({ ...travelDetails, entryPort: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
-                  <option value="">{t.travelDetails?.selectPort || "Select checkpoint..."}</option>
-                  <optgroup label="International Airports">
-                    {ENTRY_PORTS.filter(p => p.type === "airport").map((port) => (
-                      <option key={port.code} value={port.code}>{port.name}</option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="Land Border Gates">
-                    {ENTRY_PORTS.filter(p => p.type === "land").map((port) => (
-                      <option key={port.code} value={port.code}>{port.name}</option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="Seaports">
-                    {ENTRY_PORTS.filter(p => p.type === "seaport").map((port) => (
-                      <option key={port.code} value={port.code}>{port.name}</option>
-                    ))}
-                  </optgroup>
+                  <option value="">Select airport...</option>
+                  {VIETNAM_AIRPORTS.map((airport) => (
+                    <option key={airport.code} value={airport.code}>{airport.name}</option>
+                  ))}
                 </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  {t.travelDetails?.entryPortHint || "Select the airport/border where you will enter Vietnam"}
-                </p>
               </div>
 
-              {/* Exit Port */}
+              {/* Intended Airport of Exit */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.travelDetails?.exitPort || "Exit Checkpoint"} <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Intended airport of exit <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={travelDetails.exitPort}
                   onChange={(e) => setTravelDetails({ ...travelDetails, exitPort: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
-                  <option value="">{t.travelDetails?.selectPort || "Select checkpoint..."}</option>
-                  <optgroup label="International Airports">
-                    {ENTRY_PORTS.filter(p => p.type === "airport").map((port) => (
-                      <option key={port.code} value={port.code}>{port.name}</option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="Land Border Gates">
-                    {ENTRY_PORTS.filter(p => p.type === "land").map((port) => (
-                      <option key={port.code} value={port.code}>{port.name}</option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="Seaports">
-                    {ENTRY_PORTS.filter(p => p.type === "seaport").map((port) => (
-                      <option key={port.code} value={port.code}>{port.name}</option>
-                    ))}
-                  </optgroup>
+                  <option value="">Select airport...</option>
+                  {VIETNAM_AIRPORTS.map((airport) => (
+                    <option key={airport.code} value={airport.code}>{airport.name}</option>
+                  ))}
                 </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  {t.travelDetails?.exitPortHint || "Select the airport/border where you will leave Vietnam"}
-                </p>
               </div>
 
               {/* Temporary Address in Vietnam */}
               <div className="lg:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.addressInVietnam || "Temporary Address in Vietnam"} <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -1240,22 +1374,22 @@ function ApplyForm() {
                   value={travelDetails.addressInVietnam}
                   onChange={(e) => setTravelDetails({ ...travelDetails, addressInVietnam: e.target.value })}
                   placeholder={t.travelDetails?.addressPlaceholder || "e.g. Sheraton Hotel, 88 Dong Khoi Street"}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {t.travelDetails?.addressHint || "Hotel name or address where you will stay"}
                 </p>
               </div>
 
               {/* City/Province */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.cityProvince || "City/Province"} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={travelDetails.cityProvince}
                   onChange={(e) => setTravelDetails({ ...travelDetails, cityProvince: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
                   <option value="">{t.travelDetails?.selectCity || "Select city/province..."}</option>
                   {VIETNAM_CITIES.map((city) => (
@@ -1266,7 +1400,7 @@ function ApplyForm() {
 
               {/* Flight Number */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.flightNumber || "Flight Number"} <span className="text-gray-400 font-normal">{t.travelDetails?.flightOptional || "(Optional)"}</span>
                 </label>
                 <input
@@ -1274,7 +1408,7 @@ function ApplyForm() {
                   value={travelDetails.flightNumber}
                   onChange={(e) => setTravelDetails({ ...travelDetails, flightNumber: e.target.value.toUpperCase() })}
                   placeholder={t.travelDetails?.flightPlaceholder || "e.g. VN123, SQ456"}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
                 />
               </div>
             </div>
@@ -1282,7 +1416,7 @@ function ApplyForm() {
         </div>
 
         {/* Applicant Info Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
           {/* Form Header */}
           <div className="bg-blue-600 px-6 py-4">
             <h2 className="text-lg font-semibold text-white">
@@ -1297,15 +1431,15 @@ function ApplyForm() {
 
           {/* Applicant Tabs */}
           {travelDetails.applicantCount > 1 && (
-            <div className="flex border-b border-gray-200 overflow-x-auto bg-gray-50">
+            <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto bg-gray-50 dark:bg-gray-800">
               {applicants.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentApplicant(index)}
                   className={`flex-1 min-w-[100px] px-4 py-3 text-sm font-medium transition-colors ${
                     currentApplicant === index
-                      ? "bg-white text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                      ? "bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 border-b-2 border-blue-600"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                 >
                   {t.applyForm.person} {index + 1}
@@ -1320,131 +1454,28 @@ function ApplyForm() {
           {/* Form Body */}
           <div className="p-6 lg:p-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Full Name */}
+              {/* Document Uploads Section - FIRST for passport scanning autofill */}
               <div className="lg:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.applyForm.fullName} <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={currentData.fullName}
-                  onChange={(e) => updateApplicant("fullName", e.target.value.toUpperCase())}
-                  placeholder={t.applyForm.fullNamePlaceholder}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {t.applyForm.fullNameHint}
-                </p>
-              </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.applyForm.documentUploads}</h3>
 
-              {/* Gender */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.applyForm.gender} <span className="text-red-500">*</span>
-                </label>
-                <div className="flex gap-3">
-                  {[{ label: t.applyForm.male, value: "male" }, { label: t.applyForm.female, value: "female" }].map((gender) => (
-                    <label
-                      key={gender.value}
-                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 cursor-pointer transition-all text-base ${
-                        currentData.gender === gender.value
-                          ? "bg-blue-50 border-blue-500 text-blue-700"
-                          : "bg-white border-gray-300 text-gray-700 hover:border-gray-400"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name={`gender-${currentApplicant}`}
-                        value={gender.value}
-                        checked={currentData.gender === gender.value}
-                        onChange={(e) => updateApplicant("gender", e.target.value)}
-                        className="sr-only"
-                      />
-                      {gender.label}
-                    </label>
-                  ))}
+                {/* Passport Scan Info Banner */}
+                <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                      <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-blue-800 dark:text-blue-300 text-base">
+                        {t.applyForm.passportScanInfo}
+                      </h4>
+                      <p className="mt-1 text-sm text-blue-700 dark:text-blue-400">
+                        {t.applyForm.passportScanInfoDetail}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              {/* Date of Birth */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.applyForm.dateOfBirth} <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="date"
-                  value={currentData.dateOfBirth}
-                  onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
-              </div>
-
-              {/* Religion */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.applyForm.religion || "Religion"} <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={currentData.religion}
-                  onChange={(e) => updateApplicant("religion", e.target.value)}
-                  placeholder={t.applyForm.religionPlaceholder || "e.g. None, Christian, Muslim, Buddhist"}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {t.applyForm.religionHint || "Enter your religion or 'None' if not applicable"}
-                </p>
-              </div>
-
-              {/* Nationality */}
-              <div className="lg:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.applyForm.nationality} <span className="text-red-500">*</span>
-                </label>
-                <CountrySelector
-                  value={currentData.nationality}
-                  onChange={(code) => updateApplicant("nationality", code)}
-                  countries={EVISA_COUNTRIES}
-                  placeholder={t.citizenship.searchPlaceholder}
-                  noResultsText={t.citizenship.noCountriesFound}
-                />
-              </div>
-
-              {/* Passport Number */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.applyForm.passportNumber} <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={currentData.passportNumber}
-                  onChange={(e) => updateApplicant("passportNumber", e.target.value.toUpperCase())}
-                  placeholder={t.applyForm.passportPlaceholder}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
-                />
-              </div>
-
-              {/* Passport Expiry */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.applyForm.passportExpiry} <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="date"
-                  value={currentData.passportExpiry}
-                  onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
-                  min={minPassportExpiry.toISOString().split("T")[0]}
-                  className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {t.applyForm.passportExpiryHint}
-                </p>
-              </div>
-
-              {/* Document Uploads Section */}
-              <div className="lg:col-span-2 border-t border-gray-200 pt-6 mt-2">
-                <h3 className="font-semibold text-gray-900 mb-4">{t.applyForm.documentUploads}</h3>
               </div>
 
               {/* Passport Photo */}
@@ -1457,10 +1488,76 @@ function ApplyForm() {
                     const files = [...passportPhotos];
                     files[currentApplicant] = file;
                     setPassportPhotos(files);
+                    // Reset scan state when new file is selected
+                    setScanSuccess(false);
+                    setScanError(null);
                   }}
                   uploadedText={t.applyForm.uploaded}
                   clickToUploadText={t.applyForm.clickToUpload}
                 />
+
+                {/* Scan Passport Button - shows when passport photo is uploaded */}
+                {passportPhotos[currentApplicant] && (
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      onClick={scanPassport}
+                      disabled={isScanning}
+                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-blue-400 disabled:to-indigo-400 text-white font-medium rounded-lg transition-all shadow-md hover:shadow-lg flex flex-col items-center justify-center gap-1"
+                    >
+                      {isScanning ? (
+                        <div className="flex items-center gap-2">
+                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <span>{t.applyForm.scanning}</span>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            <span>{t.applyForm.scanPassport}</span>
+                          </div>
+                          <span className="text-xs text-blue-200 font-normal">{t.applyForm.scanPassportHint}</span>
+                        </>
+                      )}
+                    </button>
+
+                    {/* Scan Success Message */}
+                    {scanSuccess && (
+                      <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
+                        <p className="text-green-700 dark:text-green-400 text-sm flex items-center gap-2">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          {t.applyForm.scanSuccess}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Scan Error Message */}
+                    {scanError && (
+                      <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg">
+                        <p className="text-red-700 dark:text-red-400 text-sm flex items-center gap-2">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                          {scanError}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={scanPassport}
+                          className="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 underline"
+                        >
+                          {t.applyForm.scanRetry}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Portrait Photo */}
@@ -1479,16 +1576,315 @@ function ApplyForm() {
                 />
               </div>
 
+              {/* Personal Information Section */}
+              <div className="lg:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-6 mt-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.applyForm.personalInfo || "Personal Information"}</h3>
+              </div>
+
+              {/* Full Name */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.applyForm.fullName} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.fullName}
+                  onChange={(e) => updateApplicant("fullName", e.target.value.toUpperCase())}
+                  placeholder={t.applyForm.fullNamePlaceholder}
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {t.applyForm.fullNameHint}
+                </p>
+              </div>
+
+              {/* Gender */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.applyForm.gender} <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-3">
+                  {[{ label: t.applyForm.male, value: "male" }, { label: t.applyForm.female, value: "female" }].map((gender) => (
+                    <label
+                      key={gender.value}
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 cursor-pointer transition-all text-base ${
+                        currentData.gender === gender.value
+                          ? "bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-700 dark:text-blue-400"
+                          : "bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name={`gender-${currentApplicant}`}
+                        value={gender.value}
+                        checked={currentData.gender === gender.value}
+                        onChange={(e) => updateApplicant("gender", e.target.value)}
+                        className="sr-only"
+                      />
+                      {gender.label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Date of Birth */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.applyForm.dateOfBirth} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={currentData.dateOfBirth}
+                  onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
+                  max={new Date().toISOString().split("T")[0]}
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Religion */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.applyForm.religion || "Religion"} <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={currentData.religion}
+                  onChange={(e) => updateApplicant("religion", e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  <option value="">{t.applyForm.selectReligion || "Select religion"}</option>
+                  <option value="christian">{t.applyForm.religionChristian || "Christian"}</option>
+                  <option value="muslim">{t.applyForm.religionMuslim || "Muslim"}</option>
+                  <option value="buddhist">{t.applyForm.religionBuddhist || "Buddhist"}</option>
+                  <option value="none">{t.applyForm.religionNone || "None"}</option>
+                </select>
+              </div>
+
+              {/* Place of Birth */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Place of birth <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.placeOfBirth}
+                  onChange={(e) => updateApplicant("placeOfBirth", e.target.value)}
+                  placeholder="Enter place of birth"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Nationality */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.applyForm.nationality} <span className="text-red-500">*</span>
+                </label>
+                <CountrySelector
+                  value={currentData.nationality}
+                  onChange={(code) => updateApplicant("nationality", code)}
+                  countries={EVISA_COUNTRIES}
+                  placeholder={t.citizenship.searchPlaceholder}
+                  noResultsText={t.citizenship.noCountriesFound}
+                />
+              </div>
+
+              {/* Passport Information Section */}
+              <div className="lg:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-6 mt-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.applyForm.passportInfo || "Passport Information"}</h3>
+              </div>
+
+              {/* Passport Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Passport <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.passportNumber}
+                  onChange={(e) => updateApplicant("passportNumber", e.target.value.toUpperCase())}
+                  placeholder={t.applyForm.passportPlaceholder}
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
+                />
+              </div>
+
+              {/* Issuing Authority/Place of Issue */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Issuing Authority/Place of issue
+                </label>
+                <input
+                  type="text"
+                  value={currentData.issuingAuthority}
+                  onChange={(e) => updateApplicant("issuingAuthority", e.target.value)}
+                  placeholder="Enter Issuing Authority/Place of issue"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Passport Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Type <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={currentData.passportType}
+                  onChange={(e) => updateApplicant("passportType", e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                >
+                  {PASSPORT_TYPES.map((type) => (
+                    <option key={type.code} value={type.code}>{type.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Date of Issue */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Date of issue
+                </label>
+                <input
+                  type="date"
+                  value={currentData.dateOfIssue}
+                  onChange={(e) => updateApplicant("dateOfIssue", e.target.value)}
+                  max={new Date().toISOString().split("T")[0]}
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Passport Expiry */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.applyForm.passportExpiry} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={currentData.passportExpiry}
+                  onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
+                  min={minPassportExpiry.toISOString().split("T")[0]}
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {t.applyForm.passportExpiryHint}
+                </p>
+              </div>
+
+              {/* Contact Information Section */}
+              <div className="lg:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-6 mt-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h3>
+              </div>
+
+              {/* Permanent Residential Address */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Permanent residential address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.permanentAddress}
+                  onChange={(e) => updateApplicant("permanentAddress", e.target.value)}
+                  placeholder="Enter permanent residential address"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Contact Address */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Contact address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.contactAddress}
+                  onChange={(e) => updateApplicant("contactAddress", e.target.value)}
+                  placeholder="Enter contact address"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Telephone Number */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Telephone number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  value={currentData.telephoneNumber}
+                  onChange={(e) => updateApplicant("telephoneNumber", e.target.value)}
+                  placeholder="Enter telephone number"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Emergency Contact Section */}
+              <div className="lg:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-6 mt-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.applyForm.emergencyContact || "Emergency Contact"}</h3>
+              </div>
+
+              {/* Emergency Contact Full Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Full name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.emergencyFullName}
+                  onChange={(e) => updateApplicant("emergencyFullName", e.target.value)}
+                  placeholder="Enter name"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Emergency Contact Address */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Current residential address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.emergencyAddress}
+                  onChange={(e) => updateApplicant("emergencyAddress", e.target.value)}
+                  placeholder="Enter current residential address"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Emergency Contact Phone */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Telephone number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  value={currentData.emergencyPhone}
+                  onChange={(e) => updateApplicant("emergencyPhone", e.target.value)}
+                  placeholder="Enter telephone number"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Emergency Contact Relationship */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Relationship <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={currentData.emergencyRelationship}
+                  onChange={(e) => updateApplicant("emergencyRelationship", e.target.value)}
+                  placeholder="Enter relationship"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
               {/* Contact Information */}
               {currentApplicant === 0 && (
                 <>
-                  <div className="lg:col-span-2 border-t border-gray-200 pt-6 mt-2">
-                    <h3 className="font-semibold text-gray-900 mb-4">{t.applyForm.contactInfo}</h3>
+                  <div className="lg:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-6 mt-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.applyForm.contactInfo}</h3>
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t.applyForm.email} <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -1496,16 +1892,16 @@ function ApplyForm() {
                       value={contactInfo.email}
                       onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
                       placeholder={t.applyForm.emailPlaceholder}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {t.applyForm.emailHint}
                     </p>
                   </div>
 
                   {/* Confirm Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t.applyForm.confirmEmail} <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -1513,7 +1909,7 @@ function ApplyForm() {
                       value={contactInfo.confirmEmail}
                       onChange={(e) => setContactInfo({ ...contactInfo, confirmEmail: e.target.value })}
                       placeholder={t.applyForm.emailPlaceholder}
-                      className={`w-full px-4 py-3 rounded-lg bg-white border text-gray-900 text-base placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
+                      className={`w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
                         contactInfo.confirmEmail && contactInfo.email !== contactInfo.confirmEmail
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
                           : "border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
@@ -1526,7 +1922,7 @@ function ApplyForm() {
 
                   {/* Mobile Phone */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t.applyForm.mobile} <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -1534,16 +1930,16 @@ function ApplyForm() {
                       value={contactInfo.mobile}
                       onChange={(e) => setContactInfo({ ...contactInfo, mobile: e.target.value })}
                       placeholder={t.applyForm.mobilePlaceholder}
-                      className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                      className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {t.applyForm.mobileHint}
                     </p>
                   </div>
 
                   {/* WhatsApp Same as Mobile Checkbox + WhatsApp Field */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t.applyForm.whatsapp} <span className="text-gray-400 font-normal">{t.applyForm.whatsappOptional}</span>
                     </label>
 
@@ -1570,9 +1966,9 @@ function ApplyForm() {
                           value={contactInfo.whatsapp}
                           onChange={(e) => setContactInfo({ ...contactInfo, whatsapp: e.target.value })}
                           placeholder={t.applyForm.whatsappPlaceholder}
-                          className="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-900 text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                         />
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           {t.applyForm.whatsappHint}
                         </p>
                       </>
@@ -1581,60 +1977,15 @@ function ApplyForm() {
                 </>
               )}
 
-              {/* Phone Verification Section */}
-              {currentApplicant === travelDetails.applicantCount - 1 && phoneForVerification && !isPhoneVerified && (
-                <div className="lg:col-span-2 border-t border-gray-200 pt-6 mt-2">
-                  <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    {t.applyForm.verifyPhone || "Verify Your Phone Number"}
-                  </h3>
-                  {showVerification ? (
-                    <PhoneVerification
-                      phoneNumber={phoneForVerification}
-                      onVerified={() => {
-                        setIsPhoneVerified(true);
-                        setShowVerification(false);
-                      }}
-                      onCancel={() => setShowVerification(false)}
-                      translations={t.verification}
-                    />
-                  ) : (
-                    <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
-                      <p className="text-blue-800 mb-4">
-                        {t.applyForm.verifyPhoneDesc || "Please verify your phone number to continue. We'll send you a verification code."}
-                      </p>
-                      <button
-                        onClick={() => setShowVerification(true)}
-                        className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                        {t.applyForm.verifyNow || "Verify Phone Number"}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Verified Badge */}
-              {isPhoneVerified && (
-                <div className="lg:col-span-2 flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-green-700 font-medium">{t.applyForm.phoneVerified || "Phone number verified!"}</span>
-                </div>
-              )}
+              {/* Phone Verification Section - Disabled until Twilio account is verified */}
+              {/* Phone verification will be re-enabled once SMS/WhatsApp service is configured */}
 
               {/* Navigation Buttons */}
               <div className="lg:col-span-2 flex gap-4 pt-6">
                 {travelDetails.applicantCount > 1 && currentApplicant > 0 && (
                   <button
                     onClick={() => setCurrentApplicant(currentApplicant - 1)}
-                    className="flex-1 lg:flex-none lg:px-8 py-3 rounded-lg border border-gray-300 text-gray-700 text-base font-medium hover:bg-gray-50 transition-colors"
+                    className="flex-1 lg:flex-none lg:px-8 py-3 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-base font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     {t.applyForm.previous}
                   </button>
@@ -1650,7 +2001,7 @@ function ApplyForm() {
                 ) : (
                   <button
                     onClick={handleSubmit}
-                    disabled={isSubmitting || !isPhoneVerified}
+                    disabled={isSubmitting}
                     className="flex-1 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                   >
                     {isSubmitting ? (
@@ -1676,9 +2027,9 @@ function ApplyForm() {
               )}
 
               {/* Price Summary */}
-              <div className="lg:col-span-2 border-t border-gray-200 pt-5 mt-2">
+              <div className="lg:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-5 mt-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-700 font-medium">
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">
                     {t.applyForm.total} ({travelDetails.applicantCount} {travelDetails.applicantCount === 1 ? t.applyForm.person1 : t.applyForm.people})
                   </span>
                   <span className="text-2xl font-bold text-blue-600">${totalPrice} USD</span>
@@ -1689,7 +2040,7 @@ function ApplyForm() {
         </div>
 
         {/* Trust Badges */}
-        <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+        <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -1713,16 +2064,16 @@ function ApplyForm() {
         {/* FAQ Section */}
         <div className="mt-16 mb-12">
           <div className="text-center mb-10">
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">{t.applyFaq.title}</h2>
-            <p className="text-gray-600 mt-2">{t.applyFaq.subtitle}</p>
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{t.applyFaq.title}</h2>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">{t.applyFaq.subtitle}</p>
           </div>
 
           {/* FAQ Categories */}
           <div className="space-y-8">
 
             {/* Section 1: Visa Types */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-blue-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-blue-50 dark:bg-blue-900/30 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-blue-900 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clipRule="evenodd" />
@@ -1732,8 +2083,8 @@ function ApplyForm() {
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaTypesQ1}</h4>
-                  <div className="text-gray-600 space-y-2">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.visaTypesQ1}</h4>
+                  <div className="text-gray-600 dark:text-gray-400 space-y-2">
                     <p>{t.applyFaq.visaTypesA1Evisa}</p>
                     <p>{t.applyFaq.visaTypesA1Voa}</p>
                     <p>{t.applyFaq.visaTypesA1Embassy}</p>
@@ -1741,12 +2092,11 @@ function ApplyForm() {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaTypesQ2}</h4>
-                  <div className="text-gray-600">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.visaTypesQ2}</h4>
+                  <div className="text-gray-600 dark:text-gray-400">
                     <ul className="list-disc list-inside space-y-1">
                       <li>{t.applyFaq.visaTypesA2Single}</li>
                       <li>{t.applyFaq.visaTypesA2Multiple}</li>
-                      <li>{t.applyFaq.visaTypesA2Extend}</li>
                     </ul>
                   </div>
                 </div>
@@ -1754,8 +2104,8 @@ function ApplyForm() {
             </div>
 
             {/* Section 2: Visa-Free Countries */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-green-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-green-50 dark:bg-green-900/30 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-green-900 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -1765,41 +2115,40 @@ function ApplyForm() {
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaFreeQ1}</h4>
-                  <div className="text-gray-600 space-y-4">
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree45Title}</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.visaFreeQ1}</h4>
+                  <div className="text-gray-600 dark:text-gray-400 space-y-4">
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                      <p className="font-medium text-gray-900 dark:text-white mb-2">{t.applyFaq.visaFree45Title}</p>
                       <p>{t.applyFaq.visaFree45Countries}</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree30Title}</p>
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                      <p className="font-medium text-gray-900 dark:text-white mb-2">{t.applyFaq.visaFree30Title}</p>
                       <p>{t.applyFaq.visaFree30Countries}</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree21Title}</p>
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                      <p className="font-medium text-gray-900 dark:text-white mb-2">{t.applyFaq.visaFree21Title}</p>
                       <p>{t.applyFaq.visaFree21Countries}</p>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium text-gray-900 mb-2">{t.applyFaq.visaFree14Title}</p>
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                      <p className="font-medium text-gray-900 dark:text-white mb-2">{t.applyFaq.visaFree14Title}</p>
                       <p>{t.applyFaq.visaFree14Countries}</p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.visaFreeQ2}</h4>
-                  <ul className="text-gray-600 list-disc list-inside space-y-1">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.visaFreeQ2}</h4>
+                  <ul className="text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
                     <li>{t.applyFaq.visaFreeNote1}</li>
                     <li>{t.applyFaq.visaFreeNote2}</li>
                     <li>{t.applyFaq.visaFreeNote3}</li>
-                    <li>{t.applyFaq.visaFreeNote4}</li>
                   </ul>
                 </div>
               </div>
             </div>
 
             {/* Section 3: E-Visa Eligible Countries */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-purple-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-purple-50 dark:bg-purple-900/30 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-purple-900 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
@@ -1810,25 +2159,25 @@ function ApplyForm() {
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="font-medium text-gray-900 mb-2">{t.applyFaq.evisaEurope}</p>
-                    <p className="text-sm text-gray-600">{t.applyFaq.evisaEuropeCountries}</p>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <p className="font-medium text-gray-900 dark:text-white mb-2">{t.applyFaq.evisaEurope}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{t.applyFaq.evisaEuropeCountries}</p>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="font-medium text-gray-900 mb-2">{t.applyFaq.evisaAsia}</p>
-                    <p className="text-sm text-gray-600">{t.applyFaq.evisaAsiaCountries}</p>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <p className="font-medium text-gray-900 dark:text-white mb-2">{t.applyFaq.evisaAsia}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{t.applyFaq.evisaAsiaCountries}</p>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="font-medium text-gray-900 mb-2">{t.applyFaq.evisaAmericas}</p>
-                    <p className="text-sm text-gray-600">{t.applyFaq.evisaAmericasCountries}</p>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <p className="font-medium text-gray-900 dark:text-white mb-2">{t.applyFaq.evisaAmericas}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{t.applyFaq.evisaAmericasCountries}</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Section 4: Visa on Arrival */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-orange-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-orange-50 dark:bg-orange-900/30 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-orange-900 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
@@ -1838,12 +2187,12 @@ function ApplyForm() {
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.voaQ1}</h4>
-                  <p className="text-gray-600">{t.applyFaq.voaA1}</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.voaQ1}</h4>
+                  <p className="text-gray-600 dark:text-gray-400">{t.applyFaq.voaA1}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.voaQ2}</h4>
-                  <ul className="text-gray-600 list-disc list-inside space-y-1">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.voaQ2}</h4>
+                  <ul className="text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
                     <li>{t.applyFaq.voaReq1}</li>
                     <li>{t.applyFaq.voaReq2}</li>
                     <li>{t.applyFaq.voaReq3}</li>
@@ -1852,8 +2201,8 @@ function ApplyForm() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.voaQ3}</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.voaQ3}</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <span className="bg-gray-100 px-3 py-1 rounded">Hanoi (HAN)</span>
                     <span className="bg-gray-100 px-3 py-1 rounded">Ho Chi Minh (SGN)</span>
                     <span className="bg-gray-100 px-3 py-1 rounded">Da Nang (DAD)</span>
@@ -1866,8 +2215,8 @@ function ApplyForm() {
             </div>
 
             {/* Section 5: Arrival Procedures */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-teal-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-teal-50 dark:bg-teal-900/30 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-teal-900 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
@@ -1877,8 +2226,8 @@ function ApplyForm() {
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.arrivalQ1}</h4>
-                  <ol className="text-gray-600 list-decimal list-inside space-y-2">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.arrivalQ1}</h4>
+                  <ol className="text-gray-600 dark:text-gray-400 list-decimal list-inside space-y-2">
                     <li>{t.applyFaq.arrivalStep1}</li>
                     <li>{t.applyFaq.arrivalStep2}</li>
                     <li>{t.applyFaq.arrivalStep3}</li>
@@ -1889,8 +2238,8 @@ function ApplyForm() {
                   </ol>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.arrivalQ2}</h4>
-                  <ul className="text-gray-600 list-disc list-inside space-y-1">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.arrivalQ2}</h4>
+                  <ul className="text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
                     <li>{t.applyFaq.customsItem1}</li>
                     <li>{t.applyFaq.customsItem2}</li>
                     <li>{t.applyFaq.customsItem3}</li>
@@ -1901,8 +2250,8 @@ function ApplyForm() {
             </div>
 
             {/* Section 6: Processing & Requirements */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-indigo-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-indigo-50 dark:bg-indigo-900/30 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-indigo-900 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
@@ -1912,28 +2261,28 @@ function ApplyForm() {
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.processingQ1}</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.processingQ1}</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
                       <p className="font-bold text-red-700 text-xl">{t.applyFaq.rushTime}</p>
                       <p className="text-red-600 text-sm">{t.applyFaq.rushLabel}</p>
-                      <p className="text-gray-500 text-xs mt-1">{t.applyFaq.rushNote}</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">{t.applyFaq.rushNote}</p>
                     </div>
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
                       <p className="font-bold text-yellow-700 text-xl">{t.applyFaq.standardTime}</p>
                       <p className="text-yellow-600 text-sm">{t.applyFaq.standardLabel}</p>
-                      <p className="text-gray-500 text-xs mt-1">{t.applyFaq.standardNote}</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">{t.applyFaq.standardNote}</p>
                     </div>
-                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-                      <p className="font-bold text-gray-700 text-xl">{t.applyFaq.embassyTime}</p>
-                      <p className="text-gray-600 text-sm">{t.applyFaq.embassyLabel}</p>
-                      <p className="text-gray-500 text-xs mt-1">{t.applyFaq.embassyNote}</p>
+                    <div className="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4 text-center">
+                      <p className="font-bold text-gray-700 dark:text-gray-300 text-xl">{t.applyFaq.embassyTime}</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">{t.applyFaq.embassyLabel}</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">{t.applyFaq.embassyNote}</p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.processingQ2}</h4>
-                  <ul className="text-gray-600 list-disc list-inside space-y-1">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.processingQ2}</h4>
+                  <ul className="text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
                     <li>{t.applyFaq.docReq1}</li>
                     <li>{t.applyFaq.docReq2}</li>
                     <li>{t.applyFaq.docReq3}</li>
@@ -1941,7 +2290,7 @@ function ApplyForm() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.processingQ3}</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.processingQ3}</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                       <p className="font-medium text-green-800 mb-2">{t.applyFaq.photoAcceptable}</p>
@@ -1967,8 +2316,8 @@ function ApplyForm() {
             </div>
 
             {/* Section 7: Special Cases */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-rose-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="bg-rose-50 dark:bg-rose-900/30 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 className="text-lg font-semibold text-rose-900 flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
@@ -1978,16 +2327,12 @@ function ApplyForm() {
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ1}</h4>
-                  <p className="text-gray-600">{t.applyFaq.specialA1}</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.specialQ2}</h4>
+                  <p className="text-gray-600 dark:text-gray-400">{t.applyFaq.specialA2}</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ2}</h4>
-                  <p className="text-gray-600">{t.applyFaq.specialA2}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ3}</h4>
-                  <ul className="text-gray-600 list-disc list-inside space-y-1">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.specialQ3}</h4>
+                  <ul className="text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
                     <li>{t.applyFaq.businessReq1}</li>
                     <li>{t.applyFaq.businessReq2}</li>
                     <li>{t.applyFaq.businessReq3}</li>
@@ -1995,8 +2340,8 @@ function ApplyForm() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t.applyFaq.specialQ4}</h4>
-                  <p className="text-gray-600">{t.applyFaq.specialA4}</p>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyFaq.specialQ4}</h4>
+                  <p className="text-gray-600 dark:text-gray-400">{t.applyFaq.specialA4}</p>
                 </div>
               </div>
             </div>
@@ -2022,7 +2367,7 @@ function ApplyForm() {
 
 function LoadingFallback() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
       <div className="flex items-center gap-3">
         <svg className="w-6 h-6 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
