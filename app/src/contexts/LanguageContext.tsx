@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import {
   translations as defaultTranslations,
   SupportedLanguage,
@@ -28,32 +28,27 @@ const translationCache: Record<SupportedLanguage, TranslationsType> = {
   PT: defaultTranslations,
   FR: defaultTranslations,
   RU: defaultTranslations,
+  HI: defaultTranslations,
 };
+
+// Track which languages have actually been fetched from the API
+const fetchedLanguages = new Set<SupportedLanguage>(["EN"]); // EN is always "fetched"
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<SupportedLanguage>("EN");
   const [t, setT] = useState<TranslationsType>(defaultTranslations);
   const [isLoading, setIsLoading] = useState(false);
+  const initialLoadDone = useRef(false);
 
-  // Load language preference from localStorage
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedLang = localStorage.getItem("language") as SupportedLanguage;
-      if (savedLang && LANGUAGES[savedLang]) {
-        setLanguageState(savedLang);
-      }
-    }
-  }, []);
-
-  // Fetch translations when language changes
+  // Fetch translations function
   const fetchTranslations = useCallback(async (lang: SupportedLanguage) => {
     if (lang === "EN") {
       setT(defaultTranslations);
       return;
     }
 
-    // Check cache first
-    if (translationCache[lang] !== defaultTranslations) {
+    // Check if this language has already been fetched
+    if (fetchedLanguages.has(lang)) {
       setT(translationCache[lang]);
       return;
     }
@@ -84,8 +79,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       // Rebuild translations object with translated texts
       const newTranslations = rebuildTranslations(translatedTexts);
 
-      // Cache the translations
+      // Cache the translations and mark as fetched
       translationCache[lang] = newTranslations;
+      fetchedLanguages.add(lang);
 
       setT(newTranslations);
     } catch (error) {
@@ -108,12 +104,22 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [fetchTranslations]
   );
 
-  // Fetch translations on mount if language is not English
+  // Load language preference from localStorage on mount
   useEffect(() => {
-    if (language !== "EN") {
-      fetchTranslations(language);
+    if (initialLoadDone.current) return;
+    initialLoadDone.current = true;
+
+    if (typeof window !== "undefined") {
+      const savedLang = localStorage.getItem("language") as SupportedLanguage;
+      if (savedLang && LANGUAGES[savedLang]) {
+        setLanguageState(savedLang);
+        // Fetch translations for the saved language
+        if (savedLang !== "EN") {
+          fetchTranslations(savedLang);
+        }
+      }
     }
-  }, [language, fetchTranslations]);
+  }, [fetchTranslations]);
 
   return (
     <LanguageContext.Provider

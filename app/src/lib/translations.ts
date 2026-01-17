@@ -1,7 +1,7 @@
 // All translatable strings for the website
 // English is the source language - other languages are translated via DeepL API
 
-export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU";
+export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU" | "HI";
 
 export const LANGUAGES: Record<SupportedLanguage, { name: string; flag: string; nativeName: string }> = {
   EN: { name: "English", flag: "🇬🇧", nativeName: "English" },
@@ -9,6 +9,7 @@ export const LANGUAGES: Record<SupportedLanguage, { name: string; flag: string; 
   PT: { name: "Portuguese", flag: "🇧🇷", nativeName: "Português" },
   FR: { name: "French", flag: "🇫🇷", nativeName: "Français" },
   RU: { name: "Russian", flag: "🇷🇺", nativeName: "Русский" },
+  HI: { name: "Hindi", flag: "🇮🇳", nativeName: "हिन्दी" },
 };
 
 // All translatable content organized by section
@@ -145,7 +146,7 @@ export const translations = {
     q3: "I'm stuck at check-in. Can you help now?",
     a3: "Yes! This is exactly what we specialize in. Apply now and we'll have your approval letter ready in 30 minutes. Contact us via chat or WhatsApp for immediate assistance.",
     q4: "How long is the e-visa valid?",
-    a4: "The Vietnam e-visa is valid for up to 90 days with single or multiple entry options. The visa allows stays of up to 90 days per visit.",
+    a4: "The Vietnam e-visa is valid for 30-90 days with single or multiple entry options.",
     q5: "What documents do I need?",
     a5: "You only need: (1) A passport valid for at least 6 months, (2) A passport-style photo, (3) Your flight details. We'll guide you through the simple process.",
     q6: "What if my visa is rejected?",
@@ -212,7 +213,7 @@ export const translations = {
     evisaEligible: "You are eligible for Vietnam E-Visa! Approval letter in just 30 minutes.",
     embassyRequired: "You need to apply for a visa at the Vietnam Embassy or Consulate in your country.",
     longerStay: "For stays longer than {days} days, you will need to apply for an E-Visa or visit a Vietnamese Embassy.",
-    evisaValid: "E-Visa is valid for 90 days with single or multiple entry options.",
+    evisaValid: "E-Visa is valid for 30-90 days with single or multiple entry.",
     applyBelow: "Apply below - Approval in 30 minutes!",
   },
 
@@ -272,6 +273,11 @@ export const translations = {
     flightNumber: "Flight Number",
     flightPlaceholder: "e.g. VN123, SQ456",
     flightOptional: "(Optional)",
+    entryType: "Entry Type",
+    singleEntry: "Single Entry",
+    multipleEntry: "Multiple Entry",
+    included: "Included",
+    perPerson: "/person",
   },
 
   // Apply Page - Form
@@ -287,14 +293,19 @@ export const translations = {
     female: "Female",
     dateOfBirth: "Date of Birth",
     religion: "Religion",
-    religionHint: "Enter your religion or 'None' if not applicable",
-    religionPlaceholder: "e.g. None, Christian, Muslim, Buddhist",
+    selectReligion: "Select religion",
+    religionChristian: "Christian",
+    religionMuslim: "Muslim",
+    religionBuddhist: "Buddhist",
+    religionNone: "None",
     nationality: "Nationality",
     passportNumber: "Passport Number",
     passportPlaceholder: "AB1234567",
     passportExpiry: "Passport Expiry Date",
     passportExpiryHint: "Must be valid for at least 6 months",
     documentUploads: "Document Uploads",
+    passportScanInfo: "Upload your passport photo and we'll automatically read and fill in your personal details!",
+    passportScanInfoDetail: "Our AI system will extract your name, date of birth, passport number, and other details from the passport image.",
     passportDataPage: "Passport Data Page",
     passportPageDesc: "Clear photo showing all details",
     portraitPhoto: "Portrait Photo",
@@ -329,6 +340,16 @@ export const translations = {
     verifyPhoneDesc: "Please verify your phone number to continue. We'll send you a verification code via SMS or WhatsApp.",
     verifyNow: "Verify Phone Number",
     phoneVerified: "Phone number verified!",
+    scanPassport: "Scan & Auto-Fill Details",
+    scanPassportHint: "Click to automatically fill your information",
+    scanning: "Reading passport...",
+    scanSuccess: "Passport scanned successfully! Please verify the auto-filled information above.",
+    scanError: "Could not scan passport. Please enter details manually.",
+    scanRetry: "Try Again",
+    autoFilledFields: "Auto-filled from passport",
+    personalInfo: "Personal Information",
+    passportInfo: "Passport Information",
+    emergencyContact: "Emergency Contact",
   },
 
   // Phone Verification
@@ -376,14 +397,14 @@ export const translations = {
     // Section 1: Visa Types
     visaTypesTitle: "Types of Vietnam Visas",
     visaTypesQ1: "What types of visas are available for Vietnam?",
-    visaTypesA1Evisa: "E-Visa (Electronic Visa): Single entry, valid for 90 days. Can be applied online. Available for citizens of 80 countries.",
+    visaTypesA1Evisa: "E-Visa (Electronic Visa): Single entry only, valid for 30 days. Can be applied online. Available for citizens of 80 countries.",
     visaTypesA1Voa: "Visa on Arrival (VOA): Available at international airports only. Requires pre-approved visa letter.",
     visaTypesA1Embassy: "Embassy Visa: Traditional visa obtained from Vietnamese embassy or consulate in your country.",
     visaTypesA1Transit: "Transit Visa: For travelers transiting through Vietnam (up to 5 days).",
     visaTypesQ2: "What is the E-Visa validity and duration of stay?",
-    visaTypesA2Single: "Single Entry E-Visa: Valid for 90 days, maximum stay of 90 days",
-    visaTypesA2Multiple: "Multiple Entry E-Visa: Valid for 90 days, multiple entries allowed, 90 days stay per entry",
-    visaTypesA2Extend: "E-Visa can be extended once while in Vietnam",
+    visaTypesA2Single: "Single Entry E-Visa: Valid for 30-90 days",
+    visaTypesA2Multiple: "Multiple Entry E-Visa: Valid for 30-90 days with unlimited entries (+$30)",
+    visaTypesA2Extend: "",
 
     // Section 2: Visa-Free Countries
     visaFreeTitle: "Visa-Free Entry",
@@ -400,7 +421,7 @@ export const translations = {
     visaFreeNote1: "Passport must be valid for at least 6 months from entry date",
     visaFreeNote2: "Must have proof of onward travel (flight ticket)",
     visaFreeNote3: "30-day gap required between visa-free entries",
-    visaFreeNote4: "Cannot be extended - must exit and re-enter or apply for visa",
+    visaFreeNote4: "",
 
     // Section 3: E-Visa Eligible Countries
     evisaTitle: "E-Visa Eligible Countries (80 Countries)",
@@ -469,9 +490,9 @@ export const translations = {
     photoReject4: "Shadows on face",
 
     // Section 7: Special Cases
-    specialTitle: "Special Cases & Extensions",
-    specialQ1: "Can I extend my visa in Vietnam?",
-    specialA1: "Yes, E-Visa can be extended once for an additional 90 days. Apply through Vietnam Immigration Department at least 5-7 days before expiry. Cost is approximately $100-150 USD.",
+    specialTitle: "Special Cases",
+    specialQ1: "",
+    specialA1: "",
     specialQ2: "Phu Quoc Island - Special visa exemption:",
     specialA2: "All nationalities can visit Phu Quoc Island for up to 30 days without a visa if arriving directly by international flight and staying only on the island.",
     specialQ3: "Business visa requirements:",
