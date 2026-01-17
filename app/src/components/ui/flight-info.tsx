@@ -29,11 +29,12 @@ interface FlightData {
 interface FlightInfoProps {
   flightNumber: string;
   date?: string;
+  origin?: string; // Optional: origin airport code (e.g., "DPS") for accurate lookup
   onCheckInUrgent?: () => void;
   onFlightData?: (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string }) => void;
 }
 
-export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }: FlightInfoProps) {
+export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlightData }: FlightInfoProps) {
   const [flightData, setFlightData] = useState<FlightData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +42,12 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
   const [subscribeLoading, setSubscribeLoading] = useState(false);
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
   const [subscribeError, setSubscribeError] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering time-dependent content after mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!flightNumber || flightNumber.length < 3) {
@@ -56,6 +63,7 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
       try {
         const params = new URLSearchParams({ flight: flightNumber });
         if (date) params.append("date", date);
+        if (origin) params.append("origin", origin);
 
         const response = await fetch(`/api/flight-info?${params}`);
         const data = await response.json();
@@ -95,7 +103,7 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
     // Debounce the API call
     const timeoutId = setTimeout(fetchFlightInfo, 500);
     return () => clearTimeout(timeoutId);
-  }, [flightNumber, date, onCheckInUrgent, onFlightData]);
+  }, [flightNumber, date, origin, onCheckInUrgent, onFlightData]);
 
   if (!flightNumber || flightNumber.length < 3) {
     return null;
@@ -120,7 +128,40 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
     return null;
   }
 
+  // Check if flight has already departed - don't show info for past flights
+  const checkIfDeparted = () => {
+    if (!isMounted) return false; // Don't check on server to avoid hydration mismatch
+    try {
+      const departureTime = new Date(flightData.departure.scheduledTime);
+      const now = new Date();
+      return departureTime < now;
+    } catch {
+      return false;
+    }
+  };
+
+  // Hide departed flights entirely
+  if (checkIfDeparted()) {
+    return null;
+  }
+
+  // Hide flights where check-in is already closed
+  if (flightData.checkInStatus === "closed") {
+    return null;
+  }
+
+  // Check if flight arrives in Vietnam (for highlighting purposes)
+  const vietnamAirportCodes = ["HAN", "SGN", "DAD", "CXR", "PQC", "VDO", "HPH", "VCA", "VII", "HUI", "DLI", "PXU", "UIH", "TBB", "BMV"];
+  const arrivalAirportMatch = flightData.arrival.airport.match(/\(([A-Z]{3})\)/);
+  const arrivalCode = arrivalAirportMatch ? arrivalAirportMatch[1] : "";
+  const arrivesInVietnam = vietnamAirportCodes.includes(arrivalCode);
+
+  // Check if this could be a connecting flight to Vietnam (common stopover airports)
+  const commonStopovers = ["HKG", "SIN", "BKK", "KUL", "ICN", "NRT", "PEK", "PVG", "TPE", "MNL", "DOH", "DXB"];
+  const isLikelyConnecting = commonStopovers.includes(arrivalCode);
+
   const formatTime = (isoString: string) => {
+    if (!isMounted) return "--:--";
     const date = new Date(isoString);
     return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -130,6 +171,7 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
   };
 
   const formatDate = (isoString: string) => {
+    if (!isMounted) return "---";
     const date = new Date(isoString);
     return date.toLocaleDateString("en-US", {
       weekday: "short",
@@ -144,8 +186,6 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
         return "bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 border-green-200 dark:border-green-700";
       case "closing_soon":
         return "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-700";
-      case "closed":
-        return "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 border-red-200 dark:border-red-700";
       case "not_open_yet":
         return "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-700";
       default:
@@ -159,8 +199,6 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
         return "✓";
       case "closing_soon":
         return "⚠️";
-      case "closed":
-        return "✕";
       case "not_open_yet":
         return "🕐";
       default:
@@ -169,9 +207,6 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
   };
 
   const getCheckInMessage = () => {
-    if (flightData.checkInStatus === "closed") {
-      return "Check-in has CLOSED - Contact us immediately!";
-    }
     if (flightData.checkInStatus === "not_open_yet" && flightData.minutesUntilCheckInOpens) {
       const hours = Math.floor(flightData.minutesUntilCheckInOpens / 60);
       const mins = flightData.minutesUntilCheckInOpens % 60;
@@ -228,8 +263,16 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
     }
   };
 
+  // Determine container border color based on status
+  const getContainerStyle = () => {
+    if (flightData.checkInStatus === "closing_soon") {
+      return "border-yellow-400 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-900/30";
+    }
+    return "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800";
+  };
+
   return (
-    <div className={`mt-3 p-4 rounded-xl border-2 transition-colors ${flightData.checkInStatus === "closing_soon" ? "border-yellow-400 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-900/30" : flightData.checkInStatus === "closed" ? "border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-900/30" : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"}`}>
+    <div className={`mt-3 p-4 rounded-xl border-2 transition-colors ${getContainerStyle()}`}>
       {/* Flight Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -260,6 +303,13 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
           <div className="text-gray-500 dark:text-gray-400 text-xs">{formatTime(flightData.arrival.scheduledTime)}</div>
         </div>
       </div>
+
+      {/* Connecting flight note */}
+      {isLikelyConnecting && !arrivesInVietnam && (
+        <div className="mb-3 px-3 py-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg text-sm text-blue-700 dark:text-blue-300">
+          <span className="font-medium">Connecting flight:</span> This is the first leg to {arrivalCode}. Check your ticket for the connection to Vietnam.
+        </div>
+      )}
 
       {/* Gate & Terminal Info */}
       <div className="grid grid-cols-2 gap-2 mb-3 text-sm">
@@ -297,19 +347,31 @@ export function FlightInfo({ flightNumber, date, onCheckInUrgent, onFlightData }
         </div>
       </div>
 
-      {/* Urgent Warning */}
-      {(flightData.checkInStatus === "closing_soon" || flightData.checkInStatus === "closed") && (
+      {/* WhatsApp Contact Button - show for all valid check-in statuses */}
+      {(flightData.checkInStatus === "closing_soon" || flightData.checkInStatus === "open" || flightData.checkInStatus === "not_open_yet") && (
         <a
-          href="https://wa.me/3725035137?text=URGENT: I need help with my Vietnam visa! My check-in is closing soon!"
+          href={`https://wa.me/3725035137?text=${encodeURIComponent(
+            flightData.checkInStatus === "closing_soon"
+              ? "URGENT: I need help with my Vietnam visa! My check-in is closing soon!"
+              : flightData.checkInStatus === "open"
+              ? "Hi! I need help with my Vietnam visa. My check-in is already open."
+              : "Hi! I need help with my Vietnam visa before my check-in opens."
+          )}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 w-full py-3 rounded-lg font-bold text-white flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
+          className={`mt-3 w-full py-3 rounded-lg font-bold text-white flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] ${
+            flightData.checkInStatus === "closing_soon" ? "" : "opacity-90 hover:opacity-100"
+          }`}
           style={{ backgroundColor: '#25D366' }}
         >
-          <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+          <svg className={`w-5 h-5 ${flightData.checkInStatus === "closing_soon" ? "animate-pulse" : ""}`} fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
-          {flightData.checkInStatus === "closed" ? "URGENT: WhatsApp Now for Help!" : "Get Visa Before Check-in Closes!"}
+          {flightData.checkInStatus === "closing_soon"
+            ? "Get Visa Before Check-in Closes!"
+            : flightData.checkInStatus === "open"
+            ? "Get Your Vietnam Visa Now"
+            : "Get Your Vietnam Visa Ready"}
         </a>
       )}
 
