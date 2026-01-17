@@ -397,7 +397,7 @@ export const translations = {
     // Section 1: Visa Types
     visaTypesTitle: "Types of Vietnam Visas",
     visaTypesQ1: "What types of visas are available for Vietnam?",
-    visaTypesA1Evisa: "E-Visa (Electronic Visa): Single entry only, valid for 30 days. Can be applied online. Available for citizens of 80 countries.",
+    visaTypesA1Evisa: "E-Visa (Electronic Visa): Single or multi entry, valid 30-90 days. Can be applied online. Available for citizens of 80 countries.",
     visaTypesA1Voa: "Visa on Arrival (VOA): Available at international airports only. Requires pre-approved visa letter.",
     visaTypesA1Embassy: "Embassy Visa: Traditional visa obtained from Vietnamese embassy or consulate in your country.",
     visaTypesA1Transit: "Transit Visa: For travelers transiting through Vietnam (up to 5 days).",
