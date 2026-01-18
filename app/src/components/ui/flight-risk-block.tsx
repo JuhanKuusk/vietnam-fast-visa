@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { translations as appTranslations } from "@/lib/translations";
 
 // Inline SVG icons to avoid lucide-react dependency
 const PlaneIcon = ({ className }: { className?: string }) => (
@@ -32,70 +33,20 @@ interface FlightRiskData {
   isFallback?: boolean;
 }
 
+// Default fallback translations
+const defaultTranslations = appTranslations.flightRisk;
+
 interface FlightRiskBlockProps {
   countryCode: string;
   visaSpeed: string;
   language?: string;
   airportCode?: string;
+  t?: typeof defaultTranslations;
 }
 
-// Translations for the risk block
-const translations: Record<string, {
-  title: string;
-  flightCost: string;
-  warning: string;
-  returnWarning: string;
-  recommendation: string;
-}> = {
-  EN: {
-    title: "Flight Ticket Risk Warning",
-    flightCost: "Flights from {origin} to Vietnam typically cost",
-    warning: "If airline check-in is denied due to missing visa approval, you will not be allowed to board.",
-    returnWarning: "Both your outbound AND return tickets may become completely worthless - most airlines do not offer refunds or rebooking for passengers denied boarding due to visa issues.",
-    recommendation: "Secure your visa approval before booking expensive flights to protect your investment.",
-  },
-  ES: {
-    title: "Advertencia de Riesgo de Billete de Avion",
-    flightCost: "Los vuelos desde {origin} a Vietnam suelen costar",
-    warning: "Si se le niega el embarque por falta de visa aprobada, no podra abordar el avion.",
-    returnWarning: "Tanto su billete de ida COMO el de vuelta pueden perder todo su valor - la mayoria de aerolineas no ofrecen reembolsos ni cambios para pasajeros rechazados por problemas de visa.",
-    recommendation: "Asegure su aprobacion de visa antes de reservar vuelos caros para proteger su inversion.",
-  },
-  PT: {
-    title: "Aviso de Risco de Passagem Aerea",
-    flightCost: "Voos de {origin} para o Vietna geralmente custam",
-    warning: "Se o embarque for negado por falta de visto aprovado, voce nao podera embarcar.",
-    returnWarning: "Tanto a passagem de ida QUANTO a de volta podem perder todo o valor - a maioria das companhias aereas nao oferece reembolso ou remarcacao para passageiros recusados por problemas de visto.",
-    recommendation: "Garanta a aprovacao do seu visto antes de comprar passagens caras para proteger seu investimento.",
-  },
-  FR: {
-    title: "Avertissement de Risque Billet d'Avion",
-    flightCost: "Les vols depuis {origin} vers le Vietnam coutent generalement",
-    warning: "Si l'embarquement vous est refuse en raison d'un visa non approuve, vous ne pourrez pas monter a bord.",
-    returnWarning: "Vos billets aller ET retour peuvent perdre toute valeur - la plupart des compagnies aeriennes n'offrent ni remboursement ni modification pour les passagers refuses pour problemes de visa.",
-    recommendation: "Obtenez votre approbation de visa avant de reserver des vols couteux pour proteger votre investissement.",
-  },
-  RU: {
-    title: "Preduprezhdenie o riske aviabileta",
-    flightCost: "Polety iz {origin} vo V'etnam obychno stoyat",
-    warning: "Esli vam otkazhut v posadke iz-za otsutstviya odobrennoj vizy, vy ne smozhete sest' na reys.",
-    returnWarning: "Bilety v OBA napravleniya mogut polnost'yu obestsenitsya - bol'shinstvo aviakompanij ne predlagayut vozvrat ili perebronirovaniye passazhiram, kotorym otkazano v posadke iz-za vizovykh problem.",
-    recommendation: "Poluchite odobrenie vizy pered pokupkoj dorogikh biletov, chtoby zashchitit' svoi vlozheniia.",
-  },
-  HI: {
-    title: "Flight Ticket Jokhim Chetavani",
-    flightCost: "{origin} se Vietnam ke liye udaanon ki keemat aamtaur par hoti hai",
-    warning: "Agar visa anumoden ki kami ke karan boarding se inkaar kar diya jaata hai, to aap flight mein nahi chadh payenge.",
-    returnWarning: "Aapki jaane AUR wapsi dono tickets bekar ho sakti hain - adhikansh airlines visa samasyaon ke karan boarding se inkaar kiye gaye yatriyon ko refund ya rebooking nahi deti.",
-    recommendation: "Apne nivesh ki raksha ke liye mahangi flights book karne se pehle visa anumoden surakshit karein.",
-  },
-};
-
-export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airportCode }: FlightRiskBlockProps) {
+export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airportCode, t = defaultTranslations }: FlightRiskBlockProps) {
   const [riskData, setRiskData] = useState<FlightRiskData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  const t = translations[language] || translations.EN;
 
   useEffect(() => {
     if (!countryCode) {

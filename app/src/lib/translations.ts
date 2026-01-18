@@ -223,6 +223,35 @@ export const translations = {
     getLongerVisa: "Get E-Visa",
   },
 
+  // Dynamic Flights Component
+  dynamicFlights: {
+    title: "Flights to Vietnam",
+    from: "From {cityName} ({airportCode})",
+    today: "Today",
+    tomorrow: "Tomorrow",
+    filter: "Filter:",
+    allFlights: "All Flights",
+    directOnly: "Direct Only",
+    loading: "Loading flights...",
+    errorLoading: "Unable to load flight information",
+    direct: "Direct",
+    oneStop: "1 Stop",
+    noFlightsToday: "No flights to Vietnam scheduled for today from {cityName} ({airportCode}).",
+    noFlightsThisDay: "No flights to Vietnam scheduled for this day.",
+    flightCount: "{count} flight",
+    flightCountPlural: "{count} flights",
+    localTimeNote: "All times shown in local departure time. Flight schedules subject to change.",
+  },
+
+  // Flight Risk Warning Block
+  flightRisk: {
+    title: "Flight Ticket Risk Warning",
+    flightCost: "Flights from {origin} to Vietnam typically cost",
+    warning: "If airline check-in is denied due to missing visa approval, you will not be allowed to board.",
+    returnWarning: "Both your outbound AND return tickets may become completely worthless - most airlines do not offer refunds or rebooking for passengers denied boarding due to visa issues.",
+    recommendation: "Secure your visa approval before booking expensive flights to protect your investment.",
+  },
+
   // Apply Page - VOA Banner
   voa: {
     title: 'What "Visa on Arrival" (VOA) Actually Means',

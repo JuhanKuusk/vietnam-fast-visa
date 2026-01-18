@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { translations } from "@/lib/translations";
 
 interface Flight {
   flightNumber: string;
@@ -19,14 +20,18 @@ interface DayFlights {
   flights: Flight[];
 }
 
+// Default fallback translations
+const defaultTranslations = translations.dynamicFlights;
+
 interface DynamicFlightsProps {
   airportCode: string;
   airportName: string;
   cityName?: string;
+  t?: typeof defaultTranslations;
 }
 
 // Generate next 6 days starting from today
-function getNext6Days(): { date: string; label: string; shortLabel: string }[] {
+function getNext6Days(todayLabel: string, tomorrowLabel: string): { date: string; label: string; shortLabel: string }[] {
   const days: { date: string; label: string; shortLabel: string }[] = [];
   const today = new Date();
 
@@ -41,9 +46,9 @@ function getNext6Days(): { date: string; label: string; shortLabel: string }[] {
 
     let label: string;
     if (i === 0) {
-      label = "Today";
+      label = todayLabel;
     } else if (i === 1) {
-      label = "Tomorrow";
+      label = tomorrowLabel;
     } else {
       label = `${weekday}, ${monthShort} ${dayOfMonth}`;
     }
@@ -58,8 +63,8 @@ function getNext6Days(): { date: string; label: string; shortLabel: string }[] {
   return days;
 }
 
-export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFlightsProps) {
-  const days = getNext6Days();
+export function DynamicFlights({ airportCode, airportName, cityName, t = defaultTranslations }: DynamicFlightsProps) {
+  const days = getNext6Days(t.today, t.tomorrow);
   const [selectedDate, setSelectedDate] = useState(days[0].date);
   const [flightData, setFlightData] = useState<DayFlights | null>(null);
   const [loading, setLoading] = useState(true);
@@ -149,7 +154,7 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
           ></path>
         </svg>
-        <span>Loading flights...</span>
+        <span>{t.loading}</span>
       </div>
     </div>
   );
@@ -170,10 +175,10 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">
-              Flights to Vietnam
+              {t.title}
             </h2>
             <p className="text-blue-100 text-sm">
-              From {displayName} ({airportCode})
+              {t.from.replace("{cityName}", displayName).replace("{airportCode}", airportCode)}
             </p>
           </div>
         </div>
@@ -201,7 +206,7 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
 
       {/* Filter Buttons */}
       <div className="px-4 sm:px-6 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
-        <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">Filter:</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">{t.filter}</span>
         <button
           onClick={() => setFlightType("all")}
           className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
@@ -210,7 +215,7 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
               : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
           }`}
         >
-          All Flights
+          {t.allFlights}
         </button>
         <button
           onClick={() => setFlightType("direct")}
@@ -220,7 +225,7 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
               : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
           }`}
         >
-          Direct Only
+          {t.directOnly}
         </button>
       </div>
 
@@ -255,8 +260,9 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
                 </h3>
               </div>
               <span className="px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full">
-                {filteredFlights.length} flight
-                {filteredFlights.length !== 1 ? "s" : ""}
+                {filteredFlights.length === 1
+                  ? t.flightCount.replace("{count}", "1")
+                  : t.flightCountPlural.replace("{count}", String(filteredFlights.length))}
               </span>
             </div>
 
@@ -309,12 +315,12 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
                       </div>
                       {flight.isDirect ? (
                         <span className="text-[10px] text-green-600 dark:text-green-400 font-medium">
-                          Direct
+                          {t.direct}
                         </span>
                       ) : (
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] text-orange-600 dark:text-orange-400 font-medium">
-                            1 Stop
+                            {t.oneStop}
                           </span>
                           {flight.stopover && (
                             <span className="text-[9px] text-gray-500 dark:text-gray-400">
@@ -343,15 +349,15 @@ export function DynamicFlights({ airportCode, airportName, cityName }: DynamicFl
         ) : (
           <div className="text-center py-6 text-gray-500 dark:text-gray-400">
             {selectedDate === days[0].date
-              ? `No flights to Vietnam scheduled for today from ${displayName} (${airportCode}).`
-              : "No flights to Vietnam scheduled for this day."}
+              ? t.noFlightsToday.replace("{cityName}", displayName).replace("{airportCode}", airportCode)
+              : t.noFlightsThisDay}
           </div>
         )}
 
         {/* Footer Note */}
         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-            All times shown in local departure time. Flight schedules subject to change.
+            {t.localTimeNote}
           </p>
         </div>
       </div>
