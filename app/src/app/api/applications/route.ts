@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase-server";
-import { applicationSchema, VISA_SPEED_PRICING } from "@/lib/validations";
+import { applicationSchema, VISA_SPEED_PRICING, MULTI_ENTRY_FEE } from "@/lib/validations";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,6 +10,8 @@ export async function POST(request: NextRequest) {
     // Validate input
     const validationResult = applicationSchema.safeParse(body);
     if (!validationResult.success) {
+      console.error("Validation errors:", JSON.stringify(validationResult.error.flatten(), null, 2));
+      console.error("Received body:", JSON.stringify(body, null, 2));
       return NextResponse.json(
         { error: "Validation failed", details: validationResult.error.flatten() },
         { status: 400 }
@@ -18,9 +20,11 @@ export async function POST(request: NextRequest) {
 
     const { tripDetails, applicants, language, visaSpeed } = validationResult.data;
 
-    // Calculate total amount based on visa speed
+    // Calculate total amount based on visa speed and entry type
     const pricePerPerson = VISA_SPEED_PRICING[visaSpeed];
-    const totalAmount = pricePerPerson * applicants.length;
+    const entryType = tripDetails.entryType || "single";
+    const multiEntryFee = entryType === "multiple" ? MULTI_ENTRY_FEE * applicants.length : 0;
+    const totalAmount = (pricePerPerson * applicants.length) + multiEntryFee;
 
     // Get email and WhatsApp from first applicant
     const primaryApplicant = applicants[0];
@@ -32,6 +36,7 @@ export async function POST(request: NextRequest) {
         entry_date: tripDetails.entryDate,
         exit_date: tripDetails.exitDate,
         entry_port: tripDetails.entryPort,
+        entry_type: entryType,
         email: primaryApplicant.email,
         whatsapp: primaryApplicant.whatsapp,
         amount_usd: totalAmount,
@@ -59,6 +64,7 @@ export async function POST(request: NextRequest) {
       passport_number: applicant.passportNumber.toUpperCase(),
       date_of_birth: applicant.dateOfBirth,
       gender: applicant.gender,
+      religion: applicant.religion,
     }));
 
     const { error: applicantsError } = await supabase
