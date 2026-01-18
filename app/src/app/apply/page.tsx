@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
@@ -9,6 +9,8 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 // import { PhoneVerification } from "@/components/ui/phone-verification";
 import { Logo } from "@/components/ui/logo";
 import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
+import { getAirportsForCountry } from "@/lib/amadeus";
+import { DynamicFlights } from "@/components/ui/dynamic-flights";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -452,7 +454,28 @@ const citizenshipFallback = {
   longerStay: "For stays longer than {days} days, you will need to apply for an E-Visa or visit a Vietnamese Embassy.",
   evisaValid: "E-Visa is valid for 30-90 days with single or multiple entry.",
   applyBelow: "Apply below - Approval in 30 minutes!",
+  departingCountry: "Departing From Country",
+  departingAirport: "Departing From City/Airport",
+  selectAirport: "Select airport...",
+  detectingLocation: "Detecting your location...",
+  needLongerStay: "Need 60+ days or multiple entries?",
+  getLongerVisa: "Get E-Visa",
 };
+
+// Interface for geolocation response
+interface GeolocationData {
+  country: string;
+  countryCode: string;
+  city: string;
+  region: string;
+}
+
+// Interface for airport info from amadeus
+interface AirportInfo {
+  code: string;
+  name: string;
+  city: string;
+}
 
 function CitizenshipChecker({
   onCountrySelect,
@@ -464,8 +487,71 @@ function CitizenshipChecker({
   const [selectedCountry, setSelectedCountry] = useState("");
   const [visaResult, setVisaResult] = useState<ReturnType<typeof getVisaRequirement> | null>(null);
 
+  // New state for departure location
+  const [departingCountry, setDepartingCountry] = useState("");
+  const [departingAirport, setDepartingAirport] = useState("");
+  const [availableAirports, setAvailableAirports] = useState<AirportInfo[]>([]);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [detectedCity, setDetectedCity] = useState("");
+
   // Use fallback if translations not yet loaded
   const citizenship = t?.citizenship ?? citizenshipFallback;
+
+  // Fetch geolocation on mount
+  useEffect(() => {
+    const fetchGeolocation = async () => {
+      try {
+        const response = await fetch("/api/geolocation");
+        if (response.ok) {
+          const data: GeolocationData = await response.json();
+          // Set detected country
+          setDepartingCountry(data.countryCode);
+          setDetectedCity(data.city);
+
+          // Get airports for the detected country
+          const airports = getAirportsForCountry(data.countryCode);
+          setAvailableAirports(airports);
+
+          // Try to match detected city to an airport
+          if (airports.length > 0) {
+            const cityMatch = airports.find(
+              a => a.city.toLowerCase() === data.city.toLowerCase()
+            );
+            if (cityMatch) {
+              setDepartingAirport(cityMatch.code);
+            } else {
+              // Use first airport as default
+              setDepartingAirport(airports[0].code);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching geolocation:", error);
+      } finally {
+        setIsLoadingLocation(false);
+      }
+    };
+
+    fetchGeolocation();
+  }, []);
+
+  // Update available airports when departing country changes
+  useEffect(() => {
+    if (departingCountry) {
+      const airports = getAirportsForCountry(departingCountry);
+      setAvailableAirports(airports);
+      // If we already have an airport and it's valid for this country, keep it
+      const currentAirportValid = airports.some(a => a.code === departingAirport);
+      if (!currentAirportValid && airports.length > 0) {
+        setDepartingAirport(airports[0].code);
+      } else if (airports.length === 0) {
+        setDepartingAirport("");
+      }
+    } else {
+      setAvailableAirports([]);
+      setDepartingAirport("");
+    }
+  }, [departingCountry]);
 
   const handleCountryChange = (code: string) => {
     setSelectedCountry(code);
@@ -478,7 +564,12 @@ function CitizenshipChecker({
     }
   };
 
+  const handleDepartingCountryChange = (code: string) => {
+    setDepartingCountry(code);
+  };
+
   const selectedCountryName = ALL_COUNTRIES.find((c) => c.code === selectedCountry)?.name;
+  const selectedAirportInfo = availableAirports.find(a => a.code === departingAirport);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
@@ -487,17 +578,60 @@ function CitizenshipChecker({
         <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{citizenship.subtitle}</p>
       </div>
 
-      <div className="max-w-md mx-auto">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {citizenship.label}
-        </label>
-        <CountrySelector
-          value={selectedCountry}
-          onChange={handleCountryChange}
-          countries={ALL_COUNTRIES}
-          placeholder={citizenship.searchPlaceholder}
-          noResultsText={citizenship.noCountriesFound}
-        />
+      <div className="max-w-md mx-auto space-y-4">
+        {/* Nationality/Citizenship selector */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {citizenship.label} <span className="text-red-500">*</span>
+          </label>
+          <CountrySelector
+            value={selectedCountry}
+            onChange={handleCountryChange}
+            countries={ALL_COUNTRIES}
+            placeholder={citizenship.searchPlaceholder}
+            noResultsText={citizenship.noCountriesFound}
+          />
+        </div>
+
+        {/* Departing Country selector */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {citizenship.departingCountry} <span className="text-red-500">*</span>
+            {isLoadingLocation && (
+              <span className="ml-2 text-xs text-gray-400 italic">
+                {citizenship.detectingLocation}
+              </span>
+            )}
+          </label>
+          <CountrySelector
+            value={departingCountry}
+            onChange={handleDepartingCountryChange}
+            countries={ALL_COUNTRIES}
+            placeholder={citizenship.searchPlaceholder}
+            noResultsText={citizenship.noCountriesFound}
+          />
+        </div>
+
+        {/* Departing Airport selector - only show if country has airports */}
+        {departingCountry && availableAirports.length > 0 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              {citizenship.departingAirport}
+            </label>
+            <select
+              value={departingAirport}
+              onChange={(e) => setDepartingAirport(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+            >
+              <option value="">{citizenship.selectAirport}</option>
+              {availableAirports.map((airport) => (
+                <option key={airport.code} value={airport.code}>
+                  {airport.city} ({airport.code}) - {airport.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {visaResult && selectedCountryName && (
@@ -531,9 +665,23 @@ function CitizenshipChecker({
               <p className={`mt-1 ${visaResult.color}`}>{visaResult.message}</p>
 
               {visaResult.type === "visa_free" && (
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  {citizenship.longerStay.replace("{days}", String(visaResult.days))}
-                </p>
+                <>
+                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    {citizenship.longerStay.replace("{days}", String(visaResult.days))}
+                  </p>
+                  {/* Upsell for visa-free countries */}
+                  <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+                      {citizenship.needLongerStay}
+                    </p>
+                    <button className="mt-2 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      {citizenship.getLongerVisa} →
+                    </button>
+                  </div>
+                </>
               )}
 
               {visaResult.type === "evisa" && (
@@ -552,6 +700,27 @@ function CitizenshipChecker({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Flight Risk Warning - shown right after citizenship result for e-visa countries */}
+      {selectedCountry && visaResult?.type === "evisa" && departingCountry && (
+        <div className="mt-4">
+          <FlightRiskBlock
+            countryCode={departingCountry}
+            visaSpeed="30-min"
+            language="EN"
+            airportCode={departingAirport || undefined}
+          />
+        </div>
+      )}
+
+      {/* Dynamic Flights - shown when an airport is selected */}
+      {departingAirport && selectedAirportInfo && (
+        <DynamicFlights
+          airportCode={departingAirport}
+          airportName={selectedAirportInfo.name}
+          cityName={selectedAirportInfo.city}
+        />
       )}
     </div>
   );

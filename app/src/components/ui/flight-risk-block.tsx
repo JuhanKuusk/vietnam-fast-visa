@@ -36,6 +36,7 @@ interface FlightRiskBlockProps {
   countryCode: string;
   visaSpeed: string;
   language?: string;
+  airportCode?: string;
 }
 
 // Translations for the risk block
@@ -43,47 +44,54 @@ const translations: Record<string, {
   title: string;
   flightCost: string;
   warning: string;
+  returnWarning: string;
   recommendation: string;
 }> = {
   EN: {
     title: "Flight Ticket Risk Warning",
     flightCost: "Flights from {origin} to Vietnam typically cost",
-    warning: "If airline check-in is denied due to missing visa approval, the entire ticket may become invalid.",
-    recommendation: "We recommend securing visa approval before booking expensive tickets.",
+    warning: "If airline check-in is denied due to missing visa approval, you will not be allowed to board.",
+    returnWarning: "Both your outbound AND return tickets may become completely worthless - most airlines do not offer refunds or rebooking for passengers denied boarding due to visa issues.",
+    recommendation: "Secure your visa approval before booking expensive flights to protect your investment.",
   },
   ES: {
     title: "Advertencia de Riesgo de Billete de Avion",
     flightCost: "Los vuelos desde {origin} a Vietnam suelen costar",
-    warning: "Si se rechaza el check-in de la aerolinea por falta de aprobacion de visa, el billete entero puede quedar invalido.",
-    recommendation: "Recomendamos asegurar la aprobacion de visa antes de reservar billetes caros.",
+    warning: "Si se le niega el embarque por falta de visa aprobada, no podra abordar el avion.",
+    returnWarning: "Tanto su billete de ida COMO el de vuelta pueden perder todo su valor - la mayoria de aerolineas no ofrecen reembolsos ni cambios para pasajeros rechazados por problemas de visa.",
+    recommendation: "Asegure su aprobacion de visa antes de reservar vuelos caros para proteger su inversion.",
   },
   PT: {
     title: "Aviso de Risco de Passagem Aerea",
     flightCost: "Voos de {origin} para o Vietna geralmente custam",
-    warning: "Se o check-in da companhia aerea for negado por falta de aprovacao de visto, toda a passagem pode se tornar invalida.",
-    recommendation: "Recomendamos garantir a aprovacao do visto antes de comprar passagens caras.",
+    warning: "Se o embarque for negado por falta de visto aprovado, voce nao podera embarcar.",
+    returnWarning: "Tanto a passagem de ida QUANTO a de volta podem perder todo o valor - a maioria das companhias aereas nao oferece reembolso ou remarcacao para passageiros recusados por problemas de visto.",
+    recommendation: "Garanta a aprovacao do seu visto antes de comprar passagens caras para proteger seu investimento.",
   },
   FR: {
     title: "Avertissement de Risque Billet d'Avion",
     flightCost: "Les vols depuis {origin} vers le Vietnam coutent generalement",
-    warning: "Si l'enregistrement aerien est refuse en raison d'une approbation de visa manquante, le billet entier peut devenir invalide.",
-    recommendation: "Nous vous recommandons d'obtenir l'approbation du visa avant de reserver des billets couteux.",
+    warning: "Si l'embarquement vous est refuse en raison d'un visa non approuve, vous ne pourrez pas monter a bord.",
+    returnWarning: "Vos billets aller ET retour peuvent perdre toute valeur - la plupart des compagnies aeriennes n'offrent ni remboursement ni modification pour les passagers refuses pour problemes de visa.",
+    recommendation: "Obtenez votre approbation de visa avant de reserver des vols couteux pour proteger votre investissement.",
   },
   RU: {
     title: "Preduprezhdenie o riske aviabileta",
     flightCost: "Polety iz {origin} vo V'etnam obychno stoyat",
-    warning: "Esli v registratsii na reys budet otkazano iz-za otsutstviya odobreniya vizy, ves' bilet mozhet stat' nedeystvitel'nym.",
-    recommendation: "My rekomenduem poluchit' odobrenie vizy pered pokupkoy dorogikh biletov.",
+    warning: "Esli vam otkazhut v posadke iz-za otsutstviya odobrennoj vizy, vy ne smozhete sest' na reys.",
+    returnWarning: "Bilety v OBA napravleniya mogut polnost'yu obestsenitsya - bol'shinstvo aviakompanij ne predlagayut vozvrat ili perebronirovaniye passazhiram, kotorym otkazano v posadke iz-za vizovykh problem.",
+    recommendation: "Poluchite odobrenie vizy pered pokupkoj dorogikh biletov, chtoby zashchitit' svoi vlozheniia.",
   },
   HI: {
     title: "Flight Ticket Jokhim Chetavani",
     flightCost: "{origin} se Vietnam ke liye udaanon ki keemat aamtaur par hoti hai",
-    warning: "Agar visa anumoden ki kami ke karan airline check-in se inkaar kar diya jaata hai, to poori ticket amaanya ho sakti hai.",
-    recommendation: "Hum mahangi tickets book karne se pehle visa anumoden surakshit karne ki salaah dete hain.",
+    warning: "Agar visa anumoden ki kami ke karan boarding se inkaar kar diya jaata hai, to aap flight mein nahi chadh payenge.",
+    returnWarning: "Aapki jaane AUR wapsi dono tickets bekar ho sakti hain - adhikansh airlines visa samasyaon ke karan boarding se inkaar kiye gaye yatriyon ko refund ya rebooking nahi deti.",
+    recommendation: "Apne nivesh ki raksha ke liye mahangi flights book karne se pehle visa anumoden surakshit karein.",
   },
 };
 
-export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN" }: FlightRiskBlockProps) {
+export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airportCode }: FlightRiskBlockProps) {
   const [riskData, setRiskData] = useState<FlightRiskData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -97,9 +105,11 @@ export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN" }: Fli
 
     const fetchRiskData = async () => {
       try {
-        const response = await fetch(
-          `/api/flight-price-risk?country=${countryCode}&visaSpeed=${visaSpeed}`
-        );
+        let url = `/api/flight-price-risk?country=${countryCode}&visaSpeed=${visaSpeed}`;
+        if (airportCode) {
+          url += `&airport=${airportCode}`;
+        }
+        const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
           setRiskData(data);
@@ -112,7 +122,7 @@ export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN" }: Fli
     };
 
     fetchRiskData();
-  }, [countryCode, visaSpeed]);
+  }, [countryCode, visaSpeed, airportCode]);
 
   // Don't render anything while loading or if risk should not be shown
   if (isLoading || !riskData?.showRisk) {
@@ -160,7 +170,10 @@ export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN" }: Fli
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             {t.warning}
           </p>
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-500 italic">
+          <p className="mt-2 text-sm text-red-600 dark:text-red-400 font-medium">
+            {t.returnWarning}
+          </p>
+          <p className="mt-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">
             {t.recommendation}
           </p>
         </div>

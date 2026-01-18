@@ -215,6 +215,12 @@ export const translations = {
     longerStay: "For stays longer than {days} days, you will need to apply for an E-Visa or visit a Vietnamese Embassy.",
     evisaValid: "E-Visa is valid for 30-90 days with single or multiple entry.",
     applyBelow: "Apply below - Approval in 30 minutes!",
+    departingCountry: "Departing From Country",
+    departingAirport: "Departing From City/Airport",
+    selectAirport: "Select airport...",
+    detectingLocation: "Detecting your location...",
+    needLongerStay: "Need 60+ days or multiple entries?",
+    getLongerVisa: "Get E-Visa",
   },
 
   // Apply Page - VOA Banner

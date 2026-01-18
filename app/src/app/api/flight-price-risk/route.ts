@@ -5,12 +5,15 @@ import {
   shouldShowRiskBlock,
   COUNTRY_AIRPORTS,
   FALLBACK_PRICES,
+  getDefaultAirport,
+  getAirportByCode,
 } from "@/lib/amadeus";
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const countryCode = searchParams.get("country")?.toUpperCase();
+    const airportCode = searchParams.get("airport")?.toUpperCase();
     const visaSpeed = searchParams.get("visaSpeed") || "30-min";
 
     if (!countryCode) {
@@ -27,25 +30,45 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         showRisk: false,
         countryCode,
+        airportCode,
         visaSpeed,
       });
     }
 
-    // Get flight price metrics
-    const priceMetrics = await getFlightPriceWithFallback(countryCode);
-    const airport = COUNTRY_AIRPORTS[countryCode];
+    // Get the airport info - either by specific code or default for country
+    let airport = null;
+    let effectiveAirportCode = airportCode;
+
+    if (airportCode) {
+      // Find the specific airport
+      const airportInfo = getAirportByCode(airportCode);
+      if (airportInfo) {
+        airport = airportInfo.airport;
+      }
+    }
+
+    if (!airport) {
+      // Fall back to default airport for country
+      airport = getDefaultAirport(countryCode);
+      effectiveAirportCode = airport?.code;
+    }
+
     const riskLevel = getCountryRiskLevel(countryCode);
 
-    if (!priceMetrics || !airport) {
+    // Get flight price metrics with specific airport
+    const priceMetrics = await getFlightPriceWithFallback(countryCode, effectiveAirportCode);
+
+    if (!priceMetrics) {
       // Use fallback if available
       const fallback = FALLBACK_PRICES[countryCode];
       if (fallback) {
         return NextResponse.json({
           showRisk: true,
           countryCode,
+          airportCode: effectiveAirportCode,
           visaSpeed,
           riskLevel,
-          origin: airport?.name || countryCode,
+          origin: airport ? `${airport.city} (${airport.code})` : countryCode,
           priceRange: {
             min: fallback.minimumPrice,
             max: fallback.maximumPrice,
@@ -59,6 +82,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         showRisk: false,
         countryCode,
+        airportCode: effectiveAirportCode,
         visaSpeed,
         reason: "No price data available",
       });
@@ -67,9 +91,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       showRisk: true,
       countryCode,
+      airportCode: effectiveAirportCode,
       visaSpeed,
       riskLevel,
-      origin: airport.name,
+      origin: airport ? `${airport.city} (${airport.code})` : countryCode,
       priceRange: {
         min: priceMetrics.minimumPrice,
         max: priceMetrics.maximumPrice,

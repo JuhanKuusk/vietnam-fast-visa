@@ -31,50 +31,256 @@ let tokenCache: AmadeusToken | null = null;
 // Vietnam airport codes (primary destinations)
 const VIETNAM_AIRPORTS = ["SGN", "HAN", "DAD"]; // Ho Chi Minh, Hanoi, Da Nang
 
-// Country to primary airport mapping for origin countries
-export const COUNTRY_AIRPORTS: Record<string, { code: string; name: string }> = {
+// Airport info with city name for display
+interface AirportInfo {
+  code: string;      // IATA code
+  name: string;      // Full airport name
+  city: string;      // City name
+}
+
+// Country to airports mapping (multiple airports per country)
+export const COUNTRY_AIRPORTS: Record<string, AirportInfo[]> = {
   // High-risk countries (show risk block ALWAYS)
-  US: { code: "JFK", name: "New York" },
-  CA: { code: "YYZ", name: "Toronto" },
-  AU: { code: "SYD", name: "Sydney" },
-  NZ: { code: "AKL", name: "Auckland" },
+  US: [
+    { code: "JFK", name: "John F. Kennedy International", city: "New York" },
+    { code: "LAX", name: "Los Angeles International", city: "Los Angeles" },
+    { code: "ORD", name: "O'Hare International", city: "Chicago" },
+    { code: "SFO", name: "San Francisco International", city: "San Francisco" },
+    { code: "MIA", name: "Miami International", city: "Miami" },
+    { code: "ATL", name: "Hartsfield-Jackson Atlanta International", city: "Atlanta" },
+    { code: "DFW", name: "Dallas/Fort Worth International", city: "Dallas" },
+    { code: "SEA", name: "Seattle-Tacoma International", city: "Seattle" },
+    { code: "BOS", name: "Boston Logan International", city: "Boston" },
+    { code: "IAD", name: "Washington Dulles International", city: "Washington D.C." },
+  ],
+  CA: [
+    { code: "YYZ", name: "Toronto Pearson International", city: "Toronto" },
+    { code: "YVR", name: "Vancouver International", city: "Vancouver" },
+    { code: "YUL", name: "Montreal-Trudeau International", city: "Montreal" },
+    { code: "YYC", name: "Calgary International", city: "Calgary" },
+  ],
+  AU: [
+    { code: "SYD", name: "Sydney Kingsford Smith", city: "Sydney" },
+    { code: "MEL", name: "Melbourne Tullamarine", city: "Melbourne" },
+    { code: "BNE", name: "Brisbane Airport", city: "Brisbane" },
+    { code: "PER", name: "Perth Airport", city: "Perth" },
+  ],
+  NZ: [
+    { code: "AKL", name: "Auckland Airport", city: "Auckland" },
+    { code: "WLG", name: "Wellington Airport", city: "Wellington" },
+    { code: "CHC", name: "Christchurch Airport", city: "Christchurch" },
+  ],
 
   // Medium-risk countries (show on URGENT/WEEKEND only)
-  GB: { code: "LHR", name: "London" },
-  DE: { code: "FRA", name: "Frankfurt" },
-  FR: { code: "CDG", name: "Paris" },
-  NL: { code: "AMS", name: "Amsterdam" },
-  SE: { code: "ARN", name: "Stockholm" },
-  NO: { code: "OSL", name: "Oslo" },
-  DK: { code: "CPH", name: "Copenhagen" },
-  FI: { code: "HEL", name: "Helsinki" },
-  IE: { code: "DUB", name: "Dublin" },
-  CH: { code: "ZRH", name: "Zurich" },
-  AT: { code: "VIE", name: "Vienna" },
-  BE: { code: "BRU", name: "Brussels" },
-  IT: { code: "FCO", name: "Rome" },
-  ES: { code: "MAD", name: "Madrid" },
-  PT: { code: "LIS", name: "Lisbon" },
-  PL: { code: "WAW", name: "Warsaw" },
-  CZ: { code: "PRG", name: "Prague" },
+  GB: [
+    { code: "LHR", name: "London Heathrow", city: "London" },
+    { code: "LGW", name: "London Gatwick", city: "London" },
+    { code: "MAN", name: "Manchester Airport", city: "Manchester" },
+    { code: "EDI", name: "Edinburgh Airport", city: "Edinburgh" },
+    { code: "BHX", name: "Birmingham Airport", city: "Birmingham" },
+  ],
+  DE: [
+    { code: "FRA", name: "Frankfurt Airport", city: "Frankfurt" },
+    { code: "MUC", name: "Munich Airport", city: "Munich" },
+    { code: "BER", name: "Berlin Brandenburg", city: "Berlin" },
+    { code: "DUS", name: "Dusseldorf Airport", city: "Dusseldorf" },
+    { code: "HAM", name: "Hamburg Airport", city: "Hamburg" },
+  ],
+  FR: [
+    { code: "CDG", name: "Paris Charles de Gaulle", city: "Paris" },
+    { code: "ORY", name: "Paris Orly", city: "Paris" },
+    { code: "NCE", name: "Nice Cote d'Azur", city: "Nice" },
+    { code: "LYS", name: "Lyon-Saint Exupery", city: "Lyon" },
+  ],
+  NL: [
+    { code: "AMS", name: "Amsterdam Schiphol", city: "Amsterdam" },
+  ],
+  SE: [
+    { code: "ARN", name: "Stockholm Arlanda", city: "Stockholm" },
+    { code: "GOT", name: "Gothenburg Landvetter", city: "Gothenburg" },
+  ],
+  NO: [
+    { code: "OSL", name: "Oslo Gardermoen", city: "Oslo" },
+    { code: "BGO", name: "Bergen Flesland", city: "Bergen" },
+  ],
+  DK: [
+    { code: "CPH", name: "Copenhagen Airport", city: "Copenhagen" },
+  ],
+  FI: [
+    { code: "HEL", name: "Helsinki-Vantaa", city: "Helsinki" },
+  ],
+  IE: [
+    { code: "DUB", name: "Dublin Airport", city: "Dublin" },
+  ],
+  CH: [
+    { code: "ZRH", name: "Zurich Airport", city: "Zurich" },
+    { code: "GVA", name: "Geneva Airport", city: "Geneva" },
+  ],
+  AT: [
+    { code: "VIE", name: "Vienna International", city: "Vienna" },
+  ],
+  BE: [
+    { code: "BRU", name: "Brussels Airport", city: "Brussels" },
+  ],
+  IT: [
+    { code: "FCO", name: "Rome Fiumicino", city: "Rome" },
+    { code: "MXP", name: "Milan Malpensa", city: "Milan" },
+    { code: "VCE", name: "Venice Marco Polo", city: "Venice" },
+  ],
+  ES: [
+    { code: "MAD", name: "Madrid Barajas", city: "Madrid" },
+    { code: "BCN", name: "Barcelona El Prat", city: "Barcelona" },
+  ],
+  PT: [
+    { code: "LIS", name: "Lisbon Portela", city: "Lisbon" },
+    { code: "OPO", name: "Porto Airport", city: "Porto" },
+  ],
+  PL: [
+    { code: "WAW", name: "Warsaw Chopin", city: "Warsaw" },
+    { code: "KRK", name: "Krakow Airport", city: "Krakow" },
+  ],
+  CZ: [
+    { code: "PRG", name: "Prague Vaclav Havel", city: "Prague" },
+  ],
 
-  // Low-risk countries (DON'T show risk block)
-  IN: { code: "DEL", name: "Delhi" },
-  TH: { code: "BKK", name: "Bangkok" },
-  SG: { code: "SIN", name: "Singapore" },
-  MY: { code: "KUL", name: "Kuala Lumpur" },
-  ID: { code: "CGK", name: "Jakarta" },
-  PH: { code: "MNL", name: "Manila" },
-  KR: { code: "ICN", name: "Seoul" },
-  JP: { code: "NRT", name: "Tokyo" },
-  CN: { code: "PVG", name: "Shanghai" },
-  HK: { code: "HKG", name: "Hong Kong" },
-  TW: { code: "TPE", name: "Taipei" },
-  RU: { code: "SVO", name: "Moscow" },
-  BR: { code: "GRU", name: "Sao Paulo" },
-  MX: { code: "MEX", name: "Mexico City" },
-  AR: { code: "EZE", name: "Buenos Aires" },
+  // Low-risk countries (flights available but no risk warning)
+  IN: [
+    { code: "DEL", name: "Indira Gandhi International", city: "Delhi" },
+    { code: "BOM", name: "Chhatrapati Shivaji International", city: "Mumbai" },
+    { code: "BLR", name: "Kempegowda International", city: "Bangalore" },
+    { code: "MAA", name: "Chennai International", city: "Chennai" },
+  ],
+  TH: [
+    { code: "BKK", name: "Suvarnabhumi Airport", city: "Bangkok" },
+    { code: "DMK", name: "Don Mueang International", city: "Bangkok" },
+    { code: "CNX", name: "Chiang Mai International", city: "Chiang Mai" },
+    { code: "HKT", name: "Phuket International", city: "Phuket" },
+  ],
+  SG: [
+    { code: "SIN", name: "Singapore Changi", city: "Singapore" },
+  ],
+  MY: [
+    { code: "KUL", name: "Kuala Lumpur International", city: "Kuala Lumpur" },
+    { code: "PEN", name: "Penang International", city: "Penang" },
+  ],
+  ID: [
+    { code: "CGK", name: "Soekarno-Hatta International", city: "Jakarta" },
+    { code: "DPS", name: "Ngurah Rai International", city: "Bali" },
+    { code: "SUB", name: "Juanda International", city: "Surabaya" },
+  ],
+  PH: [
+    { code: "MNL", name: "Ninoy Aquino International", city: "Manila" },
+    { code: "CEB", name: "Mactan-Cebu International", city: "Cebu" },
+  ],
+  KR: [
+    { code: "ICN", name: "Incheon International", city: "Seoul" },
+    { code: "GMP", name: "Gimpo International", city: "Seoul" },
+    { code: "PUS", name: "Gimhae International", city: "Busan" },
+  ],
+  JP: [
+    { code: "NRT", name: "Narita International", city: "Tokyo" },
+    { code: "HND", name: "Haneda Airport", city: "Tokyo" },
+    { code: "KIX", name: "Kansai International", city: "Osaka" },
+    { code: "NGO", name: "Chubu Centrair International", city: "Nagoya" },
+  ],
+  CN: [
+    { code: "PVG", name: "Shanghai Pudong", city: "Shanghai" },
+    { code: "PEK", name: "Beijing Capital", city: "Beijing" },
+    { code: "CAN", name: "Guangzhou Baiyun", city: "Guangzhou" },
+    { code: "SZX", name: "Shenzhen Bao'an", city: "Shenzhen" },
+  ],
+  HK: [
+    { code: "HKG", name: "Hong Kong International", city: "Hong Kong" },
+  ],
+  TW: [
+    { code: "TPE", name: "Taiwan Taoyuan International", city: "Taipei" },
+    { code: "KHH", name: "Kaohsiung International", city: "Kaohsiung" },
+  ],
+  RU: [
+    { code: "SVO", name: "Sheremetyevo International", city: "Moscow" },
+    { code: "DME", name: "Domodedovo International", city: "Moscow" },
+    { code: "LED", name: "Pulkovo Airport", city: "St. Petersburg" },
+  ],
+  BR: [
+    { code: "GRU", name: "Sao Paulo-Guarulhos", city: "Sao Paulo" },
+    { code: "GIG", name: "Rio de Janeiro-Galeao", city: "Rio de Janeiro" },
+  ],
+  MX: [
+    { code: "MEX", name: "Mexico City International", city: "Mexico City" },
+    { code: "CUN", name: "Cancun International", city: "Cancun" },
+  ],
+  AR: [
+    { code: "EZE", name: "Ministro Pistarini International", city: "Buenos Aires" },
+  ],
 };
+
+// IATA to ICAO mapping for AeroDataBox API
+export const IATA_TO_ICAO: Record<string, string> = {
+  // US Airports
+  JFK: "KJFK", LAX: "KLAX", ORD: "KORD", SFO: "KSFO", MIA: "KMIA",
+  ATL: "KATL", DFW: "KDFW", SEA: "KSEA", BOS: "KBOS", IAD: "KIAD",
+  // Canada
+  YYZ: "CYYZ", YVR: "CYVR", YUL: "CYUL", YYC: "CYYC",
+  // Australia
+  SYD: "YSSY", MEL: "YMML", BNE: "YBBN", PER: "YPPH",
+  // New Zealand
+  AKL: "NZAA", WLG: "NZWN", CHC: "NZCH",
+  // UK
+  LHR: "EGLL", LGW: "EGKK", MAN: "EGCC", EDI: "EGPH", BHX: "EGBB",
+  // Germany
+  FRA: "EDDF", MUC: "EDDM", BER: "EDDB", DUS: "EDDL", HAM: "EDDH",
+  // France
+  CDG: "LFPG", ORY: "LFPO", NCE: "LFMN", LYS: "LFLL",
+  // Other Europe
+  AMS: "EHAM", ARN: "ESSA", GOT: "ESGG", OSL: "ENGM", BGO: "ENBR",
+  CPH: "EKCH", HEL: "EFHK", DUB: "EIDW", ZRH: "LSZH", GVA: "LSGG",
+  VIE: "LOWW", BRU: "EBBR", FCO: "LIRF", MXP: "LIMC", VCE: "LIPZ",
+  MAD: "LEMD", BCN: "LEBL", LIS: "LPPT", OPO: "LPPR",
+  WAW: "EPWA", KRK: "EPKK", PRG: "LKPR",
+  // Asia
+  DEL: "VIDP", BOM: "VABB", BLR: "VOBL", MAA: "VOMM",
+  BKK: "VTBS", DMK: "VTBD", CNX: "VTCC", HKT: "VTSP",
+  SIN: "WSSS", KUL: "WMKK", PEN: "WMKP",
+  CGK: "WIII", DPS: "WADD", SUB: "WARR",
+  MNL: "RPLL", CEB: "RPVM",
+  ICN: "RKSI", GMP: "RKSS", PUS: "RKPK",
+  NRT: "RJAA", HND: "RJTT", KIX: "RJBB", NGO: "RJGG",
+  PVG: "ZSPD", PEK: "ZBAA", CAN: "ZGGG", SZX: "ZGSZ",
+  HKG: "VHHH", TPE: "RCTP", KHH: "RCKH",
+  // Russia
+  SVO: "UUEE", DME: "UUDD", LED: "ULLI",
+  // Americas
+  GRU: "SBGR", GIG: "SBGL", MEX: "MMMX", CUN: "MMUN", EZE: "SAEZ",
+  // Vietnam destinations
+  SGN: "VVTS", HAN: "VVNB", DAD: "VVDN",
+};
+
+// Helper function to get first airport for a country (for backward compatibility)
+export function getDefaultAirport(countryCode: string): AirportInfo | null {
+  const airports = COUNTRY_AIRPORTS[countryCode];
+  return airports && airports.length > 0 ? airports[0] : null;
+}
+
+// Helper function to get all airports for a country
+export function getAirportsForCountry(countryCode: string): AirportInfo[] {
+  return COUNTRY_AIRPORTS[countryCode] || [];
+}
+
+// Helper function to find airport by IATA code
+export function getAirportByCode(iataCode: string): { countryCode: string; airport: AirportInfo } | null {
+  for (const [countryCode, airports] of Object.entries(COUNTRY_AIRPORTS)) {
+    const airport = airports.find(a => a.code === iataCode);
+    if (airport) {
+      return { countryCode, airport };
+    }
+  }
+  return null;
+}
+
+// Helper function to get ICAO code from IATA
+export function getIcaoCode(iataCode: string): string | null {
+  return IATA_TO_ICAO[iataCode] || null;
+}
 
 // Risk level categorization
 export type RiskLevel = "high" | "medium" | "low" | "none";
@@ -252,17 +458,25 @@ export const FALLBACK_PRICES: Record<string, PriceMetrics> = {
   TW: { minimumPrice: 200, medianPrice: 350, maximumPrice: 550 },
 };
 
-// Get price metrics with fallback
-export async function getFlightPriceWithFallback(countryCode: string): Promise<PriceMetrics | null> {
-  const airport = COUNTRY_AIRPORTS[countryCode];
-  if (!airport) return null;
+// Get price metrics with fallback (using specific airport or default)
+export async function getFlightPriceWithFallback(
+  countryCode: string,
+  airportCode?: string
+): Promise<PriceMetrics | null> {
+  // If specific airport provided, use it; otherwise get default for country
+  let code = airportCode;
+  if (!code) {
+    const defaultAirport = getDefaultAirport(countryCode);
+    if (!defaultAirport) return null;
+    code = defaultAirport.code;
+  }
 
   // Try to get from Amadeus API first
-  const apiData = await getFlightPriceMetrics(airport.code, "SGN");
+  const apiData = await getFlightPriceMetrics(code, "SGN");
   if (apiData && apiData.priceMetrics.medianPrice > 0) {
     return apiData.priceMetrics;
   }
 
-  // Fall back to static estimates
-  return FALLBACK_PRICES[countryCode] || null;
+  // Fall back to static estimates (by airport code first, then country)
+  return FALLBACK_PRICES[code] || FALLBACK_PRICES[countryCode] || null;
 }
