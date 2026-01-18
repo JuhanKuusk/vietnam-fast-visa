@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
-import { fetchEmails, sendEmail, checkNewEmails } from "@/lib/zoho-mail";
+// Switched from Zoho to Gmail
+import { fetchEmails, sendEmail, checkNewEmails } from "@/lib/gmail-mail";
 
 // GET - Fetch emails from inbox
 export async function GET(request: NextRequest) {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
-import { fetchEmailById, markAsRead, markAsUnread, deleteEmail } from "@/lib/zoho-mail";
+// Switched from Zoho to Gmail
+import { fetchEmailById, markAsRead, markAsUnread, deleteEmail } from "@/lib/gmail-mail";
 
 // GET - Fetch single email by UID
 export async function GET(
