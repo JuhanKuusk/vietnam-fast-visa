@@ -489,18 +489,17 @@ export function CitizenshipChecker({
     if (departingCountry) {
       const airports = getAirportsForCountry(departingCountry);
       setAvailableAirports(airports);
-      // If we already have an airport and it's valid for this country, keep it
-      const currentAirportValid = airports.some(a => a.code === departingAirport);
-      if (!currentAirportValid && airports.length > 0) {
+      // Always reset airport when country changes to ensure consistency
+      if (airports.length > 0) {
         setDepartingAirport(airports[0].code);
-      } else if (airports.length === 0) {
+      } else {
         setDepartingAirport("");
       }
     } else {
       setAvailableAirports([]);
       setDepartingAirport("");
     }
-  }, [departingCountry, departingAirport]);
+  }, [departingCountry]); // Removed departingAirport from deps to prevent loops
 
   const handleCountryChange = (code: string) => {
     setSelectedCountry(code);
