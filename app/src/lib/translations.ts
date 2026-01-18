@@ -701,6 +701,15 @@ export const translations = {
     importantDisclaimer: "Important Disclaimer",
     disclaimerBannerText: "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities.",
 
+    // Contact Form
+    sendMessage: "Send us a Message",
+    emailPlaceholder: "Your email",
+    messagePlaceholder: "Your message",
+    send: "Send Message",
+    sending: "Sending...",
+    messageSent: "Message sent successfully!",
+    messageError: "Failed to send message. Please try again.",
+
     // About Us page
     aboutTitle: "About Us",
     aboutIntro: "Vietnam Visa Help is a professional visa support service specializing in Vietnam e-Visa applications and related travel documentation. Through our website, www.vietnamvisahelp.com, we assist travelers from around the world with fast, accurate, and reliable visa solutions for entry into Vietnam.",
