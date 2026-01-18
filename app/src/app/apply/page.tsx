@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 // PhoneVerification removed - using email verification only
 // import { PhoneVerification } from "@/components/ui/phone-verification";
 import { Logo } from "@/components/ui/logo";
+import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -2048,6 +2049,13 @@ function ApplyForm() {
                   </button>
                 ) : (
                   <div className="flex-1 flex flex-col gap-4">
+                    {/* Flight Risk Warning - shown for high-risk countries before payment */}
+                    <FlightRiskBlock
+                      countryCode={applicants[0]?.nationality || ""}
+                      visaSpeed={visaSpeed}
+                      language={language}
+                    />
+
                     {/* Terms and Privacy Checkboxes */}
                     <div className="space-y-3 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                       <label className="flex items-start gap-3 cursor-pointer">
