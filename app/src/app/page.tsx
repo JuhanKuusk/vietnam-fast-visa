@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlightInfo } from "@/components/ui/flight-info";
-import { DirectFlights } from "@/components/ui/direct-flights";
+import { AutoDetectFlights } from "@/components/ui/auto-detect-flights";
 import { CitizenshipChecker } from "@/components/ui/citizenship-checker";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -576,8 +576,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Direct Flights Section */}
-      <DirectFlights />
+      {/* Direct Flights Section - Auto-detects user location */}
+      <AutoDetectFlights />
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
