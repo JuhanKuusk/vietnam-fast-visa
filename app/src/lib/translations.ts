@@ -79,7 +79,7 @@ export const translations = {
     addressOptional: "(Optional)",
     hotelPlaceholder: "Hotel name or address",
     urgentRescue: "URGENT RESCUE - 30 Minutes",
-    urgentRescueDesc: "30 min check-in approval • Full visa in 1-2 hours",
+    urgentRescueDesc: "30 min check-in approval • Full visa in 1,5 hours",
     serviceFee: "Service fee",
     total: "Total",
     continueButton: "Continue to Applicant Details →",

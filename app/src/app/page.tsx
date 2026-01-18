@@ -452,7 +452,7 @@ export default function Home() {
                 <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-xl p-4 md:p-5 shadow-lg flex flex-col justify-center h-full">
                   <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4">
                     <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: '#57D0B2' }}>
-                      <span className="text-lg md:text-xl font-bold">1-2h</span>
+                      <span className="text-lg md:text-xl font-bold">1,5h</span>
                     </div>
                     <div className="text-center md:text-left">
                       <div className="font-bold text-base md:text-lg text-gray-900 dark:text-white">{t.hero.oneToTwoHours}</div>
