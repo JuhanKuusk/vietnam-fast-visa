@@ -16,6 +16,24 @@ import hiTranslations from "@/locales/hi.json";
 
 type TranslationsType = typeof defaultTranslations;
 
+// Map country codes to preferred languages
+const COUNTRY_TO_LANGUAGE: Record<string, SupportedLanguage> = {
+  // Spanish-speaking countries
+  ES: "ES", MX: "ES", AR: "ES", CO: "ES", CL: "ES", PE: "ES", VE: "ES",
+  EC: "ES", GT: "ES", CU: "ES", BO: "ES", DO: "ES", HN: "ES", PY: "ES",
+  SV: "ES", NI: "ES", CR: "ES", PA: "ES", UY: "ES",
+  // Portuguese-speaking countries
+  BR: "PT", PT: "PT", AO: "PT", MZ: "PT",
+  // French-speaking countries
+  FR: "FR", BE: "FR", CH: "FR", CA: "FR", SN: "FR", CI: "FR", CM: "FR",
+  MG: "FR", ML: "FR", BF: "FR", NE: "FR", TG: "FR", BJ: "FR",
+  // Russian-speaking countries
+  RU: "RU", BY: "RU", KZ: "RU", KG: "RU", UA: "RU",
+  // Hindi-speaking - only India
+  IN: "HI",
+  // All other countries default to English (handled in code)
+};
+
 interface LanguageContextType {
   language: SupportedLanguage;
   setLanguage: (lang: SupportedLanguage) => void;
@@ -69,18 +87,42 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [loadTranslations]
   );
 
-  // Load language preference from localStorage on mount
+  // Load language preference from localStorage on mount, or detect from geolocation
   useEffect(() => {
     if (initialLoadDone.current) return;
     initialLoadDone.current = true;
 
     if (typeof window !== "undefined") {
       const savedLang = localStorage.getItem("language") as SupportedLanguage;
+
+      // If user has explicitly set a language before, use that
       if (savedLang && LANGUAGES[savedLang]) {
         setLanguageState(savedLang);
-        // Load translations for the saved language (instant from static files)
         loadTranslations(savedLang);
+        return;
       }
+
+      // No saved language - detect from geolocation
+      const detectLanguageFromLocation = async () => {
+        try {
+          const response = await fetch("/api/geolocation");
+          if (response.ok) {
+            const data = await response.json();
+            const countryCode = data.countryCode;
+            const detectedLang = COUNTRY_TO_LANGUAGE[countryCode] || "EN";
+
+            // Set the detected language (but don't save to localStorage yet)
+            // Only save when user explicitly changes language
+            setLanguageState(detectedLang);
+            loadTranslations(detectedLang);
+          }
+        } catch (error) {
+          // On error, default to English
+          console.error("Failed to detect language from location:", error);
+        }
+      };
+
+      detectLanguageFromLocation();
     }
   }, [loadTranslations]);
 
