@@ -11,6 +11,19 @@ interface Applicant {
   passport_number: string;
   date_of_birth: string;
   gender: string;
+  religion: string | null;
+  place_of_birth: string | null;
+  passport_type: string | null;
+  passport_issue_date: string | null;
+  passport_expiry_date: string | null;
+  issuing_authority: string | null;
+  permanent_address: string | null;
+  contact_address: string | null;
+  telephone: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_address: string | null;
+  emergency_contact_phone: string | null;
+  emergency_contact_relationship: string | null;
   passport_photo_url: string | null;
   portrait_photo_url: string | null;
   visa_document_url: string | null;
@@ -39,12 +52,118 @@ interface Application {
   entry_date: string;
   exit_date: string;
   entry_port: string;
+  entry_type: string | null;
+  purpose: string | null;
+  flight_number: string | null;
+  language: string | null;
   notes: string | null;
   created_at: string;
   paid_at: string | null;
   delivered_at: string | null;
   applicants: Applicant[];
   visa_documents: VisaDocument[];
+}
+
+// Editable field component
+function EditableField({
+  label,
+  value,
+  onSave,
+  type = "text",
+  options,
+}: {
+  label: string;
+  value: string | null;
+  onSave: (value: string) => Promise<void>;
+  type?: "text" | "date" | "select" | "textarea";
+  options?: { value: string; label: string }[];
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(value || "");
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await onSave(editValue);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to save:", error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditValue(value || "");
+    setIsEditing(false);
+  };
+
+  if (isEditing) {
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-gray-500">{label}</p>
+        <div className="flex gap-2">
+          {type === "select" && options ? (
+            <select
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
+            >
+              <option value="">-</option>
+              {options.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          ) : type === "textarea" ? (
+            <textarea
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              rows={2}
+              className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none resize-none"
+            />
+          ) : (
+            <input
+              type={type}
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
+            />
+          )}
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50"
+          >
+            {saving ? "..." : "Save"}
+          </button>
+          <button
+            onClick={handleCancel}
+            className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="group">
+      <p className="text-sm text-gray-500">{label}</p>
+      <div className="flex items-center gap-2">
+        <p className="font-medium">{value || "-"}</p>
+        <button
+          onClick={() => setIsEditing(true)}
+          className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600 transition-opacity"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default function ApplicationDetailPage() {
@@ -57,6 +176,7 @@ export default function ApplicationDetailPage() {
   const [sending, setSending] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("");
+  const [generatingPdf, setGeneratingPdf] = useState(false);
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
   useEffect(() => {
@@ -168,6 +288,54 @@ export default function ApplicationDetailPage() {
     }
   };
 
+  const handleUpdateApplicant = async (applicantId: string, field: string, value: string) => {
+    if (!application) return;
+
+    const response = await fetch(`/api/admin/applicants/${applicantId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [field]: value }),
+    });
+
+    if (response.ok) {
+      // Refresh application data
+      const appResponse = await fetch(`/api/admin/applications/${application.id}`);
+      if (appResponse.ok) {
+        const data = await appResponse.json();
+        setApplication(data.application);
+      }
+    } else {
+      throw new Error("Failed to update");
+    }
+  };
+
+  const handleGeneratePdf = async () => {
+    if (!application) return;
+    setGeneratingPdf(true);
+
+    try {
+      const response = await fetch(`/api/admin/applications/${application.id}/pdf`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `visa-application-${application.reference_number}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        alert("Failed to generate PDF");
+      }
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+      alert("Failed to generate PDF");
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -215,7 +383,28 @@ export default function ApplicationDetailPage() {
         <div className="lg:col-span-2 space-y-6">
           {/* Application Info */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Application Details</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Application Details</h2>
+              <button
+                onClick={handleGeneratePdf}
+                disabled={generatingPdf}
+                className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50 flex items-center gap-2"
+              >
+                {generatingPdf ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Generate PDF
+                  </>
+                )}
+              </button>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Email</p>
@@ -238,8 +427,24 @@ export default function ApplicationDetailPage() {
                 <p className="font-medium">{application.entry_port}</p>
               </div>
               <div>
+                <p className="text-sm text-gray-500">Entry Type</p>
+                <p className="font-medium capitalize">{application.entry_type || "single"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Purpose</p>
+                <p className="font-medium capitalize">{application.purpose || "-"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Flight Number</p>
+                <p className="font-medium">{application.flight_number || "-"}</p>
+              </div>
+              <div>
                 <p className="text-sm text-gray-500">Visa Speed</p>
                 <p className="font-medium">{application.visa_speed || "-"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Language</p>
+                <p className="font-medium">{application.language || "EN"}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Amount</p>
@@ -262,51 +467,183 @@ export default function ApplicationDetailPage() {
                   Applicant {index + 1}: {applicant.full_name}
                 </h2>
 
+                {/* Photos Section */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <p className="text-sm text-gray-500">Nationality</p>
-                    <p className="font-medium">{applicant.nationality}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Passport Number</p>
-                    <p className="font-medium">{applicant.passport_number}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Date of Birth</p>
-                    <p className="font-medium">{new Date(applicant.date_of_birth).toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Gender</p>
-                    <p className="font-medium capitalize">{applicant.gender}</p>
-                  </div>
-                </div>
-
-                {/* Photos */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  {applicant.passport_photo_url && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-2">Passport Photo</p>
+                    <p className="text-sm text-gray-500 mb-2">Passport Photo</p>
+                    {applicant.passport_photo_url ? (
                       <a href={applicant.passport_photo_url} target="_blank" rel="noopener noreferrer">
                         <img
                           src={applicant.passport_photo_url}
                           alt="Passport"
-                          className="w-full h-40 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
+                          className="w-full h-48 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
                         />
                       </a>
-                    </div>
-                  )}
-                  {applicant.portrait_photo_url && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-2">Portrait Photo</p>
+                    ) : (
+                      <div className="w-full h-48 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400">
+                        No passport photo
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">Portrait Photo</p>
+                    {applicant.portrait_photo_url ? (
                       <a href={applicant.portrait_photo_url} target="_blank" rel="noopener noreferrer">
                         <img
                           src={applicant.portrait_photo_url}
                           alt="Portrait"
-                          className="w-full h-40 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
+                          className="w-full h-48 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
                         />
                       </a>
-                    </div>
-                  )}
+                    ) : (
+                      <div className="w-full h-48 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center text-gray-400">
+                        No portrait photo
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Personal Information */}
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Personal Information</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <EditableField
+                      label="Full Name"
+                      value={applicant.full_name}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "full_name", v)}
+                    />
+                    <EditableField
+                      label="Nationality"
+                      value={applicant.nationality}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "nationality", v)}
+                    />
+                    <EditableField
+                      label="Date of Birth"
+                      value={applicant.date_of_birth}
+                      type="date"
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "date_of_birth", v)}
+                    />
+                    <EditableField
+                      label="Gender"
+                      value={applicant.gender}
+                      type="select"
+                      options={[
+                        { value: "male", label: "Male" },
+                        { value: "female", label: "Female" },
+                      ]}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "gender", v)}
+                    />
+                    <EditableField
+                      label="Religion"
+                      value={applicant.religion}
+                      type="select"
+                      options={[
+                        { value: "christian", label: "Christian" },
+                        { value: "muslim", label: "Muslim" },
+                        { value: "buddhist", label: "Buddhist" },
+                        { value: "none", label: "None" },
+                      ]}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "religion", v)}
+                    />
+                    <EditableField
+                      label="Place of Birth"
+                      value={applicant.place_of_birth}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "place_of_birth", v)}
+                    />
+                  </div>
+                </div>
+
+                {/* Passport Information */}
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Passport Information</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <EditableField
+                      label="Passport Number"
+                      value={applicant.passport_number}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "passport_number", v)}
+                    />
+                    <EditableField
+                      label="Passport Type"
+                      value={applicant.passport_type}
+                      type="select"
+                      options={[
+                        { value: "ordinary", label: "Ordinary" },
+                        { value: "diplomatic", label: "Diplomatic" },
+                        { value: "official", label: "Official" },
+                        { value: "service", label: "Service" },
+                      ]}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "passport_type", v)}
+                    />
+                    <EditableField
+                      label="Issue Date"
+                      value={applicant.passport_issue_date}
+                      type="date"
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "passport_issue_date", v)}
+                    />
+                    <EditableField
+                      label="Expiry Date"
+                      value={applicant.passport_expiry_date}
+                      type="date"
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "passport_expiry_date", v)}
+                    />
+                    <EditableField
+                      label="Issuing Authority"
+                      value={applicant.issuing_authority}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "issuing_authority", v)}
+                    />
+                  </div>
+                </div>
+
+                {/* Address Information */}
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Address Information</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    <EditableField
+                      label="Permanent Address"
+                      value={applicant.permanent_address}
+                      type="textarea"
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "permanent_address", v)}
+                    />
+                    <EditableField
+                      label="Contact Address"
+                      value={applicant.contact_address}
+                      type="textarea"
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "contact_address", v)}
+                    />
+                    <EditableField
+                      label="Telephone"
+                      value={applicant.telephone}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "telephone", v)}
+                    />
+                  </div>
+                </div>
+
+                {/* Emergency Contact */}
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Emergency Contact</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <EditableField
+                      label="Contact Name"
+                      value={applicant.emergency_contact_name}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "emergency_contact_name", v)}
+                    />
+                    <EditableField
+                      label="Relationship"
+                      value={applicant.emergency_contact_relationship}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "emergency_contact_relationship", v)}
+                    />
+                    <EditableField
+                      label="Phone"
+                      value={applicant.emergency_contact_phone}
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "emergency_contact_phone", v)}
+                    />
+                    <EditableField
+                      label="Address"
+                      value={applicant.emergency_contact_address}
+                      type="textarea"
+                      onSave={(v) => handleUpdateApplicant(applicant.id, "emergency_contact_address", v)}
+                    />
+                  </div>
                 </div>
 
                 {/* Visa Document Section */}

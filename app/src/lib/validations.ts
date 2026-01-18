@@ -8,23 +8,45 @@ export const tripDetailsSchema = z.object({
   entryDate: z.string().min(1, "Please select an entry date"),
   exitDate: z.string().min(1, "Please select an exit date"),
   entryType: z.enum(["single", "multiple"]).optional().default("single"),
+  flightNumber: z.string().optional(),
 });
 
-// Applicant validation (Step 2)
+// Applicant validation (Step 2) - Extended with all fields
 export const applicantSchema = z.object({
+  // Personal Information
   fullName: z
     .string()
     .min(2, "Full name must be at least 2 characters")
     .max(100, "Full name is too long"),
   nationality: z.string().min(1, "Please select your nationality"),
+  dateOfBirth: z.string().min(1, "Please enter your date of birth"),
+  gender: z.enum(["male", "female"]),
+  religion: z.enum(["christian", "muslim", "buddhist", "none"]),
+  placeOfBirth: z.string().optional(),
+
+  // Passport Information
   passportNumber: z
     .string()
     .min(5, "Passport number must be at least 5 characters")
     .max(20, "Passport number is too long")
     .regex(/^[A-Z0-9]+$/, "Passport number must contain only letters and numbers"),
-  dateOfBirth: z.string().min(1, "Please enter your date of birth"),
-  gender: z.enum(["male", "female"]),
-  religion: z.enum(["christian", "muslim", "buddhist", "none"]),
+  passportType: z.string().optional().default("ordinary"),
+  passportIssueDate: z.string().optional(),
+  passportExpiry: z.string().optional(),
+  issuingAuthority: z.string().optional(),
+
+  // Address Information
+  permanentAddress: z.string().optional(),
+  contactAddress: z.string().optional(),
+  telephone: z.string().optional(),
+
+  // Emergency Contact
+  emergencyContactName: z.string().optional(),
+  emergencyAddress: z.string().optional(),
+  emergencyPhone: z.string().optional(),
+  emergencyRelationship: z.string().optional(),
+
+  // Contact Information (primary applicant)
   email: z.string().email("Please enter a valid email address"),
   whatsapp: z
     .string()

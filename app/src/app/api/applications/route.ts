@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Get email and WhatsApp from first applicant
     const primaryApplicant = applicants[0];
 
-    // Create application
+    // Create application with all fields
     const { data: application, error: appError } = await supabase
       .from("applications")
       .insert({
@@ -37,6 +37,8 @@ export async function POST(request: NextRequest) {
         exit_date: tripDetails.exitDate,
         entry_port: tripDetails.entryPort,
         entry_type: entryType,
+        purpose: tripDetails.purpose,
+        flight_number: tripDetails.flightNumber || null,
         email: primaryApplicant.email,
         whatsapp: primaryApplicant.whatsapp,
         amount_usd: totalAmount,
@@ -56,20 +58,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create applicants
+    // Create applicants with ALL fields
     const applicantsToInsert = applicants.map((applicant) => ({
       application_id: application.id,
+      // Personal Information
       full_name: applicant.fullName,
       nationality: applicant.nationality,
-      passport_number: applicant.passportNumber.toUpperCase(),
       date_of_birth: applicant.dateOfBirth,
       gender: applicant.gender,
       religion: applicant.religion,
+      place_of_birth: applicant.placeOfBirth || null,
+      // Passport Information
+      passport_number: applicant.passportNumber.toUpperCase(),
+      passport_type: applicant.passportType || "ordinary",
+      passport_issue_date: applicant.passportIssueDate || null,
+      passport_expiry_date: applicant.passportExpiry || null,
+      issuing_authority: applicant.issuingAuthority || null,
+      // Address Information
+      permanent_address: applicant.permanentAddress || null,
+      contact_address: applicant.contactAddress || null,
+      telephone: applicant.telephone || null,
+      // Emergency Contact
+      emergency_contact_name: applicant.emergencyContactName || null,
+      emergency_contact_address: applicant.emergencyAddress || null,
+      emergency_contact_phone: applicant.emergencyPhone || null,
+      emergency_contact_relationship: applicant.emergencyRelationship || null,
     }));
 
-    const { error: applicantsError } = await supabase
+    const { data: insertedApplicants, error: applicantsError } = await supabase
       .from("applicants")
-      .insert(applicantsToInsert);
+      .insert(applicantsToInsert)
+      .select();
 
     if (applicantsError) {
       console.error("Applicants creation error:", applicantsError);
@@ -86,6 +105,7 @@ export async function POST(request: NextRequest) {
       applicationId: application.id,
       referenceNumber: application.reference_number,
       amount: totalAmount,
+      applicantIds: insertedApplicants?.map(a => a.id) || [],
     });
   } catch (error) {
     console.error("Unexpected error:", error);
