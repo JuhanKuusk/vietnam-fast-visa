@@ -14,7 +14,7 @@ export default function AppleIcon() {
     (
       <div
         style={{
-          background: '#c41e3a',
+          background: '#ffffff',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -24,23 +24,30 @@ export default function AppleIcon() {
         }}
       >
         <svg
-          width="120"
-          height="120"
+          width="140"
+          height="140"
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Passport book shape */}
-          <rect x="12" y="6" width="40" height="52" rx="4" fill="#1e3a5f" stroke="white" strokeWidth="2"/>
+          {/* Background passport (orange/visa behind) */}
+          <rect x="22" y="6" width="34" height="42" rx="3" fill="#f97316" stroke="#1e3a5f" strokeWidth="1.5"/>
 
-          {/* Globe/world icon */}
-          <circle cx="32" cy="28" r="12" fill="none" stroke="white" strokeWidth="2"/>
-          <ellipse cx="32" cy="28" rx="5" ry="12" fill="none" stroke="white" strokeWidth="1.5"/>
-          <line x1="20" y1="28" x2="44" y2="28" stroke="white" strokeWidth="1.5"/>
+          {/* Main passport book - teal/blue */}
+          <rect x="8" y="14" width="38" height="44" rx="3" fill="#67b8c4" stroke="#1e3a5f" strokeWidth="2"/>
 
-          {/* Text lines */}
-          <line x1="18" y1="47" x2="46" y2="47" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-          <line x1="22" y1="52" x2="42" y2="52" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+          {/* Light reflection */}
+          <path d="M8 18 L8 54 Q8 58 12 58 L22 58 L22 18 Q22 14 18 14 L12 14 Q8 14 8 18" fill="#8ed4dc" opacity="0.5"/>
+
+          {/* Globe */}
+          <circle cx="27" cy="36" r="10" fill="none" stroke="#1e3a5f" strokeWidth="2"/>
+          <path d="M17 36 h20" stroke="#1e3a5f" strokeWidth="1.5"/>
+          <ellipse cx="27" cy="36" rx="10" ry="4" fill="none" stroke="#1e3a5f" strokeWidth="1"/>
+          <ellipse cx="27" cy="36" rx="4" ry="10" fill="none" stroke="#1e3a5f" strokeWidth="1"/>
+
+          {/* Lines */}
+          <line x1="14" y1="50" x2="40" y2="50" stroke="#ffffff" strokeWidth="2" strokeLinecap="round"/>
+          <line x1="16" y1="54" x2="38" y2="54" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round"/>
         </svg>
       </div>
     ),
