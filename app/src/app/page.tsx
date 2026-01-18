@@ -5,6 +5,7 @@ import Link from "next/link";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlightInfo } from "@/components/ui/flight-info";
 import { DirectFlights } from "@/components/ui/direct-flights";
+import { CitizenshipChecker } from "@/components/ui/citizenship-checker";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
@@ -563,6 +564,13 @@ export default function Home() {
               <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.whatsappSupport}</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Citizenship Checker Section */}
+      <section className="bg-gray-50 dark:bg-slate-800 py-8 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <CitizenshipChecker />
         </div>
       </section>
 
