@@ -1,9 +1,13 @@
-// DeepL API integration for translations
+// DeepL API integration for translations (with Google Translate fallback for Hindi)
 
 const DEEPL_API_KEY = process.env.DEEPL_API_KEY;
 const DEEPL_API_URL = "https://api.deepl.com/v2/translate";
+const GOOGLE_TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
 
-export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU";
+// Languages not supported by DeepL that need Google Translate
+const GOOGLE_TRANSLATE_LANGUAGES = ["HI"]; // Hindi
+
+export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU" | "HI";
 
 export const LANGUAGES: Record<SupportedLanguage, { name: string; flag: string }> = {
   EN: { name: "English", flag: "🇬🇧" },
@@ -11,6 +15,7 @@ export const LANGUAGES: Record<SupportedLanguage, { name: string; flag: string }
   PT: { name: "Português", flag: "🇧🇷" },
   FR: { name: "Français", flag: "🇫🇷" },
   RU: { name: "Русский", flag: "🇷🇺" },
+  HI: { name: "हिन्दी", flag: "🇮🇳" },
 };
 
 interface TranslateParams {
@@ -26,18 +31,63 @@ interface DeepLResponse {
   }>;
 }
 
+async function translateWithGoogle(texts: string[], targetLang: string, sourceLang: string): Promise<string[]> {
+  if (!GOOGLE_TRANSLATE_API_KEY) {
+    console.error("Google Translate API key not configured for language:", targetLang);
+    return texts;
+  }
+
+  try {
+    const googleTargetLang = targetLang.toLowerCase();
+    const googleSourceLang = sourceLang.toLowerCase();
+    const translations: string[] = [];
+
+    for (const text of texts) {
+      const url = `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANSLATE_API_KEY}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          q: text,
+          target: googleTargetLang,
+          source: googleSourceLang,
+          format: "text",
+        }),
+      });
+
+      if (!response.ok) {
+        translations.push(text);
+        continue;
+      }
+
+      const data = await response.json();
+      translations.push(data.data?.translations?.[0]?.translatedText || text);
+    }
+
+    return translations;
+  } catch (error) {
+    console.error("Google Translate error:", error);
+    return texts;
+  }
+}
+
 export async function translateTexts({
   texts,
   targetLang,
   sourceLang = "EN",
 }: TranslateParams): Promise<string[]> {
-  if (!DEEPL_API_KEY) {
-    console.error("DeepL API key not configured");
-    return texts; // Return original texts if no API key
-  }
-
   // Don't translate if target is English (source language)
   if (targetLang === "EN") {
+    return texts;
+  }
+
+  // Use Google Translate for languages not supported by DeepL
+  if (GOOGLE_TRANSLATE_LANGUAGES.includes(targetLang)) {
+    return translateWithGoogle(texts, targetLang, sourceLang);
+  }
+
+  if (!DEEPL_API_KEY) {
+    console.error("DeepL API key not configured");
     return texts;
   }
 

@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const flightNumber = searchParams.get("flight");
   const date = searchParams.get("date"); // Format: YYYY-MM-DD
+  const origin = searchParams.get("origin"); // Optional: origin airport code (e.g., "DPS" or "WADD")
 
   if (!flightNumber) {
     return NextResponse.json(
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
 
   if (!apiKey) {
     // Return mock data for development/demo purposes
-    return NextResponse.json(getMockFlightData(flightNumber, date));
+    return NextResponse.json(getMockFlightData(flightNumber, date, origin));
   }
 
   try {
@@ -86,12 +87,12 @@ export async function GET(request: NextRequest) {
       if (response.status === 403 || response.status === 401) {
         // API key issue - fall back to mock data
         console.error("AeroDataBox API key issue, returning mock data");
-        return NextResponse.json(getMockFlightData(flightNumber, date));
+        return NextResponse.json(getMockFlightData(flightNumber, date, origin));
       }
       if (response.status === 429) {
         // Rate limit exceeded - fall back to mock data
         console.error("AeroDataBox rate limit exceeded, returning mock data");
-        return NextResponse.json(getMockFlightData(flightNumber, date));
+        return NextResponse.json(getMockFlightData(flightNumber, date, origin));
       }
       throw new Error(`API error: ${response.status}`);
     }
@@ -105,8 +106,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get the first flight result
-    const flight = data[0];
+    // If origin is provided, try to find a flight departing from that airport
+    // This handles cases where the same flight number operates on multiple routes
+    let flight = data[0];
+    if (origin && data.length > 0) {
+      const originUpper = origin.toUpperCase();
+      const matchingFlight = data.find((f: { departure?: { airport?: { iata?: string; icao?: string } } }) =>
+        f.departure?.airport?.iata?.toUpperCase() === originUpper ||
+        f.departure?.airport?.icao?.toUpperCase() === originUpper
+      );
+      if (matchingFlight) {
+        flight = matchingFlight;
+      }
+    }
 
     // Debug: log the flight data structure
     console.log("AeroDataBox flight data:", JSON.stringify(flight.departure, null, 2));
@@ -208,18 +220,34 @@ export async function GET(request: NextRequest) {
       return new Date().toISOString();
     };
 
+    // Helper to format airport name with code - ensures format like "Airport Name (ABC)"
+    const formatAirportWithCode = (airport: { name?: string; iata?: string } | undefined): string => {
+      if (!airport) return "Unknown";
+      const name = airport.name || "Unknown";
+      const code = airport.iata;
+      // If name already contains the code in parentheses, return as-is
+      if (code && name.includes(`(${code})`)) {
+        return name;
+      }
+      // Otherwise append the code
+      if (code) {
+        return `${name} (${code})`;
+      }
+      return name;
+    };
+
     const flightData: FlightData = {
       flightNumber: `${airlineCode}${flightNum}`.toUpperCase(),
       airline: flight.airline?.name || airlineCode,
       departure: {
-        airport: flight.departure?.airport?.name || flight.departure?.airport?.iata || "Unknown",
+        airport: formatAirportWithCode(flight.departure?.airport),
         scheduledTime: displayDepartureTime,
         terminal: flight.departure?.terminal,
         gate: flight.departure?.gate,
         actualTime: flight.departure?.actualTime ? extractTimeString(flight.departure.actualTime) : undefined,
       },
       arrival: {
-        airport: flight.arrival?.airport?.name || flight.arrival?.airport?.iata || "Unknown",
+        airport: formatAirportWithCode(flight.arrival?.airport),
         scheduledTime: extractTimeString(flight.arrival?.scheduledTimeLocal || flight.arrival?.scheduledTime || flight.arrival?.scheduledTimeUtc),
         terminal: flight.arrival?.terminal,
         gate: flight.arrival?.gate,
@@ -236,12 +264,12 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Flight info error:", error);
     // On any error, return mock data so the feature still works
-    return NextResponse.json(getMockFlightData(flightNumber, date));
+    return NextResponse.json(getMockFlightData(flightNumber, date, origin));
   }
 }
 
 // Mock data for development/demo when no API key is configured
-function getMockFlightData(flightNumber: string, date: string | null): FlightData {
+function getMockFlightData(flightNumber: string, date: string | null, origin: string | null): FlightData {
   // Normalize flight number: remove spaces
   const normalizedFlightNumber = flightNumber.replace(/\s+/g, "").trim().toUpperCase();
 
@@ -291,8 +319,8 @@ function getMockFlightData(flightNumber: string, date: string | null): FlightDat
     "MU": "China Eastern",
   };
 
-  // Routes based on airline
-  const routes: Record<string, { from: string; to: string; fromTerminal: string; toTerminal: string }> = {
+  // Routes based on airline - default routes
+  const defaultRoutes: Record<string, { from: string; to: string; fromTerminal: string; toTerminal: string }> = {
     "VN": { from: "Incheon International Airport (ICN)", to: "Noi Bai International Airport (HAN)", fromTerminal: "1", toTerminal: "2" },
     "VJ": { from: "Changi Airport (SIN)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "4", toTerminal: "1" },
     "QH": { from: "Narita International Airport (NRT)", to: "Da Nang International Airport (DAD)", fromTerminal: "2", toTerminal: "1" },
@@ -305,12 +333,37 @@ function getMockFlightData(flightNumber: string, date: string | null): FlightDat
     "KE": { from: "Incheon International Airport (ICN)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "2", toTerminal: "2" },
   };
 
-  const route = routes[airlineCode] || {
-    from: "Singapore Changi Airport (SIN)",
-    to: "Tan Son Nhat International Airport (SGN)",
-    fromTerminal: "3",
-    toTerminal: "2"
+  // Routes from DPS (Denpasar Bali) - used when origin is DPS
+  const dpsRoutes: Record<string, { from: string; to: string; fromTerminal: string; toTerminal: string }> = {
+    "VN": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "2" },
+    "VJ": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "1" },
+    "QH": { from: "Ngurah Rai International Airport (DPS)", to: "Da Nang International Airport (DAD)", fromTerminal: "I", toTerminal: "1" },
+    "SQ": { from: "Ngurah Rai International Airport (DPS)", to: "Noi Bai International Airport (HAN)", fromTerminal: "I", toTerminal: "2" },
+    "TG": { from: "Ngurah Rai International Airport (DPS)", to: "Noi Bai International Airport (HAN)", fromTerminal: "I", toTerminal: "2" },
+    "MH": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "2" },
+    "GA": { from: "Ngurah Rai International Airport (DPS)", to: "Noi Bai International Airport (HAN)", fromTerminal: "I", toTerminal: "2" },
+    "CX": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "2" },
   };
+
+  // Select route based on origin
+  let route: { from: string; to: string; fromTerminal: string; toTerminal: string };
+  const originUpper = origin?.toUpperCase();
+
+  if (originUpper === "DPS" || originUpper === "WADD") {
+    route = dpsRoutes[airlineCode] || {
+      from: "Ngurah Rai International Airport (DPS)",
+      to: "Tan Son Nhat International Airport (SGN)",
+      fromTerminal: "I",
+      toTerminal: "2"
+    };
+  } else {
+    route = defaultRoutes[airlineCode] || {
+      from: "Singapore Changi Airport (SIN)",
+      to: "Tan Son Nhat International Airport (SGN)",
+      fromTerminal: "3",
+      toTerminal: "2"
+    };
+  }
 
   return {
     flightNumber: normalizedFlightNumber,

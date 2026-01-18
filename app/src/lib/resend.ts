@@ -209,6 +209,14 @@ const serviceTypeLabels: Record<SupportedLanguage, Record<string, string>> = {
     weekend: "Выходные/Праздничные дни",
     standard: "Стандартная обработка",
   },
+  HI: {
+    "30-min": "30-मिनट एक्सप्रेस",
+    "4-hour": "4-घंटे एक्सप्रेस",
+    "1-day": "1-दिन सेवा",
+    "2-day": "2-दिन सेवा",
+    weekend: "सप्ताहांत/छुट्टी सेवा",
+    standard: "मानक प्रोसेसिंग",
+  },
 };
 
 // Payment confirmation email params

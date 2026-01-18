@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create Stripe Payment Intent
+    const entryTypeLabel = application.entry_type === "multiple" ? "Multi-Entry" : "Single Entry";
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(application.amount_usd * 100), // Convert to cents
       currency: "usd",
@@ -46,9 +47,11 @@ export async function POST(request: NextRequest) {
         applicationId: application.id,
         referenceNumber: application.reference_number,
         email: application.email,
+        entryType: application.entry_type || "single",
+        visaSpeed: application.visa_speed,
       },
       receipt_email: application.email,
-      description: `Vietnam E-Visa Application - ${application.reference_number}`,
+      description: `Vietnam E-Visa Application (${entryTypeLabel}) - ${application.reference_number}`,
     });
 
     // Store payment intent ID in database

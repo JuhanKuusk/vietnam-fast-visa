@@ -768,7 +768,10 @@ function ApplyForm() {
   // Get initial values from URL params (from home page)
   const initialFlight = searchParams.get("flight") || "";
   const initialNationality = searchParams.get("nationality") || "";
-  const initialPurpose = searchParams.get("purpose") || "tourism";
+  const purposeParam = searchParams.get("purpose");
+  const initialPurpose = (purposeParam === "tourist" || purposeParam === "business" || purposeParam === "visiting")
+    ? purposeParam
+    : "tourist";
   const initialEntryPort = searchParams.get("entryPort") || "";
   const speedParam = searchParams.get("speed") || "30-min";
 

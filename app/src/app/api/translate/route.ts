@@ -2,15 +2,60 @@ import { NextRequest, NextResponse } from "next/server";
 
 const DEEPL_API_KEY = process.env.DEEPL_API_KEY;
 const DEEPL_API_URL = "https://api.deepl.com/v2/translate";
+const GOOGLE_TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
 
-export async function POST(request: NextRequest) {
-  if (!DEEPL_API_KEY) {
-    return NextResponse.json(
-      { error: "DeepL API key not configured" },
-      { status: 500 }
-    );
+// Languages not supported by DeepL that need Google Translate
+const GOOGLE_TRANSLATE_LANGUAGES = ["HI"]; // Hindi
+
+async function translateWithGoogle(texts: string[], targetLang: string, sourceLang: string): Promise<string[]> {
+  if (!GOOGLE_TRANSLATE_API_KEY) {
+    console.error("Google Translate API key not configured for language:", targetLang);
+    return texts; // Return original texts if no API key
   }
 
+  try {
+    // Google Translate language codes are lowercase
+    const googleTargetLang = targetLang.toLowerCase();
+    const googleSourceLang = sourceLang.toLowerCase();
+
+    const translations: string[] = [];
+
+    // Google Translate API - translate each text
+    for (const text of texts) {
+      const url = `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANSLATE_API_KEY}`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          q: text,
+          target: googleTargetLang,
+          source: googleSourceLang,
+          format: "text",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error("Google Translate API error:", response.status, errorBody);
+        translations.push(text); // Fall back to original text
+        continue;
+      }
+
+      const data = await response.json();
+      const translatedText = data.data?.translations?.[0]?.translatedText || text;
+      translations.push(translatedText);
+    }
+
+    return translations;
+  } catch (error) {
+    console.error("Google Translate error:", error);
+    return texts; // Return original texts on error
+  }
+}
+
+export async function POST(request: NextRequest) {
   try {
     const { texts, targetLang, sourceLang = "EN" } = await request.json();
 
@@ -31,6 +76,20 @@ export async function POST(request: NextRequest) {
     // Don't translate if target is English (source language)
     if (targetLang === "EN") {
       return NextResponse.json({ translations: texts });
+    }
+
+    // Use Google Translate for languages not supported by DeepL
+    if (GOOGLE_TRANSLATE_LANGUAGES.includes(targetLang)) {
+      const translations = await translateWithGoogle(texts, targetLang, sourceLang);
+      return NextResponse.json({ translations });
+    }
+
+    // Use DeepL for supported languages
+    if (!DEEPL_API_KEY) {
+      return NextResponse.json(
+        { error: "DeepL API key not configured" },
+        { status: 500 }
+      );
     }
 
     const response = await fetch(DEEPL_API_URL, {

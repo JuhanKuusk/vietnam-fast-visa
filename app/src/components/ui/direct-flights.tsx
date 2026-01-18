@@ -98,12 +98,28 @@ export function DirectFlights() {
     return "bg-gray-500 text-white";
   };
 
-  // Filter flights based on selected filter type
+  // Filter flights based on selected filter type and check-in status
   const filteredFlights = (flightData?.flights || []).filter((flight) => {
-    if (flightType === "direct") {
-      return flight.isDirect;
+    // Filter by flight type
+    if (flightType === "direct" && !flight.isDirect) {
+      return false;
     }
-    return true; // "all" shows all flights
+
+    // Filter past flights for today only (hide flights with closed check-in)
+    const today = new Date().toISOString().split("T")[0];
+    if (flightData?.date === today) {
+      const now = new Date();
+      const [hours, minutes] = flight.departureTime.split(":").map(Number);
+      const flightTime = new Date();
+      flightTime.setHours(hours, minutes, 0, 0);
+      // Check-in closes 45 minutes before departure
+      const checkInCloseTime = new Date(flightTime.getTime() - 45 * 60 * 1000);
+      if (now > checkInCloseTime) {
+        return false; // Check-in has closed, hide this flight
+      }
+    }
+
+    return true;
   });
 
   const LoadingState = () => (
@@ -319,7 +335,9 @@ export function DirectFlights() {
               </>
             ) : (
               <div className="text-center py-6 text-gray-500 dark:text-gray-400">
-                No flights to Vietnam scheduled for this day.
+                {selectedDate === days[0].date
+                  ? "No flights to Vietnam scheduled for today from Denpasar Ngurah Rai International Airport (DPS)."
+                  : "No flights to Vietnam scheduled for this day."}
               </div>
             )}
 

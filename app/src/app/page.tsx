@@ -287,7 +287,7 @@ export default function Home() {
   const [formData, setFormData] = useState({
     flightNumber: "",
     nationality: "",
-    purpose: "tourism",
+    purpose: "tourist",
   });
   const [showVisaInfo, setShowVisaInfo] = useState(false);
   const [heroFlightNumber, setHeroFlightNumber] = useState("");
@@ -299,12 +299,11 @@ export default function Home() {
     departureAirport: string;
   } | null>(null);
 
-  // Purpose of visit options
+  // Purpose of visit options - must match validation schema values
   const purposeOptions = [
-    { value: "tourism", label: t.form?.purposeTourism || "Tourism" },
+    { value: "tourist", label: t.form?.purposeTourism || "Tourism" },
     { value: "business", label: t.form?.purposeBusiness || "Business" },
     { value: "visiting", label: t.form?.purposeVisiting || "Visiting relatives" },
-    { value: "short_term", label: t.form?.purposeShortTerm || "Short-term activities" },
   ];
 
   // Handle flight data from FlightInfo component - memoized to prevent infinite re-renders
@@ -1115,7 +1114,7 @@ export default function Home() {
                   <h4 className="font-semibold text-gray-900 dark:text-white">{t.nonUrgent?.multiEntry || "Multi-Entry Visa"}</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.multiEntryDesc || "Enter Vietnam multiple times"}</p>
                   <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium">
-                    +$45
+                    +$30
                   </div>
                 </div>
               </div>
