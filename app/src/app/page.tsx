@@ -480,7 +480,7 @@ export default function Home() {
             </div>
 
             {/* Flight Check Box */}
-            <div className="max-w-md mx-auto mb-8">
+            <div className="max-w-2xl mx-auto mb-8">
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur rounded-2xl p-5 shadow-xl border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xl">✈️</span>
