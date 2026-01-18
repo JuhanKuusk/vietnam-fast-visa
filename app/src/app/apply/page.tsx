@@ -783,6 +783,8 @@ function ApplyForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
   // Phone verification disabled - will be re-enabled when Twilio account is verified
   // const [showVerification, setShowVerification] = useState(false);
   // const [isPhoneVerified, setIsPhoneVerified] = useState(false);
@@ -979,6 +981,13 @@ function ApplyForm() {
     setSubmitError(null);
 
     try {
+      // Validate terms and privacy agreement
+      if (!agreedToTerms || !agreedToPrivacy) {
+        setSubmitError("Please agree to the Terms of Service and Privacy Policy");
+        setIsSubmitting(false);
+        return;
+      }
+
       // Validate travel details
       if (!travelDetails.entryDate || !travelDetails.exitDate) {
         setSubmitError("Please provide entry and exit dates");
@@ -2038,23 +2047,58 @@ function ApplyForm() {
                     {t.applyForm.nextApplicant}
                   </button>
                 ) : (
-                  <button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="flex-1 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
-                        {t.applyForm.processing}
-                      </span>
-                    ) : (
-                      t.applyForm.continuePayment
-                    )}
-                  </button>
+                  <div className="flex-1 flex flex-col gap-4">
+                    {/* Terms and Privacy Checkboxes */}
+                    <div className="space-y-3 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agreedToTerms}
+                          onChange={(e) => setAgreedToTerms(e.target.checked)}
+                          className="w-5 h-5 mt-0.5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 flex-shrink-0"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          I have read and agree to the{" "}
+                          <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                            Terms of Service
+                          </a>
+                        </span>
+                      </label>
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agreedToPrivacy}
+                          onChange={(e) => setAgreedToPrivacy(e.target.checked)}
+                          className="w-5 h-5 mt-0.5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 flex-shrink-0"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          I have read and agree to the{" "}
+                          <a href="/privacy" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                            Privacy Policy
+                          </a>
+                          {" "}including SMS communications
+                        </span>
+                      </label>
+                    </div>
+
+                    <button
+                      onClick={handleSubmit}
+                      disabled={isSubmitting || !agreedToTerms || !agreedToPrivacy}
+                      className="w-full py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          {t.applyForm.processing}
+                        </span>
+                      ) : (
+                        t.applyForm.continuePayment
+                      )}
+                    </button>
+                  </div>
                 )}
               </div>
 
