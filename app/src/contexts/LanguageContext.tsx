@@ -5,9 +5,14 @@ import {
   translations as defaultTranslations,
   SupportedLanguage,
   LANGUAGES,
-  getAllTranslationTexts,
-  rebuildTranslations,
 } from "@/lib/translations";
+
+// Import pre-translated static JSON files
+import esTranslations from "@/locales/es.json";
+import ptTranslations from "@/locales/pt.json";
+import frTranslations from "@/locales/fr.json";
+import ruTranslations from "@/locales/ru.json";
+import hiTranslations from "@/locales/hi.json";
 
 type TranslationsType = typeof defaultTranslations;
 
@@ -21,18 +26,15 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Cache for translations to avoid re-fetching
-const translationCache: Record<SupportedLanguage, TranslationsType> = {
+// Pre-loaded translations from static JSON files (no API calls needed!)
+const staticTranslations: Record<SupportedLanguage, TranslationsType> = {
   EN: defaultTranslations,
-  ES: defaultTranslations,
-  PT: defaultTranslations,
-  FR: defaultTranslations,
-  RU: defaultTranslations,
-  HI: defaultTranslations,
+  ES: esTranslations as TranslationsType,
+  PT: ptTranslations as TranslationsType,
+  FR: frTranslations as TranslationsType,
+  RU: ruTranslations as TranslationsType,
+  HI: hiTranslations as TranslationsType,
 };
-
-// Track which languages have actually been fetched from the API
-const fetchedLanguages = new Set<SupportedLanguage>(["EN"]); // EN is always "fetched"
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<SupportedLanguage>("EN");
@@ -40,52 +42,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const initialLoadDone = useRef(false);
 
-  // Fetch translations function
-  const fetchTranslations = useCallback(async (lang: SupportedLanguage) => {
-    if (lang === "EN") {
-      setT(defaultTranslations);
-      return;
-    }
-
-    // Check if this language has already been fetched
-    if (fetchedLanguages.has(lang)) {
-      setT(translationCache[lang]);
-      return;
-    }
-
+  // Load translations from static files (instant, no API call)
+  const loadTranslations = useCallback((lang: SupportedLanguage) => {
     setIsLoading(true);
     try {
-      const textsToTranslate = getAllTranslationTexts();
-
-      const response = await fetch("/api/translate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          texts: textsToTranslate,
-          targetLang: lang,
-          sourceLang: "EN",
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Translation failed");
-      }
-
-      const data = await response.json();
-      const translatedTexts = data.translations;
-
-      // Rebuild translations object with translated texts
-      const newTranslations = rebuildTranslations(translatedTexts);
-
-      // Cache the translations and mark as fetched
-      translationCache[lang] = newTranslations;
-      fetchedLanguages.add(lang);
-
-      setT(newTranslations);
+      // Get translations from pre-loaded static files
+      const translations = staticTranslations[lang] || defaultTranslations;
+      setT(translations);
     } catch (error) {
-      console.error("Failed to fetch translations:", error);
+      console.error("Failed to load translations:", error);
       // Fall back to English
       setT(defaultTranslations);
     } finally {
@@ -99,9 +64,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       if (typeof window !== "undefined") {
         localStorage.setItem("language", lang);
       }
-      fetchTranslations(lang);
+      loadTranslations(lang);
     },
-    [fetchTranslations]
+    [loadTranslations]
   );
 
   // Load language preference from localStorage on mount
@@ -113,13 +78,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const savedLang = localStorage.getItem("language") as SupportedLanguage;
       if (savedLang && LANGUAGES[savedLang]) {
         setLanguageState(savedLang);
-        // Fetch translations for the saved language
-        if (savedLang !== "EN") {
-          fetchTranslations(savedLang);
-        }
+        // Load translations for the saved language (instant from static files)
+        loadTranslations(savedLang);
       }
     }
-  }, [fetchTranslations]);
+  }, [loadTranslations]);
 
   return (
     <LanguageContext.Provider
