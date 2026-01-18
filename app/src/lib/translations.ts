@@ -18,6 +18,7 @@ export const translations = {
   header: {
     siteName: "VietnamVisaHelp.com",
     tagline: "Express Visa Service",
+    logoTagline: "Check-in Approval in 30 min",
     support: "24/7 WhatsApp Support",
     supportShort: "Support",
   },

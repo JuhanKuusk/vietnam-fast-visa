@@ -341,7 +341,7 @@ export default function Home() {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <Link href="/" className="hover:opacity-90 transition-opacity">
-              <Logo size="md" />
+              <Logo size="md" taglineText={t.header.logoTagline} />
             </Link>
 
             {/* About, Contact, Theme Toggle & Language */}
@@ -409,8 +409,7 @@ export default function Home() {
             {/* Urgency Badge */}
             <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium" style={{ backgroundColor: '#8EE1EC' }}>
               <span className="animate-pulse inline-block mr-1">⚡</span>
-              <span style={{ color: '#c52e3a' }}>Stuck at check-in?</span>
-              <span style={{ color: '#0E5C3D' }}> We fix that in 30 minutes!</span>
+              <span style={{ color: '#0E5C3D' }}>{t.hero.urgencyBadge}</span>
             </div>
 
             {/* Main Headline */}

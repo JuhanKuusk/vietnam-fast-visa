@@ -2,6 +2,7 @@
   "header": {
     "siteName": "VietnamVisaHelp.com",
     "tagline": "Service Visa Express",
+    "logoTagline": "Approbation de l'enregistrement en 30 minutes",
     "support": "Assistance WhatsApp 24/7",
     "supportShort": "Soutien"
   },
@@ -73,7 +74,7 @@
     "evisaDesc": "Vous avez besoin d'un visa électronique ou d'un visa à l'arrivée pour entrer au Viêt Nam. Nous pouvons vous aider à l'obtenir rapidement !",
     "weCanHelp": "Nous traitons votre e-visa en 30 minutes",
     "embassyRequired": "Visa requis par l'ambassade",
-    "embassyDesc": "Vous devez demander un visa auprès d'une ambassade vietnamienne avant de partir.",
+    "embassyDesc": "Vous devez demander un visa auprès d'une ambassade vietnamienne avant votre départ.",
     "contactUsHelp": "Contactez-nous pour obtenir de l'aide pour votre demande de visa.",
     "yourFlightNumber": "Votre numéro de vol",
     "checkVisaRequirements": "Vérifiez les conditions d'obtention de votre visa",
@@ -96,7 +97,7 @@
     "priceComparison": "Comparaison des prix",
     "ourPrice": "Notre prix (30 min)",
     "competitorA": "Concurrent A (2h)",
-    "competitorB": "Concurrent B (1-2h)",
+    "competitorB": "Compétiteur B (1-2h)",
     "voaTitle": "Important : Visa à l'arrivée",
     "voaText": "Le Viêt Nam ne délivre PAS de visas à l'aéroport sans autorisation préalable.",
     "voaPoint1": "Demander à l'avance une lettre d'approbation",
@@ -199,7 +200,7 @@
     "noFlightsToday": "Aucun vol à destination du Vietnam n'est prévu aujourd'hui au départ de {nom de la ville} ({code de l'aéroport}).",
     "noFlightsThisDay": "Aucun vol à destination du Vietnam n'est prévu ce jour.",
     "flightCount": "vol {count}",
-    "flightCountPlural": "Vols {count}",
+    "flightCountPlural": "vols {count}",
     "localTimeNote": "Tous les horaires sont indiqués à l'heure de départ locale. Les horaires de vol sont susceptibles d'être modifiés."
   },
   "flightRisk": {
@@ -304,7 +305,7 @@
     "mobile": "Numéro de téléphone mobile",
     "mobilePlaceholder": "+1 234 567 8900",
     "mobileHint": "Inclure le code du pays (par exemple, +1 pour les États-Unis)",
-    "whatsappSameAsMobile": "Le numéro WhatsApp est le même que le numéro de téléphone portable",
+    "whatsappSameAsMobile": "Le numéro WhatsApp est le même que le numéro de téléphone mobile",
     "whatsapp": "Numéro WhatsApp",
     "whatsappOptional": "(optionnel)",
     "whatsappPlaceholder": "+1 234 567 8900",
@@ -336,7 +337,7 @@
   },
   "verification": {
     "title": "Vérifier votre téléphone",
-    "chooseMethod": "Choisissez la manière dont vous souhaitez recevoir votre code de vérification :",
+    "chooseMethod": "Choisissez la façon dont vous souhaitez recevoir votre code de vérification :",
     "sms": "SMS",
     "smsDesc": "Recevoir le code par message texte",
     "whatsapp": "WhatsApp",
@@ -418,7 +419,7 @@
     "arrivalStep4": "Présentez vos documents : Présenter le passeport, l'imprimé du visa électronique et la carte d'arrivée.",
     "arrivalStep5": "Biométrie : Les empreintes digitales et la photo peuvent être prises",
     "arrivalStep6": "Tampon d'entrée : L'agent appose un tampon sur votre passeport - conservez la carte d'arrivée ci-jointe.",
-    "arrivalStep7": "Douanes : Se rendre à la récupération des bagages et à la douane",
+    "arrivalStep7": "Douanes : Procéder à la récupération des bagages et aux formalités douanières",
     "arrivalQ2": "Ce qu'il faut déclarer à la douane :",
     "customsItem1": "Espèces supérieures à 5 000 USD (ou équivalent)",
     "customsItem2": "Articles à des fins commerciales",
@@ -467,7 +468,7 @@
   "common": {
     "loading": "Chargement...",
     "backToHome": "Retour à l'accueil",
-    "contactSupport": "Support de contact",
+    "contactSupport": "Contacter le support",
     "questionsContact": "Vous avez des questions ? Contactez notre équipe d'assistance 24/7",
     "chatOnWhatsApp": "Chat sur WhatsApp"
   },
@@ -496,7 +497,7 @@
     "whatsApp": "WhatsApp",
     "applicationStatus": "Statut de la demande",
     "paymentReceived": "Paiement reçu",
-    "justNow": "A l'instant",
+    "justNow": "A l'heure actuelle",
     "processingVisa": "Traitement du visa",
     "inProgress": "En cours...",
     "visaApproved": "Visa approuvé",
@@ -778,6 +779,6 @@
     "liabilityItem4": "Changements dans les politiques gouvernementales",
     "externalLinks": "Liens externes",
     "externalLinksText": "Notre site web peut contenir des liens vers des sites externes. Nous ne sommes pas responsables de leur contenu ou de leurs politiques.",
-    "consentCheckboxText": "Je confirme que toutes les informations fournies sont exactes et j'accepte les conditions d'utilisation, la politique de confidentialité et la politique de remboursement. Je comprends que VietnamVisaHelp.com n'est pas une agence gouvernementale et ne garantit pas l'approbation du visa."
+    "consentCheckboxText": "Je confirme que toutes les informations fournies sont exactes et j'accepte les conditions d'utilisation, la politique de confidentialité et la politique de remboursement. Je comprends que VietnamVisaHelp.com n'est pas une agence gouvernementale et ne garantit pas l'obtention d'un visa."
   }
 }

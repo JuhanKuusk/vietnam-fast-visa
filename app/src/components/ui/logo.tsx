@@ -1,15 +1,14 @@
 "use client";
 
-import Image from "next/image";
-
 interface LogoProps {
   size?: "sm" | "md" | "lg";
   showTagline?: boolean;
   className?: string;
   variant?: "auto" | "light" | "dark"; // auto uses dark mode detection, light/dark forces specific colors
+  taglineText?: string; // Allow passing translated tagline
 }
 
-export function Logo({ size = "md", showTagline = true, className = "", variant = "auto" }: LogoProps) {
+export function Logo({ size = "md", showTagline = true, className = "", variant = "auto", taglineText = "Check-in Approval in 30 min" }: LogoProps) {
   // Sizes increased by 40%
   const sizes = {
     sm: { icon: 45, text: "text-base", tagline: "text-[11px]" },     // was 32 -> 45
@@ -57,7 +56,7 @@ export function Logo({ size = "md", showTagline = true, className = "", variant 
         </span>
         {showTagline && (
           <span className={`${tagline} ${variant === "light" ? "text-gray-300" : variant === "dark" ? "text-gray-500" : "text-gray-500 dark:text-gray-400"} uppercase tracking-wide font-medium`}>
-            Check-in Approval in 30 min
+            {taglineText}
           </span>
         )}
       </div>

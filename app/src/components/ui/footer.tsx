@@ -54,7 +54,7 @@ export function Footer() {
           {/* Brand Section */}
           <div>
             <div className="mb-4">
-              <Logo size="md" showTagline={true} />
+              <Logo size="md" showTagline={true} taglineText={t.header?.logoTagline || "Check-in Approval in 30 min"} />
             </div>
             <p className="text-sm text-gray-400">
               {t.legal?.footerDescription || "Fast, reliable Vietnam visa assistance service. Get your approval letter in 30 minutes."}
