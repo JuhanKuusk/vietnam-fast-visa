@@ -98,6 +98,26 @@ export default function PrivacyPage() {
             </p>
           </section>
 
+          {/* SMS/Mobile Communications - A2P 10DLC Required */}
+          <section className="mb-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              {t.legal?.smsTitle || "SMS/Mobile Communications"}
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              {t.legal?.smsIntro || "When you provide your mobile phone number and opt-in to receive SMS messages from VietnamVisaHelp.com:"}
+            </p>
+            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
+              <li>{t.legal?.sms1 || "We use your mobile number solely to send visa application updates, status notifications, and important travel alerts"}</li>
+              <li className="font-semibold">{t.legal?.sms2 || "Your mobile phone number and SMS consent will never be shared with or sold to third parties for marketing purposes"}</li>
+              <li className="font-semibold">{t.legal?.sms3 || "We do not share your mobile information with lead generators or data brokers"}</li>
+              <li>{t.legal?.sms4 || "Message frequency varies based on your application status"}</li>
+              <li>{t.legal?.sms5 || "Message and data rates may apply"}</li>
+            </ul>
+            <p className="text-gray-700 dark:text-gray-300 mt-4 font-medium">
+              {t.legal?.smsOptOut || "To opt out of SMS messages, reply STOP to any message. For help, reply HELP or contact support@vietnamvisahelp.com."}
+            </p>
+          </section>
+
           {/* International Transfers */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
