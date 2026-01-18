@@ -570,6 +570,7 @@ interface ApplicantData {
   dateOfIssue: string;
   permanentAddress: string;
   contactAddress: string;
+  contactAddressSameAsPermanent: boolean;
   telephoneNumber: string;
   // Emergency contact
   emergencyFullName: string;
@@ -830,6 +831,7 @@ function ApplyForm() {
     dateOfIssue: "",
     permanentAddress: "",
     contactAddress: "",
+    contactAddressSameAsPermanent: false,
     telephoneNumber: "",
     emergencyFullName: "",
     emergencyAddress: "",
@@ -858,6 +860,7 @@ function ApplyForm() {
           dateOfIssue: "",
           permanentAddress: "",
           contactAddress: "",
+          contactAddressSameAsPermanent: false,
           telephoneNumber: "",
           emergencyFullName: "",
           emergencyAddress: "",
@@ -889,7 +892,7 @@ function ApplyForm() {
   const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>([null]);
   const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>([null]);
 
-  const updateApplicant = (field: keyof ApplicantData, value: string) => {
+  const updateApplicant = (field: keyof ApplicantData, value: string | boolean) => {
     const updated = [...applicants];
     updated[currentApplicant] = { ...updated[currentApplicant], [field]: value };
     setApplicants(updated);
@@ -996,10 +999,14 @@ function ApplyForm() {
       // Validate applicants
       for (let i = 0; i < applicants.length; i++) {
         const applicant = applicants[i];
+        // If contactAddressSameAsPermanent is checked, use permanentAddress as contactAddress
+        const effectiveContactAddress = applicant.contactAddressSameAsPermanent
+          ? applicant.permanentAddress
+          : applicant.contactAddress;
         if (!applicant.fullName || !applicant.nationality || !applicant.passportNumber ||
             !applicant.dateOfBirth || !applicant.gender || !applicant.religion ||
             !applicant.placeOfBirth || !applicant.passportType || !applicant.permanentAddress ||
-            !applicant.contactAddress || !applicant.telephoneNumber || !applicant.emergencyFullName ||
+            !effectiveContactAddress || !applicant.telephoneNumber || !applicant.emergencyFullName ||
             !applicant.emergencyAddress || !applicant.emergencyPhone || !applicant.emergencyRelationship) {
           setSubmitError(`Please complete all required fields for applicant ${i + 1}`);
           setCurrentApplicant(i);
@@ -1807,12 +1814,28 @@ function ApplyForm() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Contact address <span className="text-red-500">*</span>
                 </label>
+                <label className="flex items-center gap-2 mb-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={currentData.contactAddressSameAsPermanent}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      updateApplicant("contactAddressSameAsPermanent", isChecked);
+                      if (isChecked) {
+                        updateApplicant("contactAddress", currentData.permanentAddress);
+                      }
+                    }}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Same as permanent residential address</span>
+                </label>
                 <input
                   type="text"
-                  value={currentData.contactAddress}
+                  value={currentData.contactAddressSameAsPermanent ? currentData.permanentAddress : currentData.contactAddress}
                   onChange={(e) => updateApplicant("contactAddress", e.target.value)}
                   placeholder="Enter contact address"
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  disabled={currentData.contactAddressSameAsPermanent}
+                  className={`w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${currentData.contactAddressSameAsPermanent ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
                 />
               </div>
 
