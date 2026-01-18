@@ -50,13 +50,10 @@ export function Logo({ size = "md", showTagline = true, className = "", variant 
         </svg>
       </div>
 
-      {/* Text - Vietnam (red), Visa (black), Help (green) */}
+      {/* Text - Vietnam (red), VisaHelp (green), all together without spaces */}
       <div className="flex flex-col">
         <span className={`${text} font-bold leading-tight`}>
-          <span className="text-red-600">Vietnam</span>
-          <span className={variant === "light" ? "text-gray-100" : variant === "dark" ? "text-gray-800" : "text-gray-800 dark:text-gray-100"}>Visa</span>
-          {" "}
-          <span className="text-green-600">Help</span>
+          <span className="text-red-600">Vietnam</span><span className="text-green-600">VisaHelp</span>
         </span>
         {showTagline && (
           <span className={`${tagline} ${variant === "light" ? "text-gray-300" : variant === "dark" ? "text-gray-500" : "text-gray-500 dark:text-gray-400"} uppercase tracking-wide font-medium`}>
