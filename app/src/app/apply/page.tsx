@@ -1228,6 +1228,20 @@ function ApplyForm() {
           dateOfBirth: applicant.dateOfBirth,
           gender: applicant.gender as "male" | "female",
           religion: applicant.religion,
+          placeOfBirth: applicant.placeOfBirth,
+          passportType: applicant.passportType,
+          passportIssueDate: applicant.dateOfIssue,
+          passportExpiry: applicant.passportExpiry,
+          issuingAuthority: applicant.issuingAuthority,
+          permanentAddress: applicant.permanentAddress,
+          contactAddress: applicant.contactAddressSameAsPermanent
+            ? applicant.permanentAddress
+            : applicant.contactAddress,
+          telephone: applicant.telephoneNumber,
+          emergencyContactName: applicant.emergencyFullName,
+          emergencyAddress: applicant.emergencyAddress,
+          emergencyPhone: applicant.emergencyPhone,
+          emergencyRelationship: applicant.emergencyRelationship,
           email: contactInfo.email,
           mobile: contactInfo.mobile,
           whatsapp: contactInfo.whatsappSameAsMobile ? contactInfo.mobile : contactInfo.whatsapp,
@@ -1246,6 +1260,60 @@ function ApplyForm() {
 
       if (!response.ok) {
         throw new Error(result.error || "Failed to submit application");
+      }
+
+      // Upload passport and portrait photos for each applicant
+      if (result.applicantIds && result.applicantIds.length > 0) {
+        const uploadPromises: Promise<void>[] = [];
+
+        for (let i = 0; i < result.applicantIds.length; i++) {
+          const applicantId = result.applicantIds[i];
+
+          // Upload passport photo if exists
+          const passportFile = passportPhotos[i];
+          if (passportFile) {
+            const passportFormData = new FormData();
+            passportFormData.append("file", passportFile);
+            passportFormData.append("applicantId", applicantId);
+            passportFormData.append("type", "passport");
+
+            uploadPromises.push(
+              fetch("/api/upload", {
+                method: "POST",
+                body: passportFormData,
+              }).then((res) => {
+                if (!res.ok) {
+                  console.error(`Failed to upload passport photo for applicant ${i + 1}`);
+                }
+              })
+            );
+          }
+
+          // Upload portrait photo if exists
+          const portraitFile = portraitPhotos[i];
+          if (portraitFile) {
+            const portraitFormData = new FormData();
+            portraitFormData.append("file", portraitFile);
+            portraitFormData.append("applicantId", applicantId);
+            portraitFormData.append("type", "portrait");
+
+            uploadPromises.push(
+              fetch("/api/upload", {
+                method: "POST",
+                body: portraitFormData,
+              }).then((res) => {
+                if (!res.ok) {
+                  console.error(`Failed to upload portrait photo for applicant ${i + 1}`);
+                }
+              })
+            );
+          }
+        }
+
+        // Wait for all uploads to complete (don't block navigation)
+        Promise.all(uploadPromises).catch((err) => {
+          console.error("Error uploading photos:", err);
+        });
       }
 
       sessionStorage.setItem("applicationId", result.applicationId);
