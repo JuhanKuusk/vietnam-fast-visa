@@ -4,11 +4,11 @@ interface LogoProps {
   size?: "sm" | "md" | "lg";
   showTagline?: boolean;
   className?: string;
-  variant?: "auto" | "light" | "dark"; // auto uses dark mode detection, light/dark forces specific colors
+  variant?: "light" | "dark"; // light = white text (for dark bg), dark = black text (for light bg)
   taglineText?: string; // Allow passing translated tagline
 }
 
-export function Logo({ size = "md", showTagline = true, className = "", variant = "auto", taglineText = "Check-in Approval in 30 min" }: LogoProps) {
+export function Logo({ size = "md", showTagline = true, className = "", variant = "dark", taglineText = "Check-in Approval in 30 min" }: LogoProps) {
   // Sizes increased by 40%
   const sizes = {
     sm: { icon: 45, text: "text-base", tagline: "text-[11px]" },     // was 32 -> 45
@@ -20,42 +20,55 @@ export function Logo({ size = "md", showTagline = true, className = "", variant 
 
   return (
     <div className={`flex items-center gap-2 sm:gap-3 ${className}`}>
-      {/* Passport Icon - New design */}
-      <div style={{ width: icon, height: icon }} className="flex-shrink-0">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-          {/* Background passport (orange/visa behind) */}
-          <rect x="20" y="4" width="38" height="48" rx="4" fill="#f97316" stroke="#1e3a5f" strokeWidth="2"/>
-          <rect x="20" y="4" width="38" height="14" rx="2" fill="#f97316"/>
+      {/* Passport with Globe and Stamp Icon */}
+      <div style={{ width: icon * 1.4, height: icon }} className="flex-shrink-0">
+        <svg viewBox="0 0 90 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+          {/* Back passport (slightly offset) */}
+          <rect x="8" y="4" width="36" height="48" rx="3" fill="white" stroke="#1a1a1a" strokeWidth="2" transform="rotate(-5 26 28)"/>
 
-          {/* Main passport book - teal/blue */}
-          <rect x="6" y="12" width="42" height="48" rx="4" fill="#67b8c4" stroke="#1e3a5f" strokeWidth="2.5"/>
-
-          {/* Light reflection on passport */}
-          <path d="M6 16 L6 56 Q6 60 10 60 L24 60 L24 16 Q24 12 20 12 L10 12 Q6 12 6 16" fill="#8ed4dc" opacity="0.6"/>
+          {/* Main passport */}
+          <rect x="4" y="6" width="36" height="48" rx="3" fill="white" stroke="#1a1a1a" strokeWidth="2"/>
 
           {/* Globe circle */}
-          <circle cx="27" cy="36" r="12" fill="none" stroke="#1e3a5f" strokeWidth="2.5"/>
+          <circle cx="22" cy="24" r="11" fill="none" stroke="#1a1a1a" strokeWidth="1.8"/>
 
-          {/* Globe grid lines - horizontal */}
-          <path d="M15 36 h24" stroke="#1e3a5f" strokeWidth="2"/>
-          <ellipse cx="27" cy="36" rx="12" ry="4.5" fill="none" stroke="#1e3a5f" strokeWidth="1.5"/>
+          {/* Globe horizontal line */}
+          <path d="M11 24 h22" stroke="#1a1a1a" strokeWidth="1.5"/>
 
-          {/* Globe grid lines - vertical */}
-          <ellipse cx="27" cy="36" rx="4.5" ry="12" fill="none" stroke="#1e3a5f" strokeWidth="1.5"/>
+          {/* Globe vertical ellipse */}
+          <ellipse cx="22" cy="24" rx="5" ry="11" fill="none" stroke="#1a1a1a" strokeWidth="1.5"/>
 
-          {/* Decorative lines at bottom */}
-          <line x1="14" y1="52" x2="40" y2="52" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round"/>
-          <line x1="16" y1="56" x2="38" y2="56" stroke="#ffffff" strokeWidth="2" strokeLinecap="round"/>
+          {/* Globe horizontal curves */}
+          <path d="M12 18 Q22 20 32 18" fill="none" stroke="#1a1a1a" strokeWidth="1.2"/>
+          <path d="M12 30 Q22 28 32 30" fill="none" stroke="#1a1a1a" strokeWidth="1.2"/>
+
+          {/* Text lines on passport */}
+          <line x1="10" y1="42" x2="34" y2="42" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round"/>
+          <line x1="10" y1="47" x2="28" y2="47" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round"/>
+
+          {/* Stamp handle */}
+          <rect x="52" y="30" width="8" height="22" rx="1" fill="white" stroke="#1a1a1a" strokeWidth="2"/>
+
+          {/* Stamp grip lines */}
+          <line x1="54" y1="35" x2="58" y2="35" stroke="#1a1a1a" strokeWidth="1"/>
+          <line x1="54" y1="38" x2="58" y2="38" stroke="#1a1a1a" strokeWidth="1"/>
+          <line x1="54" y1="41" x2="58" y2="41" stroke="#1a1a1a" strokeWidth="1"/>
+
+          {/* Stamp base (wider bottom) */}
+          <path d="M48 52 L48 56 Q48 58 50 58 L62 58 Q64 58 64 56 L64 52 Z" fill="white" stroke="#1a1a1a" strokeWidth="2"/>
+
+          {/* Stamp connector */}
+          <rect x="52" y="50" width="8" height="4" fill="white" stroke="#1a1a1a" strokeWidth="1.5"/>
         </svg>
       </div>
 
-      {/* Text - Vietnam (red), VisaHelp (green), all together without spaces */}
+      {/* Text - VietnamVisaHelp in green */}
       <div className="flex flex-col">
-        <span className={`${text} font-bold leading-tight`}>
-          <span className="text-red-600">Vietnam</span><span className="text-green-600">VisaHelp</span>
+        <span className={`${text} font-bold leading-tight ${variant === "light" ? "text-green-400" : "text-green-600"}`}>
+          VietnamVisaHelp
         </span>
         {showTagline && (
-          <span className={`${tagline} ${variant === "light" ? "text-gray-300" : variant === "dark" ? "text-gray-500" : "text-gray-500 dark:text-gray-400"} uppercase tracking-wide font-medium`}>
+          <span className={`${tagline} ${variant === "light" ? "text-green-300" : "text-green-600"} tracking-wide font-medium`}>
             {taglineText}
           </span>
         )}
@@ -71,24 +84,42 @@ export function LogoIcon({ size = 56 }: { size?: number }) {
       {/* Background */}
       <rect width="64" height="64" rx="12" fill="#ffffff"/>
 
-      {/* Background passport (orange/visa behind) */}
-      <rect x="22" y="6" width="34" height="42" rx="3" fill="#f97316" stroke="#1e3a5f" strokeWidth="1.5"/>
+      {/* Back passport (slightly offset) */}
+      <rect x="10" y="6" width="32" height="42" rx="3" fill="white" stroke="#1a1a1a" strokeWidth="2" transform="rotate(-5 26 27)"/>
 
-      {/* Main passport book - teal/blue */}
-      <rect x="8" y="14" width="38" height="44" rx="3" fill="#67b8c4" stroke="#1e3a5f" strokeWidth="2"/>
+      {/* Main passport */}
+      <rect x="6" y="8" width="32" height="42" rx="3" fill="white" stroke="#1a1a1a" strokeWidth="2"/>
 
-      {/* Light reflection */}
-      <path d="M8 18 L8 54 Q8 58 12 58 L22 58 L22 18 Q22 14 18 14 L12 14 Q8 14 8 18" fill="#8ed4dc" opacity="0.5"/>
+      {/* Globe circle */}
+      <circle cx="22" cy="24" r="10" fill="none" stroke="#1a1a1a" strokeWidth="1.8"/>
 
-      {/* Globe */}
-      <circle cx="27" cy="36" r="10" fill="none" stroke="#1e3a5f" strokeWidth="2"/>
-      <path d="M17 36 h20" stroke="#1e3a5f" strokeWidth="1.5"/>
-      <ellipse cx="27" cy="36" rx="10" ry="4" fill="none" stroke="#1e3a5f" strokeWidth="1"/>
-      <ellipse cx="27" cy="36" rx="4" ry="10" fill="none" stroke="#1e3a5f" strokeWidth="1"/>
+      {/* Globe horizontal line */}
+      <path d="M12 24 h20" stroke="#1a1a1a" strokeWidth="1.5"/>
 
-      {/* Lines */}
-      <line x1="14" y1="50" x2="40" y2="50" stroke="#ffffff" strokeWidth="2" strokeLinecap="round"/>
-      <line x1="16" y1="54" x2="38" y2="54" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round"/>
+      {/* Globe vertical ellipse */}
+      <ellipse cx="22" cy="24" rx="4.5" ry="10" fill="none" stroke="#1a1a1a" strokeWidth="1.5"/>
+
+      {/* Globe horizontal curves */}
+      <path d="M13 19 Q22 21 31 19" fill="none" stroke="#1a1a1a" strokeWidth="1.2"/>
+      <path d="M13 29 Q22 27 31 29" fill="none" stroke="#1a1a1a" strokeWidth="1.2"/>
+
+      {/* Text lines on passport */}
+      <line x1="12" y1="40" x2="32" y2="40" stroke="#1a1a1a" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="12" y1="45" x2="26" y2="45" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round"/>
+
+      {/* Stamp handle */}
+      <rect x="44" y="32" width="7" height="18" rx="1" fill="white" stroke="#1a1a1a" strokeWidth="1.5"/>
+
+      {/* Stamp grip lines */}
+      <line x1="46" y1="36" x2="49" y2="36" stroke="#1a1a1a" strokeWidth="1"/>
+      <line x1="46" y1="39" x2="49" y2="39" stroke="#1a1a1a" strokeWidth="1"/>
+      <line x1="46" y1="42" x2="49" y2="42" stroke="#1a1a1a" strokeWidth="1"/>
+
+      {/* Stamp base */}
+      <path d="M41 50 L41 54 Q41 56 43 56 L52 56 Q54 56 54 54 L54 50 Z" fill="white" stroke="#1a1a1a" strokeWidth="1.5"/>
+
+      {/* Stamp connector */}
+      <rect x="44" y="48" width="7" height="3" fill="white" stroke="#1a1a1a" strokeWidth="1"/>
     </svg>
   );
 }

@@ -418,7 +418,7 @@ export default function Home() {
               <span style={{ color: '#5eca52' }}>{t.hero.headline2}</span>
             </h1>
 
-            <p className="text-xl text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-xl text-black dark:text-gray-300 mb-6 max-w-2xl mx-auto">
               {t.hero.subtitle}
             </p>
 
