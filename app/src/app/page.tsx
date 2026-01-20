@@ -1100,10 +1100,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white">{t.nonUrgent?.extendedDuration || "Extended Duration"}</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.extendedDurationDesc || "Upgrade to 1-3 months validity"}</p>
-                  <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium">
-                    +$50
-                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.extendedDurationDesc || "Free upgrade to 1-3 months validity"}</p>
                 </div>
               </div>
             </div>
@@ -1233,7 +1230,6 @@ export default function Home() {
               { q: t.faq.q4, a: t.faq.a4 },
               { q: t.faq.q5, a: t.faq.a5 },
               { q: t.faq.q6, a: t.faq.a6 },
-              { q: t.faq.q7, a: t.faq.a7 },
             ].map((faq, index) => (
               <details key={index} className="bg-white dark:bg-gray-700 rounded-xl shadow-sm border border-gray-200 dark:border-gray-600 group">
                 <summary className="flex items-center justify-between p-4 sm:p-5 cursor-pointer list-none">
