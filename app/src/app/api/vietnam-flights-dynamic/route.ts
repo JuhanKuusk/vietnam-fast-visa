@@ -391,7 +391,7 @@ function getMockFlightsForDate(dateStr: string, originIata: string): Flight[] {
         stopover: "via Dubai (DXB)",
       },
       {
-        flightNumber: "TG 550",
+        flightNumber: "TG 999",
         airline: "Thai Airways",
         airlineCode: "TG",
         departureTime: "15:30",
