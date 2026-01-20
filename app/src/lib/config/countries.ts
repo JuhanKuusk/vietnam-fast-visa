@@ -33,8 +33,10 @@ export const LANGUAGE_TARGETS: Record<SupportedLanguage, number> = {
 };
 
 // Primary countries for Google Ads targeting
+// EXCLUDES visa-free countries: GB, DE, FR, IT, ES, RU, SG, CL, PH, ID, MY, TH
+// (45-day visa-free: GB, DE, FR, IT, ES, RU; 30-day: SG, PH, ID, MY, TH; 21-day: CL)
 export const COUNTRIES: CountryConfig[] = [
-  // TIER 1 - High Priority
+  // TIER 1 - High Priority (visa-required countries only)
   {
     code: 'US',
     name: 'United States',
@@ -75,68 +77,8 @@ export const COUNTRIES: CountryConfig[] = [
     timezone: 'Pacific/Auckland',
     priority: 'high',
   },
-  {
-    code: 'SG',
-    name: 'Singapore',
-    nativeName: 'Singapore',
-    languages: ['EN'],
-    geoTargetId: 2702,
-    currencyCode: 'SGD',
-    timezone: 'Asia/Singapore',
-    priority: 'high',
-  },
 
-  // TIER 2 - Medium Priority (Europe)
-  {
-    code: 'GB',
-    name: 'United Kingdom',
-    nativeName: 'United Kingdom',
-    languages: ['EN'],
-    geoTargetId: 2826,
-    currencyCode: 'GBP',
-    timezone: 'Europe/London',
-    priority: 'medium',
-  },
-  {
-    code: 'DE',
-    name: 'Germany',
-    nativeName: 'Deutschland',
-    languages: ['EN'], // Use EN for Germany - most tourists speak English
-    geoTargetId: 2276,
-    currencyCode: 'EUR',
-    timezone: 'Europe/Berlin',
-    priority: 'medium',
-  },
-  {
-    code: 'FR',
-    name: 'France',
-    nativeName: 'France',
-    languages: ['FR', 'EN'],
-    geoTargetId: 2250,
-    currencyCode: 'EUR',
-    timezone: 'Europe/Paris',
-    priority: 'medium',
-  },
-  {
-    code: 'IT',
-    name: 'Italy',
-    nativeName: 'Italia',
-    languages: ['EN'],
-    geoTargetId: 2380,
-    currencyCode: 'EUR',
-    timezone: 'Europe/Rome',
-    priority: 'medium',
-  },
-  {
-    code: 'ES',
-    name: 'Spain',
-    nativeName: 'Espana',
-    languages: ['ES', 'EN'],
-    geoTargetId: 2724,
-    currencyCode: 'EUR',
-    timezone: 'Europe/Madrid',
-    priority: 'medium',
-  },
+  // TIER 2 - Medium Priority (Europe - visa-required only)
   {
     code: 'NL',
     name: 'Netherlands',
@@ -147,18 +89,8 @@ export const COUNTRIES: CountryConfig[] = [
     timezone: 'Europe/Amsterdam',
     priority: 'medium',
   },
-  {
-    code: 'RU',
-    name: 'Russia',
-    nativeName: 'Россия',
-    languages: ['RU', 'EN'],
-    geoTargetId: 2643,
-    currencyCode: 'RUB',
-    timezone: 'Europe/Moscow',
-    priority: 'medium',
-  },
 
-  // Latin America
+  // Latin America (visa-required only)
   {
     code: 'MX',
     name: 'Mexico',
@@ -199,18 +131,8 @@ export const COUNTRIES: CountryConfig[] = [
     timezone: 'America/Bogota',
     priority: 'low',
   },
-  {
-    code: 'CL',
-    name: 'Chile',
-    nativeName: 'Chile',
-    languages: ['ES'],
-    geoTargetId: 2152,
-    currencyCode: 'CLP',
-    timezone: 'America/Santiago',
-    priority: 'low',
-  },
 
-  // TIER 3 - Lower Priority (Asia/India)
+  // TIER 3 - Lower Priority (Asia - visa-required only)
   {
     code: 'IN',
     name: 'India',
@@ -221,71 +143,29 @@ export const COUNTRIES: CountryConfig[] = [
     timezone: 'Asia/Kolkata',
     priority: 'low',
   },
-  {
-    code: 'PH',
-    name: 'Philippines',
-    nativeName: 'Pilipinas',
-    languages: ['EN'],
-    geoTargetId: 2608,
-    currencyCode: 'PHP',
-    timezone: 'Asia/Manila',
-    priority: 'low',
-  },
-  {
-    code: 'ID',
-    name: 'Indonesia',
-    nativeName: 'Indonesia',
-    languages: ['EN'],
-    geoTargetId: 2360,
-    currencyCode: 'IDR',
-    timezone: 'Asia/Jakarta',
-    priority: 'low',
-  },
-  {
-    code: 'MY',
-    name: 'Malaysia',
-    nativeName: 'Malaysia',
-    languages: ['EN'],
-    geoTargetId: 2458,
-    currencyCode: 'MYR',
-    timezone: 'Asia/Kuala_Lumpur',
-    priority: 'low',
-  },
-  {
-    code: 'TH',
-    name: 'Thailand',
-    nativeName: 'ประเทศไทย',
-    languages: ['EN'],
-    geoTargetId: 2764,
-    currencyCode: 'THB',
-    timezone: 'Asia/Bangkok',
-    priority: 'low',
-  },
 ];
 
 // Country code to language mapping for auto-detection
+// Includes only visa-required countries + common visa-required countries not in COUNTRIES array
 export const COUNTRY_TO_PRIMARY_LANGUAGE: Record<string, SupportedLanguage> = {
-  // Spanish-speaking
-  ES: 'ES', MX: 'ES', AR: 'ES', CO: 'ES', CL: 'ES', PE: 'ES', VE: 'ES',
+  // Spanish-speaking (visa-required)
+  MX: 'ES', AR: 'ES', CO: 'ES', PE: 'ES', VE: 'ES',
   EC: 'ES', GT: 'ES', CU: 'ES', BO: 'ES', DO: 'ES', HN: 'ES', PY: 'ES',
   SV: 'ES', NI: 'ES', CR: 'ES', PA: 'ES', UY: 'ES',
 
-  // Portuguese-speaking
+  // Portuguese-speaking (visa-required)
   BR: 'PT', PT: 'PT', AO: 'PT', MZ: 'PT',
 
-  // French-speaking
-  FR: 'FR', BE: 'FR', CH: 'FR', SN: 'FR', CI: 'FR', CM: 'FR',
+  // French-speaking (visa-required)
+  BE: 'FR', CH: 'FR', SN: 'FR', CI: 'FR', CM: 'FR',
   MG: 'FR', ML: 'FR', BF: 'FR', NE: 'FR', TG: 'FR', BJ: 'FR',
 
-  // Russian-speaking
-  RU: 'RU', BY: 'RU', KZ: 'RU', KG: 'RU', UA: 'RU',
-
-  // Hindi-speaking
+  // Hindi-speaking (visa-required)
   IN: 'HI',
 
-  // English-speaking (default)
-  US: 'EN', CA: 'EN', GB: 'EN', AU: 'EN', NZ: 'EN', IE: 'EN', SG: 'EN',
-  ZA: 'EN', PH: 'EN', MY: 'EN', NG: 'EN', KE: 'EN', GH: 'EN',
+  // English-speaking (visa-required only)
+  US: 'EN', CA: 'EN', AU: 'EN', NZ: 'EN', NL: 'EN', IE: 'EN',
+  ZA: 'EN', NG: 'EN', KE: 'EN', GH: 'EN',
 };
 
 /**
