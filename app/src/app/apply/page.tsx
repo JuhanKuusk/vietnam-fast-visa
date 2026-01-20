@@ -2271,9 +2271,9 @@ function ApplyForm() {
                         </svg>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Verify Your Phone Number</h4>
+                        <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Verify Your Phone Number (Optional)</h4>
                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                          We'll send you a verification code via SMS or WhatsApp to ensure we can reach you for urgent visa updates.
+                          Verify your phone number to receive urgent visa updates via SMS or WhatsApp. You can skip this step and proceed to payment.
                         </p>
                         <button
                           onClick={() => setShowVerification(true)}
@@ -2382,7 +2382,7 @@ function ApplyForm() {
 
                     <button
                       onClick={handleSubmit}
-                      disabled={isSubmitting || !agreedToTerms || !agreedToPrivacy || !isPhoneVerified}
+                      disabled={isSubmitting || !agreedToTerms || !agreedToPrivacy}
                       className="w-full py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     >
                       {isSubmitting ? (
