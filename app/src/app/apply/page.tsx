@@ -32,10 +32,10 @@ const VISA_SPEEDS: Record<VisaSpeedKey, {
   "30-min": {
     name: "30-Minute Express Visa",
     nameKey: "speed30MinName",
-    description: "Fastest processing - visa ready in 30 minutes",
+    description: "Check-in approval within 30 minutes. Fastest processing: visa ready in 1–1.5 hours.",
     descriptionKey: "speed30MinDesc",
     price: 199,
-    processingTime: "30 minutes",
+    processingTime: "1-1.5 hours",
   },
   "4-hour": {
     name: "4-Hour Express Visa",

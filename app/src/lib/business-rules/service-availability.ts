@@ -43,9 +43,9 @@ export interface ServiceConfig {
 export const SERVICES: ServiceConfig[] = [
   {
     type: 'URGENT_1H',
-    name: 'Urgent 1 Hour',
+    name: '30-Minute Express (1-1.5hr delivery)',
     nameKey: 'service.urgent1h',
-    processingHours: 1,
+    processingHours: 1.5, // Check-in approval in 30min, full visa in 1-1.5hrs
     requiresOpenOffice: true,
     minimumHoursBeforeClose: 1.5, // Need 1.5 hours buffer
     availableOnWeekends: false,
