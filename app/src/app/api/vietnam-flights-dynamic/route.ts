@@ -315,14 +315,14 @@ function getMockFlightsForDate(dateStr: string, originIata: string): Flight[] {
   } else if (europeAirports.includes(originIata)) {
     connectingFlights.push(
       {
-        flightNumber: "QR 975",
-        airline: "Qatar Airways",
-        airlineCode: "QR",
+        flightNumber: "TK 083",
+        airline: "Turkish Airlines",
+        airlineCode: "TK",
         departureTime: "11:30",
         destination: "Ho Chi Minh City",
         destinationCode: "SGN",
         isDirect: false,
-        stopover: "via Doha (DOH)",
+        stopover: "via Istanbul (IST)",
       },
       {
         flightNumber: "TG 911",
