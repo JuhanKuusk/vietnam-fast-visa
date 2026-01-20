@@ -248,14 +248,14 @@ function getMockFlightsForDate(dateStr: string): Flight[] {
   // Connecting flights (1-stop) that always operate
   const connectingFlights: Flight[] = [
     {
-      flightNumber: "SQ 947",
-      airline: "Singapore Airlines",
-      airlineCode: "SQ",
+      flightNumber: "CX 765",
+      airline: "Cathay Pacific",
+      airlineCode: "CX",
       departureTime: "09:15",
       destination: "Hanoi",
       destinationCode: "HAN",
       isDirect: false,
-      stopover: "via Singapore (SIN)",
+      stopover: "via Hong Kong (HKG)",
     },
     {
       flightNumber: "TG 432",
@@ -295,7 +295,7 @@ function getMockFlightsForDate(dateStr: string): Flight[] {
     4: [ // Thursday
       { flightNumber: "VJ 900", airline: "VietJet Air", airlineCode: "VJ", departureTime: "13:10", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
       { flightNumber: "VN 644", airline: "Vietnam Airlines", airlineCode: "VN", departureTime: "11:30", destination: "Hanoi", destinationCode: "HAN", isDirect: true },
-      { flightNumber: "SQ 176", airline: "Singapore Airlines", airlineCode: "SQ", departureTime: "18:45", destination: "Da Nang", destinationCode: "DAD", isDirect: false, stopover: "via Singapore (SIN)" },
+      { flightNumber: "CX 873", airline: "Cathay Pacific", airlineCode: "CX", departureTime: "18:45", destination: "Da Nang", destinationCode: "DAD", isDirect: false, stopover: "via Hong Kong (HKG)" },
     ],
     5: [ // Friday
       { flightNumber: "VJ 898", airline: "VietJet Air", airlineCode: "VJ", departureTime: "15:35", destination: "Ho Chi Minh City", destinationCode: "SGN", isDirect: true },

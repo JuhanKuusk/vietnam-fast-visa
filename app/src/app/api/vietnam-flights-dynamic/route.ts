@@ -243,7 +243,7 @@ function getMockFlightsForDate(dateStr: string, originIata: string): Flight[] {
   // Only show connecting flights via major hubs
 
   // Check if this is a regional airport (Southeast Asia) that might have direct flights
-  const directFlightOrigins = ["DPS", "SIN", "BKK", "KUL", "HKG", "ICN", "NRT", "HND", "PVG", "CAN"];
+  const directFlightOrigins = ["DPS", "BKK", "KUL", "HKG", "ICN", "NRT", "HND", "PVG", "CAN"];
   const hasDirectFlights = directFlightOrigins.includes(originIata);
 
   const baseFlights: Flight[] = [];
@@ -282,14 +282,14 @@ function getMockFlightsForDate(dateStr: string, originIata: string): Flight[] {
   if (usAirports.includes(originIata)) {
     connectingFlights.push(
       {
-        flightNumber: "SQ 025",
-        airline: "Singapore Airlines",
-        airlineCode: "SQ",
+        flightNumber: "EK 392",
+        airline: "Emirates",
+        airlineCode: "EK",
         departureTime: "00:30",
         destination: "Ho Chi Minh City",
         destinationCode: "SGN",
         isDirect: false,
-        stopover: "via Singapore (SIN)",
+        stopover: "via Dubai (DXB)",
       },
       {
         flightNumber: "CX 831",
@@ -315,14 +315,14 @@ function getMockFlightsForDate(dateStr: string, originIata: string): Flight[] {
   } else if (europeAirports.includes(originIata)) {
     connectingFlights.push(
       {
-        flightNumber: "SQ 319",
-        airline: "Singapore Airlines",
-        airlineCode: "SQ",
+        flightNumber: "QR 975",
+        airline: "Qatar Airways",
+        airlineCode: "QR",
         departureTime: "11:30",
         destination: "Ho Chi Minh City",
         destinationCode: "SGN",
         isDirect: false,
-        stopover: "via Singapore (SIN)",
+        stopover: "via Doha (DOH)",
       },
       {
         flightNumber: "TG 911",
@@ -348,14 +348,14 @@ function getMockFlightsForDate(dateStr: string, originIata: string): Flight[] {
   } else if (australiaAirports.includes(originIata)) {
     connectingFlights.push(
       {
-        flightNumber: "SQ 232",
-        airline: "Singapore Airlines",
-        airlineCode: "SQ",
+        flightNumber: "CX 105",
+        airline: "Cathay Pacific",
+        airlineCode: "CX",
         departureTime: "08:15",
         destination: "Ho Chi Minh City",
         destinationCode: "SGN",
         isDirect: false,
-        stopover: "via Singapore (SIN)",
+        stopover: "via Hong Kong (HKG)",
       },
       {
         flightNumber: "VN 782",
@@ -374,21 +374,21 @@ function getMockFlightsForDate(dateStr: string, originIata: string): Flight[] {
         destination: "Hanoi",
         destinationCode: "HAN",
         isDirect: false,
-        stopover: "via Singapore (SIN)",
+        stopover: "via Hong Kong (HKG)",
       }
     );
   } else {
     // Generic connecting flights for other airports
     connectingFlights.push(
       {
-        flightNumber: "SQ 181",
-        airline: "Singapore Airlines",
-        airlineCode: "SQ",
+        flightNumber: "EK 398",
+        airline: "Emirates",
+        airlineCode: "EK",
         departureTime: "10:00",
         destination: "Ho Chi Minh City",
         destinationCode: "SGN",
         isDirect: false,
-        stopover: "via Singapore (SIN)",
+        stopover: "via Dubai (DXB)",
       },
       {
         flightNumber: "TG 550",
