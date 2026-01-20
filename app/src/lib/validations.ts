@@ -59,12 +59,12 @@ export const applicantSchema = z.object({
 export const visaSpeedSchema = z.enum(["30-min", "4-hour", "1-day", "2-day", "weekend"]);
 export type VisaSpeed = z.infer<typeof visaSpeedSchema>;
 
-// Visa speed pricing (in USD)
+// Visa speed pricing (in USD) - TIER3 base pricing
 export const VISA_SPEED_PRICING: Record<VisaSpeed, number> = {
-  "30-min": 179,
-  "4-hour": 99,
-  "1-day": 69,
-  "2-day": 49,
+  "30-min": 199,
+  "4-hour": 139,
+  "1-day": 99,
+  "2-day": 89,
   "weekend": 249,
 };
 
