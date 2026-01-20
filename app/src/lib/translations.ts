@@ -41,7 +41,7 @@ export const translations = {
     localExperts: "Local Vietnamese Immigration Experts",
     thirtyMinutes: "30 Minutes",
     thirtyMinutesDesc: "Formal Air Travel Approval and Airline Check-In Authorization Document",
-    oneToTwoHours: "1.5 Hours",
+    oneToTwoHours: "1 Hour",
     oneToTwoHoursDesc: "The official E-Visa will be completed and issued through WhatsApp and email before landing.",
     checkFlightStatus: "Check Your Flight Status",
     enterFlightNumber: "Enter flight number (e.g. VN123)",
@@ -269,7 +269,7 @@ export const translations = {
     title: "Our Processing Speed",
     thirtyMin: "30 Minutes",
     thirtyMinDesc: "Formal Air Travel Approval and Airline Check-In Authorization Document",
-    oneToTwo: "1.5 Hours",
+    oneToTwo: "1 Hour",
     oneToTwoDesc: "The official E-Visa will be completed and issued through WhatsApp and email before landing.",
   },
 
@@ -499,7 +499,7 @@ export const translations = {
     // Section 6: Processing & Requirements
     processingTitle: "Processing Times & Requirements",
     processingQ1: "E-Visa processing times:",
-    rushTime: "1.5 Hours",
+    rushTime: "1 Hour",
     rushLabel: "Rush Processing",
     rushNote: "Our fast service",
     standardTime: "1-3 Days",
@@ -705,7 +705,7 @@ export const translations = {
 
   // Operating Hours
   operatingHours: {
-    title: "30-Min & 1.5-Hour Express Service Hours",
+    title: "30-Min & 1-Hour Express Service Hours",
     weekdaysOnly: "Weekdays only:",
     vietnamTime: "8:00 AM - 5:00 PM (Vietnam Time, GMT+7)",
     fromBali: "From Bali/Indonesia:",
@@ -715,8 +715,8 @@ export const translations = {
 
   // Hero Price Section
   heroPrice: {
-    fullVisaDesc: "1.5-Hour Full Visa | Check-in approval letter in 30 min",
-    expressLabel: "1.5-Hour Express",
+    fullVisaDesc: "1-Hour Full Visa | Check-in approval letter in 30 min",
+    expressLabel: "1-Hour Express",
   },
 
   // Legal Pages

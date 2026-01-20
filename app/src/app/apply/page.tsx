@@ -1442,7 +1442,7 @@ function ApplyForm() {
             </div>
             <div className="flex items-center gap-4 p-4 rounded-xl bg-blue-50 border border-blue-200">
               <div className="w-14 h-14 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-lg font-bold">1,5h</span>
+                <span className="text-white text-lg font-bold">1h</span>
               </div>
               <div>
                 <div className="text-blue-700 font-bold text-lg">{t.processing.oneToTwo}</div>
