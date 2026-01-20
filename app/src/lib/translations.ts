@@ -153,7 +153,7 @@ export const translations = {
     q6: "What if my visa is rejected?",
     a6: "We offer a 100% money-back guarantee if your visa is rejected. We have a 99% approval rate and will work with you to ensure success.",
     q7: "Do I need to pay again at the Vietnam airport?",
-    a7: "No additional airport fees. Our price of $179 is all-inclusive. Once you have your e-visa, simply show it at immigration - no extra payments required.",
+    a7: "No additional airport fees. Our price of $199 is all-inclusive. Once you have your e-visa, simply show it at immigration - no extra payments required.",
   },
 
   // Footer

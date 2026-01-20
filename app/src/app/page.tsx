@@ -317,7 +317,7 @@ export default function Home() {
     country.name.toLowerCase().includes(nationalitySearch.toLowerCase())
   );
 
-  const pricePerPerson = 179;
+  const pricePerPerson = 199;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
@@ -867,7 +867,7 @@ export default function Home() {
                     <span className="font-medium text-gray-900 dark:text-white block">{t.sidebar.ourPrice}</span>
                     <span className="text-xs text-gray-600 dark:text-gray-400">{t.heroPrice?.expressLabel || "1.5-Hour Express"}</span>
                   </div>
-                  <span className="font-bold text-xl text-gray-900 dark:text-white">$179</span>
+                  <span className="font-bold text-xl text-gray-900 dark:text-white">$199</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorA}</span>
@@ -971,7 +971,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">$135</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">$139</span>
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
@@ -1024,7 +1024,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">$111</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">$99</span>
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
@@ -1076,7 +1076,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">$99</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">$89</span>
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a

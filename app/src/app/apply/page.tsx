@@ -34,7 +34,7 @@ const VISA_SPEEDS: Record<VisaSpeedKey, {
     nameKey: "speed30MinName",
     description: "Fastest processing - visa ready in 30 minutes",
     descriptionKey: "speed30MinDesc",
-    price: 179,
+    price: 199,
     processingTime: "30 minutes",
   },
   "4-hour": {
@@ -42,7 +42,7 @@ const VISA_SPEEDS: Record<VisaSpeedKey, {
     nameKey: "speed4HourName",
     description: "Quick processing - visa ready in 4 hours",
     descriptionKey: "speed4HourDesc",
-    price: 99,
+    price: 139,
     processingTime: "4 hours",
   },
   "1-day": {
@@ -50,7 +50,7 @@ const VISA_SPEEDS: Record<VisaSpeedKey, {
     nameKey: "speed1DayName",
     description: "Standard processing - visa ready in 1 business day",
     descriptionKey: "speed1DayDesc",
-    price: 69,
+    price: 99,
     processingTime: "1 business day",
   },
   "2-day": {
@@ -58,7 +58,7 @@ const VISA_SPEEDS: Record<VisaSpeedKey, {
     nameKey: "speed2DayName",
     description: "Economy processing - visa ready in 2 business days",
     descriptionKey: "speed2DayDesc",
-    price: 49,
+    price: 89,
     processingTime: "2 business days",
   },
   "weekend": {
@@ -1325,7 +1325,7 @@ function ApplyForm() {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Need it faster? Upgrade to 30-Minute Express ($179)
+                Need it faster? Upgrade to 30-Minute Express ($199)
               </a>
             </div>
           )}

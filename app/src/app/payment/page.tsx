@@ -111,7 +111,7 @@ function PaymentForm() {
   const router = useRouter();
   const applicantCount = Number(searchParams.get("applicants")) || 1;
   const referenceNumber = searchParams.get("ref");
-  const pricePerPerson = 179;
+  const pricePerPerson = 199;
   const totalPrice = pricePerPerson * applicantCount;
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
