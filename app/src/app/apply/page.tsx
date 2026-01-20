@@ -5,8 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-// PhoneVerification removed - using email verification only
-// import { PhoneVerification } from "@/components/ui/phone-verification";
+import { PhoneVerification } from "@/components/ui/phone-verification";
 import { Logo } from "@/components/ui/logo";
 import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
 import { getAirportsForCountry } from "@/lib/amadeus";
@@ -955,9 +954,8 @@ function ApplyForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
-  // Phone verification disabled - will be re-enabled when Twilio account is verified
-  // const [showVerification, setShowVerification] = useState(false);
-  // const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
 
   // Passport scanning state
   const [isScanning, setIsScanning] = useState(false);
@@ -1058,8 +1056,7 @@ function ApplyForm() {
     confirmEmail: "",
   });
 
-  // Phone verification disabled - will be re-enabled when Twilio account is verified
-  // const phoneForVerification = contactInfo.mobile;
+  const phoneForVerification = contactInfo.mobile;
 
   const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>([null]);
   const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>([null]);
@@ -2263,8 +2260,65 @@ function ApplyForm() {
                 </>
               )}
 
-              {/* Phone Verification Section - Disabled until Twilio account is verified */}
-              {/* Phone verification will be re-enabled once SMS/WhatsApp service is configured */}
+              {/* Phone Verification Section */}
+              {contactInfo.mobile && !isPhoneVerified && !showVerification && (
+                <div className="lg:col-span-2">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Verify Your Phone Number</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                          We'll send you a verification code via SMS or WhatsApp to ensure we can reach you for urgent visa updates.
+                        </p>
+                        <button
+                          onClick={() => setShowVerification(true)}
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
+                        >
+                          Verify Phone Number
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {showVerification && !isPhoneVerified && (
+                <div className="lg:col-span-2">
+                  <PhoneVerification
+                    phoneNumber={phoneForVerification}
+                    onVerified={() => {
+                      setIsPhoneVerified(true);
+                      setShowVerification(false);
+                    }}
+                    onCancel={() => setShowVerification(false)}
+                  />
+                </div>
+              )}
+
+              {isPhoneVerified && (
+                <div className="lg:col-span-2">
+                  <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-xl p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center">
+                        <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-green-900 dark:text-green-100">Phone Number Verified ✓</h4>
+                        <p className="text-sm text-green-700 dark:text-green-300">
+                          {phoneForVerification} is verified. We'll send urgent updates to this number.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Navigation Buttons */}
               <div className="lg:col-span-2 flex gap-4 pt-6">
@@ -2328,7 +2382,7 @@ function ApplyForm() {
 
                     <button
                       onClick={handleSubmit}
-                      disabled={isSubmitting || !agreedToTerms || !agreedToPrivacy}
+                      disabled={isSubmitting || !agreedToTerms || !agreedToPrivacy || !isPhoneVerified}
                       className="w-full py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     >
                       {isSubmitting ? (
