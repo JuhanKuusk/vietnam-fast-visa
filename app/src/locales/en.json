@@ -603,11 +603,11 @@
   },
   "operatingHours": {
     "title": "30-Min & 1-Hour Express Service Hours",
-    "weekdaysOnly": "Weekdays only:",
-    "vietnamTime": "8:00 AM - 5:00 PM (Vietnam Time, GMT+7)",
-    "fromBali": "From Bali/Indonesia:",
-    "baliTime": "9:00 AM - 6:00 PM (WITA, GMT+8)",
-    "expressServiceNote": "Express service: Weekdays 8AM-5PM Vietnam Time (9AM-6PM Bali)"
+    "weekdaysOnly": "Weekdays only!",
+    "vietnamTime": "",
+    "fromBali": "",
+    "baliTime": "",
+    "expressServiceNote": ""
   },
   "heroPrice": {
     "fullVisaDesc": "1-Hour Full Visa | Check-in approval letter in 30 min",

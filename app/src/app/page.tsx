@@ -466,12 +466,9 @@ export default function Home() {
                 <div className="flex items-start gap-3">
                   <span className="text-xl flex-shrink-0">🕐</span>
                   <div className="text-left">
-                    <div className="font-semibold text-gray-900 dark:text-white text-sm">{t.operatingHours?.title || "30-Min & 1.5-Hour Express Service Hours"}</div>
+                    <div className="font-semibold text-gray-900 dark:text-white text-sm">{t.operatingHours?.title || "30-Min & 1-Hour Express Service Hours"}</div>
                     <div className="text-gray-600 dark:text-gray-300 text-xs mt-1">
-                      <span className="font-medium">{t.operatingHours?.weekdaysOnly || "Weekdays only:"}</span> {t.operatingHours?.vietnamTime || "8:00 AM - 5:00 PM (Vietnam Time, GMT+7)"}
-                    </div>
-                    <div className="text-gray-500 dark:text-gray-400 text-xs mt-1">
-                      <span className="font-medium">{t.operatingHours?.fromBali || "From Bali/Indonesia:"}</span> {t.operatingHours?.baliTime || "9:00 AM - 6:00 PM (WITA, GMT+8)"}
+                      <span className="font-medium">{t.operatingHours?.weekdaysOnly || "Weekdays only!"}</span>
                     </div>
                   </div>
                 </div>
@@ -881,7 +878,7 @@ export default function Home() {
               <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <div className="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
                   <span className="flex-shrink-0">🕐</span>
-                  <span>{t.operatingHours?.expressServiceNote || "Express service: Weekdays 8AM-5PM Vietnam Time (9AM-6PM Bali)"}</span>
+                  <span>{t.operatingHours?.title || "30-Min & 1-Hour Express Service Hours"}: {t.operatingHours?.weekdaysOnly || "Weekdays only!"}</span>
                 </div>
               </div>
             </div>
