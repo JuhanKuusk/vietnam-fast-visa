@@ -1282,6 +1282,15 @@ export default function Home() {
               <Link href="/terms" className="hover:text-white transition-colors">{t.footer.termsOfService}</Link>
               <Link href="/refund" className="hover:text-white transition-colors">{t.footer.refundPolicy}</Link>
             </div>
+            {/* Disclaimer Banner */}
+            <div className="bg-gray-800 rounded-lg p-4 text-sm text-gray-400 mb-6 max-w-3xl mx-auto text-left">
+              <p className="font-medium text-gray-300 mb-2">
+                {t.legal?.importantDisclaimer || "Important Disclaimer"}
+              </p>
+              <p>
+                {t.legal?.disclaimerBannerText || "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities."}
+              </p>
+            </div>
             <p className="text-sm">{t.footer.copyright}</p>
           </div>
         </div>
