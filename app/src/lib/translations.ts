@@ -33,10 +33,10 @@ export const translations = {
 
   // Hero Section
   hero: {
-    urgencyBadge: "Stuck at check-in? We fix that in 30 minutes!",
+    urgencyBadge: "Stuck at check-in? We can help in as fast as 30 minutes!",
     headline1: "Can't Check In?",
     headline2: "Approval in 30 Minutes",
-    subtitle: "Get your Vietnam E-Visa approval letter in 30 minutes. Pass airline check-in immediately. Full visa ready before you land.",
+    subtitle: "Get your Vietnam E-Visa approval letter in as fast as 30 minutes. Pass airline check-in immediately. Full visa ready before you land.",
     processedIn: "Processed in Ho Chi Minh City",
     localExperts: "Local Vietnamese Immigration Experts",
     thirtyMinutes: "30 Minutes",
@@ -97,7 +97,7 @@ export const translations = {
     needVisaForLonger: "You'll need a visa for stays exceeding the visa-free period.",
     evisaRequired: "E-Visa Required",
     evisaDesc: "You need an e-visa or visa on arrival to enter Vietnam. We can help you get it fast!",
-    weCanHelp: "We process your e-visa in 30 minutes",
+    weCanHelp: "We process your e-visa in as fast as 30 minutes",
     embassyRequired: "Embassy Visa Required",
     embassyDesc: "You must apply for a visa at a Vietnamese embassy before travel.",
     contactUsHelp: "Contact us for assistance with your visa application.",
@@ -143,7 +143,7 @@ export const translations = {
     q1: "Can I get a visa at the Vietnam airport?",
     a1: "No. Vietnam does NOT issue visas at the airport without prior approval. You must have a pre-approved visa letter before your airline will allow you to board. Without this, you cannot fly to Vietnam.",
     q2: "I'm stuck at check-in. Can you help now?",
-    a2: "Yes! This is exactly what we specialize in. Apply now and we'll have your approval letter ready in 30 minutes. Contact us via chat or WhatsApp for immediate assistance.",
+    a2: "Yes! This is exactly what we specialize in. Apply now and we can have your approval letter ready in as fast as 30 minutes. Contact us via chat or WhatsApp for immediate assistance.",
     q3: "How long is the e-visa valid?",
     a3: "The Vietnam e-visa is valid for 30-90 days with single or multiple entry options.",
     q4: "What documents do I need?",
@@ -209,11 +209,11 @@ export const translations = {
     visaFree30: "You can enter Vietnam visa-free for up to 30 days!",
     visaFree21: "You can enter Vietnam visa-free for up to 21 days!",
     visaFree14: "You can enter Vietnam visa-free for up to 14 days!",
-    evisaEligible: "You are eligible for Vietnam E-Visa! Approval letter in just 30 minutes.",
+    evisaEligible: "You are eligible for Vietnam E-Visa! Approval letter in as fast as 30 minutes.",
     embassyRequired: "You need to apply for a visa at the Vietnam Embassy or Consulate in your country.",
     longerStay: "For stays longer than {days} days, you will need to apply for an E-Visa or visit a Vietnamese Embassy.",
     evisaValid: "E-Visa is valid for 30-90 days with single or multiple entry.",
-    applyBelow: "Apply below - Approval in 30 minutes!",
+    applyBelow: "Apply below - Fast processing available!",
     departingCountry: "Departing From Country",
     departingAirport: "Departing From City/Airport",
     selectAirport: "Select airport...",
@@ -413,7 +413,7 @@ export const translations = {
   applyTrust: {
     secure: "Secure & Encrypted",
     fast: "Fast Processing",
-    official: "Official E-Visa",
+    official: "E-Visa Processing",
   },
 
   // Apply Page - Header
@@ -528,7 +528,7 @@ export const translations = {
     specialQ1: "",
     specialA1: "",
     specialQ2: "Phu Quoc Island - Special visa exemption:",
-    specialA2: "All nationalities can visit Phu Quoc Island for up to 30 days without a visa if arriving directly by international flight and staying only on the island.",
+    specialA2: "Most nationalities can visit Phu Quoc Island for up to 30 days without a visa if arriving directly by international flight and staying only on the island. Check with Vietnamese immigration for your specific eligibility.",
     specialQ3: "Business visa requirements:",
     businessReq1: "Invitation letter from Vietnamese company",
     businessReq2: "Business registration of the host company",
@@ -725,7 +725,7 @@ export const translations = {
     emailLabel: "Email",
     legalLinks: "Legal",
     allRightsReserved: "All rights reserved.",
-    footerDescription: "Fast, reliable Vietnam visa assistance service. Get your approval letter in 30 minutes.",
+    footerDescription: "Fast, reliable Vietnam visa assistance service. Express processing available.",
     importantDisclaimer: "Important Disclaimer",
     disclaimerBannerText: "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities.",
 
