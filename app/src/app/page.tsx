@@ -336,12 +336,24 @@ export default function Home() {
 
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <Link href="/" className="hover:opacity-90 transition-opacity">
-              <Logo size="md" taglineText={t.header.logoTagline} />
-            </Link>
+            <div className="flex flex-col">
+              <Link href="/" className="hover:opacity-90 transition-opacity">
+                <Logo size="md" taglineText={t.header.logoTagline} />
+              </Link>
+              {/* Mobile contact info below logo */}
+              <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                <a href="mailto:support@vietnamvisahelp.com" className="hover:text-blue-600">
+                  support@vietnamvisahelp.com
+                </a>
+                <span>|</span>
+                <a href="https://wa.me/841205549868" className="hover:text-green-600">
+                  +84 120 554 9868
+                </a>
+              </div>
+            </div>
 
             {/* About, Contact, Theme Toggle & Language */}
             <div className="flex items-center gap-2 sm:gap-4">
@@ -356,7 +368,7 @@ export default function Home() {
                 <span>About Us</span>
               </Link>
               <a
-                href="https://wa.me/3725035137"
+                href="https://wa.me/841205549868"
                 className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
               >
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>

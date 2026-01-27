@@ -8,12 +8,12 @@ interface LogoProps {
   taglineText?: string; // Allow passing translated tagline
 }
 
-export function Logo({ size = "md", showTagline = true, className = "", variant = "dark", taglineText = "Check-in Approval in 30 min" }: LogoProps) {
-  // Sizes increased by 40%
+export function Logo({ size = "md", showTagline = true, className = "", variant = "dark", taglineText = "Urgent Visa Processing" }: LogoProps) {
+  // Sizes - text reduced by 20%
   const sizes = {
-    sm: { icon: 45, text: "text-base", tagline: "text-[11px]" },     // was 32 -> 45
-    md: { icon: 56, text: "text-lg", tagline: "text-sm" },           // was 40 -> 56
-    lg: { icon: 78, text: "text-2xl", tagline: "text-base" },        // was 56 -> 78
+    sm: { icon: 45, text: "text-sm", tagline: "text-[9px]" },        // text: base -> sm (-20%)
+    md: { icon: 56, text: "text-base", tagline: "text-xs" },         // text: lg -> base (-20%)
+    lg: { icon: 78, text: "text-xl", tagline: "text-sm" },           // text: 2xl -> xl (-20%)
   };
 
   const { icon, text, tagline } = sizes[size];
@@ -62,13 +62,13 @@ export function Logo({ size = "md", showTagline = true, className = "", variant 
         </svg>
       </div>
 
-      {/* Text - VietnamVisaHelp in green */}
+      {/* Text - VietnamVisaHelp in blue */}
       <div className="flex flex-col">
-        <span className={`${text} font-bold leading-tight ${variant === "light" ? "text-green-400" : "text-green-600"}`}>
+        <span className={`${text} font-bold leading-tight`} style={{ color: '#2d7ef6' }}>
           VietnamVisaHelp
         </span>
         {showTagline && (
-          <span className={`${tagline} ${variant === "light" ? "text-green-300" : "text-green-600"} tracking-wide font-medium`}>
+          <span className={`${tagline} tracking-wide font-medium`} style={{ color: '#2d7ef6' }}>
             {taglineText}
           </span>
         )}
