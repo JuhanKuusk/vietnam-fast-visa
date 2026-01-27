@@ -112,6 +112,13 @@ export function Footer() {
                   WhatsApp: +372 503 5137
                 </a>
               </li>
+              <li className="pt-3 text-gray-400">
+                <span className="block font-medium text-gray-300 mb-1">Address:</span>
+                Park 7 Building, Floor 38<br />
+                Vinhomes Central Park, 720A<br />
+                Binh Thanh District<br />
+                Ho Chi Minh City, Vietnam
+              </li>
             </ul>
           </div>
 
@@ -158,13 +165,31 @@ export function Footer() {
 
         {/* Disclaimer Banner */}
         <div className="border-t border-gray-700 pt-8 mb-8">
-          <div className="bg-gray-800 rounded-lg p-4 text-sm text-gray-400">
-            <p className="font-medium text-gray-300 mb-2">
+          <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-4 text-sm">
+            <p className="font-semibold text-amber-200 mb-2">
               {t.legal?.importantDisclaimer || "Important Disclaimer"}
             </p>
-            <p>
-              {t.legal?.disclaimerBannerText || "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities."}
+            <p className="text-amber-100/80 mb-3">
+              <span className="font-medium">VietnamVisaHelp.com</span> is a private, third-party visa assistance service and is <span className="font-medium">not affiliated with the Government of Vietnam</span>. We charge a service fee for our assistance. All visa approval decisions are made by Vietnamese immigration authorities.
             </p>
+            <p className="text-amber-100/80 mb-3">
+              <span className="font-medium">Official Government Website:</span>{" "}
+              <a
+                href="https://evisa.xuatnhapcanh.gov.vn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-amber-100"
+              >
+                evisa.xuatnhapcanh.gov.vn
+              </a>
+              {" "}(Government e-Visa portal - $25 USD fee, 3 business days processing)
+            </p>
+            <Link href="/disclaimer" className="inline-flex items-center gap-1 text-amber-200 hover:text-amber-100 font-medium underline">
+              Read our full disclaimer
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
 

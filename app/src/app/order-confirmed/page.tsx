@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Applicant {
@@ -194,6 +195,9 @@ function OrderConfirmedContent() {
           </a>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       <main className="px-5 pb-24">
         {/* Success Section */}

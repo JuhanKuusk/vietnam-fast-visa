@@ -5,6 +5,7 @@ import Link from "next/link";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
 export default function ConfirmationPage() {
   const [referenceNumber] = useState(() => {
@@ -48,6 +49,9 @@ export default function ConfirmationPage() {
           </a>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       <main className="px-5 pb-24">
         {/* Success Section */}

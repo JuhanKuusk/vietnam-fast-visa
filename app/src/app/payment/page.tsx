@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 import {
   Elements,
   PaymentElement,
@@ -180,6 +181,9 @@ function PaymentForm() {
           </a>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       <main className="px-5 pb-24">
         {/* Progress Steps */}

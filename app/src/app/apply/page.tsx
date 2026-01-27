@@ -10,6 +10,7 @@ import { Logo } from "@/components/ui/logo";
 import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
 import { getAirportsForCountry } from "@/lib/amadeus";
 import { DynamicFlights } from "@/components/ui/dynamic-flights";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -1360,6 +1361,9 @@ function ApplyForm() {
           </div>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Selected Visa Speed Banner */}

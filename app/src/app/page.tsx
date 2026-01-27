@@ -8,6 +8,7 @@ import { CitizenshipChecker } from "@/components/ui/citizenship-checker";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 // Visa Info Modal Component
@@ -381,6 +382,9 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       {/* Denied Boarding Banner - Shows on all devices */}
       <div className="py-3 md:py-4 px-4 bg-red-700 dark:bg-red-800">

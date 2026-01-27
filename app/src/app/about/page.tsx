@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { Logo } from "@/components/ui/logo";
 import { Footer } from "@/components/ui/footer";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AboutPage() {
@@ -35,6 +36,9 @@ export default function AboutPage() {
           </div>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

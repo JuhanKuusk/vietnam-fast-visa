@@ -6,6 +6,7 @@ import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Footer } from "@/components/ui/footer";
 import { Logo } from "@/components/ui/logo";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
 export default function TermsPage() {
   const { t } = useLanguage();
@@ -24,6 +25,9 @@ export default function TermsPage() {
           </div>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">

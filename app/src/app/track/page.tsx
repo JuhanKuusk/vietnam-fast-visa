@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
+import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
 interface Applicant {
   id: string;
@@ -110,6 +111,9 @@ export default function TrackPage() {
           </div>
         </div>
       </header>
+
+      {/* Third-Party Disclaimer Banner */}
+      <DisclaimerBanner />
 
       <main className="max-w-2xl mx-auto px-4 py-12">
         <div className="text-center mb-8">
