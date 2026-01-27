@@ -43,8 +43,10 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.AERODATABOX_API_KEY;
 
   if (!apiKey) {
-    // Return mock data for development/demo purposes
-    return NextResponse.json(getMockFlightData(flightNumber, date, origin));
+    return NextResponse.json(
+      { error: "Flight info service unavailable. AERODATABOX_API_KEY not configured." },
+      { status: 503 }
+    );
   }
 
   try {
@@ -85,14 +87,18 @@ export async function GET(request: NextRequest) {
         );
       }
       if (response.status === 403 || response.status === 401) {
-        // API key issue - fall back to mock data
-        console.error("AeroDataBox API key issue, returning mock data");
-        return NextResponse.json(getMockFlightData(flightNumber, date, origin));
+        console.error("AeroDataBox API key issue");
+        return NextResponse.json(
+          { error: "Flight info service authentication failed. Please check API key." },
+          { status: 401 }
+        );
       }
       if (response.status === 429) {
-        // Rate limit exceeded - fall back to mock data
-        console.error("AeroDataBox rate limit exceeded, returning mock data");
-        return NextResponse.json(getMockFlightData(flightNumber, date, origin));
+        console.error("AeroDataBox rate limit exceeded");
+        return NextResponse.json(
+          { error: "Flight info service temporarily unavailable. Rate limit exceeded." },
+          { status: 429 }
+        );
       }
       throw new Error(`API error: ${response.status}`);
     }
@@ -263,127 +269,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(flightData);
   } catch (error) {
     console.error("Flight info error:", error);
-    // On any error, return mock data so the feature still works
-    return NextResponse.json(getMockFlightData(flightNumber, date, origin));
+    return NextResponse.json(
+      { error: "Failed to fetch flight information. Please try again." },
+      { status: 500 }
+    );
   }
 }
 
-// Mock data for development/demo when no API key is configured
-function getMockFlightData(flightNumber: string, date: string | null, origin: string | null): FlightData {
-  // Normalize flight number: remove spaces
-  const normalizedFlightNumber = flightNumber.replace(/\s+/g, "").trim().toUpperCase();
-
-  // Set departure time to 3 hours from now for demo
-  const departureTime = new Date();
-  departureTime.setHours(departureTime.getHours() + 3);
-
-  // Check-in opens 3 hours before, closes 45 minutes before
-  const checkInOpeningTime = new Date(departureTime.getTime() - 3 * 60 * 60 * 1000);
-  const checkInClosingTime = new Date(departureTime.getTime() - 45 * 60 * 1000);
-  const now = new Date();
-  const minutesUntilOpen = Math.floor((checkInOpeningTime.getTime() - now.getTime()) / (1000 * 60));
-  const minutesUntilClose = Math.floor((checkInClosingTime.getTime() - now.getTime()) / (1000 * 60));
-
-  let checkInStatus: FlightData["checkInStatus"] = "open";
-  if (minutesUntilOpen > 0) {
-    checkInStatus = "not_open_yet";
-  } else if (minutesUntilClose <= 60 && minutesUntilClose > 0) {
-    checkInStatus = "closing_soon";
-  } else if (minutesUntilClose <= 0) {
-    checkInStatus = "closed";
-  }
-
-  // Parse airline code from normalized flight number
-  const match = normalizedFlightNumber.match(/^([A-Z]{2,3})/i);
-  const airlineCode = match ? match[1].toUpperCase() : "XX";
-
-  const airlines: Record<string, string> = {
-    "VN": "Vietnam Airlines",
-    "VJ": "VietJet Air",
-    "QH": "Bamboo Airways",
-    "BL": "Pacific Airlines",
-    "SQ": "Singapore Airlines",
-    "QR": "Qatar Airways",
-    "EK": "Emirates",
-    "TG": "Thai Airways",
-    "CX": "Cathay Pacific",
-    "MH": "Malaysia Airlines",
-    "BA": "British Airways",
-    "LH": "Lufthansa",
-    "KE": "Korean Air",
-    "OZ": "Asiana Airlines",
-    "JL": "Japan Airlines",
-    "NH": "ANA",
-    "CZ": "China Southern",
-    "CA": "Air China",
-    "MU": "China Eastern",
-  };
-
-  // Routes based on airline - default routes
-  const defaultRoutes: Record<string, { from: string; to: string; fromTerminal: string; toTerminal: string }> = {
-    "VN": { from: "Incheon International Airport (ICN)", to: "Noi Bai International Airport (HAN)", fromTerminal: "1", toTerminal: "2" },
-    "VJ": { from: "Changi Airport (SIN)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "4", toTerminal: "1" },
-    "QH": { from: "Narita International Airport (NRT)", to: "Da Nang International Airport (DAD)", fromTerminal: "2", toTerminal: "1" },
-    "SQ": { from: "Changi Airport (SIN)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "3", toTerminal: "2" },
-    "TG": { from: "Suvarnabhumi Airport (BKK)", to: "Noi Bai International Airport (HAN)", fromTerminal: "Main", toTerminal: "2" },
-    "EK": { from: "Dubai International Airport (DXB)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "3", toTerminal: "2" },
-    "QR": { from: "Hamad International Airport (DOH)", to: "Noi Bai International Airport (HAN)", fromTerminal: "Main", toTerminal: "2" },
-    "CX": { from: "Hong Kong International Airport (HKG)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "1", toTerminal: "2" },
-    "MH": { from: "Kuala Lumpur International Airport (KUL)", to: "Noi Bai International Airport (HAN)", fromTerminal: "M", toTerminal: "2" },
-    "KE": { from: "Incheon International Airport (ICN)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "2", toTerminal: "2" },
-  };
-
-  // Routes from DPS (Denpasar Bali) - used when origin is DPS
-  const dpsRoutes: Record<string, { from: string; to: string; fromTerminal: string; toTerminal: string }> = {
-    "VN": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "2" },
-    "VJ": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "1" },
-    "QH": { from: "Ngurah Rai International Airport (DPS)", to: "Da Nang International Airport (DAD)", fromTerminal: "I", toTerminal: "1" },
-    "SQ": { from: "Ngurah Rai International Airport (DPS)", to: "Noi Bai International Airport (HAN)", fromTerminal: "I", toTerminal: "2" },
-    "TG": { from: "Ngurah Rai International Airport (DPS)", to: "Noi Bai International Airport (HAN)", fromTerminal: "I", toTerminal: "2" },
-    "MH": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "2" },
-    "GA": { from: "Ngurah Rai International Airport (DPS)", to: "Noi Bai International Airport (HAN)", fromTerminal: "I", toTerminal: "2" },
-    "CX": { from: "Ngurah Rai International Airport (DPS)", to: "Tan Son Nhat International Airport (SGN)", fromTerminal: "I", toTerminal: "2" },
-  };
-
-  // Select route based on origin
-  let route: { from: string; to: string; fromTerminal: string; toTerminal: string };
-  const originUpper = origin?.toUpperCase();
-
-  if (originUpper === "DPS" || originUpper === "WADD") {
-    route = dpsRoutes[airlineCode] || {
-      from: "Ngurah Rai International Airport (DPS)",
-      to: "Tan Son Nhat International Airport (SGN)",
-      fromTerminal: "I",
-      toTerminal: "2"
-    };
-  } else {
-    route = defaultRoutes[airlineCode] || {
-      from: "Singapore Changi Airport (SIN)",
-      to: "Tan Son Nhat International Airport (SGN)",
-      fromTerminal: "3",
-      toTerminal: "2"
-    };
-  }
-
-  return {
-    flightNumber: normalizedFlightNumber,
-    airline: airlines[airlineCode] || `${airlineCode} Airlines`,
-    departure: {
-      airport: route.from,
-      scheduledTime: departureTime.toISOString(),
-      terminal: route.fromTerminal,
-      gate: `${String.fromCharCode(65 + Math.floor(Math.random() * 4))}${Math.floor(Math.random() * 20) + 1}`,
-    },
-    arrival: {
-      airport: route.to,
-      scheduledTime: new Date(departureTime.getTime() + 2 * 60 * 60 * 1000).toISOString(),
-      terminal: route.toTerminal,
-    },
-    status: "On Time",
-    checkInOpeningTime: checkInOpeningTime.toISOString(),
-    checkInClosingTime: checkInClosingTime.toISOString(),
-    checkInStatus,
-    minutesUntilCheckInOpens: minutesUntilOpen > 0 ? minutesUntilOpen : null,
-    minutesUntilCheckInCloses: minutesUntilClose > 0 ? minutesUntilClose : null,
-  };
-}

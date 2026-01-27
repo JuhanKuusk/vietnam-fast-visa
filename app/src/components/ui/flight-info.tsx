@@ -121,7 +121,14 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
   }
 
   if (error) {
-    return null; // Silently fail - don't show errors for flight lookup
+    return (
+      <div className="mt-3 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+        <div className="flex items-center gap-2 text-red-700 dark:text-red-300">
+          <span>⚠️</span>
+          <span className="text-sm">{error}</span>
+        </div>
+      </div>
+    );
   }
 
   if (!flightData) {
