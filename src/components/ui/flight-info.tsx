@@ -31,7 +31,7 @@ interface FlightInfoProps {
   date?: string;
   origin?: string; // Optional: origin airport code (e.g., "DPS") for accurate lookup
   onCheckInUrgent?: () => void;
-  onFlightData?: (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string }) => void;
+  onFlightData?: (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => void;
 }
 
 export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlightData }: FlightInfoProps) {
@@ -82,14 +82,17 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
         }
 
         // Pass flight data to parent for pre-filling apply form
-        if (onFlightData && data.arrival) {
-          // Extract airport code from string like "Noi Bai International (HAN)"
+        if (onFlightData && data.arrival && data.departure) {
+          // Extract airport codes from strings like "Noi Bai International (HAN)"
           const arrivalAirportMatch = data.arrival.airport.match(/\(([A-Z]{3})\)/);
           const arrivalAirportCode = arrivalAirportMatch ? arrivalAirportMatch[1] : "";
+          const departureAirportMatch = data.departure.airport.match(/\(([A-Z]{3})\)/);
+          const departureAirportCode = departureAirportMatch ? departureAirportMatch[1] : "";
           onFlightData({
             arrivalAirport: data.arrival.airport,
             arrivalAirportCode,
             departureAirport: data.departure.airport,
+            departureAirportCode,
           });
         }
       } catch {

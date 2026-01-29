@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
@@ -1062,6 +1062,22 @@ function ApplyForm() {
     return tomorrow.toISOString().split("T")[0];
   });
 
+  // Handle flight data to auto-fill airport fields
+  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+    // Check if the arrival airport is a Vietnamese airport (entry port)
+    const vietnamAirportCodes = ENTRY_PORTS.filter(p => p.type === "airport").map(p => p.code);
+
+    if (vietnamAirportCodes.includes(data.arrivalAirportCode)) {
+      // Auto-fill entry port if flight arrives in Vietnam
+      setTravelDetails(prev => ({
+        ...prev,
+        entryPort: data.arrivalAirportCode,
+        // Also set exit port to same airport if not already set
+        exitPort: prev.exitPort || data.arrivalAirportCode,
+      }));
+    }
+  }, []);
+
   const updateApplicant = (field: keyof ApplicantData, value: string | boolean) => {
     const updated = [...applicants];
     updated[currentApplicant] = { ...updated[currentApplicant], [field]: value };
@@ -1467,6 +1483,7 @@ function ApplyForm() {
             <FlightInfo
               flightNumber={travelDetails.flightNumber}
               date={flightCheckDate}
+              onFlightData={handleFlightData}
             />
           )}
         </div>
