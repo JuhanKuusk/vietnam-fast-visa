@@ -101,6 +101,16 @@ export default function DisclaimerPage() {
                   </tr>
                 </thead>
                 <tbody>
+                  <tr className="bg-amber-50 dark:bg-amber-900/10">
+                    <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-gray-700 dark:text-gray-300">
+                      <strong>Weekend / Holiday</strong>
+                      <br />
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Processing on weekends & holidays</span>
+                    </td>
+                    <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center font-bold text-amber-600 dark:text-amber-400">$249 USD</td>
+                    <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-600 dark:text-gray-400">$25 USD</td>
+                    <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-center text-gray-600 dark:text-gray-400">$224 USD</td>
+                  </tr>
                   <tr className="bg-red-50 dark:bg-red-900/10">
                     <td className="border border-gray-300 dark:border-gray-600 px-4 py-3 text-gray-700 dark:text-gray-300">
                       <strong>Emergency</strong>

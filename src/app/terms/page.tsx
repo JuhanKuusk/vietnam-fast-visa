@@ -179,6 +179,7 @@ export default function TermsPage() {
               We offer various processing speeds:
             </p>
             <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
+              <li><strong>Weekend / Holiday:</strong> Processing available on weekends and public holidays</li>
               <li><strong>Emergency:</strong> 15-30 minutes (with Check-In approval letter)</li>
               <li><strong>Urgent:</strong> 1 hour (during business hours, for eligible applications)</li>
               <li><strong>Express:</strong> 4 hours</li>
