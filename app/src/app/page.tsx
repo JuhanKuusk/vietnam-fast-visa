@@ -287,11 +287,23 @@ export default function Home() {
   const { t, isLoading } = useLanguage();
   const [formData, setFormData] = useState({
     flightNumber: "",
+    flightDate: (() => {
+      // Default to tomorrow for apply form
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      return tomorrow.toISOString().split("T")[0];
+    })(),
     nationality: "",
     purpose: "tourist",
   });
   const [showVisaInfo, setShowVisaInfo] = useState(false);
   const [heroFlightNumber, setHeroFlightNumber] = useState("");
+  const [heroFlightDate, setHeroFlightDate] = useState(() => {
+    // Default to tomorrow's date for better UX (most users search for future flights)
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split("T")[0];
+  });
   const [nationalitySearch, setNationalitySearch] = useState("");
   const [showNationalityDropdown, setShowNationalityDropdown] = useState(false);
   const [flightArrivalData, setFlightArrivalData] = useState<{
@@ -465,7 +477,7 @@ export default function Home() {
                   <span className="text-xl">✈️</span>
                   <span className="font-bold text-gray-900 dark:text-white">{t.hero.checkFlightStatus}</span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     value={heroFlightNumber}
@@ -473,10 +485,18 @@ export default function Home() {
                     placeholder={t.hero.enterFlightNumber}
                     className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:border-transparent"
                   />
+                  <input
+                    type="date"
+                    value={heroFlightDate}
+                    onChange={(e) => setHeroFlightDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                    className="px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:border-transparent"
+                  />
                 </div>
                 {heroFlightNumber && heroFlightNumber.length >= 3 && (
                   <FlightInfo
                     flightNumber={heroFlightNumber}
+                    date={heroFlightDate}
                   />
                 )}
               </div>
@@ -586,23 +606,33 @@ export default function Home() {
                     <span className="text-xl">✈️</span>
                     <span className="font-bold text-gray-900 dark:text-white">{t.form?.yourFlightNumber || "Your Flight Number"}</span>
                   </div>
-                  <input
-                    type="text"
-                    value={formData.flightNumber}
-                    onChange={(e) => {
-                      setFormData({ ...formData, flightNumber: e.target.value.toUpperCase() });
-                      // Reset flight data when changing flight number
-                      if (e.target.value.length < 3) {
-                        setFlightArrivalData(null);
-                      }
-                    }}
-                    placeholder={t.form.flightPlaceholder}
-                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
-                  />
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={formData.flightNumber}
+                      onChange={(e) => {
+                        setFormData({ ...formData, flightNumber: e.target.value.toUpperCase() });
+                        // Reset flight data when changing flight number
+                        if (e.target.value.length < 3) {
+                          setFlightArrivalData(null);
+                        }
+                      }}
+                      placeholder={t.form.flightPlaceholder}
+                      className="flex-1 px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
+                    />
+                    <input
+                      type="date"
+                      value={formData.flightDate}
+                      onChange={(e) => setFormData({ ...formData, flightDate: e.target.value })}
+                      min={new Date().toISOString().split("T")[0]}
+                      className="px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
+                    />
+                  </div>
                   {/* Flight Info - Shows check-in time and gate when flight number is entered */}
                   {formData.flightNumber && formData.flightNumber.length >= 3 && (
                     <FlightInfo
                       flightNumber={formData.flightNumber}
+                      date={formData.flightDate}
                       onFlightData={handleFlightData}
                     />
                   )}
