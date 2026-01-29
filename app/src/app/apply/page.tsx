@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { PhoneVerification } from "@/components/ui/phone-verification";
 import { Logo } from "@/components/ui/logo";
 import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
+import { FlightCheckBox } from "@/components/ui/flight-check-box";
 import { getAirportsForCountry } from "@/lib/amadeus";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
@@ -944,6 +945,7 @@ function ApplyForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [confirmedInfoCorrect, setConfirmedInfoCorrect] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
   const [showVerification, setShowVerification] = useState(false);
@@ -1053,6 +1055,29 @@ function ApplyForm() {
   const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>([null]);
   const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>([null]);
 
+  // Flight check state
+  const [flightCheckDate, setFlightCheckDate] = useState(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split("T")[0];
+  });
+
+  // Handle flight data to auto-fill airport fields
+  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+    // Check if the arrival airport is a Vietnamese airport (entry port)
+    const vietnamAirportCodes = ENTRY_PORTS.filter(p => p.type === "airport").map(p => p.code);
+
+    if (vietnamAirportCodes.includes(data.arrivalAirportCode)) {
+      // Auto-fill entry port if flight arrives in Vietnam
+      setTravelDetails(prev => ({
+        ...prev,
+        entryPort: data.arrivalAirportCode,
+        // Also set exit port to same airport if not already set
+        exitPort: prev.exitPort || data.arrivalAirportCode,
+      }));
+    }
+  }, []);
+
   const updateApplicant = (field: keyof ApplicantData, value: string | boolean) => {
     const updated = [...applicants];
     updated[currentApplicant] = { ...updated[currentApplicant], [field]: value };
@@ -1140,9 +1165,14 @@ function ApplyForm() {
     setSubmitError(null);
 
     try {
-      // Validate terms and privacy agreement
+      // Validate information confirmation and terms agreement
+      if (!confirmedInfoCorrect) {
+        setSubmitError("Please confirm that the information provided is correct");
+        setIsSubmitting(false);
+        return;
+      }
       if (!agreedToTerms || !agreedToPrivacy) {
-        setSubmitError("Please agree to the Terms of Service and Privacy Policy");
+        setSubmitError("Please agree to the Terms & Conditions, Refund Policy, and Privacy Policy");
         setIsSubmitting(false);
         return;
       }
@@ -1339,22 +1369,30 @@ function ApplyForm() {
           <a href="/" className="flex items-center gap-3">
             <Logo size="md" taglineText={t.header?.logoTagline || t.applyHeader?.tagline || "Check-in Approval in 30 min"} />
           </a>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            {/* About Us Button - Blue */}
             <a
-              href="https://wa.me/841205549868"
-              className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+              href="/about"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors hover:opacity-90"
+              style={{ backgroundColor: '#2d7ef6' }}
             >
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              <span className="hidden sm:inline">{t.applyHeader.support}</span>
+              About Us
+            </a>
+            {/* WhatsApp Button - Green */}
+            <a
+              href="https://wa.me/3725035137"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              WhatsApp
             </a>
             <ThemeToggle />
             <LanguageSelector />
           </div>
         </div>
       </header>
-
-      {/* Third-Party Disclaimer Banner */}
-      <DisclaimerBanner />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Selected Visa Speed Banner */}
@@ -1417,6 +1455,19 @@ function ApplyForm() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Flight Status Check Box with Connection Flight Support */}
+        <div className="mb-6">
+          <FlightCheckBox
+            flightNumber={travelDetails.flightNumber}
+            onFlightNumberChange={(value) => setTravelDetails({ ...travelDetails, flightNumber: value })}
+            flightDate={flightCheckDate}
+            onFlightDateChange={setFlightCheckDate}
+            onFlightData={handleFlightData}
+            title="Check Your Flight Status"
+            placeholder="e.g. VN123, CX841"
+          />
         </div>
 
         {/* Citizenship Checker - Only show if nationality not already provided from homepage */}
@@ -2342,42 +2393,88 @@ function ApplyForm() {
                       language={language}
                     />
 
-                    {/* Terms and Privacy Checkboxes */}
+                    {/* Scrollable Terms & Conditions Preview Box */}
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                      <div className="bg-gray-100 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600">
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Terms & Conditions</h4>
+                      </div>
+                      <div className="h-[150px] overflow-y-auto p-4 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">1. Definitions</p>
+                        <p className="mb-3">&quot;Website&quot; refers to VietnamVisaHelp.com. &quot;Service&quot; refers to the Vietnam e-Visa application assistance provided. &quot;Client&quot; or &quot;You&quot; refers to any individual using our Service. &quot;We&quot;, &quot;Us&quot;, or &quot;Our&quot; refers to VietnamVisaHelp.com and its operators.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">2. Acceptance of Terms</p>
+                        <p className="mb-3">By using our Website and Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. You understand that VietnamVisaHelp.com is an independent visa assistance service and is NOT affiliated with the Vietnamese Government or any governmental body.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">3. Nature of Our Service</p>
+                        <p className="mb-3">VietnamVisaHelp.com provides professional visa application assistance services including document review and verification, application form preparation and submission, 24/7 customer support, application status tracking, and express processing options. We do not issue visas. All visa decisions are made solely by the Vietnam Immigration Department.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">4. Document Requirements</p>
+                        <p className="mb-3">You must provide a valid passport with at least 6 months validity, a clear scan of your passport data page, a recent passport-style photograph, and accurate travel dates. You are solely responsible for ensuring all information provided is accurate and complete.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">5. Fees and Payment</p>
+                        <p className="mb-3">Our fees consist of: Government Fee (the official fee charged by the Vietnam Immigration Department - currently $25 USD for single entry, $50 USD for multiple entry) and Service Fee (our processing and assistance fee, which varies based on processing speed selected). All fees are clearly displayed before payment.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">6. Refund Policy</p>
+                        <p className="mb-3">Before submission: Full refund available if you cancel before we submit your application. After submission: Government fees are non-refundable once the application is submitted to Vietnamese authorities. Visa denial due to our errors: We will refund our service fee. Client error: No refund is available if the visa is denied due to incorrect information provided by you.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">7. Warnings and Disclaimers</p>
+                        <p className="mb-3">VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service that charges fees for visa application assistance. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) without using our services. Visa approval is at the sole discretion of Vietnamese immigration authorities.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">8. Limitation of Liability</p>
+                        <p className="mb-3">We are not responsible for: visa refusals or delays by the Vietnam Immigration Department, entry denial at Vietnamese borders, travel disruptions or missed flights, changes in Vietnamese visa policies, consequences of incorrect information provided by you, or technical issues beyond our control. Our total liability shall not exceed the amount you paid for our services.</p>
+
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">9. Privacy and Data Protection</p>
+                        <p className="mb-3">Your personal information is collected only for visa application processing purposes, stored securely using industry-standard encryption, shared only with the Vietnam Immigration Department as required, and never sold to third parties for marketing purposes.</p>
+
+                        <p className="text-blue-600 dark:text-blue-400 mt-4">
+                          <a href="/terms" target="_blank" className="hover:underline">Read full Terms & Conditions →</a>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Confirmation Checkboxes */}
                     <div className="space-y-3 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
                       <label className="flex items-start gap-3 cursor-pointer">
                         <input
                           type="checkbox"
-                          checked={agreedToTerms}
-                          onChange={(e) => setAgreedToTerms(e.target.checked)}
+                          checked={confirmedInfoCorrect}
+                          onChange={(e) => setConfirmedInfoCorrect(e.target.checked)}
                           className="w-5 h-5 mt-0.5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 flex-shrink-0"
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
-                          I have read and agree to the{" "}
-                          <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                            Terms of Service
-                          </a>
+                          I confirm that the above information is correct
                         </span>
                       </label>
                       <label className="flex items-start gap-3 cursor-pointer">
                         <input
                           type="checkbox"
-                          checked={agreedToPrivacy}
-                          onChange={(e) => setAgreedToPrivacy(e.target.checked)}
+                          checked={agreedToTerms && agreedToPrivacy}
+                          onChange={(e) => {
+                            setAgreedToTerms(e.target.checked);
+                            setAgreedToPrivacy(e.target.checked);
+                          }}
                           className="w-5 h-5 mt-0.5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 flex-shrink-0"
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
                           I have read and agree to the{" "}
+                          <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                            Terms & Conditions
+                          </a>
+                          ,{" "}
+                          <a href="/refund" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                            Cancellation and Refund Policy
+                          </a>
+                          , and{" "}
                           <a href="/privacy" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
                             Privacy Policy
                           </a>
-                          {" "}including SMS communications
                         </span>
                       </label>
                     </div>
 
                     <button
                       onClick={handleSubmit}
-                      disabled={isSubmitting || !agreedToTerms || !agreedToPrivacy}
+                      disabled={isSubmitting || !confirmedInfoCorrect || !agreedToTerms || !agreedToPrivacy}
                       className="w-full py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                     >
                       {isSubmitting ? (
@@ -2742,7 +2839,7 @@ function ApplyForm() {
 
       {/* WhatsApp Button */}
       <a
-        href="https://wa.me/841205549868?text=Hi, I need help with my visa application!"
+        href="https://wa.me/3725035137?text=Hi, I need help with my visa application!"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110 z-50"

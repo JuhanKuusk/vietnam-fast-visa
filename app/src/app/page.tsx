@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import { EncryptedText } from "@/components/ui/encrypted-text";
-import { FlightInfo } from "@/components/ui/flight-info";
+import { FlightCheckBox } from "@/components/ui/flight-check-box";
 import { CitizenshipChecker } from "@/components/ui/citizenship-checker";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -313,7 +313,7 @@ export default function Home() {
   ];
 
   // Handle flight data from FlightInfo component - memoized to prevent infinite re-renders
-  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string }) => {
+  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
     setFlightArrivalData(data);
   }, []);
 
@@ -567,36 +567,21 @@ export default function Home() {
                     <span className="text-xl">✈️</span>
                     <span className="font-bold text-gray-900 dark:text-white">{t.form?.yourFlightNumber || "Your Flight Number"}</span>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <input
-                      type="text"
-                      value={formData.flightNumber}
-                      onChange={(e) => {
-                        setFormData({ ...formData, flightNumber: e.target.value.toUpperCase() });
-                        // Reset flight data when changing flight number
-                        if (e.target.value.length < 3) {
-                          setFlightArrivalData(null);
-                        }
-                      }}
-                      placeholder={t.form.flightPlaceholder}
-                      className="flex-1 px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
-                    />
-                    <input
-                      type="date"
-                      value={formData.flightDate}
-                      onChange={(e) => setFormData({ ...formData, flightDate: e.target.value })}
-                      min={new Date().toISOString().split("T")[0]}
-                      className="px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500"
-                    />
-                  </div>
-                  {/* Flight Info - Shows check-in time and gate when flight number is entered */}
-                  {formData.flightNumber && formData.flightNumber.length >= 3 && (
-                    <FlightInfo
-                      flightNumber={formData.flightNumber}
-                      date={formData.flightDate}
-                      onFlightData={handleFlightData}
-                    />
-                  )}
+                  <FlightCheckBox
+                    flightNumber={formData.flightNumber}
+                    onFlightNumberChange={(value) => {
+                      setFormData({ ...formData, flightNumber: value });
+                      // Reset flight data when changing flight number
+                      if (value.length < 3) {
+                        setFlightArrivalData(null);
+                      }
+                    }}
+                    flightDate={formData.flightDate}
+                    onFlightDateChange={(value) => setFormData({ ...formData, flightDate: value })}
+                    onFlightData={handleFlightData}
+                    placeholder={t.form.flightPlaceholder}
+                    embedded={true}
+                  />
                 </div>
 
                 {/* Check Your Visa Requirements - Second Box */}
