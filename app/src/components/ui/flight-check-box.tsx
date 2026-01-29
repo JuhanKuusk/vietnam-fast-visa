@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { FlightInfo } from "./flight-info";
 
 interface FlightCheckBoxProps {
@@ -28,21 +28,33 @@ export function FlightCheckBox({
   const [hasConnection, setHasConnection] = useState(false);
   const [connectionFlightNumber, setConnectionFlightNumber] = useState("");
 
+  // Use refs to store latest values without causing re-renders
+  const hasConnectionRef = useRef(hasConnection);
+  const onFlightDataRef = useRef(onFlightData);
+
+  // Keep refs in sync
+  useEffect(() => {
+    hasConnectionRef.current = hasConnection;
+    onFlightDataRef.current = onFlightData;
+  }, [hasConnection, onFlightData]);
+
   // Handle connection flight data - this is the one that arrives in Vietnam
-  const handleConnectionFlightData = (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+  // Memoized with useCallback to prevent infinite re-renders in FlightInfo
+  const handleConnectionFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
     // Pass the connection flight data to parent (this is the flight arriving in Vietnam)
-    if (onFlightData) {
-      onFlightData(data);
+    if (onFlightDataRef.current) {
+      onFlightDataRef.current(data);
     }
-  };
+  }, []);
 
   // Handle main flight data - only use if no connection flight
-  const handleMainFlightData = (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+  // Memoized with useCallback to prevent infinite re-renders in FlightInfo
+  const handleMainFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
     // Only pass to parent if there's no connection flight
-    if (!hasConnection && onFlightData) {
-      onFlightData(data);
+    if (!hasConnectionRef.current && onFlightDataRef.current) {
+      onFlightDataRef.current(data);
     }
-  };
+  }, []);
 
   const content = (
     <>
