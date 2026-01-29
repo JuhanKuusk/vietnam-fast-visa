@@ -357,7 +357,7 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
       {/* WhatsApp Contact Button - show for all valid check-in statuses */}
       {(flightData.checkInStatus === "closing_soon" || flightData.checkInStatus === "open" || flightData.checkInStatus === "not_open_yet") && (
         <a
-          href={`https://wa.me/3725035137?text=${encodeURIComponent(
+          href={`https://wa.me/841205549868?text=${encodeURIComponent(
             flightData.checkInStatus === "closing_soon"
               ? "URGENT: I need help with my Vietnam visa! My check-in is closing soon!"
               : flightData.checkInStatus === "open"

@@ -1350,7 +1350,7 @@ function ApplyForm() {
           </a>
           <div className="flex items-center gap-4">
             <a
-              href="https://wa.me/3725035137"
+              href="https://wa.me/841205549868"
               className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors"
             >
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -2751,7 +2751,7 @@ function ApplyForm() {
 
       {/* WhatsApp Button */}
       <a
-        href="https://wa.me/3725035137?text=Hi, I need help with my visa application!"
+        href="https://wa.me/841205549868?text=Hi, I need help with my visa application!"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110 z-50"

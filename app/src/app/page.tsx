@@ -399,8 +399,12 @@ export default function Home() {
             {/* Main Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
               <span style={{ color: '#c52e3a' }}>{t.hero.headline1}</span>
-              <br />
-              <span style={{ color: '#5eca52' }}>{t.hero.headline2}</span>
+              {t.hero.headline2 && (
+                <>
+                  <br />
+                  <span style={{ color: '#5eca52' }}>{t.hero.headline2}</span>
+                </>
+              )}
             </h1>
 
             <p className="text-xl text-black dark:text-gray-300 mb-6 max-w-2xl mx-auto">
@@ -501,7 +505,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-[38px]">
               {/* WhatsApp CTA Button */}
               <a
-                href="https://wa.me/3725035137?text=Hi, I need help with Vietnam visa!"
+                href="https://wa.me/841205549868?text=Hi, I need help with Vietnam visa!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 h-14"
@@ -1234,7 +1238,7 @@ export default function Home() {
             <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm sm:text-base">{t.faq.stillHaveQuestions}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href="https://wa.me/3725035137?text=Hi, I have a question about Vietnam visa!"
+                href="https://wa.me/841205549868?text=Hi, I have a question about Vietnam visa!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 text-white font-medium rounded-xl transition-colors text-sm sm:text-base hover:opacity-90"
@@ -1280,7 +1284,7 @@ export default function Home() {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/3725035137?text=Hi, I need an urgent Vietnam visa!"
+        href="https://wa.me/841205549868?text=Hi, I need an urgent Vietnam visa!"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110 z-50"

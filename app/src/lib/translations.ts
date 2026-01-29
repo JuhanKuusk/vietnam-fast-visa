@@ -35,7 +35,7 @@ export const translations = {
   hero: {
     urgencyBadge: "Stuck at check-in? We can help in as fast as 30 minutes!",
     headline1: "Can't Check In?",
-    headline2: "Approval in 30 Minutes",
+    headline2: "",
     subtitle: "Get your Vietnam E-Visa approval letter in as fast as 30 minutes. Pass airline check-in immediately. Full visa ready before you land.",
     processedIn: "Processed in Ho Chi Minh City",
     localExperts: "Independent Vietnamese Legal Services with 24/7 Support",
