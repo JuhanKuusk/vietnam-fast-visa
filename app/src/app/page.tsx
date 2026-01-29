@@ -531,11 +531,11 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
-              <div className="text-3xl font-bold" style={{ color: '#c41e3a' }}>10,000+</div>
+              <div className="text-3xl font-bold" style={{ color: '#c41e3a' }}>2,500+</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.happyCustomers}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white">99%</div>
+              <div className="text-3xl font-bold text-gray-900 dark:text-white">98%</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.onTimeDelivery}</div>
             </div>
             <div>
