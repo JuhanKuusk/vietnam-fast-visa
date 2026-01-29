@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Footer } from "@/components/ui/footer";
@@ -9,8 +8,6 @@ import { Logo } from "@/components/ui/logo";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
 export default function TermsPage() {
-  const { t } = useLanguage();
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
@@ -34,138 +31,201 @@ export default function TermsPage() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Terms and Conditions
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-8">
+          <p className="text-gray-500 dark:text-gray-400 mb-6">
             VietnamVisaHelp.com | Last updated: January 29, 2026
           </p>
 
-          {/* Introduction */}
-          <p className="text-gray-700 dark:text-gray-300 mb-8">
-            Please read these Terms and Conditions carefully before using our Vietnam e-Visa application services.
-            By accessing or using VietnamVisaHelp.com, you agree to be bound by these Terms.
+          <p className="text-gray-700 dark:text-gray-300 mb-6">
+            Please read our Terms and Conditions before accessing our website or using our services. Irrespective thereof, you are subject to our Terms and Conditions when accessing or using any part of the website and the services.
           </p>
 
-          {/* 1. Definitions */}
+          {/* Table of Contents */}
+          <div className="mb-8 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Contents</h2>
+            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1 text-sm">
+              <li>Definition</li>
+              <li>Acceptance of Terms</li>
+              <li>Modification</li>
+              <li>Procedure</li>
+              <li>Submission of Documentation</li>
+              <li>Obtaining the E-Visa</li>
+              <li>Conditions for Issuing an Electronic Visa</li>
+              <li>Additional Services</li>
+              <li>Fees</li>
+              <li>Warnings / Disclaimers</li>
+              <li>General</li>
+              <li>Privacy Policy</li>
+            </ul>
+          </div>
+
+          {/* Definition */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              1. Definitions
+              Definition
             </h2>
             <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li><strong>&quot;Website&quot;</strong> refers to VietnamVisaHelp.com and all its subdomains.</li>
-              <li><strong>&quot;Service&quot;</strong> refers to the Vietnam e-Visa application assistance provided through this Website.</li>
-              <li><strong>&quot;Client&quot;</strong> or <strong>&quot;You&quot;</strong> refers to any individual or entity using our Service.</li>
-              <li><strong>&quot;We&quot;</strong>, <strong>&quot;Us&quot;</strong>, or <strong>&quot;Our&quot;</strong> refers to VietnamVisaHelp.com and its operators.</li>
-              <li><strong>&quot;E-Visa&quot;</strong> refers to the Electronic Visa issued by the Vietnam Immigration Department.</li>
-              <li><strong>&quot;Government Fee&quot;</strong> refers to the official fee charged by the Vietnam Immigration Department.</li>
-              <li><strong>&quot;Service Fee&quot;</strong> refers to our administrative and processing fee for assisting with your application.</li>
+              <li><strong>Provider</strong> - VietnamVisaHelp.com is an e-commercial or non-government website.</li>
+              <li><strong>Client</strong> - An individual or company who conducts payment of the Sales Order/Booking.</li>
+              <li><strong>Terms and Conditions</strong> - An agreement between The Client and The Provider that contains a set of regulations governing the rights, obligations, and responsibilities of The Client and The Provider, as well as the term for using the Provider&apos;s services.</li>
+              <li><strong>Services</strong> - All types of services, functions, responsibilities offered by the Provider to the Client, the conditions of which are stated in this Terms and Conditions.</li>
+              <li><strong>Provider&apos;s Account</strong> - An Account established by The Provider for payment/register process at Provider website, provided in Sales Order/Booking.</li>
+              <li><strong>Sales Order/Booking</strong> - A list of services, functions, and/or responsibilities that have been requested by The Client to be executed by The Provider, including &quot;Addendum&quot;, &quot;Invoice&quot; or &quot;Quotation.&quot;</li>
+              <li><strong>Government</strong> - Any institutions that have governmental authority or quasi-governmental authority, including its organs, be it at national or local level.</li>
             </ul>
           </section>
 
-          {/* 2. Acceptance of Terms */}
+          {/* Acceptance of Terms */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              2. Acceptance of Terms
+              Acceptance of Terms
+            </h2>
+            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
+              <li>Please read these terms and conditions carefully before using this website. If you object to any of the terms and conditions set out in this agreement, you should not use any of the products or services on the Website and leave immediately.</li>
+              <li>You agree that you shall not use the Website for illegal purposes, and will respect all applicable laws and regulations.</li>
+              <li>You agree not to use the website in a way that may impair the performance, corrupt the content or otherwise reduce the overall functionality of the Website.</li>
+              <li>You agree not to compromise the security of the Website or attempt to gain access to secured areas or sensitive information.</li>
+              <li>You agree to be fully responsible for any claim, expense, liability, losses, costs including legal fees incurred by us arising from any infringement of the terms and conditions set out in this agreement.</li>
+            </ul>
+          </section>
+
+          {/* Modification */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              Modification
+            </h2>
+            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
+              <li>VietnamVisaHelp.com reserves the right to change any part of this agreement without notice, and your access to the site will be considered acceptance of this agreement. We advise users to regularly check the Terms and Conditions of this agreement.</li>
+              <li>We have complete discretion to modify or remove any part of this site without warning or liability arising from such action.</li>
+            </ul>
+          </section>
+
+          {/* Procedure */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              Procedure
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              By using our Website and Service, you acknowledge that:
+              VietnamVisaHelp.com will try our best to provide you with accurate information and ensure that you obtain the visa for your trip for the date required in a timely manner. Nevertheless, you should remember that all requirements to obtain the visa (documentation, fees, time frames, etc.) are calculated based on general criteria and can vary according to information provided by you such as current or previous nationality, residence, gender, age, profession, recent travel, religion, etc.
             </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>You have read, understood, and agree to be bound by these Terms and Conditions.</li>
-              <li>You are at least 18 years of age and legally capable of entering into binding contracts.</li>
-              <li>You understand that VietnamVisaHelp.com is an independent visa assistance service and is <strong>NOT affiliated with the Vietnamese Government</strong> or any governmental body.</li>
-              <li>You can also apply directly through the <a href="https://evisa.xuatnhapcanh.gov.vn" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">official Vietnam Immigration Department website</a>.</li>
-            </ul>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              Also be aware that the issuing authority may change general country requirements or require additional specific information from you without prior notification. VietnamVisaHelp.com will try to inform you as soon as practicable of such changes. In some special cases, the government may require updated or additional information, which can extend the processing time beyond the expected timeframe. VietnamVisaHelp.com will make every reasonable effort to notify you via email as soon as we become aware of any such changes or additional requirements.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300">
+              As part of our service delivery process, and to ensure efficient and secure communication, VietnamVisaHelp.com reserves the right to generate a temporary or system-assigned email address associated with your visa application. This address may be used for internal processing and communication purposes between your visa application on the government website. All official correspondence regarding your visa application—including updates, document submissions, notifications, and approvals—will be conducted through our authorized company email channels. You agree that communication sent via our system shall be deemed sufficient notice for all purposes related to your application.
+            </p>
           </section>
 
-          {/* 3. Nature of Our Service */}
+          {/* Submission of Documentation */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              3. Nature of Our Service
+              Submission of Documentation
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              VietnamVisaHelp.com provides professional visa application assistance services including:
+              On our website, you can review the requirements that must be met in order to complete your visa. To ensure that you know the status of your visa at all times, you will be sent an email confirming the processing time of your documents when we receive your payment. Please note that the processing time will begin from the moment we have received all required information from you.
             </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>Document review and verification</li>
-              <li>Application form preparation and submission</li>
-              <li>24/7 customer support</li>
-              <li>Application status tracking</li>
-              <li>Express processing options</li>
-            </ul>
-            <p className="text-gray-700 dark:text-gray-300 mt-3">
-              <strong>Important:</strong> We do not issue visas. All visa decisions are made solely by the Vietnam Immigration Department.
-              We facilitate the application process but cannot guarantee visa approval.
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              VietnamVisaHelp.com will only process the visa(s) indicated in your request; it assumes no responsibility for other visas required for your trip that have not been requested or which relate to stops on your trip.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300">
+              By submitting one or more requests to process one or more visas to VietnamVisaHelp.com, you accept these Terms. After receiving your request(s) at VietnamVisaHelp.com, we&apos;ll send an email with the particular terms of the required visa to the e-mail address provided by you (type of visa, destination, time frame, etc). Your requests will be verified upon receipt of your documentation, and VietnamVisaHelp.com will then begin the visa application process(s).
             </p>
           </section>
 
-          {/* 4. Application Procedure */}
+          {/* Obtaining the E-Visa */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              4. Application Procedure
-            </h2>
-            <ol className="list-decimal list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>Complete the online application form with accurate personal and travel information.</li>
-              <li>Upload required documents (passport photo, portrait photo).</li>
-              <li>Select your processing speed and pay the applicable fees.</li>
-              <li>We review and submit your application to the Vietnam Immigration Department.</li>
-              <li>Receive your approved e-Visa via email.</li>
-              <li>Print your e-Visa and present it upon arrival in Vietnam.</li>
-            </ol>
-          </section>
-
-          {/* 5. Document Requirements */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              5. Document Requirements
+              Obtaining the E-Visa
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              You must provide:
+              When VietnamVisaHelp.com sends you a visa approval letter, it is important that you confirm that all of the visas you need for your travel have been obtained, that visas for each country you intend to visit are valid for the dates of arrival and departure from the country/region of your visit as well as for the reason and nature of your visit (tourism, business, etc.). You must notify VietnamVisaHelp.com immediately by email if you identify any discrepancy in your documentation.
             </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>A valid passport with at least 6 months validity from your intended entry date</li>
-              <li>A clear scan or photo of your passport data page</li>
-              <li>A recent passport-style photograph (4x6cm, white background)</li>
-              <li>Accurate travel dates and entry/exit port information</li>
-            </ul>
-            <p className="text-gray-700 dark:text-gray-300 mt-3">
-              <strong>Your responsibility:</strong> You are solely responsible for ensuring all information provided is accurate and complete.
-              Incorrect or incomplete information may result in visa denial or delays, for which we cannot be held liable.
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              The issue of a visa depends exclusively on the issuing authority, and immigration officials in each country have the final decision to admit entry into the country or region, even when all of the stipulated requirements have been met.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300">
+              VietnamVisaHelp.com does not guarantee that the issuing authority will issue the visa in a timely manner and within the specified time frame; therefore, VietnamVisaHelp.com fees will be collected for the completion of procedures required for this issue. <strong>Non-refundable fares or reservations must not be purchased until all visas have been obtained.</strong>
             </p>
           </section>
 
-          {/* 6. E-Visa Conditions */}
+          {/* Conditions for Issuing an Electronic Visa */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              6. E-Visa Conditions
+              Conditions for Issuing an Electronic Visa
             </h2>
-            <p className="text-gray-700 dark:text-gray-300 mb-3">
-              The Vietnam E-Visa is subject to the following conditions set by the Vietnam Immigration Department:
-            </p>
             <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>Valid for single or multiple entries (as selected)</li>
-              <li>Maximum stay of 30 or 90 days per entry (depending on visa type)</li>
-              <li>Entry must be through designated international ports</li>
-              <li>The e-Visa cannot be extended or converted to another visa type within Vietnam</li>
-              <li>Available to citizens of eligible countries only</li>
+              <li>Foreigners outside Vietnam</li>
+              <li>Passport or valid international travel document</li>
+              <li>Not falling under the cases of suspension from entry as prescribed in Article 21 of the Law on foreigners&apos; entry, exit, transit, and residence in Vietnam</li>
             </ul>
           </section>
 
-          {/* 7. Fees and Payment */}
+          {/* Delivery */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              7. Fees and Payment
+              Delivery
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              Our fees consist of two components:
+              Documents will be sent via email as usual, but in some cases, you will be required to send us hard copies of documents to submit to the Vietnam Immigration Department for review. You will send the required documents to our office. A delivery charge will be your responsibility.
             </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li><strong>Government Fee:</strong> The official fee charged by the Vietnam Immigration Department ($25 USD for single entry, $50 USD for multiple entry).</li>
-              <li><strong>Service Fee:</strong> Our processing and assistance fee, which varies based on processing speed selected.</li>
-            </ul>
+            <p className="text-gray-700 dark:text-gray-300">
+              All third-party delivery companies are subject to the conditions set by these individual companies. VietnamVisaHelp.com accepts no liability for losses or delays incurred when using third-party delivery companies. An extra fee will be charged if we do not have enough time to process your visa in the normal processing time. To ensure that the document arrives at our offices on time, you must select quick delivery.
+            </p>
+          </section>
+
+          {/* Additional Services */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              Additional Services
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              VietnamVisaHelp.com may offer to provide additional services in some jurisdictions e.g. Fast-track Service at the airport, Emergency Document Service, Car pick-up service, ESim service. If so, the description and relevant terms for those additional services are available on the Website via the Service Directory and are incorporated into these terms.
+            </p>
+          </section>
+
+          {/* Fees */}
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              Fees
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              An email with the title &quot;Application #ID: Your booking is confirmed - Payment Successful&quot; will show that we already received your payment. We will send you an email with the subject &quot;Application #ID: Your booking is confirmed - Payment Remind&quot; if your payment failed and instructs you to try again using a different payment method. Any problems that result from a failed payment are not our responsibility. If we do not receive payment from you, we will not process your visa.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              <strong>If your visa is denied by the Vietnam Immigration Department:</strong> We will refund half of the service fee you have paid to you.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              You shall pay for all bank charges, exchange rate differences, currency adjustments, transaction fees and other such charges incurred by your bank or financial institution(s) throughout the payment process.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-4">
+              When you use our visa application service, you will need to pay two types of fees:
+            </p>
+
+            {/* Fee Types */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">1. Service Fee</h3>
+              <p className="text-blue-700 dark:text-blue-300 text-sm">
+                This fee may change from time to time and depends on the urgency of processing, so the price will vary. The service fee will be partially refunded (50%) if your visa is refused.
+              </p>
+            </div>
+
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">2. Government Fee (State/Official Fee)</h3>
+              <p className="text-amber-700 dark:text-amber-300 text-sm mb-2">
+                We will collect and pay this on your behalf. Depending on the visa type:
+              </p>
+              <ul className="list-disc list-inside text-amber-700 dark:text-amber-300 text-sm space-y-1">
+                <li>$25 USD per person for a single-entry visa</li>
+                <li>$50 USD per person for a multiple-entry visa</li>
+              </ul>
+              <p className="text-amber-700 dark:text-amber-300 text-sm mt-2 font-medium">
+                Please note that this fee is paid directly to the government before the visa is approved, so it is non-refundable even if your visa is refused.
+              </p>
+            </div>
 
             {/* Pricing Table */}
             <div className="mt-6 overflow-x-auto">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
-                Pricing for Single-Entry 30-Day E-Visa:
+                Service Pricing for Single-Entry 30-Day E-Visa:
               </h3>
               <table className="min-w-full border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
                 <thead className="bg-gray-100 dark:bg-gray-700">
@@ -227,188 +287,100 @@ export default function TermsPage() {
             </div>
 
             <p className="text-gray-700 dark:text-gray-300 mt-4">
-              <strong>What&apos;s Included:</strong> Document review and verification, application form preparation, direct submission to Vietnam Immigration Department, 24/7 customer support via WhatsApp and email, real-time application status tracking, and expedited processing for urgent requests.
+              Once VietnamVisaHelp.com has submitted a travel document request to the relevant issuing authority on behalf of the applicant, all administrative and government fees shall be deemed non-refundable. This includes, without limitation, any transactions deemed fraudulent.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mt-3">
-              All fees are clearly displayed before payment. Prices include all applicable charges with no hidden fees.
+              Please check all your information on the online application form before submitting it. An extra fee will be charged if you want to change any information related to your visa application form online.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mt-3">
-              <strong>Payment:</strong> We accept major credit cards, debit cards, and other secure payment methods.
-              All transactions are processed through secure, encrypted payment gateways (Stripe).
+              Consular fees/Admin &amp; Government fee and availability of services are subject to change without notice. We reserve the right to choose the best service available given the time limits that the client has specified.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mt-3">
+              After our system sends the &quot;Processing Notification&quot; to your registered email address, if you decide to cancel your application or change any information for any reason, there won&apos;t be a refund granted, and the service will proceed automatically.
             </p>
           </section>
 
-          {/* 8. Processing Times */}
+          {/* Warnings / Disclaimers */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              8. Processing Times
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300 mb-3">
-              We offer various processing speeds:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li><strong>Weekend / Holiday:</strong> Processing available on weekends and public holidays</li>
-              <li><strong>Emergency:</strong> 15-30 minutes (with Check-In approval letter)</li>
-              <li><strong>Urgent:</strong> 1 hour (during business hours, for eligible applications)</li>
-              <li><strong>Express:</strong> 4 hours</li>
-              <li><strong>Express:</strong> 1 day</li>
-              <li><strong>Express:</strong> 2 days</li>
-              <li><strong>Standard:</strong> 2-3 business days</li>
-            </ul>
-            <p className="text-gray-700 dark:text-gray-300 mt-3">
-              <strong>Note:</strong> Processing times are estimates and begin after complete documentation is received.
-              Actual processing time depends on the Vietnam Immigration Department.
-              Delays may occur during Vietnamese holidays, weekends, or due to additional verification requirements.
-            </p>
-          </section>
-
-          {/* 9. Refund Policy */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              9. Refund Policy
-            </h2>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li><strong>Before submission:</strong> Full refund available if you cancel before we submit your application.</li>
-              <li><strong>After submission:</strong> Government fees are non-refundable once the application is submitted to Vietnamese authorities.</li>
-              <li><strong>Visa denial:</strong> If your visa is denied due to reasons within our control (e.g., submission errors on our part), we will refund our service fee. Government fees are non-refundable.</li>
-              <li><strong>Client error:</strong> No refund is available if the visa is denied due to incorrect information provided by you, ineligibility, or immigration history issues.</li>
-            </ul>
-            <p className="text-gray-700 dark:text-gray-300 mt-3">
-              For detailed refund information, please see our <Link href="/refund" className="text-blue-600 dark:text-blue-400 hover:underline">Refund Policy</Link>.
-            </p>
-          </section>
-
-          {/* 10. Warnings and Disclaimers */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              10. Warnings and Disclaimers
+              Warnings / Disclaimers
             </h2>
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-4">
-              <p className="text-amber-800 dark:text-amber-200 font-medium mb-2">Important Notices:</p>
-              <ul className="list-disc list-inside text-amber-700 dark:text-amber-300 space-y-2 ml-4">
-                <li>VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department.</li>
-                <li>We are an independent commercial service that charges fees for visa application assistance.</li>
-                <li>You may apply directly through the <a href="https://evisa.xuatnhapcanh.gov.vn" target="_blank" rel="noopener noreferrer" className="underline">official government website</a> without using our services.</li>
-                <li>Visa approval is at the sole discretion of Vietnamese immigration authorities.</li>
-              </ul>
+              <p className="text-amber-800 dark:text-amber-200 font-medium mb-2">Important Notice:</p>
+              <p className="text-amber-700 dark:text-amber-300 text-sm">
+                VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service that charges fees for visa application assistance.
+              </p>
             </div>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              We are not responsible for:
+              The issuing authority will make the final determination as to the type of visa or passport, how quickly it will be issued and for what duration it will be issued. Prior to approval, the issuing authority may ask for additional documentation. The issuing authority may reject any visa, passport, or other travel document application for any reason and may not provide a reason to VietnamVisaHelp.com for the rejection.
             </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>Visa refusals or delays by the Vietnam Immigration Department</li>
-              <li>Entry denial at Vietnamese borders despite having a valid e-Visa</li>
-              <li>Travel disruptions, missed flights, or accommodation losses</li>
-              <li>Changes in Vietnamese visa policies or requirements</li>
-              <li>Consequences of incorrect information provided by the applicant</li>
-              <li>Technical issues beyond our reasonable control</li>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              Since VietnamVisaHelp.com does not issue visas or passports and cannot make any guarantee or assurances that any issuing authority will issue any document, nor can VietnamVisaHelp.com guarantee the time required for an issuing authority to grant or reject an application.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              <strong>Tickets or reservations that are non-refundable should not be made until all necessary travel documents for your trip have been obtained.</strong>
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              VietnamVisaHelp.com shall not be held responsible for nor accept any liability for the actions of any consulate, embassy, or passport office in delaying or not issuing such applications for any reason whatsoever, nor shall VietnamVisaHelp.com be held responsible for expense and/or delay arising from or in connection with:
+            </p>
+            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1 ml-4 mb-3">
+              <li>Incomplete application forms</li>
+              <li>Incorrectly or falsely completed application forms</li>
+              <li>Inaccurate or incomplete supporting documentation</li>
             </ul>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              When VietnamVisaHelp.com returns your result, it is your responsibility to verify that all the visas you require for your trip have been obtained, that the visas for each country you intend to visit are valid for the entry and exit dates of your visit, that your personal details are reflected accurately, and that your passport is valid for at least six months beyond the completion of your trip.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              Please note that even when a visa is issued, a traveler may be denied entry since in each country the local immigration officials make the final entry decision. All travelers are advised by VietnamVisaHelp.com to obtain a visa in advance and not to try to do so &quot;on arrival.&quot;
+            </p>
+            <p className="text-gray-700 dark:text-gray-300">
+              To the maximum extent permitted by law, VietnamVisaHelp.com excludes or limits any direct, indirect, or consequential loss and all statutory or implied conditions and warranties, including, without limitation, lost profits or travel or holiday costs or any loss arising from information obtained from the Website. Subject to the other provisions of this clause, our maximum liability for loss caused to you whether under contract, tort, or otherwise, shall be limited to the lesser of the fees actually paid by you to VietnamVisaHelp.com.
+            </p>
           </section>
 
-          {/* 11. Limitation of Liability */}
+          {/* General */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              11. Limitation of Liability
+              General
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              To the maximum extent permitted by law:
+              These terms and conditions and any document expressly referred to in them constitute the entire agreement between us and supersede all previous discussions, correspondence, negotiations, previous arrangements, understandings, or agreements between us relating to the subject matter of any contract.
             </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>Our total liability shall not exceed the amount you paid for our services.</li>
-              <li>We shall not be liable for any indirect, incidental, special, consequential, or punitive damages.</li>
-              <li>We provide our services &quot;as is&quot; without warranties of any kind, express or implied.</li>
-            </ul>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              If any provision of these Terms does not comply with any law, then the provision must be read down so as to give it as much effect as possible. If it is not possible to give the provision any effect at all, then it must be treated as severable from the rest of the Terms.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              Where VietnamVisaHelp.com is unable to carry out any obligation under the contract due to any circumstance, matter, or thing beyond its reasonable control (&quot;force majeure&quot;), VietnamVisaHelp.com shall be excused from such obligations to the extent of such prevention, restriction, or interference so caused.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300">
+              Any dispute arising under this agreement shall be governed by Vietnamese Law, and both parties agree to submit to the exclusive jurisdiction of the courts of Vietnam.
+            </p>
           </section>
 
-          {/* 12. Privacy and Data Protection */}
+          {/* Privacy Policy Summary */}
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              12. Privacy and Data Protection
+              Privacy Policy
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              We take your privacy seriously. Your personal information is:
+              <strong>Purpose for collection and processing:</strong> When you provide us with personal information to complete a transaction, place an order, deliver a product or return a product, we understand that you consent to our collecting it and using it for your specific reasons only. If we ask for your personal information for a secondary reason, like marketing, we will ask you directly for your consent or provide you with an opportunity to say no.
             </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>Collected only for visa application processing purposes</li>
-              <li>Stored securely using industry-standard encryption</li>
-              <li>Shared only with the Vietnam Immigration Department as required for your application</li>
-              <li>Never sold to third parties for marketing purposes</li>
-              <li>Retained only as long as necessary for legal and operational requirements</li>
-            </ul>
-            <p className="text-gray-700 dark:text-gray-300 mt-3">
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              <strong>How long your data is held for:</strong> Your personal data is deleted from our systems after successful service delivery. Only your name and contact details, as well as the passport number, are retained for the purposes of tracking the progress of your order and returning your documents to you. This personal data is destroyed thirty (30) days after services rendered to you are completed, or as agreed to by the Vietnamese Government.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              <strong>Who do we share your information with:</strong> We share your personal information with the Vietnamese Government as an authorized service provider. We will not share your personal information to third parties without your consent.
+            </p>
+            <p className="text-gray-700 dark:text-gray-300">
               For complete details, please review our <Link href="/privacy" className="text-blue-600 dark:text-blue-400 hover:underline">Privacy Policy</Link>.
             </p>
           </section>
 
-          {/* 13. Intellectual Property */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              13. Intellectual Property
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300">
-              All content on this Website, including text, graphics, logos, images, and software, is the property of VietnamVisaHelp.com
-              and is protected by international copyright laws. You may not reproduce, distribute, modify, or create derivative works
-              without our express written permission.
-            </p>
-          </section>
-
-          {/* 14. Prohibited Activities */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              14. Prohibited Activities
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300 mb-3">
-              You agree not to:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li>Use our services for any fraudulent or illegal purpose</li>
-              <li>Provide false or misleading information</li>
-              <li>Attempt to gain unauthorized access to our systems</li>
-              <li>Interfere with or disrupt our Website or services</li>
-              <li>Use automated systems to access our Website without permission</li>
-              <li>Impersonate any person or entity</li>
-            </ul>
-          </section>
-
-          {/* 15. Modifications to Terms */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              15. Modifications to Terms
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300">
-              We reserve the right to modify these Terms and Conditions at any time. Changes will be effective immediately upon
-              posting to this Website. Your continued use of our services after any changes constitutes acceptance of the modified Terms.
-              We encourage you to review these Terms periodically.
-            </p>
-          </section>
-
-          {/* 16. Governing Law */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              16. Governing Law and Jurisdiction
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300">
-              These Terms and Conditions shall be governed by and construed in accordance with the laws of Vietnam.
-              Any disputes arising from these Terms or your use of our services shall be subject to the exclusive
-              jurisdiction of the courts in Ho Chi Minh City, Vietnam.
-            </p>
-          </section>
-
-          {/* 17. Severability */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              17. Severability
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300">
-              If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions
-              shall continue in full force and effect.
-            </p>
-          </section>
-
-          {/* 18. Contact Information */}
+          {/* Contact Information */}
           <section>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              18. Contact Information
+              Contact Information
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
               If you have any questions about these Terms and Conditions, please contact us:
@@ -416,7 +388,7 @@ export default function TermsPage() {
             <ul className="list-none text-gray-700 dark:text-gray-300 space-y-2">
               <li><strong>Email:</strong> <a href="mailto:support@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@vietnamvisahelp.com</a></li>
               <li><strong>WhatsApp:</strong> <a href="https://wa.me/841205549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 120 554 9868</a></li>
-              <li><strong>Website:</strong> <a href="https://vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">vietnamvisahelp.com</a></li>
+              <li><strong>Website:</strong> <a href="https://vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">www.vietnamvisahelp.com</a></li>
               <li className="pt-2"><strong>Address:</strong> Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</li>
             </ul>
             <p className="text-gray-700 dark:text-gray-300 mt-4">
