@@ -175,11 +175,18 @@ export default function PrivacyPage() {
           {/* Contact */}
           <section>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              {t.legal?.contact || "Contact"}
+              {t.legal?.contact || "Contact Us"}
             </h2>
-            <p className="text-gray-700 dark:text-gray-300">
-              {t.legal?.emailLabel || "Email"}: <a href="mailto:privacy@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">privacy@vietnamvisahelp.com</a>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact us:
             </p>
+            <ul className="list-none text-gray-700 dark:text-gray-300 space-y-2">
+              <li><strong>Email:</strong> <a href="mailto:support@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@vietnamvisahelp.com</a></li>
+              <li><strong>Privacy Inquiries:</strong> <a href="mailto:privacy@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">privacy@vietnamvisahelp.com</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/841205549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 120 554 9868</a></li>
+              <li><strong>Website:</strong> <a href="https://vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">www.vietnamvisahelp.com</a></li>
+              <li className="pt-2"><strong>Address:</strong> Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</li>
+            </ul>
           </section>
         </div>
       </main>

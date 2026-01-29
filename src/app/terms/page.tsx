@@ -158,15 +158,83 @@ export default function TermsPage() {
               Our fees consist of two components:
             </p>
             <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li><strong>Government Fee:</strong> The official fee charged by the Vietnam Immigration Department (currently $25 USD for single entry, $50 USD for multiple entry).</li>
+              <li><strong>Government Fee:</strong> The official fee charged by the Vietnam Immigration Department ($25 USD for single entry, $50 USD for multiple entry).</li>
               <li><strong>Service Fee:</strong> Our processing and assistance fee, which varies based on processing speed selected.</li>
             </ul>
+
+            {/* Pricing Table */}
+            <div className="mt-6 overflow-x-auto">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-3">
+                Pricing for Single-Entry 30-Day E-Visa:
+              </h3>
+              <table className="min-w-full border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+                <thead className="bg-gray-100 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600">Processing Speed</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600">Total Price</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600">Government Fee</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b border-gray-300 dark:border-gray-600">Service Fee</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-300 dark:divide-gray-600">
+                  <tr className="bg-white dark:bg-gray-800">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Weekend/Holiday</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$249</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$224</td>
+                  </tr>
+                  <tr className="bg-gray-50 dark:bg-gray-700/50">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Emergency (15-30 min)</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$199</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$174</td>
+                  </tr>
+                  <tr className="bg-white dark:bg-gray-800">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Urgent (1 hour)</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$159</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$134</td>
+                  </tr>
+                  <tr className="bg-gray-50 dark:bg-gray-700/50">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Express (4 hours)</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$119</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$94</td>
+                  </tr>
+                  <tr className="bg-white dark:bg-gray-800">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Express (1 day)</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$99</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$74</td>
+                  </tr>
+                  <tr className="bg-gray-50 dark:bg-gray-700/50">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Express (2 days)</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$79</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$54</td>
+                  </tr>
+                  <tr className="bg-white dark:bg-gray-800">
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Standard (2-3 business days)</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$49</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$24</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                * Multiple-entry visas add $25 to all totals.
+              </p>
+            </div>
+
+            <p className="text-gray-700 dark:text-gray-300 mt-4">
+              <strong>What&apos;s Included:</strong> Document review and verification, application form preparation, direct submission to Vietnam Immigration Department, 24/7 customer support via WhatsApp and email, real-time application status tracking, and expedited processing for urgent requests.
+            </p>
             <p className="text-gray-700 dark:text-gray-300 mt-3">
               All fees are clearly displayed before payment. Prices include all applicable charges with no hidden fees.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mt-3">
               <strong>Payment:</strong> We accept major credit cards, debit cards, and other secure payment methods.
-              All transactions are processed through secure, encrypted payment gateways.
+              All transactions are processed through secure, encrypted payment gateways (Stripe).
             </p>
           </section>
 
