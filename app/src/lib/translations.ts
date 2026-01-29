@@ -38,7 +38,7 @@ export const translations = {
     headline2: "Approval in 30 Minutes",
     subtitle: "Get your Vietnam E-Visa approval letter in as fast as 30 minutes. Pass airline check-in immediately. Full visa ready before you land.",
     processedIn: "Processed in Ho Chi Minh City",
-    localExperts: "Local Vietnamese Immigration Experts",
+    localExperts: "Independent Vietnamese Legal Services with 24/7 Support",
     thirtyMinutes: "30 Minutes",
     thirtyMinutesDesc: "Formal Air Travel Approval and Airline Check-In Authorization Document",
     oneToTwoHours: "1 Hour",
