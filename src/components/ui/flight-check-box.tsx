@@ -3,12 +3,21 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FlightInfo } from "./flight-info";
 
+interface FlightDataCallback {
+  arrivalAirport: string;
+  arrivalAirportCode: string;
+  departureAirport: string;
+  departureAirportCode: string;
+  arrivalDate: string;
+  flightNumber: string;
+}
+
 interface FlightCheckBoxProps {
   flightNumber: string;
   onFlightNumberChange: (value: string) => void;
   flightDate: string;
   onFlightDateChange: (value: string) => void;
-  onFlightData?: (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => void;
+  onFlightData?: (data: FlightDataCallback) => void;
   placeholder?: string;
   title?: string;
   /** When true, removes the outer card wrapper for embedding inside other containers */
@@ -40,7 +49,7 @@ export function FlightCheckBox({
 
   // Handle connection flight data - this is the one that arrives in Vietnam
   // Memoized with useCallback to prevent infinite re-renders in FlightInfo
-  const handleConnectionFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+  const handleConnectionFlightData = useCallback((data: FlightDataCallback) => {
     // Pass the connection flight data to parent (this is the flight arriving in Vietnam)
     if (onFlightDataRef.current) {
       onFlightDataRef.current(data);
@@ -49,7 +58,7 @@ export function FlightCheckBox({
 
   // Handle main flight data - only use if no connection flight
   // Memoized with useCallback to prevent infinite re-renders in FlightInfo
-  const handleMainFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+  const handleMainFlightData = useCallback((data: FlightDataCallback) => {
     // Only pass to parent if there's no connection flight
     if (!hasConnectionRef.current && onFlightDataRef.current) {
       onFlightDataRef.current(data);
@@ -81,18 +90,9 @@ export function FlightCheckBox({
         />
       </div>
 
-      {/* Show first flight info */}
-      {flightNumber && flightNumber.length >= 3 && (
-        <FlightInfo
-          flightNumber={flightNumber}
-          date={flightDate}
-          onFlightData={handleMainFlightData}
-        />
-      )}
-
-      {/* Connection Flight Checkbox */}
-      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <label className="flex items-center gap-3 cursor-pointer group">
+      {/* Connection Flight Checkbox - Show right after flight input for better visibility */}
+      <div className="mt-3 mb-3">
+        <label className="flex items-center gap-3 cursor-pointer group p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-colors">
           <div className="relative">
             <input
               type="checkbox"
@@ -105,7 +105,7 @@ export function FlightCheckBox({
               }}
               className="sr-only peer"
             />
-            <div className="w-5 h-5 border-2 border-gray-300 dark:border-gray-500 rounded peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-colors">
+            <div className="w-5 h-5 border-2 border-amber-400 dark:border-amber-500 rounded peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-colors">
               {hasConnection && (
                 <svg className="w-full h-full text-white p-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -113,27 +113,27 @@ export function FlightCheckBox({
               )}
             </div>
           </div>
-          <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">
+          <span className="text-sm font-medium text-amber-800 dark:text-amber-300">
             I have a connecting flight to Vietnam
           </span>
         </label>
       </div>
 
-      {/* Connection Flight Input */}
+      {/* Connection Flight Input - Show before first flight info when enabled */}
       {hasConnection && (
-        <div className="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+        <div className="mb-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
           <label className="block text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
-            Connection Flight (to Vietnam)
+            Connecting Flight to Vietnam
           </label>
           <input
             type="text"
             value={connectionFlightNumber}
             onChange={(e) => setConnectionFlightNumber(e.target.value.toUpperCase())}
-            placeholder="e.g. CX799"
+            placeholder="e.g. EY834 (Abu Dhabi to Ho Chi Minh)"
             className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-blue-300 dark:border-blue-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
-            Enter your connecting flight that arrives in Vietnam (e.g., HKG → SGN)
+            Enter your flight that arrives in Vietnam - this is used for your visa entry date
           </p>
 
           {/* Show connection flight info */}
@@ -146,6 +146,20 @@ export function FlightCheckBox({
               />
             </div>
           )}
+        </div>
+      )}
+
+      {/* Show first flight info */}
+      {flightNumber && flightNumber.length >= 3 && (
+        <div className={hasConnection ? "opacity-70" : ""}>
+          {hasConnection && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">First leg of your journey:</p>
+          )}
+          <FlightInfo
+            flightNumber={flightNumber}
+            date={flightDate}
+            onFlightData={handleMainFlightData}
+          />
         </div>
       )}
     </>

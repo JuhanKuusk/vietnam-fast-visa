@@ -477,15 +477,31 @@ interface AirportInfo {
   city: string;
 }
 
+// Purpose of visit options
+const PURPOSES = [
+  { value: "tourism", label: "Tourism" },
+  { value: "business", label: "Business" },
+  { value: "visiting_relatives", label: "Visiting Relatives/Friends" },
+  { value: "study", label: "Study" },
+  { value: "work", label: "Work" },
+  { value: "transit", label: "Transit" },
+  { value: "other", label: "Other" },
+];
+
 function CitizenshipChecker({
   onCountrySelect,
+  onPurposeChange,
+  initialPurpose = "tourism",
   t,
 }: {
   onCountrySelect?: (code: string, requirement: ReturnType<typeof getVisaRequirement>) => void;
+  onPurposeChange?: (purpose: string) => void;
+  initialPurpose?: string;
   t: typeof import("@/lib/translations").translations;
 }) {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [visaResult, setVisaResult] = useState<ReturnType<typeof getVisaRequirement> | null>(null);
+  const [purpose, setPurpose] = useState(initialPurpose);
 
   // New state for departure location
   const [departingCountry, setDepartingCountry] = useState("");
@@ -568,6 +584,11 @@ function CitizenshipChecker({
     setDepartingCountry(code);
   };
 
+  const handlePurposeChange = (newPurpose: string) => {
+    setPurpose(newPurpose);
+    onPurposeChange?.(newPurpose);
+  };
+
   const selectedCountryName = ALL_COUNTRIES.find((c) => c.code === selectedCountry)?.name;
   const selectedAirportInfo = availableAirports.find(a => a.code === departingAirport);
 
@@ -632,6 +653,24 @@ function CitizenshipChecker({
             </select>
           </div>
         )}
+
+        {/* Purpose of Visit selector */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {t?.travelDetails?.purposeOfTravel || "Purpose of Visit"} <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={purpose}
+            onChange={(e) => handlePurposeChange(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+          >
+            {PURPOSES.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {visaResult && selectedCountryName && (
@@ -1062,18 +1101,29 @@ function ApplyForm() {
     return tomorrow.toISOString().split("T")[0];
   });
 
-  // Handle flight data to auto-fill airport fields
-  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+  // Handle flight data to auto-fill airport fields, entry date, and flight number
+  const handleFlightData = useCallback((data: {
+    arrivalAirport: string;
+    arrivalAirportCode: string;
+    departureAirport: string;
+    departureAirportCode: string;
+    arrivalDate: string;
+    flightNumber: string;
+  }) => {
     // Check if the arrival airport is a Vietnamese airport (entry port)
     const vietnamAirportCodes = ENTRY_PORTS.filter(p => p.type === "airport").map(p => p.code);
 
     if (vietnamAirportCodes.includes(data.arrivalAirportCode)) {
-      // Auto-fill entry port if flight arrives in Vietnam
+      // Auto-fill entry port, entry date, and flight number if flight arrives in Vietnam
       setTravelDetails(prev => ({
         ...prev,
         entryPort: data.arrivalAirportCode,
         // Also set exit port to same airport if not already set
         exitPort: prev.exitPort || data.arrivalAirportCode,
+        // Auto-fill entry date from flight arrival date
+        entryDate: data.arrivalDate || prev.entryDate,
+        // Auto-fill flight number from the flight that arrives in Vietnam
+        flightNumber: data.flightNumber || prev.flightNumber,
       }));
     }
   }, []);
@@ -1471,7 +1521,13 @@ function ApplyForm() {
         </div>
 
         {/* Citizenship Checker - Only show if nationality not already provided from homepage */}
-        {!initialNationality && <CitizenshipChecker t={t} />}
+        {!initialNationality && (
+          <CitizenshipChecker
+            t={t}
+            initialPurpose={travelDetails.purpose}
+            onPurposeChange={(purpose) => setTravelDetails(prev => ({ ...prev, purpose }))}
+          />
+        )}
 
         {/* Processing Time Box */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
@@ -1552,22 +1608,6 @@ function ApplyForm() {
                       {n} {n === 1 ? (t.travelDetails?.person || "person") : (t.travelDetails?.people || "people")}
                     </option>
                   ))}
-                </select>
-              </div>
-
-              {/* Purpose of Travel */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t.travelDetails?.purposeOfTravel || "Purpose of Travel"} <span className="text-red-500">*</span>
-                </label>
-                <select
-                  value={travelDetails.purpose}
-                  onChange={(e) => setTravelDetails({ ...travelDetails, purpose: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                >
-                  <option value="tourist">{t.travelDetails?.tourist || "Tourism"}</option>
-                  <option value="business">{t.travelDetails?.business || "Business"}</option>
-                  <option value="visiting">{t.travelDetails?.visiting || "Visiting relatives/friends"}</option>
                 </select>
               </div>
 

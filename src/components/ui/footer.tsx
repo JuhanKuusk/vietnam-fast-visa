@@ -193,6 +193,17 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Disclaimer Notice */}
+        <div className="text-center text-sm text-gray-400 mb-4">
+          <p>
+            www.vietnamvisahelp.com is a private, third-party agency and is not affiliated with the Government of Vietnam. We charge a service fee for our assistance.{" "}
+            <Link href="/disclaimer" className="text-amber-400 hover:text-amber-300 underline">
+              Read full disclaimer
+            </Link>
+            .
+          </p>
+        </div>
+
         {/* Copyright */}
         <div className="border-t border-gray-700 pt-8 text-center text-sm text-gray-500">
           <p>

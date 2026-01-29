@@ -295,6 +295,17 @@ function getVisaRequirement(countryCode: string, citizenship: typeof citizenship
   };
 }
 
+// Purpose of visit options
+const PURPOSES = [
+  { value: "tourism", label: "Tourism" },
+  { value: "business", label: "Business" },
+  { value: "visiting_relatives", label: "Visiting Relatives/Friends" },
+  { value: "study", label: "Study" },
+  { value: "work", label: "Work" },
+  { value: "transit", label: "Transit" },
+  { value: "other", label: "Other" },
+];
+
 // Default fallback translations for citizenship section
 const citizenshipFallback = {
   title: "Check Your Visa Requirements",
@@ -318,6 +329,8 @@ const citizenshipFallback = {
   detectingLocation: "Detecting your location...",
   needLongerStay: "Need 60+ days or multiple entries?",
   getLongerVisa: "Get E-Visa",
+  purposeOfVisit: "Purpose of Visit",
+  selectPurpose: "Select purpose...",
 };
 
 // Interface for geolocation response
@@ -427,15 +440,20 @@ function CountrySelector({
 
 interface CitizenshipCheckerProps {
   onCountrySelect?: (code: string, requirement: VisaRequirementResult) => void;
+  onPurposeChange?: (purpose: string) => void;
+  initialPurpose?: string;
   translations?: typeof citizenshipFallback;
 }
 
 export function CitizenshipChecker({
   onCountrySelect,
+  onPurposeChange,
+  initialPurpose = "tourism",
   translations,
 }: CitizenshipCheckerProps) {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [visaResult, setVisaResult] = useState<VisaRequirementResult | null>(null);
+  const [purpose, setPurpose] = useState(initialPurpose);
 
   // New state for departure location
   const [departingCountry, setDepartingCountry] = useState("");
@@ -515,6 +533,11 @@ export function CitizenshipChecker({
     setDepartingCountry(code);
   };
 
+  const handlePurposeChange = (newPurpose: string) => {
+    setPurpose(newPurpose);
+    onPurposeChange?.(newPurpose);
+  };
+
   const selectedCountryName = ALL_COUNTRIES.find((c) => c.code === selectedCountry)?.name;
 
   return (
@@ -578,6 +601,24 @@ export function CitizenshipChecker({
             </select>
           </div>
         )}
+
+        {/* Purpose of Visit selector */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {citizenship.purposeOfVisit} <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={purpose}
+            onChange={(e) => handlePurposeChange(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+          >
+            {PURPOSES.map((p) => (
+              <option key={p.value} value={p.value}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {visaResult && selectedCountryName && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface FlightData {
   flightNumber: string;
@@ -31,7 +31,14 @@ interface FlightInfoProps {
   date?: string;
   origin?: string; // Optional: origin airport code (e.g., "DPS") for accurate lookup
   onCheckInUrgent?: () => void;
-  onFlightData?: (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => void;
+  onFlightData?: (data: {
+    arrivalAirport: string;
+    arrivalAirportCode: string;
+    departureAirport: string;
+    departureAirportCode: string;
+    arrivalDate: string; // ISO date string (YYYY-MM-DD) extracted from scheduled arrival time
+    flightNumber: string; // The flight number
+  }) => void;
 }
 
 export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlightData }: FlightInfoProps) {
@@ -43,6 +50,16 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
   const [subscribeError, setSubscribeError] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+
+  // Use refs for callbacks to prevent unnecessary re-fetches when parent re-renders
+  const onFlightDataRef = useRef(onFlightData);
+  const onCheckInUrgentRef = useRef(onCheckInUrgent);
+
+  // Keep refs in sync with props
+  useEffect(() => {
+    onFlightDataRef.current = onFlightData;
+    onCheckInUrgentRef.current = onCheckInUrgent;
+  }, [onFlightData, onCheckInUrgent]);
 
   // Prevent hydration mismatch by only rendering time-dependent content after mount
   useEffect(() => {
@@ -76,23 +93,29 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
 
         setFlightData(data);
 
-        // Trigger callback if check-in is closing soon
-        if (data.checkInStatus === "closing_soon" && onCheckInUrgent) {
-          onCheckInUrgent();
+        // Trigger callback if check-in is closing soon (use ref to avoid dependency)
+        if (data.checkInStatus === "closing_soon" && onCheckInUrgentRef.current) {
+          onCheckInUrgentRef.current();
         }
 
-        // Pass flight data to parent for pre-filling apply form
-        if (onFlightData && data.arrival && data.departure) {
+        // Pass flight data to parent for pre-filling apply form (use ref to avoid dependency)
+        if (onFlightDataRef.current && data.arrival && data.departure) {
           // Extract airport codes from strings like "Noi Bai International (HAN)"
           const arrivalAirportMatch = data.arrival.airport.match(/\(([A-Z]{3})\)/);
           const arrivalAirportCode = arrivalAirportMatch ? arrivalAirportMatch[1] : "";
           const departureAirportMatch = data.departure.airport.match(/\(([A-Z]{3})\)/);
           const departureAirportCode = departureAirportMatch ? departureAirportMatch[1] : "";
-          onFlightData({
+          // Extract arrival date from scheduled arrival time (ISO format)
+          const arrivalDate = data.arrival.scheduledTime
+            ? data.arrival.scheduledTime.split("T")[0]
+            : "";
+          onFlightDataRef.current({
             arrivalAirport: data.arrival.airport,
             arrivalAirportCode,
             departureAirport: data.departure.airport,
             departureAirportCode,
+            arrivalDate,
+            flightNumber: data.flightNumber,
           });
         }
       } catch {
@@ -106,7 +129,7 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
     // Debounce the API call
     const timeoutId = setTimeout(fetchFlightInfo, 500);
     return () => clearTimeout(timeoutId);
-  }, [flightNumber, date, origin, onCheckInUrgent, onFlightData]);
+  }, [flightNumber, date, origin]); // Removed callback deps - using refs instead
 
   if (!flightNumber || flightNumber.length < 3) {
     return null;
