@@ -175,10 +175,16 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
               8. Processing Times
             </h2>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">
+              We offer various processing speeds:
+            </p>
             <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 ml-4">
-              <li><strong>Standard Processing:</strong> 3-5 business days</li>
-              <li><strong>Rush Processing:</strong> 1-2 business days</li>
-              <li><strong>Urgent Processing:</strong> Same day or next business day</li>
+              <li><strong>Emergency:</strong> 15-30 minutes (with Check-In approval letter)</li>
+              <li><strong>Urgent:</strong> 1 hour (during business hours, for eligible applications)</li>
+              <li><strong>Express:</strong> 4 hours</li>
+              <li><strong>Express:</strong> 1 day</li>
+              <li><strong>Express:</strong> 2 days</li>
+              <li><strong>Standard:</strong> 2-3 business days</li>
             </ul>
             <p className="text-gray-700 dark:text-gray-300 mt-3">
               <strong>Note:</strong> Processing times are estimates and begin after complete documentation is received.
