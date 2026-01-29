@@ -60,22 +60,13 @@ export function FlightCheckBox({
             {hasConnection ? "First Flight" : "Flight Number"}
           </label>
         )}
-        <div className="flex flex-col sm:flex-row gap-2">
-          <input
-            type="text"
-            value={flightNumber}
-            onChange={(e) => onFlightNumberChange(e.target.value.toUpperCase())}
-            placeholder={placeholder}
-            className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <input
-            type="date"
-            value={flightDate}
-            onChange={(e) => onFlightDateChange(e.target.value)}
-            min={new Date().toISOString().split("T")[0]}
-            className="px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
+        <input
+          type="text"
+          value={flightNumber}
+          onChange={(e) => onFlightNumberChange(e.target.value.toUpperCase())}
+          placeholder={placeholder}
+          className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
       </div>
 
       {/* Show first flight info */}
@@ -122,22 +113,13 @@ export function FlightCheckBox({
           <label className="block text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
             Connection Flight (to Vietnam)
           </label>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="text"
-              value={connectionFlightNumber}
-              onChange={(e) => setConnectionFlightNumber(e.target.value.toUpperCase())}
-              placeholder="e.g. CX799"
-              className="flex-1 px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-blue-300 dark:border-blue-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <input
-              type="date"
-              value={flightDate}
-              onChange={(e) => onFlightDateChange(e.target.value)}
-              min={new Date().toISOString().split("T")[0]}
-              className="px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-blue-300 dark:border-blue-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
+          <input
+            type="text"
+            value={connectionFlightNumber}
+            onChange={(e) => setConnectionFlightNumber(e.target.value.toUpperCase())}
+            placeholder="e.g. CX799"
+            className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-blue-300 dark:border-blue-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
           <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
             Enter your connecting flight that arrives in Vietnam (e.g., HKG → SGN)
           </p>
