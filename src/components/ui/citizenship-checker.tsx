@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { getAirportsForCountry } from "@/lib/amadeus";
 import { FlightRiskBlock } from "./flight-risk-block";
-import { DynamicFlights } from "./dynamic-flights";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -517,7 +516,6 @@ export function CitizenshipChecker({
   };
 
   const selectedCountryName = ALL_COUNTRIES.find((c) => c.code === selectedCountry)?.name;
-  const selectedAirportInfo = availableAirports.find(a => a.code === departingAirport);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
@@ -668,14 +666,6 @@ export function CitizenshipChecker({
         </div>
       )}
 
-      {/* Dynamic Flights - shown when an airport is selected */}
-      {departingAirport && selectedAirportInfo && (
-        <DynamicFlights
-          airportCode={departingAirport}
-          airportName={selectedAirportInfo.name}
-          cityName={selectedAirportInfo.city}
-        />
-      )}
     </div>
   );
 }

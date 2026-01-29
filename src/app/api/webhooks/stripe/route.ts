@@ -13,7 +13,7 @@ const twilioClient = twilio(
 );
 
 // Admin WhatsApp number for notifications
-const ADMIN_WHATSAPP = process.env.ADMIN_WHATSAPP_NUMBER || "+3725035137";
+const ADMIN_WHATSAPP = process.env.ADMIN_WHATSAPP_NUMBER || "+841205549868";
 const TWILIO_WHATSAPP_FROM = process.env.TWILIO_WHATSAPP_NUMBER || "+14155238886";
 
 // Helper to send confirmation email

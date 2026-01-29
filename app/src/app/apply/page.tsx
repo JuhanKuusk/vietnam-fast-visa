@@ -9,7 +9,6 @@ import { PhoneVerification } from "@/components/ui/phone-verification";
 import { Logo } from "@/components/ui/logo";
 import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
 import { getAirportsForCountry } from "@/lib/amadeus";
-import { DynamicFlights } from "@/components/ui/dynamic-flights";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
 // Visa-free countries with duration
@@ -714,14 +713,6 @@ function CitizenshipChecker({
         </div>
       )}
 
-      {/* Dynamic Flights - shown when an airport is selected */}
-      {departingAirport && selectedAirportInfo && (
-        <DynamicFlights
-          airportCode={departingAirport}
-          airportName={selectedAirportInfo.name}
-          cityName={selectedAirportInfo.city}
-        />
-      )}
     </div>
   );
 }
