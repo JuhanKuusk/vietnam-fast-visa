@@ -390,12 +390,6 @@ export default function Home() {
       <section className="text-white py-12 md:py-16 bg-gray-100 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            {/* Urgency Badge */}
-            <div className="inline-block mb-4 rounded-full px-4 py-2 text-sm font-medium" style={{ backgroundColor: '#8EE1EC' }}>
-              <span className="animate-pulse inline-block mr-1">⚡</span>
-              <span style={{ color: '#0E5C3D' }}>{t.hero.urgencyBadge}</span>
-            </div>
-
             {/* Main Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
               <span style={{ color: '#c52e3a' }}>{t.hero.headline1}</span>
