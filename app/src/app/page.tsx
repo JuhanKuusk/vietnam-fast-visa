@@ -297,13 +297,6 @@ export default function Home() {
     purpose: "tourist",
   });
   const [showVisaInfo, setShowVisaInfo] = useState(false);
-  const [heroFlightNumber, setHeroFlightNumber] = useState("");
-  const [heroFlightDate, setHeroFlightDate] = useState(() => {
-    // Default to tomorrow's date for better UX (most users search for future flights)
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split("T")[0];
-  });
   const [nationalitySearch, setNationalitySearch] = useState("");
   const [showNationalityDropdown, setShowNationalityDropdown] = useState(false);
   const [flightArrivalData, setFlightArrivalData] = useState<{
@@ -467,38 +460,6 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Flight Check Box */}
-            <div className="max-w-2xl mx-auto mb-8">
-              <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur rounded-2xl p-5 shadow-xl border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl">✈️</span>
-                  <span className="font-bold text-gray-900 dark:text-white">{t.hero.checkFlightStatus}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="text"
-                    value={heroFlightNumber}
-                    onChange={(e) => setHeroFlightNumber(e.target.value.toUpperCase())}
-                    placeholder={t.hero.enterFlightNumber}
-                    className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:border-transparent"
-                  />
-                  <input
-                    type="date"
-                    value={heroFlightDate}
-                    onChange={(e) => setHeroFlightDate(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
-                    className="px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:border-transparent"
-                  />
-                </div>
-                {heroFlightNumber && heroFlightNumber.length >= 3 && (
-                  <FlightInfo
-                    flightNumber={heroFlightNumber}
-                    date={heroFlightDate}
-                  />
-                )}
               </div>
             </div>
 
