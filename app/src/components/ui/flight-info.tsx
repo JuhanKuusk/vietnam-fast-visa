@@ -147,15 +147,9 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
     }
   };
 
-  // Hide departed flights entirely
-  if (checkIfDeparted()) {
-    return null;
-  }
-
-  // Hide flights where check-in is already closed
-  if (flightData.checkInStatus === "closed") {
-    return null;
-  }
+  // For departed flights, show info but with departed status
+  const hasDeparted = checkIfDeparted();
+  const isCheckInClosed = flightData.checkInStatus === "closed";
 
   // Check if flight arrives in Vietnam (for highlighting purposes)
   const vietnamAirportCodes = ["HAN", "SGN", "DAD", "CXR", "PQC", "VDO", "HPH", "VCA", "VII", "HUI", "DLI", "PXU", "UIH", "TBB", "BMV"];
@@ -195,6 +189,8 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
         return "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-700";
       case "not_open_yet":
         return "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-700";
+      case "closed":
+        return "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200 border-red-200 dark:border-red-700";
       default:
         return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700";
     }
@@ -208,12 +204,20 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
         return "⚠️";
       case "not_open_yet":
         return "🕐";
+      case "closed":
+        return "✗";
       default:
         return "?";
     }
   };
 
   const getCheckInMessage = () => {
+    if (hasDeparted) {
+      return "Flight has departed";
+    }
+    if (flightData.checkInStatus === "closed") {
+      return "Check-in is CLOSED";
+    }
     if (flightData.checkInStatus === "not_open_yet" && flightData.minutesUntilCheckInOpens) {
       const hours = Math.floor(flightData.minutesUntilCheckInOpens / 60);
       const mins = flightData.minutesUntilCheckInOpens % 60;
@@ -354,8 +358,19 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
         </div>
       </div>
 
+      {/* Message for closed/departed flights */}
+      {(isCheckInClosed || hasDeparted) && (
+        <div className="mt-3 p-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            {hasDeparted
+              ? "This flight has already departed. Select a future date to check another flight."
+              : "Check-in for this flight has closed. If you need a visa for your next trip, select a future date above."}
+          </p>
+        </div>
+      )}
+
       {/* WhatsApp Contact Button - show for all valid check-in statuses */}
-      {(flightData.checkInStatus === "closing_soon" || flightData.checkInStatus === "open" || flightData.checkInStatus === "not_open_yet") && (
+      {!isCheckInClosed && !hasDeparted && (flightData.checkInStatus === "closing_soon" || flightData.checkInStatus === "open" || flightData.checkInStatus === "not_open_yet") && (
         <a
           href={`https://wa.me/841205549868?text=${encodeURIComponent(
             flightData.checkInStatus === "closing_soon"
@@ -382,7 +397,8 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
         </a>
       )}
 
-      {/* Email Notification Subscription */}
+      {/* Email Notification Subscription - only for upcoming flights */}
+      {!isCheckInClosed && !hasDeparted && (
       <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
         {subscribeSuccess ? (
           <div className="flex items-center gap-2 p-3 rounded-lg bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-800 dark:text-green-200">
@@ -436,6 +452,7 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
           </form>
         )}
       </div>
+      )}
     </div>
   );
 }
