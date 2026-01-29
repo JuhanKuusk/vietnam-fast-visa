@@ -875,17 +875,17 @@ export default function Home() {
                 <div className="flex justify-between items-center p-3 rounded-lg border-2 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600">
                   <div>
                     <span className="font-medium text-gray-900 dark:text-white block">{t.sidebar.ourPrice}</span>
-                    <span className="text-xs text-gray-600 dark:text-gray-400">{t.heroPrice?.expressLabel || "1.5-Hour Express"}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">{t.heroPrice?.expressLabel || "1-Hour Express"}</span>
                   </div>
                   <span className="font-bold text-xl text-gray-900 dark:text-white">$199</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorA}</span>
-                  <span className="text-gray-400 dark:text-gray-500 line-through">$200</span>
+                  <span className="text-gray-400 dark:text-gray-500 line-through">$239</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorB}</span>
-                  <span className="text-gray-400 dark:text-gray-500 line-through">$235</span>
+                  <span className="text-gray-400 dark:text-gray-500 line-through">$279</span>
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
