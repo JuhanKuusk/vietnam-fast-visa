@@ -2433,42 +2433,47 @@ function ApplyForm() {
                       language={language}
                     />
 
-                    {/* Scrollable Terms & Conditions Preview Box */}
+                    {/* Scrollable Terms & Conditions Preview Box - ~5cm height with right scrollbar */}
                     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                       <div className="bg-gray-100 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600">
                         <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Terms & Conditions</h4>
                       </div>
-                      <div className="h-[150px] overflow-y-auto p-4 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                      <div className="h-[200px] overflow-y-scroll p-4 text-xs text-gray-600 dark:text-gray-400 leading-relaxed scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">1. Definitions</p>
-                        <p className="mb-3">&quot;Website&quot; refers to VietnamVisaHelp.com. &quot;Service&quot; refers to the Vietnam e-Visa application assistance provided. &quot;Client&quot; or &quot;You&quot; refers to any individual using our Service. &quot;We&quot;, &quot;Us&quot;, or &quot;Our&quot; refers to VietnamVisaHelp.com and its operators.</p>
+                        <p className="mb-3">&quot;Provider&quot; - VietnamVisaHelp.com is an e-commercial or non-government website. &quot;Client&quot; - An individual or company who conducts payment of the Sales Order/Booking. &quot;Terms and Conditions&quot; - An agreement between The Client and The Provider governing the rights, obligations, and responsibilities of both parties.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">2. Acceptance of Terms</p>
-                        <p className="mb-3">By using our Website and Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. You understand that VietnamVisaHelp.com is an independent visa assistance service and is NOT affiliated with the Vietnamese Government or any governmental body.</p>
+                        <p className="mb-3">By using our Website and Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. You understand that VietnamVisaHelp.com is an independent visa assistance service and is NOT affiliated with the Vietnamese Government or any governmental body. You agree not to use the website for illegal purposes and to respect all applicable laws.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">3. Nature of Our Service</p>
                         <p className="mb-3">VietnamVisaHelp.com provides professional visa application assistance services including document review and verification, application form preparation and submission, 24/7 customer support, application status tracking, and express processing options. We do not issue visas. All visa decisions are made solely by the Vietnam Immigration Department.</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">4. Document Requirements</p>
-                        <p className="mb-3">You must provide a valid passport with at least 6 months validity, a clear scan of your passport data page, a recent passport-style photograph, and accurate travel dates. You are solely responsible for ensuring all information provided is accurate and complete.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">4. Processing Times</p>
+                        <p className="mb-3">We offer various processing speeds: Emergency (15-30 min with Check-In Approval), Urgent (1 hour), Express (4 hours), Express (1 day), Express (2 days), and Standard (2-3 business days). Processing times are estimates and actual delivery depends on the Vietnam Immigration Department.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">5. Fees and Payment</p>
-                        <p className="mb-3">Our fees consist of: Government Fee (the official fee charged by the Vietnam Immigration Department - currently $25 USD for single entry, $50 USD for multiple entry) and Service Fee (our processing and assistance fee, which varies based on processing speed selected). All fees are clearly displayed before payment.</p>
+                        <p className="mb-3">Our fees consist of: Government Fee ($25 USD single entry, $50 USD multiple entry - non-refundable once submitted) and Service Fee (varies by processing speed from $24 to $224). Total prices: Standard $49, Express 2-day $79, Express 1-day $99, Express 4-hour $119, Urgent 1-hour $159, Emergency $199, Weekend/Holiday $249.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">6. Refund Policy</p>
-                        <p className="mb-3">Before submission: Full refund available if you cancel before we submit your application. After submission: Government fees are non-refundable once the application is submitted to Vietnamese authorities. Visa denial due to our errors: We will refund our service fee. Client error: No refund is available if the visa is denied due to incorrect information provided by you.</p>
+                        <p className="mb-3">Full refund: Available if you cancel before we submit your application. Partial refund (service fee only): When you cancel after submission but before approval. No refund: Once visa is approved, visa denial due to your error, change of travel plans, or delays by authorities. If visa is denied by Vietnam Immigration: We refund 50% of service fee.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">7. Warnings and Disclaimers</p>
-                        <p className="mb-3">VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service that charges fees for visa application assistance. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) without using our services. Visa approval is at the sole discretion of Vietnamese immigration authorities.</p>
+                        <p className="mb-3">VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) for $25 USD with 3 business day processing. Visa approval is at the sole discretion of Vietnamese immigration authorities. Non-refundable fares or reservations must not be purchased until all visas have been obtained.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">8. Limitation of Liability</p>
-                        <p className="mb-3">We are not responsible for: visa refusals or delays by the Vietnam Immigration Department, entry denial at Vietnamese borders, travel disruptions or missed flights, changes in Vietnamese visa policies, consequences of incorrect information provided by you, or technical issues beyond our control. Our total liability shall not exceed the amount you paid for our services.</p>
+                        <p className="mb-3">We are not responsible for: visa refusals or delays by the Vietnam Immigration Department, entry denial at Vietnamese borders, travel disruptions or missed flights, changes in Vietnamese visa policies, consequences of incorrect information provided by you, incomplete documentation, or technical issues beyond our control. Our total liability shall not exceed the amount you paid for our services.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">9. Privacy and Data Protection</p>
-                        <p className="mb-3">Your personal information is collected only for visa application processing purposes, stored securely using industry-standard encryption, shared only with the Vietnam Immigration Department as required, and never sold to third parties for marketing purposes.</p>
+                        <p className="mb-3">Your personal information is collected only for visa application processing purposes, stored securely, shared only with the Vietnam Immigration Department as required, and never sold to third parties. Your data is deleted 30 days after services are completed.</p>
 
-                        <p className="text-blue-600 dark:text-blue-400 mt-4">
-                          <a href="/terms" target="_blank" className="hover:underline">Read full Terms & Conditions →</a>
-                        </p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">10. Contact Information</p>
+                        <p className="mb-3">Email: support@vietnamvisahelp.com | WhatsApp: +84 120 554 9868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</p>
+
+                        <div className="flex gap-4 mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
+                          <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">Full Terms →</a>
+                          <a href="/refund" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">Refund Policy →</a>
+                          <a href="/privacy" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">Privacy Policy →</a>
+                        </div>
                       </div>
                     </div>
 
