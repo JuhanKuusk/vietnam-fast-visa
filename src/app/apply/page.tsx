@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { PhoneVerification } from "@/components/ui/phone-verification";
 import { Logo } from "@/components/ui/logo";
 import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
-import { FlightInfo } from "@/components/ui/flight-info";
+import { FlightCheckBox } from "@/components/ui/flight-check-box";
 import { getAirportsForCountry } from "@/lib/amadeus";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 
@@ -1457,35 +1457,17 @@ function ApplyForm() {
           </div>
         </div>
 
-        {/* Flight Status Check Box */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5 mb-6">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-xl">✈️</span>
-            <span className="font-bold text-gray-900 dark:text-white">Check Your Flight Status</span>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="text"
-              value={travelDetails.flightNumber}
-              onChange={(e) => setTravelDetails({ ...travelDetails, flightNumber: e.target.value.toUpperCase() })}
-              placeholder="e.g. VN123, CX799"
-              className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            <input
-              type="date"
-              value={flightCheckDate}
-              onChange={(e) => setFlightCheckDate(e.target.value)}
-              min={new Date().toISOString().split("T")[0]}
-              className="px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          {travelDetails.flightNumber && travelDetails.flightNumber.length >= 3 && (
-            <FlightInfo
-              flightNumber={travelDetails.flightNumber}
-              date={flightCheckDate}
-              onFlightData={handleFlightData}
-            />
-          )}
+        {/* Flight Status Check Box with Connection Flight Support */}
+        <div className="mb-6">
+          <FlightCheckBox
+            flightNumber={travelDetails.flightNumber}
+            onFlightNumberChange={(value) => setTravelDetails({ ...travelDetails, flightNumber: value })}
+            flightDate={flightCheckDate}
+            onFlightDateChange={setFlightCheckDate}
+            onFlightData={handleFlightData}
+            title="Check Your Flight Status"
+            placeholder="e.g. VN123, CX841"
+          />
         </div>
 
         {/* Citizenship Checker - Only show if nationality not already provided from homepage */}
