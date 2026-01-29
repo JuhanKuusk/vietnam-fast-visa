@@ -118,6 +118,16 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {/* Contact Info */}
+          <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t.legal?.contact || "Contact Us"}</h2>
+            <ul className="list-none text-gray-700 dark:text-gray-300 space-y-2">
+              <li><strong>Email:</strong> <a href="mailto:support@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@vietnamvisahelp.com</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/841205549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 120 554 9868</a></li>
+              <li className="pt-2"><strong>Address:</strong> Binh Thanh District, Ho Chi Minh City, Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Ho Chi Minh City</li>
+            </ul>
+          </div>
+
           {/* CTA */}
           <div className="text-center pt-8">
             <Link
