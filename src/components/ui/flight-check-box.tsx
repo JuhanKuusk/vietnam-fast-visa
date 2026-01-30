@@ -41,11 +41,16 @@ export function FlightCheckBox({
   const hasConnectionRef = useRef(hasConnection);
   const onFlightDataRef = useRef(onFlightData);
 
-  // Keep refs in sync
+  // Keep onFlightData ref in sync
   useEffect(() => {
-    hasConnectionRef.current = hasConnection;
     onFlightDataRef.current = onFlightData;
-  }, [hasConnection, onFlightData]);
+  }, [onFlightData]);
+
+  // Custom setter that updates both state and ref immediately
+  const setHasConnectionWithRef = useCallback((value: boolean) => {
+    hasConnectionRef.current = value; // Update ref IMMEDIATELY (synchronous)
+    setHasConnection(value); // Then update state (async)
+  }, []);
 
   // Handle connection flight data - this is the one that arrives in Vietnam
   // Memoized with useCallback to prevent infinite re-renders in FlightInfo
@@ -58,11 +63,16 @@ export function FlightCheckBox({
 
   // Handle main flight data - only use if no connection flight
   // Memoized with useCallback to prevent infinite re-renders in FlightInfo
+  // IMPORTANT: When user has a connecting flight, we NEVER use the first flight's data
+  // even if it arrives in Vietnam - the connecting flight is always the one that matters
   const handleMainFlightData = useCallback((data: FlightDataCallback) => {
-    // Only pass to parent if there's no connection flight
+    // Only pass to parent if there's NO connection flight checkbox checked
+    // Check the ref synchronously to ensure we have the latest value
     if (!hasConnectionRef.current && onFlightDataRef.current) {
       onFlightDataRef.current(data);
     }
+    // If hasConnection is true, we intentionally DO NOT call onFlightData
+    // The connecting flight's handleConnectionFlightData will handle it
   }, []);
 
   const content = (
@@ -108,7 +118,7 @@ export function FlightCheckBox({
               type="checkbox"
               checked={hasConnection}
               onChange={(e) => {
-                setHasConnection(e.target.checked);
+                setHasConnectionWithRef(e.target.checked);
                 if (!e.target.checked) {
                   setConnectionFlightNumber("");
                 }
