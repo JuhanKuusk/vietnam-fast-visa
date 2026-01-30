@@ -1094,7 +1094,9 @@ function ApplyForm() {
   const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>([null]);
   const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>([null]);
 
-  // Flight check state
+  // Flight check state - use separate state for the first flight input
+  // This prevents the connecting flight from overwriting the first flight number input
+  const [firstFlightNumber, setFirstFlightNumber] = useState("");
   const [flightCheckDate, setFlightCheckDate] = useState(() => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -1510,8 +1512,8 @@ function ApplyForm() {
         {/* Flight Status Check Box with Connection Flight Support */}
         <div className="mb-6">
           <FlightCheckBox
-            flightNumber={travelDetails.flightNumber}
-            onFlightNumberChange={(value) => setTravelDetails({ ...travelDetails, flightNumber: value })}
+            flightNumber={firstFlightNumber}
+            onFlightNumberChange={setFirstFlightNumber}
             flightDate={flightCheckDate}
             onFlightDateChange={setFlightCheckDate}
             onFlightData={handleFlightData}
