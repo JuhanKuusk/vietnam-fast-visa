@@ -67,13 +67,16 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
   }, []);
 
   useEffect(() => {
+    console.log("[FlightInfo] useEffect triggered - flightNumber:", flightNumber, "date:", date);
     if (!flightNumber || flightNumber.length < 3) {
+      console.log("[FlightInfo] Flight number too short, skipping API call");
       setFlightData(null);
       setError(null);
       return;
     }
 
     const fetchFlightInfo = async () => {
+      console.log("[FlightInfo] fetchFlightInfo called - fetching API");
       setLoading(true);
       setError(null);
 
@@ -82,8 +85,10 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
         if (date) params.append("date", date);
         if (origin) params.append("origin", origin);
 
+        console.log("[FlightInfo] Calling API with params:", params.toString());
         const response = await fetch(`/api/flight-info?${params}`);
         const data = await response.json();
+        console.log("[FlightInfo] API response received:", { ok: response.ok, data });
 
         if (!response.ok) {
           setError(data.error || "Failed to fetch flight info");
