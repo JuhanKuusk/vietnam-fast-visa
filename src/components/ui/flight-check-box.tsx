@@ -55,8 +55,11 @@ export function FlightCheckBox({
   // Handle connection flight data - this is the one that arrives in Vietnam
   // Memoized with useCallback to prevent infinite re-renders in FlightInfo
   const handleConnectionFlightData = useCallback((data: FlightDataCallback) => {
+    console.log("[FlightCheckBox] handleConnectionFlightData called with:", data);
+    console.log("[FlightCheckBox] onFlightDataRef.current exists:", !!onFlightDataRef.current);
     // Pass the connection flight data to parent (this is the flight arriving in Vietnam)
     if (onFlightDataRef.current) {
+      console.log("[FlightCheckBox] Calling parent onFlightData with connection flight data");
       onFlightDataRef.current(data);
     }
   }, []);
@@ -66,10 +69,16 @@ export function FlightCheckBox({
   // IMPORTANT: When user has a connecting flight, we NEVER use the first flight's data
   // even if it arrives in Vietnam - the connecting flight is always the one that matters
   const handleMainFlightData = useCallback((data: FlightDataCallback) => {
+    console.log("[FlightCheckBox] handleMainFlightData called with:", data);
+    console.log("[FlightCheckBox] hasConnectionRef.current:", hasConnectionRef.current);
+    console.log("[FlightCheckBox] onFlightDataRef.current exists:", !!onFlightDataRef.current);
     // Only pass to parent if there's NO connection flight checkbox checked
     // Check the ref synchronously to ensure we have the latest value
     if (!hasConnectionRef.current && onFlightDataRef.current) {
+      console.log("[FlightCheckBox] Calling parent onFlightData with main flight data");
       onFlightDataRef.current(data);
+    } else {
+      console.log("[FlightCheckBox] NOT calling parent - hasConnection is true or ref is null");
     }
     // If hasConnection is true, we intentionally DO NOT call onFlightData
     // The connecting flight's handleConnectionFlightData will handle it

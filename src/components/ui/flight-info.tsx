@@ -99,6 +99,9 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
         }
 
         // Pass flight data to parent for pre-filling apply form (use ref to avoid dependency)
+        console.log("[FlightInfo] onFlightDataRef.current exists:", !!onFlightDataRef.current);
+        console.log("[FlightInfo] data.arrival:", data.arrival);
+        console.log("[FlightInfo] data.departure:", data.departure);
         if (onFlightDataRef.current && data.arrival && data.departure) {
           // Extract airport codes from strings like "Noi Bai International (HAN)"
           const arrivalAirportMatch = data.arrival.airport.match(/\(([A-Z]{3})\)/);
@@ -109,14 +112,18 @@ export function FlightInfo({ flightNumber, date, origin, onCheckInUrgent, onFlig
           const arrivalDate = data.arrival.scheduledTime
             ? data.arrival.scheduledTime.split("T")[0]
             : "";
-          onFlightDataRef.current({
+          const flightDataToSend = {
             arrivalAirport: data.arrival.airport,
             arrivalAirportCode,
             departureAirport: data.departure.airport,
             departureAirportCode,
             arrivalDate,
             flightNumber: data.flightNumber,
-          });
+          };
+          console.log("[FlightInfo] Calling onFlightData with:", flightDataToSend);
+          onFlightDataRef.current(flightDataToSend);
+        } else {
+          console.log("[FlightInfo] NOT calling onFlightData - ref or data missing");
         }
       } catch {
         setError("Failed to fetch flight information");

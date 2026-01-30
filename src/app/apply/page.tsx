@@ -1103,6 +1103,9 @@ function ApplyForm() {
     return tomorrow.toISOString().split("T")[0];
   });
 
+  // Track when form was auto-filled from flight data
+  const [autoFilledMessage, setAutoFilledMessage] = useState<string | null>(null);
+
   // Handle flight data to auto-fill airport fields, entry date, and flight number
   const handleFlightData = useCallback((data: {
     arrivalAirport: string;
@@ -1112,10 +1115,18 @@ function ApplyForm() {
     arrivalDate: string;
     flightNumber: string;
   }) => {
+    console.log("[handleFlightData] Received data:", data);
     // Check if the arrival airport is a Vietnamese airport (entry port)
     const vietnamAirportCodes = ENTRY_PORTS.filter(p => p.type === "airport").map(p => p.code);
+    console.log("[handleFlightData] Vietnam airport codes:", vietnamAirportCodes);
+    console.log("[handleFlightData] Arrival code:", data.arrivalAirportCode, "Is Vietnam:", vietnamAirportCodes.includes(data.arrivalAirportCode));
 
     if (vietnamAirportCodes.includes(data.arrivalAirportCode)) {
+      console.log("[handleFlightData] Auto-filling form with:", {
+        entryPort: data.arrivalAirportCode,
+        entryDate: data.arrivalDate,
+        flightNumber: data.flightNumber,
+      });
       // Auto-fill entry port, entry date, and flight number if flight arrives in Vietnam
       setTravelDetails(prev => ({
         ...prev,
@@ -1127,6 +1138,12 @@ function ApplyForm() {
         // Auto-fill flight number from the flight that arrives in Vietnam
         flightNumber: data.flightNumber || prev.flightNumber,
       }));
+      // Show auto-fill success message
+      setAutoFilledMessage(`Auto-filled: ${data.arrivalAirportCode} on ${data.arrivalDate} (${data.flightNumber})`);
+      // Clear message after 5 seconds
+      setTimeout(() => setAutoFilledMessage(null), 5000);
+    } else {
+      console.log("[handleFlightData] NOT auto-filling - arrival airport not in Vietnam");
     }
   }, []);
 
@@ -1520,6 +1537,15 @@ function ApplyForm() {
             title="Check Your Flight Status"
             placeholder="e.g. VN123, CX841"
           />
+          {/* Auto-fill success notification */}
+          {autoFilledMessage && (
+            <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg flex items-center gap-2 animate-pulse">
+              <svg className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span className="text-green-700 dark:text-green-300 text-sm font-medium">{autoFilledMessage}</span>
+            </div>
+          )}
         </div>
 
         {/* Citizenship Checker - Only show if nationality not already provided from homepage */}
