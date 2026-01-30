@@ -3,12 +3,21 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FlightInfo } from "./flight-info";
 
+interface FlightDataCallback {
+  arrivalAirport: string;
+  arrivalAirportCode: string;
+  departureAirport: string;
+  departureAirportCode: string;
+  arrivalDate: string;
+  flightNumber: string;
+}
+
 interface FlightCheckBoxProps {
   flightNumber: string;
   onFlightNumberChange: (value: string) => void;
   flightDate: string;
   onFlightDateChange: (value: string) => void;
-  onFlightData?: (data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => void;
+  onFlightData?: (data: FlightDataCallback) => void;
   placeholder?: string;
   title?: string;
   /** When true, removes the outer card wrapper for embedding inside other containers */
@@ -32,28 +41,47 @@ export function FlightCheckBox({
   const hasConnectionRef = useRef(hasConnection);
   const onFlightDataRef = useRef(onFlightData);
 
-  // Keep refs in sync
+  // Keep onFlightData ref in sync
   useEffect(() => {
-    hasConnectionRef.current = hasConnection;
     onFlightDataRef.current = onFlightData;
-  }, [hasConnection, onFlightData]);
+  }, [onFlightData]);
+
+  // Custom setter that updates both state and ref immediately
+  const setHasConnectionWithRef = useCallback((value: boolean) => {
+    hasConnectionRef.current = value; // Update ref IMMEDIATELY (synchronous)
+    setHasConnection(value); // Then update state (async)
+  }, []);
 
   // Handle connection flight data - this is the one that arrives in Vietnam
   // Memoized with useCallback to prevent infinite re-renders in FlightInfo
-  const handleConnectionFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+  const handleConnectionFlightData = useCallback((data: FlightDataCallback) => {
+    console.log("[FlightCheckBox] handleConnectionFlightData called with:", data);
+    console.log("[FlightCheckBox] onFlightDataRef.current exists:", !!onFlightDataRef.current);
     // Pass the connection flight data to parent (this is the flight arriving in Vietnam)
     if (onFlightDataRef.current) {
+      console.log("[FlightCheckBox] Calling parent onFlightData with connection flight data");
       onFlightDataRef.current(data);
     }
   }, []);
 
   // Handle main flight data - only use if no connection flight
   // Memoized with useCallback to prevent infinite re-renders in FlightInfo
-  const handleMainFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
-    // Only pass to parent if there's no connection flight
+  // IMPORTANT: When user has a connecting flight, we NEVER use the first flight's data
+  // even if it arrives in Vietnam - the connecting flight is always the one that matters
+  const handleMainFlightData = useCallback((data: FlightDataCallback) => {
+    console.log("[FlightCheckBox] handleMainFlightData called with:", data);
+    console.log("[FlightCheckBox] hasConnectionRef.current:", hasConnectionRef.current);
+    console.log("[FlightCheckBox] onFlightDataRef.current exists:", !!onFlightDataRef.current);
+    // Only pass to parent if there's NO connection flight checkbox checked
+    // Check the ref synchronously to ensure we have the latest value
     if (!hasConnectionRef.current && onFlightDataRef.current) {
+      console.log("[FlightCheckBox] Calling parent onFlightData with main flight data");
       onFlightDataRef.current(data);
+    } else {
+      console.log("[FlightCheckBox] NOT calling parent - hasConnection is true or ref is null");
     }
+    // If hasConnection is true, we intentionally DO NOT call onFlightData
+    // The connecting flight's handleConnectionFlightData will handle it
   }, []);
 
   const content = (
@@ -65,47 +93,48 @@ export function FlightCheckBox({
         </div>
       )}
 
-      {/* First Flight */}
+      {/* Flight Number and Date Row */}
       <div className={embedded ? "" : "mb-3"}>
         {!embedded && (
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {hasConnection ? "First Flight" : "Flight Number"}
+            {hasConnection ? "First Flight" : "Flight Number & Date"}
           </label>
         )}
-        <input
-          type="text"
-          value={flightNumber}
-          onChange={(e) => onFlightNumberChange(e.target.value.toUpperCase())}
-          placeholder={placeholder}
-          className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={flightNumber}
+            onChange={(e) => onFlightNumberChange(e.target.value.toUpperCase())}
+            placeholder={placeholder}
+            className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <input
+            type="date"
+            value={flightDate}
+            onChange={(e) => onFlightDateChange(e.target.value)}
+            min={new Date().toISOString().split("T")[0]}
+            required
+            className="w-36 px-3 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
       </div>
 
-      {/* Show first flight info */}
-      {flightNumber && flightNumber.length >= 3 && (
-        <FlightInfo
-          flightNumber={flightNumber}
-          date={flightDate}
-          onFlightData={handleMainFlightData}
-        />
-      )}
-
       {/* Connection Flight Checkbox */}
-      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <label className="flex items-center gap-3 cursor-pointer group">
+      <div className="mt-3 mb-3">
+        <label className="flex items-center gap-3 cursor-pointer group p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/30 transition-colors">
           <div className="relative">
             <input
               type="checkbox"
               checked={hasConnection}
               onChange={(e) => {
-                setHasConnection(e.target.checked);
+                setHasConnectionWithRef(e.target.checked);
                 if (!e.target.checked) {
                   setConnectionFlightNumber("");
                 }
               }}
               className="sr-only peer"
             />
-            <div className="w-5 h-5 border-2 border-gray-300 dark:border-gray-500 rounded peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-colors">
+            <div className="w-5 h-5 border-2 border-amber-400 dark:border-amber-500 rounded peer-checked:border-blue-500 peer-checked:bg-blue-500 transition-colors">
               {hasConnection && (
                 <svg className="w-full h-full text-white p-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -113,27 +142,43 @@ export function FlightCheckBox({
               )}
             </div>
           </div>
-          <span className="text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white">
+          <span className="text-sm font-medium text-amber-800 dark:text-amber-300">
             I have a connecting flight to Vietnam
           </span>
         </label>
       </div>
 
-      {/* Connection Flight Input */}
+      {/* WhatsApp Button - Green CTA */}
+      <div className="mb-3">
+        <a
+          href="https://wa.me/841205549868?text=Hi!%20I%20need%20help%20with%20my%20Vietnam%20visa."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full py-3 rounded-lg font-bold text-white flex items-center justify-center gap-2 transition-transform hover:scale-[1.02]"
+          style={{ backgroundColor: '#25D366' }}
+        >
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Get Your Vietnam Visa Ready
+        </a>
+      </div>
+
+      {/* Connection Flight Input - Show before first flight info when enabled */}
       {hasConnection && (
-        <div className="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+        <div className="mb-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
           <label className="block text-sm font-medium text-blue-800 dark:text-blue-300 mb-2">
-            Connection Flight (to Vietnam)
+            Connecting Flight to Vietnam
           </label>
           <input
             type="text"
             value={connectionFlightNumber}
             onChange={(e) => setConnectionFlightNumber(e.target.value.toUpperCase())}
-            placeholder="e.g. CX799"
+            placeholder="e.g. EY834 (Abu Dhabi to Ho Chi Minh)"
             className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-blue-300 dark:border-blue-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
-            Enter your connecting flight that arrives in Vietnam (e.g., HKG → SGN)
+            Enter your flight that arrives in Vietnam - this is used for your visa entry date
           </p>
 
           {/* Show connection flight info */}
@@ -146,6 +191,20 @@ export function FlightCheckBox({
               />
             </div>
           )}
+        </div>
+      )}
+
+      {/* Show first flight info */}
+      {flightNumber && flightNumber.length >= 3 && (
+        <div className={hasConnection ? "opacity-70" : ""}>
+          {hasConnection && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">First leg of your journey:</p>
+          )}
+          <FlightInfo
+            flightNumber={flightNumber}
+            date={flightDate}
+            onFlightData={handleMainFlightData}
+          />
         </div>
       )}
     </>
