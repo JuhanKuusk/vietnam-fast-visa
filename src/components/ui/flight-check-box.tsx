@@ -74,20 +74,30 @@ export function FlightCheckBox({
         </div>
       )}
 
-      {/* First Flight */}
+      {/* Flight Number and Date Row */}
       <div className={embedded ? "" : "mb-3"}>
         {!embedded && (
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {hasConnection ? "First Flight" : "Flight Number"}
+            {hasConnection ? "First Flight" : "Flight Number & Date"}
           </label>
         )}
-        <input
-          type="text"
-          value={flightNumber}
-          onChange={(e) => onFlightNumberChange(e.target.value.toUpperCase())}
-          placeholder={placeholder}
-          className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={flightNumber}
+            onChange={(e) => onFlightNumberChange(e.target.value.toUpperCase())}
+            placeholder={placeholder}
+            className="flex-1 px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <input
+            type="date"
+            value={flightDate}
+            onChange={(e) => onFlightDateChange(e.target.value)}
+            min={new Date().toISOString().split("T")[0]}
+            required
+            className="w-36 px-3 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
       </div>
 
       {/* Connection Flight Checkbox */}
