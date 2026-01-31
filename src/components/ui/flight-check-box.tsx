@@ -95,9 +95,15 @@ export function FlightCheckBox({
 
       {/* Flight Number and Date Row */}
       <div className={embedded ? "" : "mb-3"}>
-        {!embedded && (
+        {hasConnection && (
+          <div className="flex items-center gap-2 mb-2">
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-600 text-xs font-bold text-gray-700 dark:text-gray-200">1</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Flight 1 - Departure</span>
+          </div>
+        )}
+        {!embedded && !hasConnection && (
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {hasConnection ? "First Flight" : "Flight Number & Date"}
+            Flight Number & Date
           </label>
         )}
         <div className="flex gap-2">

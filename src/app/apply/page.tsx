@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense, useCallback } from "react";
+import { useState, useEffect, Suspense, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
@@ -492,29 +492,41 @@ function CitizenshipChecker({
   onCountrySelect,
   onPurposeChange,
   initialPurpose = "tourism",
+  initialDepartingCountry = "",
+  initialDepartingAirport = "",
   t,
 }: {
   onCountrySelect?: (code: string, requirement: ReturnType<typeof getVisaRequirement>) => void;
   onPurposeChange?: (purpose: string) => void;
   initialPurpose?: string;
+  initialDepartingCountry?: string;
+  initialDepartingAirport?: string;
   t: typeof import("@/lib/translations").translations;
 }) {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [visaResult, setVisaResult] = useState<ReturnType<typeof getVisaRequirement> | null>(null);
   const [purpose, setPurpose] = useState(initialPurpose);
 
-  // New state for departure location
-  const [departingCountry, setDepartingCountry] = useState("");
-  const [departingAirport, setDepartingAirport] = useState("");
+  // New state for departure location - pre-fill from URL params if available
+  const [departingCountry, setDepartingCountry] = useState(initialDepartingCountry);
+  const [departingAirport, setDepartingAirport] = useState(initialDepartingAirport);
   const [availableAirports, setAvailableAirports] = useState<AirportInfo[]>([]);
-  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(!initialDepartingCountry); // Skip loading if pre-filled
   const [detectedCity, setDetectedCity] = useState("");
 
   // Use fallback if translations not yet loaded
   const citizenship = t?.citizenship ?? citizenshipFallback;
 
-  // Fetch geolocation on mount
+  // Fetch geolocation on mount (only if not pre-filled from URL)
   useEffect(() => {
+    // Skip geolocation if we already have data from URL params
+    if (initialDepartingCountry) {
+      // Load airports for the pre-filled country
+      const airports = getAirportsForCountry(initialDepartingCountry);
+      setAvailableAirports(airports);
+      return;
+    }
+
     const fetchGeolocation = async () => {
       try {
         const response = await fetch("/api/geolocation");
@@ -549,7 +561,7 @@ function CitizenshipChecker({
     };
 
     fetchGeolocation();
-  }, []);
+  }, [initialDepartingCountry]);
 
   // Update available airports when departing country changes
   useEffect(() => {
@@ -976,6 +988,28 @@ function ApplyForm() {
     : "tourist";
   const initialEntryPort = searchParams.get("entryPort") || "";
   const speedParam = searchParams.get("speed") || "30-min";
+  const initialDepartingCountry = searchParams.get("departingCountry") || "";
+  const initialDepartingAirport = searchParams.get("departingAirport") || "";
+
+  // Memoize date values to prevent hydration mismatch (server vs client Date() differences)
+  // These are calculated once on client mount to ensure consistency
+  const [todayDate, setTodayDate] = useState("");
+  const [tomorrowDate, setTomorrowDate] = useState("");
+  const [minPassportExpiryDate, setMinPassportExpiryDate] = useState("");
+
+  useEffect(() => {
+    // Set date values only on client side to prevent hydration mismatch
+    const today = new Date();
+    setTodayDate(today.toISOString().split("T")[0]);
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    setTomorrowDate(tomorrow.toISOString().split("T")[0]);
+
+    const minExpiry = new Date();
+    minExpiry.setMonth(minExpiry.getMonth() + 6);
+    setMinPassportExpiryDate(minExpiry.toISOString().split("T")[0]);
+  }, []);
 
   // Get visa speed configuration (default to 30-min if invalid)
   const visaSpeed = (Object.keys(VISA_SPEEDS).includes(speedParam) ? speedParam : "30-min") as VisaSpeedKey;
@@ -1097,11 +1131,14 @@ function ApplyForm() {
   // Flight check state - use separate state for the first flight input
   // This prevents the connecting flight from overwriting the first flight number input
   const [firstFlightNumber, setFirstFlightNumber] = useState("");
-  const [flightCheckDate, setFlightCheckDate] = useState(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split("T")[0];
-  });
+  const [flightCheckDate, setFlightCheckDate] = useState("");
+
+  // Initialize flightCheckDate with tomorrow's date on client side
+  useEffect(() => {
+    if (!flightCheckDate && tomorrowDate) {
+      setFlightCheckDate(tomorrowDate);
+    }
+  }, [flightCheckDate, tomorrowDate]);
 
   // Track when form was auto-filled from flight data
   const [autoFilledMessage, setAutoFilledMessage] = useState<string | null>(null);
@@ -1226,8 +1263,7 @@ function ApplyForm() {
 
   const currentData = applicants[currentApplicant];
 
-  const minPassportExpiry = new Date();
-  minPassportExpiry.setMonth(minPassportExpiry.getMonth() + 6);
+  // minPassportExpiryDate is now computed in the useEffect at the top
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -1553,6 +1589,8 @@ function ApplyForm() {
           <CitizenshipChecker
             t={t}
             initialPurpose={travelDetails.purpose}
+            initialDepartingCountry={initialDepartingCountry}
+            initialDepartingAirport={initialDepartingAirport}
             onPurposeChange={(purpose) => setTravelDetails(prev => ({ ...prev, purpose }))}
           />
         )}
@@ -1681,7 +1719,7 @@ function ApplyForm() {
                   type="date"
                   value={travelDetails.entryDate}
                   onChange={(e) => setTravelDetails({ ...travelDetails, entryDate: e.target.value })}
-                  min={new Date().toISOString().split("T")[0]}
+                  min={todayDate}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -1698,7 +1736,7 @@ function ApplyForm() {
                   type="date"
                   value={travelDetails.exitDate}
                   onChange={(e) => setTravelDetails({ ...travelDetails, exitDate: e.target.value })}
-                  min={travelDetails.entryDate || new Date().toISOString().split("T")[0]}
+                  min={travelDetails.entryDate || todayDate}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
                 {lengthOfStay > 0 && (
@@ -2014,7 +2052,7 @@ function ApplyForm() {
                   type="date"
                   value={currentData.dateOfBirth}
                   onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
+                  max={todayDate}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2126,7 +2164,7 @@ function ApplyForm() {
                   type="date"
                   value={currentData.dateOfIssue}
                   onChange={(e) => updateApplicant("dateOfIssue", e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
+                  max={todayDate}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2140,7 +2178,7 @@ function ApplyForm() {
                   type="date"
                   value={currentData.passportExpiry}
                   onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
-                  min={minPassportExpiry.toISOString().split("T")[0]}
+                  min={minPassportExpiryDate}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">

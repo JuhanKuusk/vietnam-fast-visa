@@ -50,6 +50,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    console.log("[Flight-Info API] Request received - flight:", flightNumber, "date:", date, "origin:", origin);
+
     // Normalize flight number: remove spaces and trim (e.g., "VJ 894" -> "VJ894")
     const normalizedFlightNumber = flightNumber.replace(/\s+/g, "").trim();
 
@@ -64,6 +66,8 @@ export async function GET(request: NextRequest) {
 
     const [, airlineCode, flightNum] = match;
     const flightDate = date || new Date().toISOString().split("T")[0];
+
+    console.log("[Flight-Info API] Calling AeroDataBox with date:", flightDate);
 
     // AeroDataBox API call - Flight status (specific date)
     const response = await fetch(
@@ -104,12 +108,64 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
+    console.log("[Flight-Info API] AeroDataBox returned", data.length, "flights. First flight departure:", data[0]?.departure?.scheduledTime);
 
     if (!data || data.length === 0) {
       return NextResponse.json(
         { error: "Flight not found" },
         { status: 404 }
       );
+    }
+
+    // Verify the returned flight matches the requested date
+    // AeroDataBox sometimes returns flights from nearby dates if the exact date's schedule isn't available yet
+    // This is common for flights 3+ days in the future
+    // We need to check the LOCAL departure date (not UTC) since users book flights by local departure date
+    const firstFlightLocalTime = data[0]?.departure?.scheduledTime?.local || data[0]?.departure?.scheduledTimeLocal;
+    if (firstFlightLocalTime) {
+      // Local time format can be: "2026-02-03 09:00-05:00" or "2026-02-03T09:00:00-05:00"
+      // Extract just the date part (YYYY-MM-DD)
+      let returnedDate = firstFlightLocalTime;
+
+      // Handle format with space separator: "2026-02-03 09:00-05:00"
+      if (returnedDate.includes(" ")) {
+        returnedDate = returnedDate.split(" ")[0];
+      }
+      // Handle ISO format: "2026-02-03T09:00:00-05:00"
+      else if (returnedDate.includes("T")) {
+        returnedDate = returnedDate.split("T")[0];
+      }
+
+      console.log("[Flight-Info API] Date comparison - Requested:", flightDate, "API returned local date:", returnedDate, "Raw:", firstFlightLocalTime);
+
+      if (returnedDate !== flightDate) {
+        // Calculate the date difference
+        const requestedDateObj = new Date(flightDate + "T00:00:00Z");
+        const returnedDateObj = new Date(returnedDate + "T00:00:00Z");
+        const daysDiff = Math.abs((requestedDateObj.getTime() - returnedDateObj.getTime()) / (1000 * 60 * 60 * 24));
+
+        console.log("[Flight-Info API] Date mismatch! Requested:", flightDate, "Got:", returnedDate, "Days diff:", daysDiff);
+
+        // If the difference is small (1-2 days) and it's a future flight, accept it
+        // This handles cases where AeroDataBox doesn't have exact future dates loaded yet
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const daysUntilFlight = Math.floor((requestedDateObj.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (daysDiff <= 2 && daysUntilFlight >= 2) {
+          // Flight exists and operates regularly, accept the data but adjust the times
+          // This is a common pattern for daily flights where exact date data isn't available yet
+          console.log("[Flight-Info API] Accepting nearby date data for future flight (", daysUntilFlight, "days away), adjusting by", daysDiff, "days");
+          // Store the date adjustment to apply to times later
+          // @ts-expect-error - adding property dynamically
+          data._dateAdjustmentDays = requestedDateObj.getTime() > returnedDateObj.getTime() ? daysDiff : -daysDiff;
+        } else {
+          return NextResponse.json(
+            { error: `Flight ${normalizedFlightNumber} not found for ${flightDate}. The flight may not operate on this date.` },
+            { status: 404 }
+          );
+        }
+      }
     }
 
     // If origin is provided, try to find a flight departing from that airport
@@ -191,8 +247,55 @@ export async function GET(request: NextRequest) {
       departureTime.setHours(departureTime.getHours() + 3);
     }
 
-    // For display, use local time if available
-    const displayDepartureTime = departureLocalStr ? departureLocalStr : departureTime.toISOString();
+    // Apply date adjustment if needed (when API returned data for a different day)
+    // @ts-expect-error - accessing dynamically added property
+    const dateAdjustmentDays: number = data._dateAdjustmentDays || 0;
+    if (dateAdjustmentDays !== 0) {
+      departureTime.setDate(departureTime.getDate() + dateAdjustmentDays);
+      console.log("[Flight-Info API] Adjusted departure time by", dateAdjustmentDays, "days to:", departureTime.toISOString());
+    }
+
+    // For display and accurate time comparison, always use ISO format with UTC
+    // This ensures the frontend can correctly compare times regardless of user's timezone
+    const displayDepartureTime = departureTime.toISOString();
+
+    // Parse arrival time similarly
+    let arrivalTimeStr: string | undefined;
+    if (flight.arrival?.scheduledTime?.utc) {
+      arrivalTimeStr = flight.arrival.scheduledTime.utc;
+    } else if (flight.arrival?.scheduledTime?.local) {
+      arrivalTimeStr = flight.arrival.scheduledTime.local;
+    } else if (typeof flight.arrival?.scheduledTimeUtc === "string") {
+      arrivalTimeStr = flight.arrival.scheduledTimeUtc;
+    } else if (typeof flight.arrival?.scheduledTimeLocal === "string") {
+      arrivalTimeStr = flight.arrival.scheduledTimeLocal;
+    }
+
+    let arrivalTime: Date;
+    if (arrivalTimeStr && typeof arrivalTimeStr === "string") {
+      let timeStr = arrivalTimeStr;
+      if (timeStr.includes(" ")) {
+        timeStr = timeStr.replace(" ", "T");
+      }
+      if (!timeStr.includes("+") && !timeStr.includes("Z") && !timeStr.match(/[+-]\d{2}:\d{2}$/)) {
+        timeStr += "Z";
+      }
+      arrivalTime = new Date(timeStr);
+      if (isNaN(arrivalTime.getTime())) {
+        arrivalTime = new Date(arrivalTimeStr);
+      }
+    } else {
+      // Estimate arrival time: departure + typical flight duration (use 12 hours as fallback)
+      arrivalTime = new Date(departureTime.getTime() + 12 * 60 * 60 * 1000);
+    }
+
+    // Apply date adjustment to arrival time if needed
+    if (dateAdjustmentDays !== 0) {
+      arrivalTime.setDate(arrivalTime.getDate() + dateAdjustmentDays);
+      console.log("[Flight-Info API] Adjusted arrival time by", dateAdjustmentDays, "days to:", arrivalTime.toISOString());
+    }
+
+    const displayArrivalTime = arrivalTime.toISOString();
 
     // Calculate check-in times
     // Check-in typically opens 3 hours before departure for international flights
@@ -254,7 +357,7 @@ export async function GET(request: NextRequest) {
       },
       arrival: {
         airport: formatAirportWithCode(flight.arrival?.airport),
-        scheduledTime: extractTimeString(flight.arrival?.scheduledTimeLocal || flight.arrival?.scheduledTime || flight.arrival?.scheduledTimeUtc),
+        scheduledTime: displayArrivalTime,
         terminal: flight.arrival?.terminal,
         gate: flight.arrival?.gate,
       },
@@ -275,4 +378,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

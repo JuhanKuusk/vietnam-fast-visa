@@ -441,6 +441,8 @@ function CountrySelector({
 interface CitizenshipCheckerProps {
   onCountrySelect?: (code: string, requirement: VisaRequirementResult) => void;
   onPurposeChange?: (purpose: string) => void;
+  onDepartingCountryChange?: (code: string) => void;
+  onDepartingAirportChange?: (code: string) => void;
   initialPurpose?: string;
   translations?: typeof citizenshipFallback;
 }
@@ -448,6 +450,8 @@ interface CitizenshipCheckerProps {
 export function CitizenshipChecker({
   onCountrySelect,
   onPurposeChange,
+  onDepartingCountryChange,
+  onDepartingAirportChange,
   initialPurpose = "tourism",
   translations,
 }: CitizenshipCheckerProps) {
@@ -518,6 +522,11 @@ export function CitizenshipChecker({
     }
   }, [departingCountry]); // Removed departingAirport from deps to prevent loops
 
+  // Notify parent when departing airport changes
+  useEffect(() => {
+    onDepartingAirportChange?.(departingAirport);
+  }, [departingAirport, onDepartingAirportChange]);
+
   const handleCountryChange = (code: string) => {
     setSelectedCountry(code);
     if (code) {
@@ -531,6 +540,7 @@ export function CitizenshipChecker({
 
   const handleDepartingCountryChange = (code: string) => {
     setDepartingCountry(code);
+    onDepartingCountryChange?.(code);
   };
 
   const handlePurposeChange = (newPurpose: string) => {
