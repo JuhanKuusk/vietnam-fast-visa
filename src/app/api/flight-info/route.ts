@@ -157,8 +157,7 @@ export async function GET(request: NextRequest) {
           // This is a common pattern for daily flights where exact date data isn't available yet
           console.log("[Flight-Info API] Accepting nearby date data for future flight (", daysUntilFlight, "days away), adjusting by", daysDiff, "days");
           // Store the date adjustment to apply to times later
-          // @ts-expect-error - adding property dynamically
-          data._dateAdjustmentDays = requestedDateObj.getTime() > returnedDateObj.getTime() ? daysDiff : -daysDiff;
+          (data as unknown as { _dateAdjustmentDays: number })._dateAdjustmentDays = requestedDateObj.getTime() > returnedDateObj.getTime() ? daysDiff : -daysDiff;
         } else {
           return NextResponse.json(
             { error: `Flight ${normalizedFlightNumber} not found for ${flightDate}. The flight may not operate on this date.` },
@@ -248,8 +247,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Apply date adjustment if needed (when API returned data for a different day)
-    // @ts-expect-error - accessing dynamically added property
-    const dateAdjustmentDays: number = data._dateAdjustmentDays || 0;
+    const dateAdjustmentDays: number = (data as unknown as { _dateAdjustmentDays?: number })._dateAdjustmentDays || 0;
     if (dateAdjustmentDays !== 0) {
       departureTime.setDate(departureTime.getDate() + dateAdjustmentDays);
       console.log("[Flight-Info API] Adjusted departure time by", dateAdjustmentDays, "days to:", departureTime.toISOString());
