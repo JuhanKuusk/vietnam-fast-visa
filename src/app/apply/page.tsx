@@ -11,6 +11,7 @@ import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
 import { FlightCheckBox } from "@/components/ui/flight-check-box";
 import { getAirportsForCountry } from "@/lib/amadeus";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
+import { scanPassport as scanPassportClient } from "@/lib/passport-scanner";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -1028,6 +1029,8 @@ function ApplyForm() {
   const [isScanning, setIsScanning] = useState(false);
   const [scanError, setScanError] = useState<string | null>(null);
   const [scanSuccess, setScanSuccess] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanStatus, setScanStatus] = useState("");
 
   // Travel Details State - pre-fill from URL params
   const [travelDetails, setTravelDetails] = useState<TravelDetails>({
@@ -1190,7 +1193,7 @@ function ApplyForm() {
     setApplicants(updated);
   };
 
-  // Scan passport and auto-fill form fields
+  // Scan passport and auto-fill form fields (client-side processing)
   const scanPassport = async () => {
     const passportFile = passportPhotos[currentApplicant];
     if (!passportFile) return;
@@ -1198,19 +1201,17 @@ function ApplyForm() {
     setIsScanning(true);
     setScanError(null);
     setScanSuccess(false);
+    setScanProgress(0);
+    setScanStatus("Starting...");
 
     try {
-      const formData = new FormData();
-      formData.append("file", passportFile);
-
-      const response = await fetch("/api/passport-scan", {
-        method: "POST",
-        body: formData,
+      // Use client-side scanner (runs in browser, not on server)
+      const result = await scanPassportClient(passportFile, (progress, status) => {
+        setScanProgress(progress);
+        setScanStatus(status);
       });
 
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
+      if (!result.success || !result.data) {
         setScanError(result.error || t.applyForm.scanError);
         return;
       }
@@ -1258,6 +1259,8 @@ function ApplyForm() {
       setScanError(t.applyForm.scanError);
     } finally {
       setIsScanning(false);
+      setScanProgress(0);
+      setScanStatus("");
     }
   };
 
@@ -1922,12 +1925,22 @@ function ApplyForm() {
                       className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-blue-400 disabled:to-indigo-400 text-white font-medium rounded-lg transition-all shadow-md hover:shadow-lg flex flex-col items-center justify-center gap-1"
                     >
                       {isScanning ? (
-                        <div className="flex items-center gap-2">
-                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          <span>{t.applyForm.scanning}</span>
+                        <div className="flex flex-col items-center gap-2 w-full">
+                          <div className="flex items-center gap-2">
+                            <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>{scanStatus || t.applyForm.scanning}</span>
+                          </div>
+                          {scanProgress > 0 && (
+                            <div className="w-full bg-blue-400/30 rounded-full h-2">
+                              <div
+                                className="bg-white h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${scanProgress}%` }}
+                              ></div>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <>
