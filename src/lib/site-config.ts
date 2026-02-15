@@ -37,6 +37,9 @@ export type SiteLayout = {
   trustBadgeVariant: "default" | "india" | "travel";
   testimonialSet: "default" | "india" | "urgent" | "travel";
 
+  // Additional sections
+  showTours: boolean;  // Show tours & activities section
+
   // Footer
   showIndianPaymentMethods: boolean;
   showISTTimezone: boolean;
@@ -114,6 +117,7 @@ export const SITES: Record<string, SiteConfig> = {
       defaultVisaSpeed: "30-min",
       trustBadgeVariant: "default",
       testimonialSet: "default",
+      showTours: false,
       showIndianPaymentMethods: false,
       showISTTimezone: false,
     },
@@ -166,6 +170,7 @@ export const SITES: Record<string, SiteConfig> = {
       defaultVisaSpeed: "30-min",
       trustBadgeVariant: "default",
       testimonialSet: "urgent",
+      showTours: false,
       showIndianPaymentMethods: false,
       showISTTimezone: false,
     },
@@ -218,6 +223,7 @@ export const SITES: Record<string, SiteConfig> = {
       defaultVisaSpeed: "30-min",
       trustBadgeVariant: "india",
       testimonialSet: "india",
+      showTours: false,
       showIndianPaymentMethods: true,
       showISTTimezone: true,
     },
@@ -273,6 +279,7 @@ export const SITES: Record<string, SiteConfig> = {
       defaultVisaSpeed: "2-day",         // Default to slower, cheaper option
       trustBadgeVariant: "travel",       // Travel-focused badges
       testimonialSet: "travel",          // Softer testimonials
+      showTours: true,                   // Show tours section - affiliate content
       showIndianPaymentMethods: false,
       showISTTimezone: false,
     },

@@ -10,6 +10,8 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 import { Footer } from "@/components/ui/footer";
+import { ToursSection } from "@/components/ui/tour-card";
+import { getFeaturedTours } from "@/lib/tours-data";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSite } from "@/contexts/SiteContext";
 
@@ -1117,6 +1119,15 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Tours Section - Only shown on vietnamtravel.help */}
+      {layout.showTours && (
+        <ToursSection
+          tours={getFeaturedTours(8)}
+          title="Explore Vietnam Tours & Activities"
+          subtitle="Book amazing experiences with our trusted travel partner and make the most of your Vietnam trip"
+        />
+      )}
 
       {/* Footer */}
       <Footer />
