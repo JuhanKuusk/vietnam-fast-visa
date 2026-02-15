@@ -24,19 +24,19 @@ export const FEATURED_TOURS: Tour[] = [
   // Halong Bay Cruises
   {
     id: "halong-day-trip",
-    name: "Halong Bay Day Trip",
+    name: "Halong Bay Day Trip (Sung Sot - Titop)",
     category: "day-trip",
     location: "Halong Bay",
     duration: "1 day",
     price: 48,
     originalPrice: 60,
     discount: 20,
-    description: "Experience the magnificent Halong Bay on a day cruise. Visit Sung Sot Cave and Titop Island with stunning limestone karst scenery.",
+    description: "Experience the magnificent Halong Bay on a day cruise. Visit Sung Sot Cave, the largest and most beautiful cave, and Titop Island.",
     highlights: ["Sung Sot Cave", "Titop Island", "Kayaking", "Lunch on board"],
     imageUrl: "/tours/halong-day-trip.jpg",
-    rating: 7.5,
+    rating: 9.4,
     reviewCount: 17,
-    affiliateUrl: "https://www.vietnamtourbooking.com/halong-bay-cruises/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/tour/halong-group-day-trip-sung-sot-titop",
   },
   {
     id: "serenity-cruise-2d1n",
@@ -52,7 +52,7 @@ export const FEATURED_TOURS: Tour[] = [
     imageUrl: "/tours/serenity-cruise.jpg",
     rating: 7.6,
     reviewCount: 9,
-    affiliateUrl: "https://www.vietnamtourbooking.com/halong-bay-cruises/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/serenity-cruise-2-days-1-night",
   },
   {
     id: "lan-ha-luxury-day",
@@ -66,7 +66,7 @@ export const FEATURED_TOURS: Tour[] = [
     description: "Experience world-class comfort with luxury limousine transfer and premium cruise through the stunning Lan Ha Bay.",
     highlights: ["Luxury transfer", "Less crowded", "Premium cruise", "Gourmet lunch"],
     imageUrl: "/tours/lan-ha-luxury.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/halong-bay-cruises/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/tour/lan-ha-bay-halong-bay-the-most-luxurious-day-tour",
   },
   {
     id: "renea-cruise-2d1n",
@@ -80,7 +80,7 @@ export const FEATURED_TOURS: Tour[] = [
     description: "Authentic Halong cruise experience on a warm ancient wooden boat. Explore Bai Tu Long Bay with clearer waters and fewer tourists.",
     highlights: ["Traditional wooden boat", "Bai Tu Long Bay", "Clearer waters", "Authentic experience"],
     imageUrl: "/tours/renea-cruise.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/halong-bay-cruises/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/tour/renea-cruise-2-days-1-night",
   },
   // Mekong Delta Tours
   {
@@ -93,7 +93,7 @@ export const FEATURED_TOURS: Tour[] = [
     description: "Discover real Vietnamese culture through cooking classes, bicycle tours, floating markets, and sampan river experiences.",
     highlights: ["Floating markets", "Cooking class", "Bicycle tour", "Local villages"],
     imageUrl: "/tours/mekong-eyes.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/mekong-delta-tours/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/mekong-eyes-cruise-2-days-saigon-con-dao",
   },
   {
     id: "mekong-eyes-3d",
@@ -105,7 +105,7 @@ export const FEATURED_TOURS: Tour[] = [
     description: "Extended Mekong experience visiting the famous Cai Rang floating market, local handicrafts, brick kilns, and fruit orchards.",
     highlights: ["Cai Rang market", "Handicrafts", "Fruit orchards", "Extended exploration"],
     imageUrl: "/tours/mekong-3day.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/mekong-delta-tours/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/mekong-eyes-cruise-3-days-saigon-con-dao",
   },
   {
     id: "gecko-eyes-2d",
@@ -117,7 +117,7 @@ export const FEATURED_TOURS: Tour[] = [
     description: "Premium cruise watching scenic Mekong views, daily river life, Cai Rang floating market and pearl island exploration.",
     highlights: ["Premium cruise", "Con Dao island", "Pearl island", "Scenic views"],
     imageUrl: "/tours/gecko-eyes.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/mekong-delta-tours/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/gecko-eyes-cruise-saigon-con-dao-2-days",
   },
   {
     id: "cambodia-vietnam-3d",
@@ -129,7 +129,7 @@ export const FEATURED_TOURS: Tour[] = [
     description: "Cross-border adventure exploring the beautiful Mekong from Phnom Penh, Cambodia to Ho Chi Minh City, Vietnam.",
     highlights: ["Cross-border journey", "Phnom Penh start", "Cultural immersion", "River adventure"],
     imageUrl: "/tours/cambodia-vietnam.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/mekong-delta-tours/",
+    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/3-day-mekong-eyes-cruise-cambodia-vietnam",
   },
 ];
 

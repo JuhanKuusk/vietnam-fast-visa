@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Tour } from "@/lib/tours-data";
 import { useSite } from "@/contexts/SiteContext";
 
@@ -19,24 +20,14 @@ export function TourCard({ tour }: TourCardProps) {
     >
       {/* Image */}
       <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-        {/* Placeholder gradient background - in production would use actual images */}
-        <div
-          className="absolute inset-0 bg-gradient-to-br opacity-80"
-          style={{
-            backgroundImage: tour.location.includes("Halong")
-              ? "linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%)"
-              : tour.location.includes("Mekong")
-              ? "linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%)"
-              : "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%)"
-          }}
+        {/* Tour image */}
+        <Image
+          src={tour.imageUrl}
+          alt={tour.name}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
-        {/* Location icon overlay */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <svg className="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-        </div>
 
         {/* Discount badge */}
         {tour.discount && (
