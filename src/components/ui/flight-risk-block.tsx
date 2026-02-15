@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { translations as appTranslations } from "@/lib/translations";
 
 // Inline SVG icons to avoid lucide-react dependency
@@ -41,10 +42,13 @@ interface FlightRiskBlockProps {
   visaSpeed: string;
   language?: string;
   airportCode?: string;
-  t?: typeof defaultTranslations;
 }
 
-export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airportCode, t = defaultTranslations }: FlightRiskBlockProps) {
+export function FlightRiskBlock({ countryCode, visaSpeed, airportCode }: FlightRiskBlockProps) {
+  // Use translations from language context
+  const { t: translations } = useLanguage();
+  const flightRiskT = translations.flightRisk ?? defaultTranslations;
+
   const [riskData, setRiskData] = useState<FlightRiskData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -54,13 +58,18 @@ export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airpo
       return;
     }
 
+    // Reset state when props change to prevent showing stale data
+    setRiskData(null);
+    setIsLoading(true);
+
     const fetchRiskData = async () => {
       try {
-        let url = `/api/flight-price-risk?country=${countryCode}&visaSpeed=${visaSpeed}`;
+        // Add timestamp to prevent caching
+        let url = `/api/flight-price-risk?country=${countryCode}&visaSpeed=${visaSpeed}&_t=${Date.now()}`;
         if (airportCode) {
           url += `&airport=${airportCode}`;
         }
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: 'no-store' });
         if (response.ok) {
           const data = await response.json();
           setRiskData(data);
@@ -96,7 +105,7 @@ export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airpo
     ? `${formatPrice(priceRange.min)} - ${formatPrice(priceRange.max)}`
     : "";
 
-  const flightCostText = t.flightCost.replace("{origin}", origin || countryCode);
+  const flightCostText = flightRiskT.flightCost.replace("{origin}", origin || countryCode);
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4">
@@ -109,7 +118,7 @@ export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airpo
         <div className="flex-1 min-w-0">
           <h4 className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
             <AlertTriangleIcon className="w-4 h-4 text-amber-500" />
-            {t.title}
+            {flightRiskT.title}
           </h4>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
             {flightCostText}{" "}
@@ -119,13 +128,13 @@ export function FlightRiskBlock({ countryCode, visaSpeed, language = "EN", airpo
             .
           </p>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            {t.warning}
+            {flightRiskT.warning}
           </p>
           <p className="mt-2 text-sm text-red-600 dark:text-red-400 font-medium">
-            {t.returnWarning}
+            {flightRiskT.returnWarning}
           </p>
           <p className="mt-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">
-            {t.recommendation}
+            {flightRiskT.recommendation}
           </p>
         </div>
       </div>

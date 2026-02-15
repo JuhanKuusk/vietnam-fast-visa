@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createWorker } from "tesseract.js";
 import { parse as parseMRZ } from "mrz";
 
 // Country code mapping from ISO 3166-1 alpha-3 to alpha-2
@@ -133,74 +132,293 @@ const formatMRZDate = (dateStr: string): string => {
   return `${year}-${mm}-${dd}`;
 };
 
+// Clean and normalize a potential MRZ line from OCR output
+const cleanMRZLine = (line: string): string => {
+  let cleaned = line.replace(/[^\x20-\x7E]/g, '').trim();
+  cleaned = cleaned.replace(/\s/g, '');
+  cleaned = cleaned.toUpperCase();
+
+  // Convert common OCR misreadings
+  cleaned = cleaned
+    .replace(/[«»‹›<>]/g, '<')
+    .replace(/[{}[\]()]/g, '<')
+    .replace(/[—–_]/g, '<')
+    .replace(/\|/g, 'I')
+    .replace(/!/g, 'I')
+    .replace(/\$/g, 'S')
+    .replace(/@/g, 'A')
+    .replace(/[oO]/g, '0')
+    .replace(/\./g, '')
+    .replace(/,/g, '');
+
+  cleaned = cleaned.replace(/[^A-Z0-9<]/g, '');
+  return cleaned;
+};
+
 // Extract MRZ lines from OCR text
 const extractMRZLines = (text: string): string[] => {
-  const lines = text.split('\n').map(line => line.trim());
-  const mrzLines: string[] = [];
+  console.log("[MRZ] Processing OCR text, length:", text.length);
 
-  for (const line of lines) {
-    // MRZ lines are typically 30, 36, or 44 characters and contain mostly uppercase letters, digits, and <
-    // Clean the line first - remove spaces and common OCR mistakes
-    const cleaned = line
-      .replace(/\s/g, '')
-      .replace(/[oO]/g, '0') // Common OCR mistake: O -> 0 in numeric contexts
-      .toUpperCase();
+  const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+  const candidateLines: Array<{ cleaned: string; score: number; lineIndex: number }> = [];
 
-    // Check if it looks like an MRZ line (contains < and is the right length)
-    if (cleaned.length >= 28 && cleaned.length <= 46 && cleaned.includes('<')) {
-      // Additional check: should be mostly alphanumeric and <
-      const validChars = cleaned.replace(/[A-Z0-9<]/g, '');
-      if (validChars.length <= 3) { // Allow some OCR errors
-        mrzLines.push(cleaned);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const cleaned = cleanMRZLine(line);
+
+    if (cleaned.length < 30) continue;
+
+    let score = 0;
+
+    // Position bonus (MRZ is at bottom)
+    const positionFromBottom = lines.length - 1 - i;
+    if (positionFromBottom < 5) score += 10;
+
+    // Length scoring (44 chars ideal for TD3)
+    if (cleaned.length >= 42 && cleaned.length <= 46) score += 15;
+    else if (cleaned.length >= 38 && cleaned.length <= 48) score += 10;
+
+    // << separator (key MRZ indicator)
+    const doubleBracketCount = (cleaned.match(/<</g) || []).length;
+    if (doubleBracketCount > 0) score += doubleBracketCount * 8;
+
+    // Single < characters
+    const angleCount = (cleaned.match(/</g) || []).length;
+    if (angleCount >= 5) score += 5;
+
+    // Line 1 pattern: P<
+    if (/^P<[A-Z]{3}/.test(cleaned)) score += 30;
+    else if (/^P</.test(cleaned)) score += 20;
+
+    // Line 2 patterns
+    const digitCount = (cleaned.match(/[0-9]/g) || []).length;
+    if (digitCount >= 8 && digitCount <= 20) score += 10;
+    if (/<{3,}$/.test(cleaned)) score += 10;
+    if (/[A-Z]{3}[0-9]{6}/.test(cleaned)) score += 10;
+
+    if (score >= 5) {
+      candidateLines.push({ cleaned, score, lineIndex: i });
+    }
+  }
+
+  candidateLines.sort((a, b) => b.score - a.score);
+
+  console.log("[MRZ] Found", candidateLines.length, "candidates");
+
+  if (candidateLines.length >= 2) {
+    const top2 = candidateLines.slice(0, 2);
+    const areConsecutive = Math.abs(top2[0].lineIndex - top2[1].lineIndex) === 1;
+
+    let line1: string, line2: string;
+
+    if (areConsecutive) {
+      if (top2[0].lineIndex < top2[1].lineIndex) {
+        line1 = top2[0].cleaned;
+        line2 = top2[1].cleaned;
+      } else {
+        line1 = top2[1].cleaned;
+        line2 = top2[0].cleaned;
+      }
+    } else {
+      const line1Candidate = top2[0].cleaned.startsWith('P') ? top2[0] : top2[1];
+      const line2Candidate = top2[0].cleaned.startsWith('P') ? top2[1] : top2[0];
+      line1 = line1Candidate.cleaned;
+      line2 = line2Candidate.cleaned;
+    }
+
+    // Normalize to 44 characters
+    if (line1.length > 44) line1 = line1.substring(0, 44);
+    else if (line1.length < 44) line1 = line1.padEnd(44, '<');
+
+    if (line2.length > 44) line2 = line2.substring(0, 44);
+    else if (line2.length < 44) line2 = line2.padEnd(44, '<');
+
+    console.log("[MRZ] Final lines:", { line1, line2 });
+    return [line1, line2];
+  }
+
+  return [];
+};
+
+// Extract Date of Issue from the Visual Inspection Zone (VIZ) of the passport
+// The MRZ doesn't contain issue date, so we need to find it in the OCR text
+const extractDateOfIssue = (fullText: string): string => {
+  // Common labels for date of issue in passports (various languages)
+  const issueLabels = [
+    'date of issue', 'date d\'émission', 'fecha de expedición',
+    'data di rilascio', 'ausstellungsdatum', 'date of issuance',
+    'issued', 'issue date', 'valid from', 'date issued',
+    'дата выдачи', 'ngày cấp', 'tanggal penerbitan',
+  ];
+
+  const lines = fullText.toLowerCase().split('\n');
+
+  // Look for date patterns near issue-related labels
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const hasIssueLabel = issueLabels.some(label => line.includes(label));
+
+    if (hasIssueLabel) {
+      // Check this line and the next few lines for a date
+      for (let j = i; j < Math.min(i + 3, lines.length); j++) {
+        const dateMatch = extractDateFromLine(lines[j]);
+        if (dateMatch) {
+          console.log("[DateOfIssue] Found near label:", dateMatch);
+          return dateMatch;
+        }
       }
     }
   }
 
-  return mrzLines;
+  // Fallback: look for date patterns that could be issue dates
+  // Typically issue date is before expiry date and after birth date
+  const allDates: string[] = [];
+  for (const line of lines) {
+    const dateMatch = extractDateFromLine(line);
+    if (dateMatch) {
+      allDates.push(dateMatch);
+    }
+  }
+
+  console.log("[DateOfIssue] All dates found:", allDates);
+
+  // If we found multiple dates, the issue date is typically the second-to-last
+  // (after birth date but before expiry date)
+  // But this is unreliable, so return empty if we can't confirm
+  return "";
 };
 
-// Free fallback using Tesseract.js + mrz parser
-async function scanWithTesseract(imageBuffer: Buffer): Promise<PassportData | null> {
-  console.log("Starting Tesseract.js OCR fallback...");
+// Extract a date from a text line (returns YYYY-MM-DD format or empty string)
+const extractDateFromLine = (line: string): string => {
+  // Pattern: DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+  const dmyPattern = /(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})/;
+  const dmyMatch = line.match(dmyPattern);
+  if (dmyMatch) {
+    const day = dmyMatch[1].padStart(2, '0');
+    const month = dmyMatch[2].padStart(2, '0');
+    const year = dmyMatch[3];
+    if (parseInt(month) <= 12 && parseInt(day) <= 31) {
+      return `${year}-${month}-${day}`;
+    }
+  }
 
-  let worker = null;
+  // Pattern: YYYY/MM/DD or YYYY-MM-DD
+  const ymdPattern = /(\d{4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,2})/;
+  const ymdMatch = line.match(ymdPattern);
+  if (ymdMatch) {
+    const year = ymdMatch[1];
+    const month = ymdMatch[2].padStart(2, '0');
+    const day = ymdMatch[3].padStart(2, '0');
+    if (parseInt(month) <= 12 && parseInt(day) <= 31) {
+      return `${year}-${month}-${day}`;
+    }
+  }
+
+  // Pattern: DD MMM YYYY or DD MMMM YYYY (e.g., "15 Jan 2020" or "15 January 2020")
+  const monthNames: Record<string, string> = {
+    'jan': '01', 'january': '01', 'feb': '02', 'february': '02',
+    'mar': '03', 'march': '03', 'apr': '04', 'april': '04',
+    'may': '05', 'jun': '06', 'june': '06', 'jul': '07', 'july': '07',
+    'aug': '08', 'august': '08', 'sep': '09', 'sept': '09', 'september': '09',
+    'oct': '10', 'october': '10', 'nov': '11', 'november': '11',
+    'dec': '12', 'december': '12',
+  };
+
+  const namedMonthPattern = /(\d{1,2})\s+([a-z]+)\s+(\d{4})/i;
+  const namedMatch = line.match(namedMonthPattern);
+  if (namedMatch) {
+    const day = namedMatch[1].padStart(2, '0');
+    const monthName = namedMatch[2].toLowerCase();
+    const year = namedMatch[3];
+    const month = monthNames[monthName];
+    if (month && parseInt(day) <= 31) {
+      return `${year}-${month}-${day}`;
+    }
+  }
+
+  return "";
+};
+
+// Google Cloud Vision API for OCR
+async function scanWithGoogleVision(imageBuffer: Buffer): Promise<PassportData | null> {
+  const apiKey = process.env.GOOGLE_CLOUD_VISION_API_KEY;
+
+  if (!apiKey) {
+    console.error("GOOGLE_CLOUD_VISION_API_KEY not configured");
+    return null;
+  }
+
+  console.log("[GoogleVision] Starting OCR...");
+
   try {
-    // Create Tesseract worker with OCRB font (optimized for MRZ)
-    worker = await createWorker('eng');
+    // Convert image buffer to base64
+    const base64Image = imageBuffer.toString('base64');
 
-    // Recognize text from image
-    const { data: { text } } = await worker.recognize(imageBuffer);
-    console.log("Tesseract OCR result:", text);
+    // Call Google Cloud Vision API
+    const response = await fetch(
+      `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requests: [{
+            image: { content: base64Image },
+            features: [{ type: 'TEXT_DETECTION', maxResults: 1 }],
+          }],
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("[GoogleVision] API error:", response.status, errorText);
+      return null;
+    }
+
+    const result = await response.json();
+    const fullText = result.responses?.[0]?.fullTextAnnotation?.text ||
+                     result.responses?.[0]?.textAnnotations?.[0]?.description || '';
+
+    console.log("[GoogleVision] OCR result:", fullText.substring(0, 500));
+
+    if (!fullText) {
+      console.error("[GoogleVision] No text detected");
+      return null;
+    }
 
     // Extract MRZ lines from the text
-    const mrzLines = extractMRZLines(text);
-    console.log("Extracted MRZ lines:", mrzLines);
+    const mrzLines = extractMRZLines(fullText);
+    console.log("[GoogleVision] Extracted MRZ lines:", mrzLines);
 
     if (mrzLines.length < 2) {
-      console.log("Could not find valid MRZ lines");
+      console.log("[GoogleVision] Could not find valid MRZ lines");
       return null;
     }
 
     // Try to parse the MRZ
     try {
       const mrzResult = parseMRZ(mrzLines, { autocorrect: true });
-      console.log("MRZ parse result:", JSON.stringify(mrzResult, null, 2));
+      console.log("[GoogleVision] MRZ parse result:", JSON.stringify(mrzResult, null, 2));
 
       if (!mrzResult.valid && !mrzResult.fields) {
-        console.log("MRZ parsing failed - invalid format");
+        console.log("[GoogleVision] MRZ parsing failed");
         return null;
       }
 
       const fields = mrzResult.fields;
 
-      // Build full name from first and last names
       const firstName = fields.firstName || "";
       const lastName = fields.lastName || "";
       const fullName = `${firstName} ${lastName}`.trim().toUpperCase();
 
-      // Format dates
       const dateOfBirth = fields.birthDate || "";
       const passportExpiry = fields.expirationDate || "";
+
+      // Try to extract date of issue from the VIZ (Visual Inspection Zone)
+      const dateOfIssue = extractDateOfIssue(fullText);
+      console.log("[GoogleVision] Extracted date of issue:", dateOfIssue);
 
       const passportData: PassportData = {
         fullName,
@@ -209,25 +427,21 @@ async function scanWithTesseract(imageBuffer: Buffer): Promise<PassportData | nu
         nationality: convertCountryCode(fields.nationality || ""),
         passportNumber: (fields.documentNumber || "").toUpperCase(),
         passportExpiry: passportExpiry ? formatMRZDate(passportExpiry) : "",
-        dateOfIssue: "", // MRZ doesn't contain issue date
+        dateOfIssue: dateOfIssue,
         issuingAuthority: convertCountryCode(fields.issuingState || ""),
       };
 
-      console.log("Tesseract parsed passport data:", passportData);
+      console.log("[GoogleVision] Parsed passport data:", passportData);
       return passportData;
 
     } catch (mrzError) {
-      console.error("MRZ parsing error:", mrzError);
+      console.error("[GoogleVision] MRZ parsing error:", mrzError);
       return null;
     }
 
   } catch (error) {
-    console.error("Tesseract OCR error:", error);
+    console.error("[GoogleVision] Error:", error);
     return null;
-  } finally {
-    if (worker) {
-      await worker.terminate();
-    }
   }
 }
 
@@ -510,42 +724,46 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert file to buffer for Tesseract fallback
+    // Convert file to buffer for OCR
     const arrayBuffer = await file.arrayBuffer();
     const imageBuffer = Buffer.from(arrayBuffer);
 
-    // Try Mindee first if API key is available
-    const apiKey = process.env.MINDEE_API_KEY;
     let passportData: PassportData | null = null;
-    let usedFallback = false;
+    let usedMethod = "unknown";
 
-    // TEMPORARILY DISABLED: Mindee subscription expired
-    // To re-enable Mindee, remove the `false &&` from the condition below
-    if (false && apiKey) {
-      console.log("Attempting Mindee API scan...");
-      const mindeeResult = await scanWithMindee(file, apiKey!);
+    // Check for Google Cloud Vision API key
+    const googleApiKey = process.env.GOOGLE_CLOUD_VISION_API_KEY;
+    const mindeeApiKey = process.env.MINDEE_API_KEY;
 
+    // Try Google Cloud Vision first (recommended - best MRZ accuracy)
+    if (googleApiKey) {
+      console.log("Using Google Cloud Vision API for passport scanning...");
+      passportData = await scanWithGoogleVision(imageBuffer);
+      usedMethod = "google_vision";
+    }
+
+    // Fallback to Mindee if Google Vision fails or is not configured
+    if (!passportData && mindeeApiKey) {
+      console.log("Trying Mindee API fallback...");
+      const mindeeResult = await scanWithMindee(file, mindeeApiKey);
       if (mindeeResult.data) {
         passportData = mindeeResult.data;
-      } else if (mindeeResult.shouldFallback) {
-        console.log("Mindee failed, trying Tesseract.js fallback...");
-        usedFallback = true;
-        passportData = await scanWithTesseract(imageBuffer);
+        usedMethod = "mindee";
       }
-    } else {
-      // Using Tesseract.js directly (Mindee temporarily disabled)
-      console.log("Using Tesseract.js OCR for passport scanning...");
-      usedFallback = true;
-      passportData = await scanWithTesseract(imageBuffer);
+    }
+
+    // If no API keys configured, return error with instructions
+    if (!googleApiKey && !mindeeApiKey) {
+      console.error("No OCR API configured. Please set GOOGLE_CLOUD_VISION_API_KEY or MINDEE_API_KEY.");
+      return NextResponse.json(
+        { error: "Passport scanning service not configured. Please enter details manually." },
+        { status: 503 }
+      );
     }
 
     if (!passportData) {
-      const message = usedFallback
-        ? "Could not read passport MRZ. Please ensure the MRZ (machine readable zone at the bottom of the passport) is clearly visible and try again."
-        : "Could not read passport data. Please take a clearer photo of the passport data page.";
-
       return NextResponse.json(
-        { error: message },
+        { error: "Could not read passport MRZ. Please ensure the MRZ (machine readable zone at the bottom of the passport) is clearly visible and try again." },
         { status: 422 }
       );
     }
@@ -563,7 +781,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: passportData,
-      method: usedFallback ? "ocr" : "mindee", // Indicate which method was used
+      method: usedMethod,
     });
 
   } catch (error) {

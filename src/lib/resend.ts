@@ -217,6 +217,14 @@ const serviceTypeLabels: Record<SupportedLanguage, Record<string, string>> = {
     weekend: "सप्ताहांत/छुट्टी सेवा",
     standard: "मानक प्रोसेसिंग",
   },
+  ZH: {
+    "30-min": "30分钟快速",
+    "4-hour": "4小时快速",
+    "1-day": "1天服务",
+    "2-day": "2天服务",
+    weekend: "周末/节假日服务",
+    standard: "标准处理",
+  },
 };
 
 // Payment confirmation email params
@@ -327,7 +335,7 @@ export async function sendPaymentConfirmationEmail({
 
             <div style="text-align: center; padding: 20px 0;">
               <p style="color: #666; margin-bottom: 15px;">${t.questionsText}</p>
-              <a href="https://wa.me/841205549868?text=Hi, I need help with my visa. Reference: ${referenceNumber}" style="display: inline-block; padding: 12px 30px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">${t.chatWhatsApp}</a>
+              <a href="https://wa.me/84705549868?text=Hi, I need help with my visa. Reference: ${referenceNumber}" style="display: inline-block; padding: 12px 30px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">${t.chatWhatsApp}</a>
             </div>
           </div>
 

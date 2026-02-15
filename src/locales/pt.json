@@ -4,7 +4,8 @@
     "tagline": "Serviço de vistos expresso",
     "logoTagline": "Aprovação do check-in em 30 minutos",
     "support": "Suporte WhatsApp 24/7",
-    "supportShort": "Apoio"
+    "supportShort": "Apoio",
+    "aboutUs": "Sobre Nós"
   },
   "banner": {
     "deniedBoarding": "Recusado o embarque e não pode efetuar o check-in?",
@@ -33,7 +34,8 @@
     "happyCustomers": "Clientes satisfeitos",
     "onTimeDelivery": "Entrega atempada",
     "countriesSupported": "Países apoiados",
-    "whatsappSupport": "Suporte do WhatsApp"
+    "whatsappSupport": "Suporte do WhatsApp",
+    "languages": "Idiomas"
   },
   "form": {
     "title": "Iniciar o seu pedido de visto eletrónico",
@@ -162,6 +164,33 @@
     "urgentChat": "URGENTE: Chat agora para obter ajuda!",
     "getVisaBefore": "Obter o visto antes do fecho do check-in!"
   },
+  "flightCheckBox": {
+    "flight1Departure": "Voo 1 - Partida",
+    "flightNumberAndDate": "Número do voo e data",
+    "hasConnectionFlight": "Tenho um voo de conexão para o Vietname",
+    "getVisaReady": "Prepare o seu visto do Vietname",
+    "connectingFlightToVietnam": "Voo de conexão para o Vietname",
+    "connectionFlightPlaceholder": "ex. EY834 (Abu Dhabi para Ho Chi Minh)",
+    "connectionFlightHint": "Introduza o seu voo que chega ao Vietname - isto é usado para a data de entrada do seu visto"
+  },
+  "visaSpeedSelection": {
+    "title": "Selecione a velocidade de processamento",
+    "subtitle": "Escolha quão rápido você precisa do seu visto",
+    "label": "Velocidade de processamento",
+    "selectSpeed": "Selecione a velocidade...",
+    "weekend": "Fim de semana/Feriado",
+    "weekendDesc": "Processamento especial para fins de semana e feriados",
+    "emergency": "Emergência (30 min)",
+    "emergencyDesc": "Aprovação em 30 min, visto em 1-1,5 horas",
+    "express4h": "Express (4 horas)",
+    "express4hDesc": "Visto pronto em 4 horas",
+    "express1d": "Express (1 dia)",
+    "express1dDesc": "Visto pronto em 1 dia útil",
+    "express2d": "Express (2 dias)",
+    "express2dDesc": "Visto pronto em 2 dias úteis",
+    "govFeeNote": "+ Taxa governamental ($25 entrada única / $50 entradas múltiplas)",
+    "pricePerPerson": "por pessoa"
+  },
   "citizenship": {
     "title": "Verificar os requisitos do seu visto",
     "subtitle": "Selecione a sua nacionalidade para saber qual o visto necessário para o Vietname",
@@ -183,7 +212,9 @@
     "selectAirport": "Selecionar aeroporto...",
     "detectingLocation": "Detetar a sua localização...",
     "needLongerStay": "Precisa de mais de 60 dias ou de várias entradas?",
-    "getLongerVisa": "Obter E-Visa"
+    "getLongerVisa": "Obter E-Visa",
+    "purposeOfVisit": "Objetivo da visita",
+    "selectPurpose": "Selecione o objetivo..."
   },
   "dynamicFlights": {
     "title": "Voos para o Vietname",
@@ -241,6 +272,10 @@
     "tourist": "Turismo",
     "business": "Negócios",
     "visiting": "Visita a familiares/amigos",
+    "study": "Estudo",
+    "work": "Trabalho",
+    "transit": "Trânsito",
+    "other": "Outro",
     "entryDate": "Data prevista de entrada",
     "entryDateHint": "Deve entrar no Vietname a partir desta data",
     "exitDate": "Data prevista de saída",
@@ -263,7 +298,23 @@
     "singleEntry": "Entrada única",
     "multipleEntry": "Entrada múltipla",
     "included": "Incluído",
-    "perPerson": "/pessoa"
+    "perPerson": "/pessoa",
+    "intendedAirportEntry": "Aeroporto de entrada previsto",
+    "intendedAirportExit": "Aeroporto de saída previsto",
+    "selectAirport": "Selecionar aeroporto..."
+  },
+  "visaSpeeds": {
+    "speed30MinName": "Visto Expresso 30 Minutos",
+    "speed30MinDesc": "Aprovação de check-in em 30 minutos. Processamento mais rápido: visto pronto em 1-1.5 horas.",
+    "speed4HourName": "Visto Expresso 4 Horas",
+    "speed4HourDesc": "Processamento rápido - visto pronto em 4 horas",
+    "speed1DayName": "Visto Padrão 1 Dia",
+    "speed1DayDesc": "Processamento padrão - visto pronto em 1 dia útil",
+    "speed2DayName": "Visto Económico 2 Dias",
+    "speed2DayDesc": "Processamento económico - visto pronto em 2 dias úteis",
+    "speedWeekendName": "Visto Fim de Semana e Feriados",
+    "speedWeekendDesc": "Processamento especial para fins de semana/feriados",
+    "needItFaster": "Precisa mais rápido? Atualize para Expresso 30 Minutos ($199)"
   },
   "applyForm": {
     "applicantInfo": "Informações sobre o candidato",
@@ -293,9 +344,10 @@
     "passportDataPage": "Página de dados do passaporte",
     "passportPageDesc": "Fotografia nítida que mostra todos os pormenores",
     "portraitPhoto": "Fotografia de retrato",
-    "portraitDesc": "Fundo branco, sem óculos",
+    "portraitDesc": "Sem chapéu, sem óculos",
     "uploaded": "carregado",
     "clickToUpload": "Clique para carregar",
+    "processingPhoto": "Processando foto...",
     "contactInfo": "Informações de contacto",
     "email": "Endereço de correio eletrónico",
     "emailPlaceholder": "your@email.com",
@@ -333,7 +385,16 @@
     "autoFilledFields": "Preenchimento automático a partir do passaporte",
     "personalInfo": "Informações pessoais",
     "passportInfo": "Informações sobre o passaporte",
-    "emergencyContact": "Contacto de emergência"
+    "emergencyContact": "Contacto de emergência",
+    "autoProcessText": "Ao carregar uma imagem, o nosso sistema mudará automaticamente o fundo da foto para branco e gerará no tamanho e formato apropriados.",
+    "selfieTipsTitle": "Como tirar a melhor selfie para o E-Visa?",
+    "selfieTip1": "Antes de tirar a foto, retire o chapéu e os óculos.",
+    "selfieTip2": "Distância do telefone aproximadamente 50-70 cm do rosto",
+    "selfieTip3": "Deixe um pequeno espaço (1-2 cm) entre o topo da sua cabeça e o topo da moldura.",
+    "selfieTip4": "Os ombros podem ser visíveis, mas o foco principal deve estar no rosto.",
+    "selfieTip5": "Câmara ao nível dos olhos, não de cima nem de baixo.",
+    "selfieTip6": "Olhe diretamente para a câmara do telefone (não para o ecrã).",
+    "selfieTipsGotIt": "Entendido!"
   },
   "verification": {
     "title": "Verificar o seu telefone",
@@ -624,6 +685,17 @@
     "footerDescription": "Serviço rápido e fiável de assistência em matéria de vistos para o Vietname. Obtenha a sua carta de aprovação em 30 minutos.",
     "importantDisclaimer": "Aviso importante",
     "disclaimerBannerText": "VietnamVisaHelp.com é um serviço independente de assistência em matéria de vistos. Não somos uma agência governamental ou uma autoridade oficial de vistos. Ajudamo-lo a preparar e a apresentar o seu pedido de visto mediante o pagamento de uma taxa de serviço. Todas as decisões de aprovação de vistos são tomadas pelas autoridades de imigração vietnamitas.",
+    "topDisclaimerText": "não é afiliado ao Governo do Vietnã nem ao Departamento de Imigração. Como parte dos nossos serviços, são aplicáveis taxas de processamento, separadas das taxas regulamentadas pelo governo. Também pode visitar o",
+    "officialWebsiteLink": "site oficial do Departamento de Imigração do Vietnã",
+    "readFullDisclaimer": "Ler aviso completo",
+    "cookieConsentText": "Utilizamos cookies para melhorar a sua experiência de navegação e analisar o tráfego do site. Ao clicar em \"Aceitar\", consente a utilização de cookies.",
+    "cookieLearnMore": "Saiba mais",
+    "cookieReject": "Rejeitar",
+    "cookieAccept": "Aceitar",
+    "footerTerms": "Termos e Condições",
+    "footerRefund": "Política de Cancelamento e Reembolso",
+    "footerPrivacy": "Política de Privacidade",
+    "securePayment": "Pagamento Seguro:",
     "sendMessage": "Enviar-nos uma mensagem",
     "emailPlaceholder": "O seu correio eletrónico",
     "messagePlaceholder": "A sua mensagem",

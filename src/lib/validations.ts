@@ -3,7 +3,8 @@ import { z } from "zod";
 // Trip details validation (Step 1)
 export const tripDetailsSchema = z.object({
   applicants: z.number().min(1).max(10),
-  purpose: z.enum(["tourist", "business", "visiting"]),
+  // Accept both old schema values and form values for backward compatibility
+  purpose: z.enum(["tourist", "tourism", "business", "visiting", "visiting_relatives", "study", "work", "transit", "other"]),
   entryPort: z.string().min(1, "Please select an entry port"),
   entryDate: z.string().min(1, "Please select an entry date"),
   exitDate: z.string().min(1, "Please select an exit date"),

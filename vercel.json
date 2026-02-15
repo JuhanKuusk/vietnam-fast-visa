@@ -4,5 +4,13 @@
       "path": "/api/ads/sync",
       "schedule": "*/15 * * * *"
     }
-  ]
+  ],
+  "functions": {
+    "src/app/api/ads/library/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/instagram/upload/route.ts": {
+      "maxDuration": 60
+    }
+  }
 }

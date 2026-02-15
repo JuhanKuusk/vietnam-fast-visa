@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSite } from "@/contexts/SiteContext";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { PhoneVerification } from "@/components/ui/phone-verification";
@@ -10,8 +11,7 @@ import { Logo } from "@/components/ui/logo";
 import { FlightRiskBlock } from "@/components/ui/flight-risk-block";
 import { FlightCheckBox } from "@/components/ui/flight-check-box";
 import { getAirportsForCountry } from "@/lib/amadeus";
-import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
-import { scanPassport as scanPassportClient } from "@/lib/passport-scanner";
+import { Footer } from "@/components/ui/footer";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -478,15 +478,15 @@ interface AirportInfo {
   city: string;
 }
 
-// Purpose of visit options
+// Purpose of visit options - using translation keys that map to travelDetails
 const PURPOSES = [
-  { value: "tourism", label: "Tourism" },
-  { value: "business", label: "Business" },
-  { value: "visiting_relatives", label: "Visiting Relatives/Friends" },
-  { value: "study", label: "Study" },
-  { value: "work", label: "Work" },
-  { value: "transit", label: "Transit" },
-  { value: "other", label: "Other" },
+  { value: "tourism", labelKey: "tourist" },
+  { value: "business", labelKey: "business" },
+  { value: "visiting_relatives", labelKey: "visiting" },
+  { value: "study", labelKey: "study" },
+  { value: "work", labelKey: "work" },
+  { value: "transit", labelKey: "transit" },
+  { value: "other", labelKey: "other" },
 ];
 
 function CitizenshipChecker({
@@ -679,7 +679,7 @@ function CitizenshipChecker({
           >
             {PURPOSES.map((p) => (
               <option key={p.value} value={p.value}>
-                {p.label}
+                {t?.travelDetails?.[p.labelKey as keyof typeof t.travelDetails] || p.labelKey}
               </option>
             ))}
           </select>
@@ -755,7 +755,8 @@ function CitizenshipChecker({
       )}
 
       {/* Flight Risk Warning - shown right after citizenship result for e-visa countries */}
-      {selectedCountry && visaResult?.type === "evisa" && departingCountry && (
+      {/* Only show when airport is valid for the selected country to prevent showing stale data */}
+      {selectedCountry && visaResult?.type === "evisa" && departingCountry && selectedAirportInfo && (
         <div className="mt-4">
           <FlightRiskBlock
             countryCode={departingCountry}
@@ -975,22 +976,282 @@ function PhotoUploadSection({
   );
 }
 
+// Portrait Photo Upload Component with immediate processing
+function PortraitPhotoUpload({
+  label,
+  description,
+  file,
+  processedUrl,
+  isProcessing,
+  onFileChange,
+  uploadedText = "uploaded",
+  clickToUploadText = "Click to upload",
+  processingText = "Processing photo...",
+  autoProcessText = "When uploading an image, our system will automatically change the photo background to white and generate it in the appropriate size and format.",
+  selfieTipsTitle = "How to take the best selfie for E-Visa?",
+  selfieTips = [
+    "Before taking the photo, be sure to remove your hat and glasses.",
+    "Phone distance approximately 50-70 cm from face",
+    "Leave a small gap (1-2 cm) between the top of your head and the top of the frame.",
+    "Shoulders may be visible, but the main focus should be on the face.",
+    "Camera at eye level, not from above or below.",
+    "Look directly at the phone camera (not the screen).",
+  ],
+  selfieTipsGotIt = "Got it!",
+}: {
+  label: string;
+  description: string;
+  file: File | null;
+  processedUrl: string | null;
+  isProcessing: boolean;
+  onFileChange: (file: File | null) => void;
+  uploadedText?: string;
+  clickToUploadText?: string;
+  processingText?: string;
+  autoProcessText?: string;
+  selfieTipsTitle?: string;
+  selfieTips?: string[];
+  selfieTipsGotIt?: string;
+}) {
+  const [showSelfieTips, setShowSelfieTips] = useState(false);
+  // Show processing state
+  if (isProcessing) {
+    return (
+      <div className="border-2 border-blue-500 rounded-lg p-4 bg-blue-50 dark:bg-blue-900/20">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-20 rounded-lg overflow-hidden bg-gray-200 flex-shrink-0 flex items-center justify-center">
+            <svg className="w-8 h-8 text-blue-500 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-blue-700 dark:text-blue-300 font-semibold text-base flex items-center gap-2">
+              <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clipRule="evenodd" />
+              </svg>
+              {processingText}
+            </p>
+            <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">Removing background & resizing to 4x6cm...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show processed result
+  if (file && processedUrl) {
+    return (
+      <div className="border-2 border-green-500 rounded-lg p-4 bg-green-50 dark:bg-green-900/20">
+        <div className="flex items-center gap-4">
+          <div className="flex gap-2">
+            {/* Original thumbnail */}
+            <div className="text-center">
+              <div className="w-12 h-16 rounded overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-300">
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="Original"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Original</p>
+            </div>
+            {/* Arrow */}
+            <div className="flex items-center text-green-500">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+            {/* Processed thumbnail */}
+            <div className="text-center">
+              <div className="w-12 h-16 rounded overflow-hidden bg-white flex-shrink-0 border-2 border-green-500">
+                <img
+                  src={processedUrl}
+                  alt="Processed"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <p className="text-xs text-green-600 font-medium mt-1">4x6cm</p>
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-green-700 dark:text-green-300 font-semibold text-base flex items-center gap-2">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              {label} {uploadedText}
+            </p>
+            <p className="text-sm text-green-600 dark:text-green-400">Background removed & resized</p>
+          </div>
+          <button
+            onClick={() => onFileChange(null)}
+            className="text-gray-400 hover:text-red-500 p-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show original file without processing (fallback)
+  if (file && !processedUrl) {
+    return (
+      <div className="border-2 border-yellow-500 rounded-lg p-4 bg-yellow-50 dark:bg-yellow-900/20">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+            <img
+              src={URL.createObjectURL(file)}
+              alt="Preview"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-yellow-700 dark:text-yellow-300 font-semibold text-base flex items-center gap-2">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              {label} (Original)
+            </p>
+            <p className="text-sm text-yellow-600 dark:text-yellow-400 truncate">{file.name}</p>
+          </div>
+          <button
+            onClick={() => onFileChange(null)}
+            className="text-gray-400 hover:text-red-500 p-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show upload area
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {label} <span className="text-red-500">*</span>
+      </label>
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all cursor-pointer">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const selectedFile = e.target.files?.[0] || null;
+            onFileChange(selectedFile);
+          }}
+          className="hidden"
+          id={`upload-portrait-${label}`}
+        />
+        <label htmlFor={`upload-portrait-${label}`} className="cursor-pointer block">
+          <svg className="w-10 h-10 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <p className="text-gray-700 dark:text-gray-300 font-medium">{clickToUploadText}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{description}</p>
+        </label>
+      </div>
+
+      {/* Info text about auto processing */}
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
+        {autoProcessText}
+      </p>
+
+      {/* Selfie tips link */}
+      <button
+        type="button"
+        onClick={() => setShowSelfieTips(true)}
+        className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mt-2 flex items-center gap-1 underline"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {selfieTipsTitle}
+      </button>
+
+      {/* Selfie Tips Modal */}
+      {showSelfieTips && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowSelfieTips(false)}>
+          <div
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full p-6 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setShowSelfieTips(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {selfieTipsTitle}
+              </h3>
+            </div>
+
+            {/* Tips list */}
+            <ul className="space-y-3">
+              {selfieTips.map((tip, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 text-sm font-medium">
+                    {index + 1}
+                  </span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{tip}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setShowSelfieTips(false)}
+              className="mt-6 w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+            >
+              {selfieTipsGotIt}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ApplyForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { t, isLoading: isTranslating, language } = useLanguage();
+  const { formatSitePrice } = useSite();
 
   // Get initial values from URL params (from home page)
-  const initialFlight = searchParams.get("flight") || "";
+  const initialFlight = searchParams.get("flight") || ""; // This is the flight arriving in Vietnam (or only flight if no connection)
+  const initialFlight1 = searchParams.get("flight1") || ""; // First leg of journey (if user has connecting flight)
   const initialNationality = searchParams.get("nationality") || "";
   const purposeParam = searchParams.get("purpose");
-  const initialPurpose = (purposeParam === "tourist" || purposeParam === "business" || purposeParam === "visiting")
-    ? purposeParam
-    : "tourist";
+  // Accept both schema values and form values for purpose
+  const validPurposes = ["tourist", "tourism", "business", "visiting", "visiting_relatives", "study", "work", "transit", "other"];
+  const initialPurpose = purposeParam && validPurposes.includes(purposeParam) ? purposeParam : "tourism";
   const initialEntryPort = searchParams.get("entryPort") || "";
+  const initialEntryDate = searchParams.get("entryDate") || "";
   const speedParam = searchParams.get("speed") || "30-min";
   const initialDepartingCountry = searchParams.get("departingCountry") || "";
   const initialDepartingAirport = searchParams.get("departingAirport") || "";
+  // If we have both flight and flight1, user had a connecting flight
+  const hasConnectionFromUrl = !!(initialFlight && initialFlight1 && initialFlight !== initialFlight1);
 
   // Memoize date values to prevent hydration mismatch (server vs client Date() differences)
   // These are calculated once on client mount to ensure consistency
@@ -1013,8 +1274,9 @@ function ApplyForm() {
   }, []);
 
   // Get visa speed configuration (default to 30-min if invalid)
-  const visaSpeed = (Object.keys(VISA_SPEEDS).includes(speedParam) ? speedParam : "30-min") as VisaSpeedKey;
-  const visaSpeedConfig = VISA_SPEEDS[visaSpeed];
+  const initialVisaSpeed = (Object.keys(VISA_SPEEDS).includes(speedParam) ? speedParam : "30-min") as VisaSpeedKey;
+  const [selectedVisaSpeed, setSelectedVisaSpeed] = useState<VisaSpeedKey>(initialVisaSpeed);
+  const visaSpeedConfig = VISA_SPEEDS[selectedVisaSpeed];
   const pricePerPerson = visaSpeedConfig.price;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -1036,7 +1298,7 @@ function ApplyForm() {
   const [travelDetails, setTravelDetails] = useState<TravelDetails>({
     applicantCount: 1,
     purpose: initialPurpose,
-    entryDate: "",
+    entryDate: initialEntryDate,
     exitDate: "",
     entryPort: initialEntryPort,
     exitPort: "",
@@ -1109,9 +1371,28 @@ function ApplyForm() {
         });
       }
       setApplicants(newApplicants);
+      // Also expand portrait photo arrays
+      const newPassportPhotos = [...passportPhotos];
+      const newPortraitPhotos = [...portraitPhotos];
+      const newProcessedUrls = [...processedPortraitUrls];
+      const newProcessingStates = [...isProcessingPortrait];
+      for (let i = passportPhotos.length; i < count; i++) {
+        newPassportPhotos.push(null);
+        newPortraitPhotos.push(null);
+        newProcessedUrls.push(null);
+        newProcessingStates.push(false);
+      }
+      setPassportPhotos(newPassportPhotos);
+      setPortraitPhotos(newPortraitPhotos);
+      setProcessedPortraitUrls(newProcessedUrls);
+      setIsProcessingPortrait(newProcessingStates);
     } else if (count < applicants.length) {
       // Remove extra applicants
       setApplicants(applicants.slice(0, count));
+      setPassportPhotos(passportPhotos.slice(0, count));
+      setPortraitPhotos(portraitPhotos.slice(0, count));
+      setProcessedPortraitUrls(processedPortraitUrls.slice(0, count));
+      setIsProcessingPortrait(isProcessingPortrait.slice(0, count));
       if (currentApplicant >= count) {
         setCurrentApplicant(count - 1);
       }
@@ -1130,18 +1411,45 @@ function ApplyForm() {
 
   const [passportPhotos, setPassportPhotos] = useState<(File | null)[]>([null]);
   const [portraitPhotos, setPortraitPhotos] = useState<(File | null)[]>([null]);
+  const [processedPortraitUrls, setProcessedPortraitUrls] = useState<(string | null)[]>([null]);
+  const [isProcessingPortrait, setIsProcessingPortrait] = useState<boolean[]>([false]);
 
   // Flight check state - use separate state for the first flight input
   // This prevents the connecting flight from overwriting the first flight number input
   const [firstFlightNumber, setFirstFlightNumber] = useState("");
   const [flightCheckDate, setFlightCheckDate] = useState("");
 
-  // Initialize flightCheckDate with tomorrow's date on client side
+  // Sync flight data from URL params after component mounts (handles hydration timing)
   useEffect(() => {
-    if (!flightCheckDate && tomorrowDate) {
+    // If user has connecting flight (flight1 URL param), set firstFlightNumber to the first leg
+    // Otherwise use the main flight param
+    if (hasConnectionFromUrl && initialFlight1 && !firstFlightNumber) {
+      setFirstFlightNumber(initialFlight1);
+    } else if (initialFlight && !firstFlightNumber) {
+      setFirstFlightNumber(initialFlight);
+    }
+  }, [initialFlight, initialFlight1, hasConnectionFromUrl, firstFlightNumber]);
+
+  // Sync entry date from URL params or use tomorrow's date as fallback
+  useEffect(() => {
+    if (initialEntryDate && !flightCheckDate) {
+      setFlightCheckDate(initialEntryDate);
+    } else if (!flightCheckDate && tomorrowDate && !initialEntryDate) {
       setFlightCheckDate(tomorrowDate);
     }
-  }, [flightCheckDate, tomorrowDate]);
+  }, [initialEntryDate, flightCheckDate, tomorrowDate]);
+
+  // Sync telephone number from mobile phone number in contact info
+  useEffect(() => {
+    if (contactInfo.mobile && applicants[0]) {
+      // Only auto-fill if telephone is empty
+      if (!applicants[0].telephoneNumber) {
+        const newData = [...applicants];
+        newData[0].telephoneNumber = contactInfo.mobile;
+        setApplicants(newData);
+      }
+    }
+  }, [contactInfo.mobile]);
 
   // Track when form was auto-filled from flight data
   const [autoFilledMessage, setAutoFilledMessage] = useState<string | null>(null);
@@ -1193,7 +1501,7 @@ function ApplyForm() {
     setApplicants(updated);
   };
 
-  // Scan passport and auto-fill form fields (client-side processing)
+  // Scan passport and auto-fill form fields (server-side processing with Google Cloud Vision)
   const scanPassport = async () => {
     const passportFile = passportPhotos[currentApplicant];
     if (!passportFile) return;
@@ -1202,16 +1510,27 @@ function ApplyForm() {
     setScanError(null);
     setScanSuccess(false);
     setScanProgress(0);
-    setScanStatus("Starting...");
+    setScanStatus("Uploading...");
 
     try {
-      // Use client-side scanner (runs in browser, not on server)
-      const result = await scanPassportClient(passportFile, (progress, status) => {
-        setScanProgress(progress);
-        setScanStatus(status);
+      // Use server-side API with Google Cloud Vision for better accuracy
+      setScanProgress(20);
+      setScanStatus("Processing passport...");
+
+      const formData = new FormData();
+      formData.append("file", passportFile);
+
+      const response = await fetch("/api/passport-scan", {
+        method: "POST",
+        body: formData,
       });
 
-      if (!result.success || !result.data) {
+      setScanProgress(80);
+      setScanStatus("Extracting data...");
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !result.data) {
         setScanError(result.error || t.applyForm.scanError);
         return;
       }
@@ -1338,7 +1657,7 @@ function ApplyForm() {
       const applicationData = {
         tripDetails: {
           applicants: travelDetails.applicantCount,
-          purpose: travelDetails.purpose as "tourist" | "business" | "visiting",
+          purpose: travelDetails.purpose,
           entryPort: travelDetails.entryPort,
           exitPort: travelDetails.exitPort,
           entryDate: travelDetails.entryDate,
@@ -1374,7 +1693,7 @@ function ApplyForm() {
           whatsapp: contactInfo.whatsappSameAsMobile ? contactInfo.mobile : contactInfo.whatsapp,
         })),
         language, // Include user's language preference for email translations
-        visaSpeed, // Include selected visa speed for pricing
+        visaSpeed: selectedVisaSpeed, // Include selected visa speed for pricing
       };
 
       const response = await fetch("/api/applications", {
@@ -1416,21 +1735,20 @@ function ApplyForm() {
             );
           }
 
-          // Upload portrait photo if exists
+          // Upload and process portrait photo if exists (resize to 4x6cm, white background)
           const portraitFile = portraitPhotos[i];
           if (portraitFile) {
             const portraitFormData = new FormData();
             portraitFormData.append("file", portraitFile);
             portraitFormData.append("applicantId", applicantId);
-            portraitFormData.append("type", "portrait");
 
             uploadPromises.push(
-              fetch("/api/upload", {
+              fetch("/api/process-photo", {
                 method: "POST",
                 body: portraitFormData,
               }).then((res) => {
                 if (!res.ok) {
-                  console.error(`Failed to upload portrait photo for applicant ${i + 1}`);
+                  console.error(`Failed to process portrait photo for applicant ${i + 1}`);
                 }
               })
             );
@@ -1447,7 +1765,7 @@ function ApplyForm() {
       sessionStorage.setItem("referenceNumber", result.referenceNumber);
       sessionStorage.setItem("totalAmount", String(result.amount));
 
-      router.push(`/payment?applicants=${travelDetails.applicantCount}&ref=${result.referenceNumber}`);
+      router.push(`/payment?applicants=${travelDetails.applicantCount}&ref=${result.referenceNumber}&speed=${selectedVisaSpeed}`);
     } catch (error) {
       console.error("Submission error:", error);
       setSubmitError(error instanceof Error ? error.message : "An unexpected error occurred");
@@ -1472,16 +1790,19 @@ function ApplyForm() {
       )}
 
       {/* Official Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <a href="/" className="flex items-center gap-3">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+        <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
+          <a href="/" className="hidden sm:flex items-center gap-3">
             <Logo size="md" taglineText={t.header?.logoTagline || t.applyHeader?.tagline || "Check-in Approval in 30 min"} />
           </a>
-          <div className="flex items-center gap-3">
+          <a href="/" className="sm:hidden text-lg font-bold" style={{ color: '#c41e3a' }}>
+            VietnamVisaHelp
+          </a>
+          <div className="flex items-center gap-1 sm:gap-3">
             {/* About Us Button - Blue */}
             <a
               href="/about"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors hover:opacity-90"
+              className="px-2 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-white transition-colors hover:opacity-90"
               style={{ backgroundColor: '#2d7ef6' }}
             >
               About Us
@@ -1489,12 +1810,12 @@ function ApplyForm() {
             {/* WhatsApp Button - Green */}
             <a
               href="https://wa.me/3725035137"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition-colors"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
-              WhatsApp
+              <span className="hidden sm:inline">WhatsApp</span>
             </a>
             <ThemeToggle />
             <LanguageSelector />
@@ -1513,16 +1834,16 @@ function ApplyForm() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold">{visaSpeedConfig.name}</h2>
-                <p className="text-blue-100 text-sm">{visaSpeedConfig.description}</p>
+                <h2 className="text-xl font-bold">{t.visaSpeeds?.[visaSpeedConfig.nameKey as keyof typeof t.visaSpeeds] || visaSpeedConfig.name}</h2>
+                <p className="text-blue-100 text-sm">{t.visaSpeeds?.[visaSpeedConfig.descriptionKey as keyof typeof t.visaSpeeds] || visaSpeedConfig.description}</p>
               </div>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold">${pricePerPerson}</div>
-              <div className="text-blue-200 text-sm">per person</div>
+              <div className="text-blue-200 text-sm">{t.travelDetails?.perPerson || "per person"}</div>
             </div>
           </div>
-          {visaSpeed !== "30-min" && (
+          {selectedVisaSpeed !== "30-min" && (
             <div className="mt-4 pt-4 border-t border-white/20">
               <a
                 href="/apply?speed=30-min"
@@ -1531,7 +1852,7 @@ function ApplyForm() {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Need it faster? Upgrade to 30-Minute Express ($199)
+                {t.visaSpeeds?.needItFaster || `Need it faster? Upgrade to 30-Minute Express (${formatSitePrice(199)})`}
               </a>
             </div>
           )}
@@ -1573,8 +1894,17 @@ function ApplyForm() {
             flightDate={flightCheckDate}
             onFlightDateChange={setFlightCheckDate}
             onFlightData={handleFlightData}
-            title="Check Your Flight Status"
-            placeholder="e.g. VN123, CX841"
+            title={t.hero?.checkFlightStatus || "Check Your Flight Status"}
+            placeholder={t.form?.flightPlaceholder || "e.g. VN123, CX841"}
+            initialHasConnection={hasConnectionFromUrl}
+            initialConnectionFlightNumber={hasConnectionFromUrl ? initialFlight : ""}
+            flight1DepartureText={t.flightCheckBox?.flight1Departure}
+            flightNumberAndDateText={t.flightCheckBox?.flightNumberAndDate}
+            hasConnectionFlightText={t.flightCheckBox?.hasConnectionFlight}
+            getVisaReadyText={t.flightCheckBox?.getVisaReady}
+            connectingFlightToVietnamText={t.flightCheckBox?.connectingFlightToVietnam}
+            connectionFlightPlaceholder={t.flightCheckBox?.connectionFlightPlaceholder}
+            connectionFlightHintText={t.flightCheckBox?.connectionFlightHint}
           />
           {/* Auto-fill success notification */}
           {autoFilledMessage && (
@@ -1662,6 +1992,142 @@ function ApplyForm() {
 
           <div className="p-6 lg:p-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Processing Speed Selection - Full Width */}
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.visaSpeedSelection?.label || "Processing Speed"} <span className="text-red-500">*</span>
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {/* Weekend/Holiday */}
+                  <label className={`flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                    selectedVisaSpeed === "weekend"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                      : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700"
+                  }`}>
+                    <input
+                      type="radio"
+                      name="visaSpeed"
+                      value="weekend"
+                      checked={selectedVisaSpeed === "weekend"}
+                      onChange={() => setSelectedVisaSpeed("weekend")}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        {t.visaSpeedSelection?.weekend || "Weekend/Holiday"}
+                      </span>
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatSitePrice(249)}</span>
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {t.visaSpeedSelection?.weekendDesc || "Special weekend/holiday processing"}
+                    </span>
+                  </label>
+
+                  {/* Emergency 30-min */}
+                  <label className={`flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                    selectedVisaSpeed === "30-min"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                      : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700"
+                  }`}>
+                    <input
+                      type="radio"
+                      name="visaSpeed"
+                      value="30-min"
+                      checked={selectedVisaSpeed === "30-min"}
+                      onChange={() => setSelectedVisaSpeed("30-min")}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        {t.visaSpeedSelection?.emergency || "Emergency (30 min)"}
+                      </span>
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatSitePrice(199)}</span>
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {t.visaSpeedSelection?.emergencyDesc || "Approval in 30 min, visa in 1-1.5 hours"}
+                    </span>
+                  </label>
+
+                  {/* Express 4 hours */}
+                  <label className={`flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                    selectedVisaSpeed === "4-hour"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                      : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700"
+                  }`}>
+                    <input
+                      type="radio"
+                      name="visaSpeed"
+                      value="4-hour"
+                      checked={selectedVisaSpeed === "4-hour"}
+                      onChange={() => setSelectedVisaSpeed("4-hour")}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        {t.visaSpeedSelection?.express4h || "Express (4 hours)"}
+                      </span>
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatSitePrice(139)}</span>
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {t.visaSpeedSelection?.express4hDesc || "Visa ready in 4 hours"}
+                    </span>
+                  </label>
+
+                  {/* Express 1 day */}
+                  <label className={`flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                    selectedVisaSpeed === "1-day"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                      : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700"
+                  }`}>
+                    <input
+                      type="radio"
+                      name="visaSpeed"
+                      value="1-day"
+                      checked={selectedVisaSpeed === "1-day"}
+                      onChange={() => setSelectedVisaSpeed("1-day")}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        {t.visaSpeedSelection?.express1d || "Express (1 day)"}
+                      </span>
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatSitePrice(99)}</span>
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {t.visaSpeedSelection?.express1dDesc || "Visa ready in 1 business day"}
+                    </span>
+                  </label>
+
+                  {/* Express 2 days */}
+                  <label className={`flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                    selectedVisaSpeed === "2-day"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                      : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-700"
+                  }`}>
+                    <input
+                      type="radio"
+                      name="visaSpeed"
+                      value="2-day"
+                      checked={selectedVisaSpeed === "2-day"}
+                      onChange={() => setSelectedVisaSpeed("2-day")}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        {t.visaSpeedSelection?.express2d || "Express (2 days)"}
+                      </span>
+                      <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatSitePrice(89)}</span>
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {t.visaSpeedSelection?.express2dDesc || "Visa ready in 2 business days"}
+                    </span>
+                  </label>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  {t.visaSpeedSelection?.govFeeNote || "+ Government fee ($25 single / $50 multiple entry)"}
+                </p>
+              </div>
+
               {/* Number of Applicants */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -1708,7 +2174,7 @@ function ApplyForm() {
                       className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                     />
                     <span className="ml-3 text-gray-900 dark:text-white">{t.travelDetails?.multipleEntry || "Multiple Entry"}</span>
-                    <span className="ml-auto text-sm text-green-600 dark:text-green-400 font-medium">+$30{t.travelDetails?.perPerson || "/person"}</span>
+                    <span className="ml-auto text-sm text-green-600 dark:text-green-400 font-medium">+{formatSitePrice(30)}{t.travelDetails?.perPerson || "/person"}</span>
                   </label>
                 </div>
               </div>
@@ -1752,14 +2218,14 @@ function ApplyForm() {
               {/* Intended Airport of Entry */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Intended airport of entry <span className="text-red-500">*</span>
+                  {t.travelDetails?.intendedAirportEntry || "Intended airport of entry"} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={travelDetails.entryPort}
                   onChange={(e) => setTravelDetails({ ...travelDetails, entryPort: e.target.value })}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
-                  <option value="">Select airport...</option>
+                  <option value="">{t.travelDetails?.selectAirport || "Select airport..."}</option>
                   {VIETNAM_AIRPORTS.map((airport) => (
                     <option key={airport.code} value={airport.code}>{airport.name}</option>
                   ))}
@@ -1769,14 +2235,14 @@ function ApplyForm() {
               {/* Intended Airport of Exit */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Intended airport of exit <span className="text-red-500">*</span>
+                  {t.travelDetails?.intendedAirportExit || "Intended airport of exit"} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={travelDetails.exitPort}
                   onChange={(e) => setTravelDetails({ ...travelDetails, exitPort: e.target.value })}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
-                  <option value="">Select airport...</option>
+                  <option value="">{t.travelDetails?.selectAirport || "Select airport..."}</option>
                   {VIETNAM_AIRPORTS.map((airport) => (
                     <option key={airport.code} value={airport.code}>{airport.name}</option>
                   ))}
@@ -1817,19 +2283,6 @@ function ApplyForm() {
                 </select>
               </div>
 
-              {/* Flight Number */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t.travelDetails?.flightNumber || "Flight Number"} <span className="text-gray-400 font-normal">{t.travelDetails?.flightOptional || "(Optional)"}</span>
-                </label>
-                <input
-                  type="text"
-                  value={travelDetails.flightNumber}
-                  onChange={(e) => setTravelDetails({ ...travelDetails, flightNumber: e.target.value.toUpperCase() })}
-                  placeholder={t.travelDetails?.flightPlaceholder || "e.g. VN123, SQ456"}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 uppercase transition-all"
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -1876,25 +2329,6 @@ function ApplyForm() {
               {/* Document Uploads Section - FIRST for passport scanning autofill */}
               <div className="lg:col-span-2">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.applyForm.documentUploads}</h3>
-
-                {/* Passport Scan Info Banner */}
-                <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-blue-800 dark:text-blue-300 text-base">
-                        {t.applyForm.passportScanInfo}
-                      </h4>
-                      <p className="mt-1 text-sm text-blue-700 dark:text-blue-400">
-                        {t.applyForm.passportScanInfoDetail}
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               {/* Passport Photo */}
@@ -1910,98 +2344,161 @@ function ApplyForm() {
                     // Reset scan state when new file is selected
                     setScanSuccess(false);
                     setScanError(null);
+                    // Auto-scan passport when file is uploaded
+                    if (file) {
+                      // Use setTimeout to ensure state is updated before scanning
+                      setTimeout(() => {
+                        scanPassport();
+                      }, 100);
+                    }
                   }}
                   uploadedText={t.applyForm.uploaded}
                   clickToUploadText={t.applyForm.clickToUpload}
                 />
 
-                {/* Scan Passport Button - shows when passport photo is uploaded */}
-                {passportPhotos[currentApplicant] && (
-                  <div className="mt-3">
+                {/* Info text under passport upload - same style as portrait photo */}
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
+                  {t.applyForm.passportScanInfoDetail}
+                </p>
+
+                {/* Scanning Status - shows when scanning is in progress */}
+                {isScanning && (
+                  <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <div className="flex flex-col items-center gap-2 w-full">
+                      <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span className="font-medium">{scanStatus || t.applyForm.scanning}</span>
+                      </div>
+                      {scanProgress > 0 && (
+                        <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-2">
+                          <div
+                            className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${scanProgress}%` }}
+                          ></div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Scan Success Message */}
+                {scanSuccess && !isScanning && (
+                  <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
+                    <p className="text-green-700 dark:text-green-400 text-sm flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      {t.applyForm.scanSuccess}
+                    </p>
+                  </div>
+                )}
+
+                {/* Scan Error Message */}
+                {scanError && !isScanning && (
+                  <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-red-700 dark:text-red-400 text-sm flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {scanError}
+                    </p>
                     <button
                       type="button"
                       onClick={scanPassport}
-                      disabled={isScanning}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-blue-400 disabled:to-indigo-400 text-white font-medium rounded-lg transition-all shadow-md hover:shadow-lg flex flex-col items-center justify-center gap-1"
+                      className="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 underline"
                     >
-                      {isScanning ? (
-                        <div className="flex flex-col items-center gap-2 w-full">
-                          <div className="flex items-center gap-2">
-                            <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span>{scanStatus || t.applyForm.scanning}</span>
-                          </div>
-                          {scanProgress > 0 && (
-                            <div className="w-full bg-blue-400/30 rounded-full h-2">
-                              <div
-                                className="bg-white h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${scanProgress}%` }}
-                              ></div>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <>
-                          <div className="flex items-center gap-2">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                            </svg>
-                            <span>{t.applyForm.scanPassport}</span>
-                          </div>
-                          <span className="text-xs text-blue-200 font-normal">{t.applyForm.scanPassportHint}</span>
-                        </>
-                      )}
+                      {t.applyForm.scanRetry}
                     </button>
-
-                    {/* Scan Success Message */}
-                    {scanSuccess && (
-                      <div className="mt-2 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
-                        <p className="text-green-700 dark:text-green-400 text-sm flex items-center gap-2">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                          {t.applyForm.scanSuccess}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Scan Error Message */}
-                    {scanError && (
-                      <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg">
-                        <p className="text-red-700 dark:text-red-400 text-sm flex items-center gap-2">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                          </svg>
-                          {scanError}
-                        </p>
-                        <button
-                          type="button"
-                          onClick={scanPassport}
-                          className="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 underline"
-                        >
-                          {t.applyForm.scanRetry}
-                        </button>
-                      </div>
-                    )}
                   </div>
+                )}
+
+                {/* Manual Scan Button - shown when passport is uploaded but not scanning or already successful */}
+                {passportPhotos[currentApplicant] && !isScanning && !scanSuccess && !scanError && (
+                  <button
+                    type="button"
+                    onClick={scanPassport}
+                    className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    {t.applyForm.scanPassport}
+                  </button>
                 )}
               </div>
 
               {/* Portrait Photo */}
               <div>
-                <PhotoUploadSection
+                <PortraitPhotoUpload
                   label={t.applyForm.portraitPhoto}
                   description={t.applyForm.portraitDesc}
                   file={portraitPhotos[currentApplicant]}
-                  onFileChange={(file) => {
+                  processedUrl={processedPortraitUrls[currentApplicant]}
+                  isProcessing={isProcessingPortrait[currentApplicant]}
+                  onFileChange={async (file) => {
                     const files = [...portraitPhotos];
                     files[currentApplicant] = file;
                     setPortraitPhotos(files);
+
+                    // Clear processed URL when removing file
+                    if (!file) {
+                      const urls = [...processedPortraitUrls];
+                      urls[currentApplicant] = null;
+                      setProcessedPortraitUrls(urls);
+                      return;
+                    }
+
+                    // Process the photo immediately
+                    const processing = [...isProcessingPortrait];
+                    processing[currentApplicant] = true;
+                    setIsProcessingPortrait(processing);
+
+                    try {
+                      const formData = new FormData();
+                      formData.append("file", file);
+                      formData.append("applicantId", `temp-${currentApplicant}-${Date.now()}`);
+
+                      const response = await fetch("/api/process-photo", {
+                        method: "POST",
+                        body: formData,
+                      });
+
+                      if (response.ok) {
+                        const result = await response.json();
+                        const urls = [...processedPortraitUrls];
+                        // Use dataUrl for immediate preview (base64), fallback to Supabase URL
+                        urls[currentApplicant] = result.dataUrl || result.url;
+                        setProcessedPortraitUrls(urls);
+                        console.log("Photo processed successfully:", result.fileSizeMB, result.dimensions);
+                      } else {
+                        const errorData = await response.json();
+                        console.error("Failed to process portrait photo:", errorData.error);
+                      }
+                    } catch (error) {
+                      console.error("Error processing portrait photo:", error);
+                    } finally {
+                      const processingDone = [...isProcessingPortrait];
+                      processingDone[currentApplicant] = false;
+                      setIsProcessingPortrait(processingDone);
+                    }
                   }}
                   uploadedText={t.applyForm.uploaded}
                   clickToUploadText={t.applyForm.clickToUpload}
+                  processingText={t.applyForm.processingPhoto || "Processing photo..."}
+                  autoProcessText={t.applyForm.autoProcessText || "When uploading an image, our system will automatically change the photo background to white and generate it in the appropriate size and format."}
+                  selfieTipsTitle={t.applyForm.selfieTipsTitle || "How to take the best selfie for E-Visa?"}
+                  selfieTips={[
+                    t.applyForm.selfieTip1 || "Before taking the photo, be sure to remove your hat and glasses.",
+                    t.applyForm.selfieTip2 || "Phone distance approximately 50-70 cm from face",
+                    t.applyForm.selfieTip3 || "Leave a small gap (1-2 cm) between the top of your head and the top of the frame.",
+                    t.applyForm.selfieTip4 || "Shoulders may be visible, but the main focus should be on the face.",
+                    t.applyForm.selfieTip5 || "Camera at eye level, not from above or below.",
+                    t.applyForm.selfieTip6 || "Look directly at the phone camera (not the screen).",
+                  ]}
+                  selfieTipsGotIt={t.applyForm.selfieTipsGotIt || "Got it!"}
                 />
               </div>
 
@@ -2508,7 +3005,7 @@ function ApplyForm() {
                     {/* Flight Risk Warning - shown for high-risk countries before payment */}
                     <FlightRiskBlock
                       countryCode={applicants[0]?.nationality || ""}
-                      visaSpeed={visaSpeed}
+                      visaSpeed={selectedVisaSpeed}
                       language={language}
                     />
 
@@ -2546,7 +3043,7 @@ function ApplyForm() {
                         <p className="mb-3">Your personal information is collected only for visa application processing purposes, stored securely, shared only with the Vietnam Immigration Department as required, and never sold to third parties. Your data is deleted 30 days after services are completed.</p>
 
                         <p className="font-semibold text-gray-900 dark:text-white mb-2">10. Contact Information</p>
-                        <p className="mb-3">Email: support@vietnamvisahelp.com | WhatsApp: +84 120 554 9868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</p>
+                        <p className="mb-3">Email: support@vietnamvisahelp.com | WhatsApp: +84 70 5549868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</p>
 
                         <div className="flex gap-4 mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
                           <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">Full Terms →</a>
@@ -2947,19 +3444,10 @@ function ApplyForm() {
           </div>
         </div>
 
-        {/* Private Service Disclaimer */}
-        <div className="mt-12 mb-8 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <svg className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-            <div>
-              <p className="text-sm font-medium text-amber-800 dark:text-amber-300 mb-1">{t.legal.importantDisclaimer}</p>
-              <p className="text-sm text-amber-700 dark:text-amber-400">{t.legal.disclaimerBannerText}</p>
-            </div>
-          </div>
-        </div>
       </main>
+
+      {/* Footer */}
+      <Footer />
 
       {/* WhatsApp Button */}
       <a

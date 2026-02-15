@@ -5,12 +5,13 @@ const DEEPL_API_URL = "https://api.deepl.com/v2/translate";
 const GOOGLE_TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
 
 // Languages not supported by DeepL that need Google Translate
-const GOOGLE_TRANSLATE_LANGUAGES = ["HI"]; // Hindi
+const GOOGLE_TRANSLATE_LANGUAGES = ["HI", "ZH"]; // Hindi, Chinese (Simplified)
 
-export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU" | "HI";
+export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU" | "HI" | "ZH";
 
 export const LANGUAGES: Record<SupportedLanguage, { name: string; flag: string }> = {
   EN: { name: "English", flag: "🇬🇧" },
+  ZH: { name: "中文", flag: "🇨🇳" },
   ES: { name: "Español", flag: "🇪🇸" },
   PT: { name: "Português", flag: "🇧🇷" },
   FR: { name: "Français", flag: "🇫🇷" },

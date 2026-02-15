@@ -1,10 +1,11 @@
 // All translatable strings for the website
 // English is the source language - other languages are translated via DeepL API
 
-export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU" | "HI";
+export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU" | "HI" | "ZH";
 
 export const LANGUAGES: Record<SupportedLanguage, { name: string; flag: string; nativeName: string }> = {
   EN: { name: "English", flag: "🇬🇧", nativeName: "English" },
+  ZH: { name: "Chinese", flag: "🇨🇳", nativeName: "中文" },
   ES: { name: "Spanish", flag: "🇪🇸", nativeName: "Español" },
   PT: { name: "Portuguese", flag: "🇧🇷", nativeName: "Português" },
   FR: { name: "French", flag: "🇫🇷", nativeName: "Français" },
@@ -21,6 +22,7 @@ export const translations = {
     logoTagline: "Check-in Approval in 30 min",
     support: "24/7 WhatsApp Support",
     supportShort: "Support",
+    aboutUs: "About Us",
   },
 
   // Banner
@@ -56,6 +58,7 @@ export const translations = {
     onTimeDelivery: "On-Time Delivery",
     countriesSupported: "Countries Supported",
     whatsappSupport: "WhatsApp Support",
+    languages: "Languages",
   },
 
   // Application Form
@@ -179,7 +182,7 @@ export const translations = {
     step5Title: "Receive Your Approval Letter",
     step5Content: "Once approved, you will receive an e-visa (PDF) or visa approval letter via email.",
     step6Title: "Prepare for Travel",
-    step6Content: "Print your e-visa or approval letter, ensure passport is valid, and have return ticket ready.",
+    step6Content: "We will send your E-Visa in PDF format to your email and WhatsApp number. Please ensure that your phone, tablet, or computer is fully charged upon arrival in Vietnam so you can present your E-Visa to airport immigration authorities.",
     importantTitle: 'Important: "Visa on Arrival"',
     importantText: "Vietnam does NOT issue visas at the airport without advance approval. A pre-approved visa letter is mandatory before travel.",
     gotItButton: "Got it, Start Application →",
@@ -195,6 +198,17 @@ export const translations = {
     gate: "Gate",
     urgentChat: "URGENT: Chat Now for Help!",
     getVisaBefore: "Get Visa Before Check-in Closes!",
+  },
+
+  // Flight Check Box component
+  flightCheckBox: {
+    flight1Departure: "Flight 1 - Departure",
+    flightNumberAndDate: "Flight Number & Date",
+    hasConnectionFlight: "I have a connecting flight to Vietnam",
+    getVisaReady: "Get Your Vietnam Visa Ready",
+    connectingFlightToVietnam: "Connecting Flight to Vietnam",
+    connectionFlightPlaceholder: "e.g. EY834 (Abu Dhabi to Ho Chi Minh)",
+    connectionFlightHint: "Enter your flight that arrives in Vietnam - this is used for your visa entry date",
   },
 
   // Apply Page - Citizenship Checker
@@ -220,6 +234,8 @@ export const translations = {
     detectingLocation: "Detecting your location...",
     needLongerStay: "Need 60+ days or multiple entries?",
     getLongerVisa: "Get E-Visa",
+    purposeOfVisit: "Purpose of Visit",
+    selectPurpose: "Select purpose...",
   },
 
   // Dynamic Flights Component
@@ -278,6 +294,28 @@ export const translations = {
     payment: "Payment",
   },
 
+  // Apply Page - Visa Speed Selection
+  visaSpeedSelection: {
+    title: "Select Processing Speed",
+    subtitle: "Choose how fast you need your visa",
+    label: "Processing Speed",
+    selectSpeed: "Select processing speed...",
+    // Speed options
+    weekend: "Weekend/Holiday",
+    weekendDesc: "Special processing for weekends and holidays",
+    emergency: "Emergency (30 min)",
+    emergencyDesc: "Approval in 30 min, visa in 1-1.5 hours",
+    express4h: "Express (4 hours)",
+    express4hDesc: "Visa ready in 4 hours",
+    express1d: "Express (1 day)",
+    express1dDesc: "Visa ready in 1 business day",
+    express2d: "Express (2 days)",
+    express2dDesc: "Visa ready in 2 business days",
+    // Info text
+    govFeeNote: "+ Government fee ($25 single / $50 multiple entry)",
+    pricePerPerson: "per person",
+  },
+
   // Apply Page - Travel Details
   travelDetails: {
     title: "Travel Details",
@@ -289,6 +327,10 @@ export const translations = {
     tourist: "Tourism",
     business: "Business",
     visiting: "Visiting relatives/friends",
+    study: "Study",
+    work: "Work",
+    transit: "Transit",
+    other: "Other",
     entryDate: "Intended Date of Entry",
     entryDateHint: "You must enter Vietnam on or after this date",
     exitDate: "Intended Date of Exit",
@@ -312,6 +354,24 @@ export const translations = {
     multipleEntry: "Multiple Entry",
     included: "Included",
     perPerson: "/person",
+    intendedAirportEntry: "Intended airport of entry",
+    intendedAirportExit: "Intended airport of exit",
+    selectAirport: "Select airport...",
+  },
+
+  // Visa Speed Options
+  visaSpeeds: {
+    speed30MinName: "30-Minute Express Visa",
+    speed30MinDesc: "Check-in approval within 30 minutes. Fastest processing: visa ready in 1–1.5 hours.",
+    speed4HourName: "4-Hour Express Visa",
+    speed4HourDesc: "Quick processing - visa ready in 4 hours",
+    speed1DayName: "1-Day Standard Visa",
+    speed1DayDesc: "Standard processing - visa ready in 1 business day",
+    speed2DayName: "2-Day Economy Visa",
+    speed2DayDesc: "Economy processing - visa ready in 2 business days",
+    speedWeekendName: "Weekend & Holiday Visa",
+    speedWeekendDesc: "Special weekend/holiday processing",
+    needItFaster: "Need it faster? Upgrade to 30-Minute Express ($199)",
   },
 
   // Apply Page - Form
@@ -343,9 +403,10 @@ export const translations = {
     passportDataPage: "Passport Data Page",
     passportPageDesc: "Clear photo showing all details",
     portraitPhoto: "Portrait Photo",
-    portraitDesc: "White background, no glasses",
+    portraitDesc: "No hat, no glasses",
     uploaded: "uploaded",
     clickToUpload: "Click to upload",
+    processingPhoto: "Processing photo...",
     contactInfo: "Contact Information",
     email: "Email Address",
     emailPlaceholder: "your@email.com",
@@ -384,6 +445,16 @@ export const translations = {
     personalInfo: "Personal Information",
     passportInfo: "Passport Information",
     emergencyContact: "Emergency Contact",
+    // Selfie tips
+    autoProcessText: "When uploading an image, our system will automatically change the photo background to white and generate it in the appropriate size and format.",
+    selfieTipsTitle: "How to take the best selfie for E-Visa?",
+    selfieTip1: "Before taking the photo, be sure to remove your hat and glasses.",
+    selfieTip2: "Phone distance approximately 50-70 cm from face",
+    selfieTip3: "Leave a small gap (1-2 cm) between the top of your head and the top of the frame.",
+    selfieTip4: "Shoulders may be visible, but the main focus should be on the face.",
+    selfieTip5: "Camera at eye level, not from above or below.",
+    selfieTip6: "Look directly at the phone camera (not the screen).",
+    selfieTipsGotIt: "Got it!",
   },
 
   // Phone Verification
@@ -481,13 +552,13 @@ export const translations = {
     // Section 5: Arrival Procedures
     arrivalTitle: "Arrival Procedures",
     arrivalQ1: "Step-by-step arrival process with E-Visa:",
-    arrivalStep1: "Print your E-Visa: Print at least 2 copies of your approved E-Visa",
-    arrivalStep2: "Arrival card: Complete the arrival/departure card on the plane or at the airport",
-    arrivalStep3: "Immigration queue: Join the queue for foreign passport holders",
-    arrivalStep4: "Present documents: Show passport, E-Visa printout, and arrival card",
-    arrivalStep5: "Biometrics: Fingerprints and photo may be taken",
-    arrivalStep6: "Entry stamp: Officer stamps your passport - keep arrival card attached",
-    arrivalStep7: "Customs: Proceed to baggage claim and customs",
+    arrivalStep1: "Show E-Visa PDF from your email or WhatsApp",
+    arrivalStep2: "Immigration queue: Join the queue for foreign passport holders",
+    arrivalStep3: "Present documents: Show passport, E-Visa PDF from your phone",
+    arrivalStep4: "Biometrics: Fingerprints and photo may be taken",
+    arrivalStep5: "Entry stamp: Officer stamps your passport",
+    arrivalStep6: "Customs: Proceed to baggage claim and customs",
+    arrivalStep7: "",
     arrivalQ2: "What to declare at customs:",
     customsItem1: "Cash over $5,000 USD (or equivalent)",
     customsItem2: "Items for commercial purposes",
@@ -729,6 +800,23 @@ export const translations = {
     importantDisclaimer: "Important Disclaimer",
     disclaimerBannerText: "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities.",
 
+    // Top Disclaimer Banner (the red banner at top)
+    topDisclaimerText: "is not affiliated with the Vietnamese Government or the Immigration Department. As part of our services, processing fees are applicable, separate from government-regulated charges. You can also visit the",
+    officialWebsiteLink: "official website of the Vietnam Immigration Department",
+    readFullDisclaimer: "Read full disclaimer",
+
+    // Cookie Consent Banner
+    cookieConsentText: "We use cookies to enhance your browsing experience and analyze site traffic. By clicking \"Accept\", you consent to our use of cookies.",
+    cookieLearnMore: "Learn more",
+    cookieReject: "Reject",
+    cookieAccept: "Accept",
+
+    // Footer Links
+    footerTerms: "Terms & Conditions",
+    footerRefund: "Cancellation and Refund Policy",
+    footerPrivacy: "Privacy Policy",
+    securePayment: "Secure Payment:",
+
     // Contact Form
     sendMessage: "Send us a Message",
     emailPlaceholder: "Your email",
@@ -740,7 +828,7 @@ export const translations = {
 
     // About Us page
     aboutTitle: "About Us",
-    aboutIntro: "Vietnam Visa Help is a professional visa support service specializing in Vietnam e-Visa applications and related travel documentation. Through our website, www.vietnamvisahelp.com, we assist travelers from around the world with fast, accurate, and reliable visa solutions for entry into Vietnam.",
+    aboutIntro: "Vietnam Visa Help is a professional third-party visa support service specializing in Vietnam e-Visa applications and related travel documentation. We are not affiliated with the Vietnam Government or the Immigration Department.",
     expressProcessing: "Express Processing",
     expressProcessingText: "We are particularly known for our urgent visa processing services, offering expedited options with processing times as fast as one hour, as well as standard processing for travelers who plan ahead. Our services cover a wide range of Vietnam visa options, including tourist e-Visas, business e-Visas, single-entry and multiple-entry visas, and other Vietnam entry permits depending on travel purpose and nationality.",
     comprehensiveSupport: "Comprehensive Support",

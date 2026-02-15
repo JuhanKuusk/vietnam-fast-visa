@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
+import { Footer } from "@/components/ui/footer";
 
 interface Applicant {
   id: string;
@@ -290,7 +291,7 @@ export default function TrackPage() {
           <p className="text-gray-600 mb-4">Need help? Contact our support team</p>
           <div className="flex justify-center gap-4">
             <a
-              href="https://wa.me/841205549868"
+              href="https://wa.me/84705549868"
               className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -310,6 +311,9 @@ export default function TrackPage() {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

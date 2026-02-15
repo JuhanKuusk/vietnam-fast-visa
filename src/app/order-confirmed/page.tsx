@@ -6,6 +6,7 @@ import { SparklesCore } from "@/components/ui/sparkles";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
+import { Footer } from "@/components/ui/footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Applicant {
@@ -134,7 +135,7 @@ function OrderConfirmedContent() {
     return speed ? speeds[speed] || speed : t.orderConfirmation.serviceTypeStandard;
   };
 
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "841205549868";
+  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "84705549868";
 
   if (loading) {
     return (
@@ -453,6 +454,9 @@ function OrderConfirmedContent() {
           </div>
         </section>
       </main>
+
+      {/* Footer */}
+      <Footer />
 
       {/* WhatsApp Floating Button */}
       <a

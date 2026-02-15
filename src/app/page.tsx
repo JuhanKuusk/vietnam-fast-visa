@@ -9,10 +9,12 @@ import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
+import { Footer } from "@/components/ui/footer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSite } from "@/contexts/SiteContext";
 
 // Visa Info Modal Component
-function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () => void; t: ReturnType<typeof useLanguage>["t"] }) {
+function VisaInfoModal({ isOpen, onClose, t, primaryColor }: { isOpen: boolean; onClose: () => void; t: ReturnType<typeof useLanguage>["t"]; primaryColor: string }) {
   if (!isOpen) return null;
 
   const steps = [
@@ -35,7 +37,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
       {/* Modal */}
       <div className="relative bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="sticky top-0 px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#c41e3a' }}>
+        <div className="sticky top-0 px-6 py-4 flex justify-between items-center" style={{ backgroundColor: primaryColor }}>
           <h2 className="text-xl font-bold text-white">{t.modal.title}</h2>
           <button
             onClick={onClose}
@@ -55,7 +57,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
           {steps.map((step, index) => (
             <div key={index} className="space-y-2">
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm text-white" style={{ backgroundColor: '#c41e3a' }}>{index + 1}</span>
+                <span className="w-8 h-8 rounded-full flex items-center justify-center text-sm text-white" style={{ backgroundColor: primaryColor }}>{index + 1}</span>
                 {step.title}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 pl-11">{step.content}</p>
@@ -74,7 +76,7 @@ function VisaInfoModal({ isOpen, onClose, t }: { isOpen: boolean; onClose: () =>
           <button
             onClick={onClose}
             className="w-full py-4 rounded-xl text-white font-bold text-lg transition-all hover:opacity-90"
-            style={{ backgroundColor: '#c41e3a' }}
+            style={{ backgroundColor: primaryColor }}
           >
             {t.modal.gotItButton}
           </button>
@@ -285,6 +287,7 @@ const ENTRY_PORTS = [
 
 export default function Home() {
   const { t, isLoading } = useLanguage();
+  const { formatSitePrice, theme, layout, content } = useSite();
   const [formData, setFormData] = useState({
     flightNumber: "",
     flightDate: (() => {
@@ -303,7 +306,35 @@ export default function Home() {
     arrivalAirport: string;
     arrivalAirportCode: string;
     departureAirport: string;
+    departureAirportCode: string;
+    arrivalDate: string;
+    flightNumber: string;
   } | null>(null);
+
+  // State for CitizenshipChecker data
+  const [citizenshipData, setCitizenshipData] = useState({
+    nationality: "",
+    departingCountry: "",
+    departingAirport: "",
+    purpose: "tourism",
+  });
+
+  // Memoized callbacks for CitizenshipChecker to prevent infinite re-renders
+  const handleCitizenshipCountrySelect = useCallback((code: string) => {
+    setCitizenshipData(prev => ({ ...prev, nationality: code }));
+  }, []);
+
+  const handleCitizenshipPurposeChange = useCallback((purpose: string) => {
+    setCitizenshipData(prev => ({ ...prev, purpose }));
+  }, []);
+
+  const handleCitizenshipDepartingCountryChange = useCallback((code: string) => {
+    setCitizenshipData(prev => ({ ...prev, departingCountry: code }));
+  }, []);
+
+  const handleCitizenshipDepartingAirportChange = useCallback((code: string) => {
+    setCitizenshipData(prev => ({ ...prev, departingAirport: code }));
+  }, []);
 
   // Purpose of visit options - must match validation schema values
   const purposeOptions = [
@@ -313,7 +344,7 @@ export default function Home() {
   ];
 
   // Handle flight data from FlightInfo component - memoized to prevent infinite re-renders
-  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string }) => {
+  const handleFlightData = useCallback((data: { arrivalAirport: string; arrivalAirportCode: string; departureAirport: string; departureAirportCode: string; arrivalDate: string; flightNumber: string }) => {
     setFlightArrivalData(data);
   }, []);
 
@@ -326,12 +357,12 @@ export default function Home() {
   const pricePerPerson = 199;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 overflow-x-hidden">
       {/* Loading Overlay */}
       {isLoading && (
         <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="flex items-center gap-3 px-6 py-4 bg-white rounded-xl shadow-lg">
-            <svg className="w-6 h-6 animate-spin" style={{ color: '#c41e3a' }} fill="none" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 animate-spin" style={{ color: theme.primaryColor }} fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -341,7 +372,7 @@ export default function Home() {
       )}
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50 overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
@@ -355,8 +386,8 @@ export default function Home() {
                   support@vietnamvisahelp.com
                 </a>
                 <span>|</span>
-                <a href="https://wa.me/841205549868" className="hover:text-green-600">
-                  +84 120 554 9868
+                <a href="https://wa.me/84705549868" className="hover:text-green-600">
+                  +84 70 5549868
                 </a>
               </div>
             </div>
@@ -373,8 +404,8 @@ export default function Home() {
               </Link>
               {/* WhatsApp Button - Green */}
               <a
-                href="https://wa.me/841205549868"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition-colors"
+                href="https://wa.me/84705549868"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition-colors"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -392,16 +423,16 @@ export default function Home() {
       <DisclaimerBanner />
 
       {/* Hero Section */}
-      <section className="text-white py-12 md:py-16 bg-gray-100 dark:bg-slate-800">
+      <section className="bg-gray-100 dark:bg-slate-800 text-white py-12 md:py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             {/* Main Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              <span style={{ color: '#c52e3a' }}>{t.hero.headline1}</span>
+              <span style={{ color: theme.primaryColor }}>{t.hero.headline1}</span>
               {t.hero.headline2 && (
                 <>
                   <br />
-                  <span style={{ color: '#5eca52' }}>{t.hero.headline2}</span>
+                  <span style={{ color: theme.secondaryColor }}>{t.hero.headline2}</span>
                 </>
               )}
             </h1>
@@ -412,10 +443,6 @@ export default function Home() {
 
             {/* Call to Action Slogans */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-200 dark:border-gray-700">
-                <span className="text-lg">🏢</span>
-                <span className="font-semibold text-gray-900 dark:text-white">{t.hero.processedIn}</span>
-              </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-gray-200 dark:border-gray-700">
                 <span className="text-lg">🇻🇳</span>
                 <span className="font-semibold text-gray-900 dark:text-white">{t.hero.localExperts}</span>
@@ -467,7 +494,7 @@ export default function Home() {
             {formData.nationality && (
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-3">
-                  <span className="text-5xl font-bold" style={{ color: '#c41e3a' }}>${pricePerPerson}</span>
+                  <span className="text-5xl font-bold" style={{ color: theme.primaryColor }}>{formatSitePrice(pricePerPerson)}</span>
                   <span className="text-gray-700 dark:text-gray-300 text-xl">{t.hero.perPerson}</span>
                 </div>
                 <div className="text-gray-600 dark:text-gray-400 text-sm mt-2">
@@ -480,7 +507,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-[38px]">
               {/* WhatsApp CTA Button */}
               <a
-                href="https://wa.me/841205549868?text=Hi, I need help with Vietnam visa!"
+                href="https://wa.me/84705549868?text=Hi, I need help with Vietnam visa!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 h-14"
@@ -508,17 +535,13 @@ export default function Home() {
       {/* Trust Badges */}
       <section className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-3 gap-6 text-center">
             <div>
-              <div className="text-3xl font-bold" style={{ color: '#c41e3a' }}>2,500+</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.happyCustomers}</div>
+              <div className="text-3xl font-bold text-gray-900 dark:text-white">5+</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.languages}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-gray-900 dark:text-white">98%</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.onTimeDelivery}</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold" style={{ color: '#c41e3a' }}>80+</div>
+              <div className="text-3xl font-bold" style={{ color: theme.primaryColor }}>80+</div>
               <div className="text-sm text-gray-500 dark:text-gray-400">{t.trust.countriesSupported}</div>
             </div>
             <div>
@@ -529,247 +552,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Citizenship Checker Section */}
-      <section className="bg-gray-50 dark:bg-slate-800 py-8 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <CitizenshipChecker />
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Application Form */}
-          <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-              {/* Form Header */}
-              <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ backgroundColor: '#c41e3a' }}>
-                <h2 className="text-lg sm:text-xl font-bold text-white">
-                  {t.form.title}
-                </h2>
-                <p className="text-white/90 text-sm sm:text-base mt-1">{t.form.subtitle}</p>
-                <a
-                  href="#faq"
-                  className="inline-flex items-center gap-1 text-white/80 hover:text-white text-xs sm:text-sm mt-2 transition-colors"
-                >
-                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                  </svg>
-                  {t.form.faqLink}
-                </a>
-              </div>
-
-              {/* Form Body */}
-              <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
-                {/* Flight Number - First Box */}
-                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xl">✈️</span>
-                    <span className="font-bold text-gray-900 dark:text-white">{t.form?.yourFlightNumber || "Your Flight Number"}</span>
-                  </div>
-                  <FlightCheckBox
-                    flightNumber={formData.flightNumber}
-                    onFlightNumberChange={(value) => {
-                      setFormData({ ...formData, flightNumber: value });
-                      // Reset flight data when changing flight number
-                      if (value.length < 3) {
-                        setFlightArrivalData(null);
-                      }
-                    }}
-                    flightDate={formData.flightDate}
-                    onFlightDateChange={(value) => setFormData({ ...formData, flightDate: value })}
-                    onFlightData={handleFlightData}
-                    placeholder={t.form.flightPlaceholder}
-                    embedded={true}
-                  />
-                </div>
-
-                {/* Check Your Visa Requirements - Second Box */}
-                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-xl">🛂</span>
-                    <span className="font-bold text-gray-900 dark:text-white">{t.form?.checkVisaRequirements || "Check Your Visa Requirements"}</span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Nationality / Citizenship */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t.form?.nationality || "Your Nationality"} <span style={{ color: '#c41e3a' }}>*</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={formData.nationality ? selectedCountryName : nationalitySearch}
-                          onChange={(e) => {
-                            setNationalitySearch(e.target.value);
-                            setFormData({ ...formData, nationality: "" });
-                            setShowNationalityDropdown(true);
-                          }}
-                          onFocus={() => setShowNationalityDropdown(true)}
-                          placeholder={t.form?.selectNationality || "Search your country..."}
-                          className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all"
-                        />
-                        {formData.nationality && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setFormData({ ...formData, nationality: "" });
-                              setNationalitySearch("");
-                            }}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-                          >
-                            ✕
-                          </button>
-                        )}
-                        {showNationalityDropdown && !formData.nationality && (
-                          <div className="absolute z-20 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                            {filteredCountries.slice(0, 10).map((country) => (
-                              <button
-                                key={country.code}
-                                type="button"
-                                onClick={() => {
-                                  setFormData({ ...formData, nationality: country.code });
-                                  setNationalitySearch("");
-                                  setShowNationalityDropdown(false);
-                                }}
-                                className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 last:border-b-0"
-                              >
-                                {country.name}
-                              </button>
-                            ))}
-                            {filteredCountries.length === 0 && (
-                              <div className="px-4 py-3 text-gray-500 dark:text-gray-400">{t.form?.noCountryFound || "No country found"}</div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Purpose of Visit */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t.form?.purposeOfVisit || "Purpose of Visit"} <span style={{ color: '#c41e3a' }}>*</span>
-                      </label>
-                      <select
-                        value={formData.purpose}
-                        onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 transition-all appearance-none cursor-pointer"
-                      >
-                        {purposeOptions.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Visa Requirement Info Banner */}
-                  {visaRequirement && (
-                    <div className={`mt-4 rounded-xl p-4 border ${visaRequirement.bgColor}`}>
-                      {visaRequirement.type === "visa_free" && (
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                            <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          </div>
-                          <div>
-                            <div className={`font-bold ${visaRequirement.color}`}>
-                              {t.form?.visaFree || "Visa-Free Entry"} - {visaRequirement.days} {t.form?.days || "days"}
-                            </div>
-                            <div className="text-gray-600 text-sm mt-1">
-                              {t.form?.visaFreeDesc || `Citizens of ${selectedCountryName} can enter Vietnam without a visa for up to ${visaRequirement.days} days.`}
-                            </div>
-                            <div className="text-gray-600 text-sm mt-2">
-                              <span className="font-medium">{t.form?.stayingLonger || "Staying longer?"}</span> {t.form?.needVisaForLonger || "You'll need a visa for stays exceeding the visa-free period."}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {visaRequirement.type === "evisa" && (
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.581.814l-4.419-3.35-4.419 3.35A1 1 0 014 16V4zm2 0v10.586l3.419-2.59a1 1 0 011.162 0L14 14.586V4H6z" clipRule="evenodd" />
-                            </svg>
-                          </div>
-                          <div>
-                            <div className={`font-bold ${visaRequirement.color}`}>
-                              {t.form?.evisaRequired || "E-Visa Required"}
-                            </div>
-                            <div className="text-gray-600 text-sm mt-1">
-                              {t.form?.evisaDesc || `Citizens of ${selectedCountryName} need an e-visa or visa on arrival to enter Vietnam. We can help you get it fast!`}
-                            </div>
-                            <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium" style={{ color: '#c41e3a' }}>
-                              <span>✓</span> {t.form?.weCanHelp || "We process your e-visa in 30 minutes"}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {visaRequirement.type === "embassy_required" && (
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                            <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                          </div>
-                          <div>
-                            <div className={`font-bold ${visaRequirement.color}`}>
-                              {t.form?.embassyRequired || "Embassy Visa Required"}
-                            </div>
-                            <div className="text-gray-600 text-sm mt-1">
-                              {t.form?.embassyDesc || `Citizens of ${selectedCountryName} must apply for a visa at a Vietnamese embassy before travel.`}
-                            </div>
-                            <div className="mt-2 text-sm text-gray-600">
-                              {t.form?.contactUsHelp || "Contact us for assistance with your visa application."}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* CTA Button */}
-                <a
-                  href={`/apply?applicants=1&purpose=${formData.purpose}&flight=${formData.flightNumber}&nationality=${formData.nationality}${flightArrivalData?.arrivalAirportCode ? `&entryPort=${flightArrivalData.arrivalAirportCode}` : ''}`}
-                  className="block w-full py-4 rounded-xl text-white font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center hover:opacity-90"
-                  style={{ backgroundColor: '#c41e3a' }}
-                >
-                  {t.form.continueButton}
-                </a>
-
-                {/* Trust indicators */}
-                <div className="flex items-center justify-center gap-4 text-sm text-gray-500 pt-2 flex-wrap">
-                  <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                    </svg>
-                    {t.form.securePayment}
-                  </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    {t.form.moneyBackGuarantee}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
+      {/* Why Choose Us & Price Comparison Section */}
+      <section className="bg-gray-50 dark:bg-gray-900 py-8 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-6">
             {/* Why Choose Us */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-4">{t.sidebar.whyChooseUs}</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gray-100 dark:bg-gray-700">
-                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: theme.primaryColor }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -780,7 +573,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gray-100 dark:bg-gray-700">
-                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: theme.primaryColor }} fill="currentColor" viewBox="0 0 20 20">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
                   </div>
@@ -791,7 +584,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-gray-100 dark:bg-gray-700">
-                    <svg className="w-4 h-4" style={{ color: '#c41e3a' }} fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4" style={{ color: theme.primaryColor }} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -823,15 +616,15 @@ export default function Home() {
                     <span className="font-medium text-gray-900 dark:text-white block">{t.sidebar.ourPrice}</span>
                     <span className="text-xs text-gray-600 dark:text-gray-400">{t.heroPrice?.expressLabel || "1-Hour Express"}</span>
                   </div>
-                  <span className="font-bold text-xl text-gray-900 dark:text-white">$199</span>
+                  <span className="font-bold text-xl text-gray-900 dark:text-white">{formatSitePrice(199)}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorA}</span>
-                  <span className="text-gray-400 dark:text-gray-500 line-through">$239</span>
+                  <span className="text-gray-400 dark:text-gray-500 line-through">{formatSitePrice(239)}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <span className="text-gray-500 dark:text-gray-400">{t.sidebar.competitorB}</span>
-                  <span className="text-gray-400 dark:text-gray-500 line-through">$279</span>
+                  <span className="text-gray-400 dark:text-gray-500 line-through">{formatSitePrice(279)}</span>
                 </div>
               </div>
               <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
@@ -841,7 +634,108 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Citizenship Checker Section */}
+      <section className="bg-gray-50 dark:bg-slate-800 py-8 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <CitizenshipChecker
+            onCountrySelect={handleCitizenshipCountrySelect}
+            onPurposeChange={handleCitizenshipPurposeChange}
+            onDepartingCountryChange={handleCitizenshipDepartingCountryChange}
+            onDepartingAirportChange={handleCitizenshipDepartingAirportChange}
+          />
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-8 sm:py-12 overflow-hidden w-full">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-8">
+          {/* Application Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden max-w-full">
+              {/* Form Header */}
+              <div className="px-4 sm:px-6 py-4 sm:py-5" style={{ backgroundColor: theme.primaryColor }}>
+                <h2 className="text-lg sm:text-xl font-bold text-white">
+                  {t.form.title}
+                </h2>
+                <p className="text-white/90 text-sm sm:text-base mt-1">{t.form.subtitle}</p>
+                <a
+                  href="#faq"
+                  className="inline-flex items-center gap-1 text-white/80 hover:text-white text-xs sm:text-sm mt-2 transition-colors"
+                >
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                  </svg>
+                  {t.form.faqLink}
+                </a>
+              </div>
+
+              {/* Form Body */}
+              <div className="p-3 sm:p-6 space-y-4 sm:space-y-5">
+                {/* Flight Number - First Box */}
+                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 sm:p-4 border border-gray-200 dark:border-gray-600 max-w-full overflow-hidden">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xl">✈️</span>
+                    <span className="font-bold text-gray-900 dark:text-white">{t.form?.yourFlightNumber || "Your Flight Number"}</span>
+                  </div>
+                  <FlightCheckBox
+                    flightNumber={formData.flightNumber}
+                    onFlightNumberChange={(value) => {
+                      setFormData({ ...formData, flightNumber: value });
+                      // Reset flight data when changing flight number
+                      if (value.length < 3) {
+                        setFlightArrivalData(null);
+                      }
+                    }}
+                    flightDate={formData.flightDate}
+                    onFlightDateChange={(value) => setFormData({ ...formData, flightDate: value })}
+                    onFlightData={handleFlightData}
+                    placeholder={t.form.flightPlaceholder}
+                    embedded={true}
+                    flight1DepartureText={t.flightCheckBox?.flight1Departure}
+                    flightNumberAndDateText={t.flightCheckBox?.flightNumberAndDate}
+                    hasConnectionFlightText={t.flightCheckBox?.hasConnectionFlight}
+                    getVisaReadyText={t.flightCheckBox?.getVisaReady}
+                    connectingFlightToVietnamText={t.flightCheckBox?.connectingFlightToVietnam}
+                    connectionFlightPlaceholder={t.flightCheckBox?.connectionFlightPlaceholder}
+                    connectionFlightHintText={t.flightCheckBox?.connectionFlightHint}
+                  />
+                </div>
+
+                {/* CTA Button */}
+                <a
+                  href={`/apply?applicants=1&purpose=${citizenshipData.purpose || formData.purpose}&flight=${flightArrivalData?.flightNumber || formData.flightNumber}${flightArrivalData?.flightNumber && flightArrivalData.flightNumber !== formData.flightNumber ? `&flight1=${formData.flightNumber}` : ''}&nationality=${citizenshipData.nationality || formData.nationality}${flightArrivalData?.arrivalAirportCode ? `&entryPort=${flightArrivalData.arrivalAirportCode}` : ''}${flightArrivalData?.arrivalDate ? `&entryDate=${flightArrivalData.arrivalDate}` : ''}${citizenshipData.departingCountry ? `&departingCountry=${citizenshipData.departingCountry}` : ''}${citizenshipData.departingAirport ? `&departingAirport=${citizenshipData.departingAirport}` : ''}`}
+                  className="block w-full py-4 rounded-xl text-white font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl text-center hover:opacity-90"
+                  style={{ backgroundColor: theme.primaryColor }}
+                >
+                  {t.form.continueButton}
+                </a>
+
+                {/* Trust indicators */}
+                <div className="flex items-center justify-center gap-4 text-sm text-gray-500 pt-2 flex-wrap">
+                  <span className="flex items-center gap-1">
+                    <svg className="w-4 h-4" style={{ color: theme.primaryColor }} fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                    </svg>
+                    {t.form.securePayment}
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1">
+                    <svg className="w-4 h-4" style={{ color: theme.primaryColor }} fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    {t.form.moneyBackGuarantee}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
             {/* VOA Info */}
             <div className="rounded-2xl p-6 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
               <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-3">
@@ -927,13 +821,13 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">$139</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">{formatSitePrice(139)}</span>
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
-                href="/apply?speed=4-hour"
+                href={`/apply?speed=4-hour${citizenshipData.nationality ? `&nationality=${citizenshipData.nationality}` : ''}${citizenshipData.purpose ? `&purpose=${citizenshipData.purpose}` : ''}${citizenshipData.departingCountry ? `&departingCountry=${citizenshipData.departingCountry}` : ''}${citizenshipData.departingAirport ? `&departingAirport=${citizenshipData.departingAirport}` : ''}`}
                 className="block w-full py-3 rounded-xl text-white font-bold text-center transition-all hover:opacity-90"
-                style={{ backgroundColor: '#c41e3a' }}
+                style={{ backgroundColor: theme.primaryColor }}
               >
                 {t.nonUrgent?.fourHourButton || "Get 4-Hour Visa"}
               </a>
@@ -980,11 +874,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">$99</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">{formatSitePrice(99)}</span>
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
-                href="/apply?speed=1-day"
+                href={`/apply?speed=1-day${citizenshipData.nationality ? `&nationality=${citizenshipData.nationality}` : ''}${citizenshipData.purpose ? `&purpose=${citizenshipData.purpose}` : ''}${citizenshipData.departingCountry ? `&departingCountry=${citizenshipData.departingCountry}` : ''}${citizenshipData.departingAirport ? `&departingAirport=${citizenshipData.departingAirport}` : ''}`}
                 className="block w-full py-3 rounded-xl text-white font-bold text-center transition-all hover:opacity-90 bg-green-600 hover:bg-green-700"
               >
                 {t.nonUrgent?.oneDayButton || "Get 1-Day Visa"}
@@ -1032,11 +926,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center mb-4">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">$89</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">{formatSitePrice(89)}</span>
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{t.nonUrgent?.perPerson || "/person"}</span>
               </div>
               <a
-                href="/apply?speed=2-day"
+                href={`/apply?speed=2-day${citizenshipData.nationality ? `&nationality=${citizenshipData.nationality}` : ''}${citizenshipData.purpose ? `&purpose=${citizenshipData.purpose}` : ''}${citizenshipData.departingCountry ? `&departingCountry=${citizenshipData.departingCountry}` : ''}${citizenshipData.departingAirport ? `&departingAirport=${citizenshipData.departingAirport}` : ''}`}
                 className="block w-full py-3 rounded-xl text-white font-bold text-center transition-all hover:opacity-90 bg-gray-700 hover:bg-gray-800"
               >
                 {t.nonUrgent?.twoDayButton || "Get 2-Day Visa"}
@@ -1073,7 +967,7 @@ export default function Home() {
                   <h4 className="font-semibold text-gray-900 dark:text-white">{t.nonUrgent?.multiEntry || "Multi-Entry Visa"}</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{t.nonUrgent?.multiEntryDesc || "Enter Vietnam multiple times"}</p>
                   <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium">
-                    +$30
+                    +{formatSitePrice(30)}
                   </div>
                 </div>
               </div>
@@ -1081,7 +975,7 @@ export default function Home() {
           </div>
 
           {/* Weekend/Holiday Urgent Visa */}
-          <div className="mt-6 rounded-xl p-6 text-white" style={{ backgroundColor: '#c41e3a' }}>
+          <div className="mt-6 rounded-xl p-6 text-white" style={{ backgroundColor: theme.primaryColor }}>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -1108,12 +1002,12 @@ export default function Home() {
                 </div>
               </div>
               <div className="text-center md:text-right">
-                <div className="text-4xl font-bold">$249</div>
+                <div className="text-4xl font-bold">{formatSitePrice(249)}</div>
                 <div className="text-white/80 text-sm">{t.nonUrgent?.perPerson || "/person"}</div>
                 <a
-                  href="/apply?speed=weekend"
+                  href={`/apply?speed=weekend${citizenshipData.nationality ? `&nationality=${citizenshipData.nationality}` : ''}${citizenshipData.purpose ? `&purpose=${citizenshipData.purpose}` : ''}${citizenshipData.departingCountry ? `&departingCountry=${citizenshipData.departingCountry}` : ''}${citizenshipData.departingAirport ? `&departingAirport=${citizenshipData.departingAirport}` : ''}`}
                   className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white font-bold transition-all hover:bg-gray-100"
-                  style={{ color: '#c41e3a' }}
+                  style={{ color: theme.primaryColor }}
                 >
                   {t.nonUrgent?.weekendButton || "Get Weekend Visa"}
                 </a>
@@ -1152,7 +1046,7 @@ export default function Home() {
                 <a
                   href="/apply"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white font-semibold transition-all hover:opacity-90"
-                  style={{ backgroundColor: '#c41e3a' }}
+                  style={{ backgroundColor: theme.primaryColor }}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -1208,7 +1102,7 @@ export default function Home() {
             <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm sm:text-base">{t.faq.stillHaveQuestions}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href="https://wa.me/841205549868?text=Hi, I have a question about Vietnam visa!"
+                href="https://wa.me/84705549868?text=Hi, I have a question about Vietnam visa!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 text-white font-medium rounded-xl transition-colors text-sm sm:text-base hover:opacity-90"
@@ -1225,36 +1119,11 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <Logo size="lg" showTagline={false} />
-            </div>
-            <p className="text-gray-500 mb-2">{t.footer.expressService}</p>
-            <p className="text-sm text-gray-400 mb-6">{t.footer.processedBy}</p>
-            <div className="flex justify-center gap-6 mb-6 text-sm">
-              <Link href="/privacy" className="hover:text-white transition-colors">{t.footer.privacyPolicy}</Link>
-              <Link href="/terms" className="hover:text-white transition-colors">{t.footer.termsOfService}</Link>
-              <Link href="/refund" className="hover:text-white transition-colors">{t.footer.refundPolicy}</Link>
-            </div>
-            {/* Disclaimer Banner */}
-            <div className="bg-gray-800 rounded-lg p-4 text-sm text-gray-400 mb-6 max-w-3xl mx-auto text-left">
-              <p className="font-medium text-gray-300 mb-2">
-                {t.legal?.importantDisclaimer || "Important Disclaimer"}
-              </p>
-              <p>
-                {t.legal?.disclaimerBannerText || "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities."}
-              </p>
-            </div>
-            <p className="text-sm">{t.footer.copyright}</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/841205549868?text=Hi, I need an urgent Vietnam visa!"
+        href="https://wa.me/84705549868?text=Hi, I need an urgent Vietnam visa!"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110 z-50"
@@ -1265,7 +1134,7 @@ export default function Home() {
       </a>
 
       {/* Visa Info Modal */}
-      <VisaInfoModal isOpen={showVisaInfo} onClose={() => setShowVisaInfo(false)} t={t} />
+      <VisaInfoModal isOpen={showVisaInfo} onClose={() => setShowVisaInfo(false)} t={t} primaryColor={theme.primaryColor} />
     </div>
   );
 }

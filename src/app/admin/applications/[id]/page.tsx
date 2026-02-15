@@ -486,13 +486,20 @@ export default function ApplicationDetailPage() {
                     )}
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">Portrait Photo</p>
+                    <p className="text-sm text-gray-500 mb-2">
+                      Portrait Photo
+                      {applicant.portrait_photo_url && applicant.portrait_photo_url.includes('portrait-processed') && (
+                        <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                          Processed
+                        </span>
+                      )}
+                    </p>
                     {applicant.portrait_photo_url ? (
                       <a href={applicant.portrait_photo_url} target="_blank" rel="noopener noreferrer">
                         <img
                           src={applicant.portrait_photo_url}
                           alt="Portrait"
-                          className="w-full h-48 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
+                          className="w-full h-48 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity bg-white"
                         />
                       </a>
                     ) : (

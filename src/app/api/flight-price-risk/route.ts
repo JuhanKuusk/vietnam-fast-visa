@@ -76,6 +76,10 @@ export async function GET(request: NextRequest) {
           },
           currency: "USD",
           isFallback: true,
+        }, {
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate',
+          },
         });
       }
 
@@ -102,6 +106,10 @@ export async function GET(request: NextRequest) {
       },
       currency: "USD",
       isFallback: false,
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
     });
   } catch (error) {
     console.error("Error fetching flight price risk:", error);

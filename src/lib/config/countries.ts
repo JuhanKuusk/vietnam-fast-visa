@@ -25,6 +25,7 @@ export interface CountryConfig {
 // Google Ads Language Target Constants
 export const LANGUAGE_TARGETS: Record<SupportedLanguage, number> = {
   EN: 1000, // English
+  ZH: 1017, // Chinese (Simplified)
   ES: 1003, // Spanish
   PT: 1014, // Portuguese
   FR: 1002, // French

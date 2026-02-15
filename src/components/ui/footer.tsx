@@ -1,238 +1,161 @@
 "use client";
 
-import { useState } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
-import { Logo } from "@/components/ui/logo";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useSite } from "@/contexts/SiteContext";
+import { IndianPaymentIcons } from "./indian-payment-icons";
 
 export function Footer() {
   const { t } = useLanguage();
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
-  const [statusMessage, setStatusMessage] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, message }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSubmitStatus("success");
-        setStatusMessage(data.message || "Message sent successfully!");
-        setEmail("");
-        setMessage("");
-      } else {
-        setSubmitStatus("error");
-        setStatusMessage(data.error || "Failed to send message. Please try again.");
-      }
-    } catch {
-      setSubmitStatus("error");
-      setStatusMessage("Network error. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { content, layout, isIndiaSite, theme } = useSite();
 
   return (
     <footer className="bg-gray-900 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Brand Section */}
-          <div>
-            <div className="mb-4">
-              <Logo size="md" showTagline={true} taglineText={t.header?.logoTagline || "Check-in Approval in 30 min"} />
-            </div>
-            <p className="text-sm text-gray-400">
-              {t.legal?.footerDescription || "Fast, reliable Vietnam visa assistance service. Get your approval letter in 30 minutes."}
-            </p>
-          </div>
-
-          {/* Company & Legal Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">{t.legal?.legalLinks || "Company & Legal"}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/about" className="hover:text-white transition-colors font-medium">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:text-white transition-colors">
-                  {t.legal?.termsTitle || "Terms of Use"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-white transition-colors">
-                  {t.legal?.privacyTitle || "Privacy Policy"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/refund" className="hover:text-white transition-colors">
-                  {t.legal?.refundTitle || "Refund Policy"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/cookies" className="hover:text-white transition-colors">
-                  {t.legal?.cookieTitle || "Cookie Policy"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/disclaimer" className="hover:text-white transition-colors">
-                  {t.legal?.disclaimerTitle || "Disclaimer"}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">{t.legal?.contact || "Contact"}</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="mailto:support@vietnamvisahelp.com" className="hover:text-white transition-colors">
-                  support@vietnamvisahelp.com
-                </a>
-              </li>
-              <li>
-                <a href="https://wa.me/841205549868" className="hover:text-white transition-colors">
-                  WhatsApp: +84 120 554 9868
-                </a>
-              </li>
-              <li className="pt-3 text-gray-400">
-                <span className="block font-medium text-gray-300 mb-1">Address:</span>
-                Park 7 Building, Floor 38<br />
-                Vinhomes Central Park, 720A<br />
-                Binh Thanh District<br />
-                Ho Chi Minh City, Vietnam
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Form */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">{t.legal?.sendMessage || "Send us a Message"}</h4>
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <div>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t.legal?.emailPlaceholder || "Your email"}
-                  required
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder={t.legal?.messagePlaceholder || "Your message"}
-                  required
-                  rows={3}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white text-sm font-medium rounded-md transition-colors"
-              >
-                {isSubmitting ? (t.legal?.sending || "Sending...") : (t.legal?.send || "Send Message")}
-              </button>
-              {submitStatus === "success" && (
-                <p className="text-green-400 text-sm">{statusMessage}</p>
-              )}
-              {submitStatus === "error" && (
-                <p className="text-red-400 text-sm">{statusMessage}</p>
-              )}
-            </form>
-          </div>
-        </div>
-
-        {/* Disclaimer Banner */}
-        <div className="border-t border-gray-700 pt-8 mb-8">
-          <div className="bg-amber-900/30 border border-amber-700 rounded-lg p-4 text-sm">
-            <p className="font-semibold text-amber-200 mb-2">
-              {t.legal?.importantDisclaimer || "Important Disclaimer"}
-            </p>
-            <p className="text-amber-100/80 mb-3">
-              <span className="font-medium">VietnamVisaHelp.com</span> is a private, third-party visa assistance service and is <span className="font-medium">not affiliated with the Government of Vietnam</span>. We charge a service fee for our assistance. All visa approval decisions are made by Vietnamese immigration authorities.
-            </p>
-            <p className="text-amber-100/80 mb-3">
-              <span className="font-medium">Official Government Website:</span>{" "}
-              <a
-                href="https://evisa.xuatnhapcanh.gov.vn"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-amber-100"
-              >
-                evisa.xuatnhapcanh.gov.vn
-              </a>
-              {" "}(Government e-Visa portal - $25 USD fee, 3 business days processing)
-            </p>
-            <Link href="/disclaimer" className="inline-flex items-center gap-1 text-amber-200 hover:text-amber-100 font-medium underline">
-              Read our full disclaimer
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-
-        {/* Disclaimer Notice */}
-        <div className="text-center text-sm text-gray-400 mb-4">
-          <p>
-            www.vietnamvisahelp.com is a private, third-party agency and is not affiliated with the Government of Vietnam. We charge a service fee for our assistance.{" "}
-            <Link href="/disclaimer" className="text-amber-400 hover:text-amber-300 underline">
-              Read full disclaimer
-            </Link>
-            .
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Important Disclaimer */}
+        <div className="mb-4">
+          <h3 className="text-amber-400 font-semibold mb-1.5 text-sm">{t.legal.importantDisclaimer}</h3>
+          <p className="text-xs text-gray-400">
+            {t.legal.disclaimerBannerText}
           </p>
         </div>
 
-        {/* Contact Info Bar */}
-        <div className="border-t border-gray-700 pt-6 pb-4">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-sm">
-            <a href="mailto:support@vietnamvisahelp.com" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              support@vietnamvisahelp.com
-            </a>
-            <a href="https://wa.me/841205549868" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
-              +84 120 554 9868
-            </a>
-            <span className="flex items-center gap-2 text-gray-400">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City
-            </span>
+        {/* Policy Links and Payment Methods - combined on desktop, separate on mobile */}
+        <div className="mb-4">
+          {/* Desktop: Policy links and payment logos on same row */}
+          <div className="hidden sm:flex justify-center items-center gap-4 flex-wrap">
+            <Link href="/terms" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal.footerTerms}
+            </Link>
+            <span className="text-gray-600">|</span>
+            <Link href="/refund" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal.footerRefund}
+            </Link>
+            <span className="text-gray-600">|</span>
+            <Link href="/privacy" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal.footerPrivacy}
+            </Link>
+            <span className="text-gray-600">|</span>
+            <span className="text-xs text-gray-500">{t.legal.securePayment}</span>
+            {/* Visa */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#1A1F71"/>
+              <path d="M278.198 334.228L311.058 138.55H364.534L331.67 334.228H278.198Z" fill="white"/>
+              <path d="M524.307 142.687C513.088 138.55 495.395 134 473.639 134C420.835 134 383.875 161.478 383.548 201.185C383.228 230.934 410.937 247.535 431.864 257.359C453.311 267.401 460.674 273.95 460.582 283.119C460.445 297.187 443.655 303.57 427.973 303.57C406.201 303.57 394.64 300.379 376.952 292.418L369.736 288.938L361.886 336.103C374.586 341.625 397.855 346.441 421.979 346.686C478.067 346.686 514.354 319.504 514.816 277.169C515.028 253.504 500.126 235.413 468.548 220.477C449.28 210.96 437.532 204.569 437.66 194.748C437.66 185.963 447.953 176.576 470.099 176.576C488.636 176.265 502.472 180.23 513.357 184.367L518.571 186.788L526.261 141.093L524.307 142.687Z" fill="white"/>
+              <path d="M612.936 138.55H571.69C558.657 138.55 548.866 142.215 543.093 155.649L464.182 334.228H520.177C520.177 334.228 529.501 309.232 531.67 303.166C537.97 303.166 592.285 303.254 600.364 303.254C602.048 311.236 607.115 334.228 607.115 334.228H656.499L612.936 138.55ZM548.263 260.069C552.68 248.746 570.509 200.773 570.509 200.773C570.181 201.302 574.883 189.082 577.589 181.524L581.172 199.036C581.172 199.036 592.002 249.315 594.271 260.069H548.263Z" fill="white"/>
+              <path d="M232.903 138.55L180.668 267.401L175.113 240.594C165.556 210.064 137.299 176.904 105.799 160.298L153.414 333.987H209.84L289.33 138.55H232.903Z" fill="white"/>
+              <path d="M131.92 138.55H45.8776L45.125 142.755C112.024 159.533 156.601 200.025 175.109 240.607L156.237 155.871C152.986 142.656 143.284 138.953 131.92 138.55Z" fill="#F9A533"/>
+            </svg>
+            {/* Mastercard */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#16366F"/>
+              <circle cx="299" cy="235.5" r="143" fill="#EB001B"/>
+              <circle cx="451" cy="235.5" r="143" fill="#F79E1B"/>
+              <path d="M375 124.5C410.898 152.069 434 195.721 434 244.5C434 293.279 410.898 336.931 375 364.5C339.102 336.931 316 293.279 316 244.5C316 195.721 339.102 152.069 375 124.5Z" fill="#FF5F00"/>
+            </svg>
+            {/* PayPal */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#003087"/>
+              <path d="M338.5 163H271.5C267.5 163 264 166.5 263.5 170.5L235.5 343C235 346 237 349 240.5 349H273C277 349 280.5 345.5 281 341.5L289 291.5C289.5 287.5 293 284 297 284H320C363 284 388 262.5 395 222C398 205 395.5 191 387.5 181C378.5 169.5 361.5 163 338.5 163ZM347 224.5C343 251 322.5 251 303 251H291.5L299.5 199.5C300 196.5 302.5 194 305.5 194H310.5C324 194 336.5 194 343 202C347 207.5 348.5 215 347 224.5Z" fill="white"/>
+              <path d="M495 222.5H461.5C458.5 222.5 456 225 455.5 228L454 238L451.5 234.5C444 223.5 427 220 410 220C371 220 337.5 250 331 294.5C327.5 316.5 332.5 337.5 345 352C356 364.5 372 370 391.5 370C424.5 370 442.5 348.5 442.5 348.5L441 358.5C440.5 361.5 442.5 364.5 446 364.5H476C480 364.5 483.5 361 484 357L502.5 229.5C503 226.5 501 223.5 497.5 223.5H495V222.5ZM453.5 296C450 317.5 433 332 411 332C400 332 391 328.5 385.5 322C380 315.5 378 306.5 379.5 296.5C382.5 275.5 400 260.5 421.5 260.5C432 260.5 441 264 446.5 270.5C452.5 277.5 455 286 453.5 296Z" fill="white"/>
+              <path d="M622 222.5H588.5C585.5 222.5 583 225 582.5 228L581 238L578.5 234.5C571 223.5 554 220 537 220C498 220 464.5 250 458 294.5C454.5 316.5 459.5 337.5 472 352C483 364.5 499 370 518.5 370C551.5 370 569.5 348.5 569.5 348.5L568 358.5C567.5 361.5 569.5 364.5 573 364.5H603C607 364.5 610.5 361 611 357L629.5 229.5C630 226.5 628 223.5 624.5 223.5H622V222.5ZM580.5 296C577 317.5 560 332 538 332C527 332 518 328.5 512.5 322C507 315.5 505 306.5 506.5 296.5C509.5 275.5 527 260.5 548.5 260.5C559 260.5 568 264 573.5 270.5C579.5 277.5 582 286 580.5 296Z" fill="white"/>
+            </svg>
+            {/* Alipay */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#1677FF"/>
+              <path d="M584.5 300C584.5 300 498 266 437.5 243.5C453 210.5 463.5 172 463.5 172H378.5V209H424.5C424.5 209 416.5 242 397 277C363.5 261.5 320 250 320 300C320 350 365 370 410 350C455 330 484.5 295 484.5 295C484.5 295 551 330 584.5 300Z" fill="white"/>
+              <path d="M375 145C294.5 145 229 210.5 229 291C229 371.5 294.5 437 375 437C455.5 437 521 371.5 521 291C521 210.5 455.5 145 375 145ZM375 410C309.5 410 256 356.5 256 291C256 225.5 309.5 172 375 172C440.5 172 494 225.5 494 291C494 356.5 440.5 410 375 410Z" fill="white"/>
+              <text x="175" y="310" fill="white" fontSize="90" fontFamily="Arial, sans-serif" fontWeight="bold">A</text>
+            </svg>
+          </div>
+
+          {/* Mobile: Policy links row */}
+          <div className="sm:hidden text-center mb-3">
+            <Link href="/terms" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal.footerTerms}
+            </Link>
+            <span className="text-gray-600 mx-2">|</span>
+            <Link href="/refund" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal.footerRefund}
+            </Link>
+            <span className="text-gray-600 mx-2">|</span>
+            <Link href="/privacy" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal.footerPrivacy}
+            </Link>
+          </div>
+
+          {/* Mobile: Payment logos row */}
+          <div className="sm:hidden flex justify-center items-center gap-3">
+            <span className="text-xs text-gray-500">{t.legal.securePayment}</span>
+            {/* Visa */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#1A1F71"/>
+              <path d="M278.198 334.228L311.058 138.55H364.534L331.67 334.228H278.198Z" fill="white"/>
+              <path d="M524.307 142.687C513.088 138.55 495.395 134 473.639 134C420.835 134 383.875 161.478 383.548 201.185C383.228 230.934 410.937 247.535 431.864 257.359C453.311 267.401 460.674 273.95 460.582 283.119C460.445 297.187 443.655 303.57 427.973 303.57C406.201 303.57 394.64 300.379 376.952 292.418L369.736 288.938L361.886 336.103C374.586 341.625 397.855 346.441 421.979 346.686C478.067 346.686 514.354 319.504 514.816 277.169C515.028 253.504 500.126 235.413 468.548 220.477C449.28 210.96 437.532 204.569 437.66 194.748C437.66 185.963 447.953 176.576 470.099 176.576C488.636 176.265 502.472 180.23 513.357 184.367L518.571 186.788L526.261 141.093L524.307 142.687Z" fill="white"/>
+              <path d="M612.936 138.55H571.69C558.657 138.55 548.866 142.215 543.093 155.649L464.182 334.228H520.177C520.177 334.228 529.501 309.232 531.67 303.166C537.97 303.166 592.285 303.254 600.364 303.254C602.048 311.236 607.115 334.228 607.115 334.228H656.499L612.936 138.55ZM548.263 260.069C552.68 248.746 570.509 200.773 570.509 200.773C570.181 201.302 574.883 189.082 577.589 181.524L581.172 199.036C581.172 199.036 592.002 249.315 594.271 260.069H548.263Z" fill="white"/>
+              <path d="M232.903 138.55L180.668 267.401L175.113 240.594C165.556 210.064 137.299 176.904 105.799 160.298L153.414 333.987H209.84L289.33 138.55H232.903Z" fill="white"/>
+              <path d="M131.92 138.55H45.8776L45.125 142.755C112.024 159.533 156.601 200.025 175.109 240.607L156.237 155.871C152.986 142.656 143.284 138.953 131.92 138.55Z" fill="#F9A533"/>
+            </svg>
+            {/* Mastercard */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#16366F"/>
+              <circle cx="299" cy="235.5" r="143" fill="#EB001B"/>
+              <circle cx="451" cy="235.5" r="143" fill="#F79E1B"/>
+              <path d="M375 124.5C410.898 152.069 434 195.721 434 244.5C434 293.279 410.898 336.931 375 364.5C339.102 336.931 316 293.279 316 244.5C316 195.721 339.102 152.069 375 124.5Z" fill="#FF5F00"/>
+            </svg>
+            {/* PayPal */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#003087"/>
+              <path d="M338.5 163H271.5C267.5 163 264 166.5 263.5 170.5L235.5 343C235 346 237 349 240.5 349H273C277 349 280.5 345.5 281 341.5L289 291.5C289.5 287.5 293 284 297 284H320C363 284 388 262.5 395 222C398 205 395.5 191 387.5 181C378.5 169.5 361.5 163 338.5 163ZM347 224.5C343 251 322.5 251 303 251H291.5L299.5 199.5C300 196.5 302.5 194 305.5 194H310.5C324 194 336.5 194 343 202C347 207.5 348.5 215 347 224.5Z" fill="white"/>
+              <path d="M495 222.5H461.5C458.5 222.5 456 225 455.5 228L454 238L451.5 234.5C444 223.5 427 220 410 220C371 220 337.5 250 331 294.5C327.5 316.5 332.5 337.5 345 352C356 364.5 372 370 391.5 370C424.5 370 442.5 348.5 442.5 348.5L441 358.5C440.5 361.5 442.5 364.5 446 364.5H476C480 364.5 483.5 361 484 357L502.5 229.5C503 226.5 501 223.5 497.5 223.5H495V222.5ZM453.5 296C450 317.5 433 332 411 332C400 332 391 328.5 385.5 322C380 315.5 378 306.5 379.5 296.5C382.5 275.5 400 260.5 421.5 260.5C432 260.5 441 264 446.5 270.5C452.5 277.5 455 286 453.5 296Z" fill="white"/>
+              <path d="M622 222.5H588.5C585.5 222.5 583 225 582.5 228L581 238L578.5 234.5C571 223.5 554 220 537 220C498 220 464.5 250 458 294.5C454.5 316.5 459.5 337.5 472 352C483 364.5 499 370 518.5 370C551.5 370 569.5 348.5 569.5 348.5L568 358.5C567.5 361.5 569.5 364.5 573 364.5H603C607 364.5 610.5 361 611 357L629.5 229.5C630 226.5 628 223.5 624.5 223.5H622V222.5ZM580.5 296C577 317.5 560 332 538 332C527 332 518 328.5 512.5 322C507 315.5 505 306.5 506.5 296.5C509.5 275.5 527 260.5 548.5 260.5C559 260.5 568 264 573.5 270.5C579.5 277.5 582 286 580.5 296Z" fill="white"/>
+            </svg>
+            {/* Alipay */}
+            <svg className="h-8 w-auto" viewBox="0 0 750 471" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="750" height="471" rx="40" fill="#1677FF"/>
+              <path d="M584.5 300C584.5 300 498 266 437.5 243.5C453 210.5 463.5 172 463.5 172H378.5V209H424.5C424.5 209 416.5 242 397 277C363.5 261.5 320 250 320 300C320 350 365 370 410 350C455 330 484.5 295 484.5 295C484.5 295 551 330 584.5 300Z" fill="white"/>
+              <path d="M375 145C294.5 145 229 210.5 229 291C229 371.5 294.5 437 375 437C455.5 437 521 371.5 521 291C521 210.5 455.5 145 375 145ZM375 410C309.5 410 256 356.5 256 291C256 225.5 309.5 172 375 172C440.5 172 494 225.5 494 291C494 356.5 440.5 410 375 410Z" fill="white"/>
+              <text x="175" y="310" fill="white" fontSize="90" fontFamily="Arial, sans-serif" fontWeight="bold">A</text>
+            </svg>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-gray-700 pt-6 text-center text-sm text-gray-500">
-          <p>
-            © {new Date().getFullYear()} VietnamVisaHelp.com. {t.legal?.allRightsReserved || "All rights reserved."}
+        {/* Indian Payment Methods (only shows on India site) */}
+        {isIndiaSite && (
+          <div className="mb-4 flex justify-center">
+            <IndianPaymentIcons showLabel={true} className="py-2" />
+          </div>
+        )}
+
+        {/* Support Hours for India */}
+        {layout.showISTTimezone && (
+          <div className="text-center mb-4 py-2 bg-gray-800 rounded-lg">
+            <p className="text-sm text-amber-400">
+              🇮🇳 Support Hours: 6:30 AM - 11:30 PM IST (Indian Standard Time)
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              WhatsApp support available 24/7 for urgent requests
+            </p>
+          </div>
+        )}
+
+        {/* Contact Info & Copyright */}
+        <div className="border-t border-gray-700 pt-4 text-center text-xs text-gray-400">
+          <p className="mb-1.5">
+            <span>Email: </span>
+            <a href={`mailto:${content.supportEmail}`} className="hover:text-white transition-colors">
+              {content.supportEmail}
+            </a>
+            <span className="mx-2">|</span>
+            <span>WhatsApp: </span>
+            <a href={`https://wa.me/${content.whatsappNumber.replace(/\+/g, '')}`} className="hover:text-white transition-colors">
+              {content.whatsappDisplay}
+            </a>
+            <span className="mx-2">|</span>
+            <span>Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</span>
+          </p>
+          <p className="text-gray-500 text-xs">
+            © 2026 {content.siteName} - All rights reserved
           </p>
         </div>
       </div>

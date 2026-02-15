@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getAirportsForCountry } from "@/lib/amadeus";
 import { FlightRiskBlock } from "./flight-risk-block";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -295,17 +296,6 @@ function getVisaRequirement(countryCode: string, citizenship: typeof citizenship
   };
 }
 
-// Purpose of visit options
-const PURPOSES = [
-  { value: "tourism", label: "Tourism" },
-  { value: "business", label: "Business" },
-  { value: "visiting_relatives", label: "Visiting Relatives/Friends" },
-  { value: "study", label: "Study" },
-  { value: "work", label: "Work" },
-  { value: "transit", label: "Transit" },
-  { value: "other", label: "Other" },
-];
-
 // Default fallback translations for citizenship section
 const citizenshipFallback = {
   title: "Check Your Visa Requirements",
@@ -444,7 +434,6 @@ interface CitizenshipCheckerProps {
   onDepartingCountryChange?: (code: string) => void;
   onDepartingAirportChange?: (code: string) => void;
   initialPurpose?: string;
-  translations?: typeof citizenshipFallback;
 }
 
 export function CitizenshipChecker({
@@ -453,8 +442,9 @@ export function CitizenshipChecker({
   onDepartingCountryChange,
   onDepartingAirportChange,
   initialPurpose = "tourism",
-  translations,
 }: CitizenshipCheckerProps) {
+  // Get translations from language context
+  const { t, language } = useLanguage();
   const [selectedCountry, setSelectedCountry] = useState("");
   const [visaResult, setVisaResult] = useState<VisaRequirementResult | null>(null);
   const [purpose, setPurpose] = useState(initialPurpose);
@@ -465,8 +455,8 @@ export function CitizenshipChecker({
   const [availableAirports, setAvailableAirports] = useState<AirportInfo[]>([]);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
 
-  // Use fallback if translations not provided
-  const citizenship = translations ?? citizenshipFallback;
+  // Use translations from context, with fallback for safety
+  const citizenship = t.citizenship ?? citizenshipFallback;
 
   // Fetch geolocation on mount
   useEffect(() => {
@@ -549,6 +539,7 @@ export function CitizenshipChecker({
   };
 
   const selectedCountryName = ALL_COUNTRIES.find((c) => c.code === selectedCountry)?.name;
+  const selectedAirportInfo = availableAirports.find(a => a.code === departingAirport);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
@@ -615,18 +606,21 @@ export function CitizenshipChecker({
         {/* Purpose of Visit selector */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {citizenship.purposeOfVisit} <span className="text-red-500">*</span>
+            {citizenship.purposeOfVisit || "Purpose of Visit"} <span className="text-red-500">*</span>
           </label>
           <select
             value={purpose}
             onChange={(e) => handlePurposeChange(e.target.value)}
             className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
           >
-            {PURPOSES.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
+            {/* Purpose options stay in English as they are form values */}
+            <option value="tourism">Tourism</option>
+            <option value="business">Business</option>
+            <option value="visiting_relatives">Visiting Relatives/Friends</option>
+            <option value="study">Study</option>
+            <option value="work">Work</option>
+            <option value="transit">Transit</option>
+            <option value="other">Other</option>
           </select>
         </div>
       </div>
@@ -706,12 +700,12 @@ export function CitizenshipChecker({
       )}
 
       {/* Flight Risk Warning - shown right after citizenship result for e-visa countries */}
-      {selectedCountry && visaResult?.type === "evisa" && departingCountry && (
+      {/* Only show when airport is valid for the selected country to prevent showing stale data */}
+      {selectedCountry && visaResult?.type === "evisa" && departingCountry && selectedAirportInfo && (
         <div className="mt-4">
           <FlightRiskBlock
             countryCode={departingCountry}
             visaSpeed="30-min"
-            language="EN"
             airportCode={departingAirport || undefined}
           />
         </div>

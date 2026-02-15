@@ -50,7 +50,6 @@ export default function TermsPage() {
               <li>Submission of Documentation</li>
               <li>Obtaining the E-Visa</li>
               <li>Conditions for Issuing an Electronic Visa</li>
-              <li>Additional Services</li>
               <li>Fees</li>
               <li>Warnings / Disclaimers</li>
               <li>General</li>
@@ -164,21 +163,8 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
               Delivery
             </h2>
-            <p className="text-gray-700 dark:text-gray-300 mb-3">
-              Documents will be sent via email as usual, but in some cases, you will be required to send us hard copies of documents to submit to the Vietnam Immigration Department for review. You will send the required documents to our office. A delivery charge will be your responsibility.
-            </p>
             <p className="text-gray-700 dark:text-gray-300">
-              All third-party delivery companies are subject to the conditions set by these individual companies. VietnamVisaHelp.com accepts no liability for losses or delays incurred when using third-party delivery companies. An extra fee will be charged if we do not have enough time to process your visa in the normal processing time. To ensure that the document arrives at our offices on time, you must select quick delivery.
-            </p>
-          </section>
-
-          {/* Additional Services */}
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              Additional Services
-            </h2>
-            <p className="text-gray-700 dark:text-gray-300">
-              VietnamVisaHelp.com may offer to provide additional services in some jurisdictions e.g. Fast-track Service at the airport, Emergency Document Service, Car pick-up service, ESim service. If so, the description and relevant terms for those additional services are available on the Website via the Service Directory and are incorporated into these terms.
+              Issued E-Visa&apos;s will be sent as .pdf format via email and Whatsapp.
             </p>
           </section>
 
@@ -188,30 +174,30 @@ export default function TermsPage() {
               Fees
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              An email with the title &quot;Application #ID: Your booking is confirmed - Payment Successful&quot; will show that we already received your payment. We will send you an email with the subject &quot;Application #ID: Your booking is confirmed - Payment Remind&quot; if your payment failed and instructs you to try again using a different payment method. Any problems that result from a failed payment are not our responsibility. If we do not receive payment from you, we will not process your visa.
+              An email with notification - Payment Successful will show that we already received your payment. Any problems that result from a failed payment are not our responsibility. If we do not receive payment from you, we will not process your e-visa.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
-              <strong>If your visa is denied by the Vietnam Immigration Department:</strong> We will refund half of the service fee you have paid to you.
+              <strong>If your e-visa application is denied by the Vietnam Immigration Department:</strong> We will refund our service fee you have paid to you.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mb-3">
               You shall pay for all bank charges, exchange rate differences, currency adjustments, transaction fees and other such charges incurred by your bank or financial institution(s) throughout the payment process.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              When you use our visa application service, you will need to pay two types of fees:
+              When you use our e-visa application service, you will need to pay two types of fees:
             </p>
 
             {/* Fee Types */}
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
               <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">1. Service Fee</h3>
               <p className="text-blue-700 dark:text-blue-300 text-sm">
-                This fee may change from time to time and depends on the urgency of processing, so the price will vary. The service fee will be partially refunded (50%) if your visa is refused.
+                This fee may change from time to time and depends on the urgency of processing, so the price will vary. The service fee will be refunded, if your visa is refused.
               </p>
             </div>
 
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-4">
               <h3 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">2. Government Fee (State/Official Fee)</h3>
               <p className="text-amber-700 dark:text-amber-300 text-sm mb-2">
-                We will collect and pay this on your behalf. Depending on the visa type:
+                We will collect and pay this on your behalf. Depending on the e-visa type:
               </p>
               <ul className="list-disc list-inside text-amber-700 dark:text-amber-300 text-sm space-y-1">
                 <li>$25 USD per person for a single-entry visa</li>
@@ -244,40 +230,28 @@ export default function TermsPage() {
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$224</td>
                   </tr>
                   <tr className="bg-gray-50 dark:bg-gray-700/50">
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Emergency (15-30 min)</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Emergency approval (15-30 min)<br /><span className="text-xs text-gray-500 dark:text-gray-400">(1-1.5 hour visa)</span></td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$199</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$174</td>
                   </tr>
                   <tr className="bg-white dark:bg-gray-800">
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Urgent (1 hour)</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$159</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$134</td>
-                  </tr>
-                  <tr className="bg-gray-50 dark:bg-gray-700/50">
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Express (4 hours)</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$119</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$139</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$94</td>
                   </tr>
-                  <tr className="bg-white dark:bg-gray-800">
+                  <tr className="bg-gray-50 dark:bg-gray-700/50">
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Express (1 day)</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$99</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$74</td>
                   </tr>
-                  <tr className="bg-gray-50 dark:bg-gray-700/50">
+                  <tr className="bg-white dark:bg-gray-800">
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Express (2 days)</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$79</td>
+                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$89</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
                     <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$54</td>
-                  </tr>
-                  <tr className="bg-white dark:bg-gray-800">
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Standard (2-3 business days)</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 font-semibold">$49</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$25</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">$24</td>
                   </tr>
                 </tbody>
               </table>
@@ -290,13 +264,10 @@ export default function TermsPage() {
               Once VietnamVisaHelp.com has submitted a travel document request to the relevant issuing authority on behalf of the applicant, all administrative and government fees shall be deemed non-refundable. This includes, without limitation, any transactions deemed fraudulent.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mt-3">
-              Please check all your information on the online application form before submitting it. An extra fee will be charged if you want to change any information related to your visa application form online.
+              Please check all your information on the online application form before submitting it. Consular fees/Admin &amp; Government fee and availability of services are subject to change without notice. We reserve the right to choose the best service available given the time limits that the client has specified.
             </p>
             <p className="text-gray-700 dark:text-gray-300 mt-3">
-              Consular fees/Admin &amp; Government fee and availability of services are subject to change without notice. We reserve the right to choose the best service available given the time limits that the client has specified.
-            </p>
-            <p className="text-gray-700 dark:text-gray-300 mt-3">
-              After our system sends the &quot;Processing Notification&quot; to your registered email address, if you decide to cancel your application or change any information for any reason, there won&apos;t be a refund granted, and the service will proceed automatically.
+              After our system sends the &quot;Payment received&quot; to your registered email address, if you decide to cancel your application or change any information for any reason, there won&apos;t be a refund granted, and the service will proceed automatically.
             </p>
           </section>
 
@@ -387,7 +358,7 @@ export default function TermsPage() {
             </p>
             <ul className="list-none text-gray-700 dark:text-gray-300 space-y-2">
               <li><strong>Email:</strong> <a href="mailto:support@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@vietnamvisahelp.com</a></li>
-              <li><strong>WhatsApp:</strong> <a href="https://wa.me/841205549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 120 554 9868</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/84705549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 70 5549868</a></li>
               <li><strong>Website:</strong> <a href="https://vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">www.vietnamvisahelp.com</a></li>
               <li className="pt-2"><strong>Address:</strong> Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</li>
             </ul>

@@ -6,6 +6,7 @@ import { SparklesCore } from "@/components/ui/sparkles";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
+import { Footer } from "@/components/ui/footer";
 
 export default function ConfirmationPage() {
   const [referenceNumber] = useState(() => {
@@ -41,7 +42,7 @@ export default function ConfirmationPage() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           <a
-            href="https://wa.me/841205549868"
+            href="https://wa.me/84705549868"
             className="flex items-center gap-2 text-base text-gray-300 hover:text-white"
           >
             <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
@@ -187,7 +188,7 @@ export default function ConfirmationPage() {
                   Questions? Contact our 24/7 support team
                 </p>
                 <a
-                  href={`https://wa.me/841205549868?text=Hi, I need help with my visa application. Reference: ${referenceNumber}`}
+                  href={`https://wa.me/84705549868?text=Hi, I need help with my visa application. Reference: ${referenceNumber}`}
                   className="inline-flex items-center gap-3 px-6 py-4 bg-green-500 hover:bg-green-400 rounded-xl font-semibold text-lg transition-colors"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -211,9 +212,12 @@ export default function ConfirmationPage() {
         </section>
       </main>
 
+      {/* Footer */}
+      <Footer />
+
       {/* WhatsApp Floating Button */}
       <a
-        href={`https://wa.me/841205549868?text=Hi, I need help with my visa application. Reference: ${referenceNumber}`}
+        href={`https://wa.me/84705549868?text=Hi, I need help with my visa application. Reference: ${referenceNumber}`}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-400 transition-all duration-300 hover:scale-110 z-50"

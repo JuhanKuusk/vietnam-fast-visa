@@ -119,7 +119,7 @@ export default function CookiesPage() {
             </p>
             <ul className="list-none text-gray-700 dark:text-gray-300 space-y-2">
               <li><strong>Email:</strong> <a href="mailto:support@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@vietnamvisahelp.com</a></li>
-              <li><strong>WhatsApp:</strong> <a href="https://wa.me/841205549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 120 554 9868</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/84705549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 70 5549868</a></li>
               <li className="pt-2"><strong>Address:</strong> Binh Thanh District, Ho Chi Minh City, Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Ho Chi Minh City</li>
             </ul>
           </section>

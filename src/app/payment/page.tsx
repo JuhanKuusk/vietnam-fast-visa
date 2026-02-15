@@ -6,6 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Logo } from "@/components/ui/logo";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
+import { Footer } from "@/components/ui/footer";
 import {
   Elements,
   PaymentElement,
@@ -107,12 +108,50 @@ function CheckoutForm({
   );
 }
 
+// Visa speed options with pricing and descriptions for payment page
+type VisaSpeedKey = "30-min" | "4-hour" | "1-day" | "2-day" | "weekend";
+
+const VISA_SPEED_INFO: Record<VisaSpeedKey, {
+  name: string;
+  description: string;
+  price: number;
+}> = {
+  "30-min": {
+    name: "URGENT 30-Minute Express Visa",
+    description: "Check-in approval letter delivered within 30 minutes via email & WhatsApp",
+    price: 199,
+  },
+  "4-hour": {
+    name: "4-Hour Express Visa",
+    description: "E-Visa delivered within 4 hours via email & WhatsApp",
+    price: 139,
+  },
+  "1-day": {
+    name: "1-Day Standard Visa",
+    description: "E-Visa delivered within 1 business day via email & WhatsApp",
+    price: 99,
+  },
+  "2-day": {
+    name: "2-Day Economy Visa",
+    description: "E-Visa delivered within 2 business days via email & WhatsApp",
+    price: 89,
+  },
+  "weekend": {
+    name: "Weekend & Holiday Visa",
+    description: "E-Visa delivered same day (weekends/holidays) via email & WhatsApp",
+    price: 249,
+  },
+};
+
 function PaymentForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const applicantCount = Number(searchParams.get("applicants")) || 1;
   const referenceNumber = searchParams.get("ref");
-  const pricePerPerson = 199;
+  const speedParam = searchParams.get("speed") as VisaSpeedKey | null;
+  const visaSpeed = speedParam && VISA_SPEED_INFO[speedParam] ? speedParam : "30-min";
+  const speedInfo = VISA_SPEED_INFO[visaSpeed];
+  const pricePerPerson = speedInfo.price;
   const totalPrice = pricePerPerson * applicantCount;
 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -173,7 +212,7 @@ function PaymentForm() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           <a
-            href="https://wa.me/841205549868"
+            href="https://wa.me/84705549868"
             className="flex items-center gap-2 text-base text-gray-300 hover:text-white"
           >
             <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
@@ -243,7 +282,7 @@ function PaymentForm() {
                   Order Summary
                 </h3>
                 <div className="flex justify-between text-base text-gray-400">
-                  <span>Emergency E-Visa (1.5h)</span>
+                  <span>{speedInfo.name}</span>
                   <span>${pricePerPerson}/person</span>
                 </div>
                 <div className="flex justify-between text-base text-gray-400">
@@ -266,7 +305,7 @@ function PaymentForm() {
                     Fast Processing
                   </div>
                   <div className="text-base text-gray-400">
-                    E-Visa delivered within 1.5 hours via email & WhatsApp
+                    {speedInfo.description}
                   </div>
                 </div>
               </div>
@@ -478,26 +517,15 @@ function PaymentForm() {
             </div>
           </div>
 
-          {/* Trust Section */}
-          <div className="mt-8 p-5 rounded-xl bg-white/5 border border-white/10 text-center">
-            <p className="text-lg font-semibold text-gray-300 mb-3">
-              Trusted by 10,000+ travelers
-            </p>
-            <div className="flex justify-center gap-6 text-gray-400">
-              <div className="flex items-center gap-1">
-                <span className="text-yellow-400">★★★★★</span>
-                <span className="text-base">4.9/5</span>
-              </div>
-              <span>|</span>
-              <span className="text-base">98% on-time delivery</span>
-            </div>
-          </div>
         </section>
       </main>
 
+      {/* Footer with disclaimer */}
+      <Footer />
+
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/841205549868?text=Hi, I need help with my payment!"
+        href="https://wa.me/84705549868?text=Hi, I need help with my payment!"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-400 transition-all duration-300 hover:scale-110 z-50"

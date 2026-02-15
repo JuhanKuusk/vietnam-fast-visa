@@ -1,12 +1,23 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSite } from "@/contexts/SiteContext";
 import { SupportedLanguage } from "@/lib/translations";
 
 export function LanguageSelector() {
   const { language, setLanguage, languages, isLoading } = useLanguage();
+  const { siteConfig } = useSite();
+
+  // Filter languages based on site config (if availableLanguages is set)
+  const availableLanguages = useMemo(() => {
+    const allowedLanguages = siteConfig.behavior.availableLanguages;
+    if (!allowedLanguages || allowedLanguages.length === 0) {
+      return Object.keys(languages) as SupportedLanguage[];
+    }
+    return allowedLanguages;
+  }, [siteConfig.behavior.availableLanguages, languages]);
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -68,7 +79,7 @@ export function LanguageSelector() {
         zIndex: 99999,
       }}
     >
-      {(Object.keys(languages) as SupportedLanguage[]).map((langCode) => {
+      {availableLanguages.map((langCode) => {
         const lang = languages[langCode];
         const isSelected = langCode === language;
 
@@ -104,7 +115,7 @@ export function LanguageSelector() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
+        className="flex-shrink-0 flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
         disabled={isLoading}
       >
         <span className="text-xl sm:text-base">{currentLang.flag}</span>
