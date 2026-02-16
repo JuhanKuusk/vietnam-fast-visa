@@ -52,9 +52,12 @@ interface Application {
   entry_date: string;
   exit_date: string;
   entry_port: string;
+  exit_port: string | null;
   entry_type: string | null;
   purpose: string | null;
   flight_number: string | null;
+  address_in_vietnam: string | null;
+  city_province: string | null;
   language: string | null;
   notes: string | null;
   created_at: string;
@@ -453,6 +456,29 @@ export default function ApplicationDetailPage() {
               <div>
                 <p className="text-sm text-gray-500">Payment Status</p>
                 <p className="font-medium capitalize">{application.payment_status}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Trip & Accommodation Details */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Trip & Accommodation Details</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-gray-500">Temporary Address in Vietnam</p>
+                <p className="font-medium">{application.address_in_vietnam || "-"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">City/Province</p>
+                <p className="font-medium">{application.city_province || "-"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Entry Port</p>
+                <p className="font-medium">{application.entry_port}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Exit Port</p>
+                <p className="font-medium">{application.exit_port || application.entry_port}</p>
               </div>
             </div>
           </div>

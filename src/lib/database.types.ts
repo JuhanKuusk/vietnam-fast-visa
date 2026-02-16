@@ -133,7 +133,9 @@ export type Database = {
       }
       applications: {
         Row: {
+          address_in_vietnam: string | null
           amount_usd: number
+          city_province: string | null
           created_at: string | null
           delivered_at: string | null
           email: string
@@ -141,6 +143,7 @@ export type Database = {
           entry_port: string
           entry_type: string | null
           exit_date: string
+          exit_port: string | null
           flight_number: string | null
           id: string
           language: string | null
@@ -159,7 +162,9 @@ export type Database = {
           whatsapp: string
         }
         Insert: {
+          address_in_vietnam?: string | null
           amount_usd?: number
+          city_province?: string | null
           created_at?: string | null
           delivered_at?: string | null
           email: string
@@ -167,6 +172,7 @@ export type Database = {
           entry_port: string
           entry_type?: string | null
           exit_date: string
+          exit_port?: string | null
           flight_number?: string | null
           id?: string
           language?: string | null
@@ -185,7 +191,9 @@ export type Database = {
           whatsapp: string
         }
         Update: {
+          address_in_vietnam?: string | null
           amount_usd?: number
+          city_province?: string | null
           created_at?: string | null
           delivered_at?: string | null
           email?: string
@@ -193,6 +201,7 @@ export type Database = {
           entry_port?: string
           entry_type?: string | null
           exit_date?: string
+          exit_port?: string | null
           flight_number?: string | null
           id?: string
           language?: string | null

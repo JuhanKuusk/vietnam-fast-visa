@@ -6,10 +6,14 @@ export const tripDetailsSchema = z.object({
   // Accept both old schema values and form values for backward compatibility
   purpose: z.enum(["tourist", "tourism", "business", "visiting", "visiting_relatives", "study", "work", "transit", "other"]),
   entryPort: z.string().min(1, "Please select an entry port"),
+  exitPort: z.string().optional(),
   entryDate: z.string().min(1, "Please select an entry date"),
   exitDate: z.string().min(1, "Please select an exit date"),
   entryType: z.enum(["single", "multiple"]).optional().default("single"),
   flightNumber: z.string().optional(),
+  // Accommodation details
+  addressInVietnam: z.string().min(1, "Please enter your temporary address in Vietnam"),
+  cityProvince: z.string().min(1, "Please select a city/province"),
 });
 
 // Applicant validation (Step 2) - Extended with all fields
