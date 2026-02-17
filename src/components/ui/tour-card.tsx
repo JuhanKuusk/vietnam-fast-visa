@@ -1,21 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import { Tour } from "@/lib/tours-data";
+import type { Tour } from "@/types/tours";
 import { useSite } from "@/contexts/SiteContext";
 
 interface TourCardProps {
   tour: Tour;
+  /** Custom link URL - if not provided, links to affiliate URL */
+  href?: string;
+  /** Whether to open in new tab (default: true for affiliate, false for internal) */
+  openInNewTab?: boolean;
 }
 
-export function TourCard({ tour }: TourCardProps) {
+export function TourCard({ tour, href, openInNewTab }: TourCardProps) {
   const { theme } = useSite();
+
+  // Use provided href or default to affiliate URL
+  const linkUrl = href || tour.affiliateUrl;
+  const shouldOpenNewTab = openInNewTab ?? !href; // Default: new tab for affiliate, same tab for internal
 
   return (
     <a
-      href={tour.affiliateUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={linkUrl}
+      target={shouldOpenNewTab ? "_blank" : undefined}
+      rel={shouldOpenNewTab ? "noopener noreferrer" : undefined}
       className="group block bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100"
     >
       {/* Image */}
