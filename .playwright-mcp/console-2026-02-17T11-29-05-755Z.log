@@ -1,0 +1,122 @@
+[    4685ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/api/geolocation:0
+[    6422ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=384&q=75:0
+[    6638ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[    6664ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[    6680ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Frenea-cruise.jpg&w=384&q=75:0
+[    7275ms] [ERROR] In HTML, %s cannot be a descendant of <%s>.
+This will cause a hydration error.%s <a> a 
+
+  ...
+    <RedirectBoundary>
+      <RedirectErrorBoundary router={{...}}>
+        <InnerLayoutRouter url="/tours" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} segmentPath={[...]} ...>
+          <SegmentViewNode type="page" pagePath="tours/page...">
+            <SegmentTrieNode>
+            <ClientPageRoot Component={function ToursPage} serverProvidedParams={{...}}>
+              <ToursPage params={Promise} searchParams={Promise}>
+                <main className="min-h-scre...">
+                  <section>
+                  <section className="max-w-7xl ...">
+                    <div className="flex flex-...">
+                      <aside>
+                      <div className="flex-1">
+                        <div>
+                        <div className="grid sm:gr...">
+                          <LinkComponent href="/cruise/ha...">
+>                           <a
+>                             ref={function}
+>                             onClick={function onClick}
+>                             onMouseEnter={function onMouseEnter}
+>                             onTouchStart={function onTouchStart}
+>                             href="/cruise/halong-day-trip-sung-sot-titop"
+>                           >
+                              <TourCard tour={{id:"halong...", ...}}>
+>                               <a
+>                                 href="https://www.vietnamtourbooking.com/tour/halong-group-day-trip-sung-sot-titop"
+>                                 target="_blank"
+>                                 rel="noopener noreferrer"
+>                                 className="group block bg-white rounded-xl shadow-sm hover:shadow-lg transition-all ..."
+>                               >
+                          ...
+                  ...
+          ...
+        ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[    7281ms] [ERROR] <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. a <a> @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[    7852ms] Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+    at throwOnHydrationMismatch (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:3348:56)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6775:918)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopConcurrentByScheduler (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9558:58)
+    at renderRootConcurrent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9541:71)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:150)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[    8018ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fmekong-3day.jpg&w=384&q=75:0
+[    8023ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fmekong-eyes.jpg&w=384&q=75:0
+[    8029ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fgecko-eyes.jpg&w=384&q=75:0
+[    8035ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fcambodia-vietnam.jpg&w=384&q=75:0
+[    8039ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=384&q=75:0
+[    8044ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[    8078ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[    8092ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Frenea-cruise.jpg&w=384&q=75:0
+[    8426ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/api/geolocation:0
+[   22938ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/cruise/halong-day-trip-sung-sot-titop?_rsc=1nyzs:0
+[   23311ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/cruise/halong-day-trip-sung-sot-titop:0
+[   24450ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/api/geolocation:0
+[   85010ms] [WARNING] %c%s%c ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[   85107ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[   85158ms] [ERROR] In HTML, %s cannot be a descendant of <%s>.
+This will cause a hydration error.%s <a> a 
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/cruise/ha..." tree={[...]} params={{slug:"halo..."}} cacheNode={{rsc:<Fragment>, ...}} ...>
+            <SegmentViewNode type="page" pagePath="cruise/[sl...">
+              <SegmentTrieNode>
+              <TourDetailPage>
+                <main className="min-h-scre...">
+                  <TourDetailHero>
+                  <div>
+                  <section className="bg-white p...">
+                    <div className="max-w-7xl ...">
+                      <RelatedTours tours={[...]}>
+                        <div>
+                          <div>
+                          <div className="grid sm:gr...">
+                            <LinkComponent href="/cruise/se...">
+>                             <a
+>                               ref={function}
+>                               onClick={function onClick}
+>                               onMouseEnter={function onMouseEnter}
+>                               onTouchStart={function onTouchStart}
+>                               href="/cruise/serenity-cruise-2-days-1-night"
+>                             >
+                                <TourCard tour={{id:"sereni...", ...}}>
+>                                 <a
+>                                   href="https://www.vietnamtourbooking.com/cruise/serenity-cruise-2-days-1-night"
+>                                   target="_blank"
+>                                   rel="noopener noreferrer"
+>                                   className="group block bg-white rounded-xl shadow-sm hover:shadow-lg transition-al..."
+>                                 >
+                            ...
+            ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[   85160ms] [ERROR] <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. a <a> @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[   85677ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0

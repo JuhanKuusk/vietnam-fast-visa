@@ -4,6 +4,58 @@ import { useState, useEffect } from "react";
 import { getAirportsForCountry } from "@/lib/amadeus";
 import { FlightRiskBlock } from "./flight-risk-block";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { SupportedLanguage } from "@/lib/translations";
+
+// Type for translations that may have countries, cities, purposeOptions
+interface TranslationsWithLocalization {
+  countries?: Record<string, string>;
+  cities?: Record<string, string>;
+  purposeOptions?: Record<string, string>;
+  searchPrompts?: {
+    searchCountry?: string;
+    searchAirport?: string;
+    searchCitizenship?: string;
+  };
+  citizenship?: typeof citizenshipFallback;
+}
+
+// Helper function to get localized country name (Chinese site only)
+function getLocalizedCountryName(
+  code: string,
+  englishName: string,
+  language: SupportedLanguage,
+  t: TranslationsWithLocalization
+): string {
+  if (language === "ZH" && t.countries?.[code]) {
+    return `${t.countries[code]} (${englishName})`;
+  }
+  return englishName;
+}
+
+// Helper function to get localized airport display (Chinese site only)
+function getLocalizedAirportDisplay(
+  airport: AirportInfo,
+  language: SupportedLanguage,
+  t: TranslationsWithLocalization
+): string {
+  if (language === "ZH" && t.cities?.[airport.city]) {
+    return `${t.cities[airport.city]} ${airport.city} (${airport.code}) - ${airport.name}`;
+  }
+  return `${airport.city} (${airport.code}) - ${airport.name}`;
+}
+
+// Helper function to get localized purpose (Chinese site only)
+function getLocalizedPurpose(
+  value: string,
+  language: SupportedLanguage,
+  t: TranslationsWithLocalization
+): string {
+  if (language === "ZH" && t.purposeOptions?.[value]) {
+    return t.purposeOptions[value];
+  }
+  // Fallback to capitalized English
+  return value.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+}
 
 // Visa-free countries with duration
 const VISA_FREE_45_DAYS = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI", "BY"];
@@ -345,21 +397,34 @@ function CountrySelector({
   countries,
   placeholder = "Type to search or select...",
   noResultsText = "No countries found",
+  language = "EN",
+  translations,
 }: {
   value: string;
   onChange: (code: string) => void;
   countries: { code: string; name: string }[];
   placeholder?: string;
   noResultsText?: string;
+  language?: SupportedLanguage;
+  translations?: TranslationsWithLocalization;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const selectedCountry = countries.find((c) => c.code === value);
+  const selectedDisplayName = selectedCountry
+    ? getLocalizedCountryName(selectedCountry.code, selectedCountry.name, language, translations || {})
+    : "";
 
-  const filteredCountries = countries.filter((country) =>
-    country.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter countries - search in both English and Chinese names
+  const filteredCountries = countries.filter((country) => {
+    const searchLower = searchTerm.toLowerCase();
+    const englishMatch = country.name.toLowerCase().includes(searchLower);
+    // Also search in Chinese name if available
+    const chineseName = translations?.countries?.[country.code] || "";
+    const chineseMatch = chineseName.includes(searchTerm);
+    return englishMatch || chineseMatch;
+  });
 
   const handleSelect = (code: string) => {
     onChange(code);
@@ -385,7 +450,7 @@ function CountrySelector({
     <div className="relative">
       <input
         type="text"
-        value={isOpen ? searchTerm : selectedCountry?.name || ""}
+        value={isOpen ? searchTerm : selectedDisplayName}
         onChange={handleInputChange}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
@@ -416,7 +481,7 @@ function CountrySelector({
                     : "text-gray-900 dark:text-white"
                 }`}
               >
-                {country.name}
+                {getLocalizedCountryName(country.code, country.name, language, translations || {})}
               </button>
             ))
           ) : (
@@ -558,8 +623,10 @@ export function CitizenshipChecker({
             value={selectedCountry}
             onChange={handleCountryChange}
             countries={ALL_COUNTRIES}
-            placeholder={citizenship.searchPlaceholder}
+            placeholder={(t as TranslationsWithLocalization).searchPrompts?.searchCitizenship || citizenship.searchPlaceholder}
             noResultsText={citizenship.noCountriesFound}
+            language={language}
+            translations={t as TranslationsWithLocalization}
           />
         </div>
 
@@ -577,8 +644,10 @@ export function CitizenshipChecker({
             value={departingCountry}
             onChange={handleDepartingCountryChange}
             countries={ALL_COUNTRIES}
-            placeholder={citizenship.searchPlaceholder}
+            placeholder={(t as TranslationsWithLocalization).searchPrompts?.searchCountry || citizenship.searchPlaceholder}
             noResultsText={citizenship.noCountriesFound}
+            language={language}
+            translations={t as TranslationsWithLocalization}
           />
         </div>
 
@@ -593,10 +662,10 @@ export function CitizenshipChecker({
               onChange={(e) => setDepartingAirport(e.target.value)}
               className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
             >
-              <option value="">{citizenship.selectAirport}</option>
+              <option value="">{(t as TranslationsWithLocalization).searchPrompts?.searchAirport || citizenship.selectAirport}</option>
               {availableAirports.map((airport) => (
                 <option key={airport.code} value={airport.code}>
-                  {airport.city} ({airport.code}) - {airport.name}
+                  {getLocalizedAirportDisplay(airport, language, t as TranslationsWithLocalization)}
                 </option>
               ))}
             </select>
@@ -613,14 +682,14 @@ export function CitizenshipChecker({
             onChange={(e) => handlePurposeChange(e.target.value)}
             className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
           >
-            {/* Purpose options stay in English as they are form values */}
-            <option value="tourism">Tourism</option>
-            <option value="business">Business</option>
-            <option value="visiting_relatives">Visiting Relatives/Friends</option>
-            <option value="study">Study</option>
-            <option value="work">Work</option>
-            <option value="transit">Transit</option>
-            <option value="other">Other</option>
+            {/* Form values stay in English, display text is localized */}
+            <option value="tourism">{getLocalizedPurpose("tourism", language, t as TranslationsWithLocalization)}</option>
+            <option value="business">{getLocalizedPurpose("business", language, t as TranslationsWithLocalization)}</option>
+            <option value="visiting_relatives">{getLocalizedPurpose("visiting_relatives", language, t as TranslationsWithLocalization)}</option>
+            <option value="study">{getLocalizedPurpose("study", language, t as TranslationsWithLocalization)}</option>
+            <option value="work">{getLocalizedPurpose("work", language, t as TranslationsWithLocalization)}</option>
+            <option value="transit">{getLocalizedPurpose("transit", language, t as TranslationsWithLocalization)}</option>
+            <option value="other">{getLocalizedPurpose("other", language, t as TranslationsWithLocalization)}</option>
           </select>
         </div>
       </div>

@@ -380,7 +380,7 @@ export default function Home() {
             {/* Logo */}
             <div className="flex flex-col">
               <Link href="/" className="hover:opacity-90 transition-opacity">
-                <Logo size="md" taglineText={t.header.logoTagline} />
+                <Logo size="md" taglineText={t.header.logoTagline} siteName={t.header.siteName !== "VietnamVisaHelp.com" ? t.header.siteName : undefined} />
               </Link>
               {/* Mobile contact info below logo */}
               <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -402,7 +402,7 @@ export default function Home() {
                 className="hidden sm:flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white rounded-lg transition-all hover:opacity-90"
                 style={{ backgroundColor: '#2d7ef6' }}
               >
-                About Us
+                {t.header.aboutUs}
               </Link>
               {/* WhatsApp Button - Green */}
               <a

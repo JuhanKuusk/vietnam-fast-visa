@@ -38,7 +38,7 @@ const COUNTRY_TO_LANGUAGE: Record<string, SupportedLanguage> = {
   // All other countries default to English (handled in code)
 };
 
-// Helper to get domain from cookie
+// Helper to get domain from cookie with retry
 function getDomainFromCookie(): string {
   if (typeof document === "undefined") return "vietnamvisahelp.com";
   const cookies = document.cookie.split(";");
@@ -46,6 +46,13 @@ function getDomainFromCookie(): string {
     const [name, value] = cookie.trim().split("=");
     if (name === "site-domain" && value) {
       return value;
+    }
+  }
+  // Also check hostname directly as fallback
+  if (typeof window !== "undefined") {
+    const hostname = window.location.hostname.replace(/^www\./, "").toLowerCase();
+    if (hostname !== "localhost" && !hostname.includes("127.0.0.1")) {
+      return hostname;
     }
   }
   return "vietnamvisahelp.com";
@@ -75,7 +82,7 @@ const staticTranslations: Record<SupportedLanguage, TranslationsType> = {
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<SupportedLanguage>("EN");
   const [t, setT] = useState<TranslationsType>(defaultTranslations);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start with loading=true until initial language is determined
   const initialLoadDone = useRef(false);
 
   // Load translations from static files (instant, no API call)
@@ -111,20 +118,21 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     initialLoadDone.current = true;
 
     if (typeof window !== "undefined") {
-      // First, check site config for default language
+      // Get domain from cookie or directly from hostname (more reliable)
       const domain = getDomainFromCookie();
       const siteConfig = getSiteConfig(domain);
       const siteDefaultLanguage = siteConfig.behavior.defaultLanguage;
       const forceLanguage = siteConfig.behavior.forceLanguageForCountries;
 
-      const savedLang = localStorage.getItem("language") as SupportedLanguage;
-
-      // If site forces language (e.g., India site), use site's default
+      // If site forces language (e.g., India site, China site), use site's default
+      // This takes priority over everything else including saved language
       if (forceLanguage && siteDefaultLanguage !== "EN") {
         setLanguageState(siteDefaultLanguage);
         loadTranslations(siteDefaultLanguage);
         return;
       }
+
+      const savedLang = localStorage.getItem("language") as SupportedLanguage;
 
       // If user has explicitly set a language before, use that
       if (savedLang && LANGUAGES[savedLang]) {

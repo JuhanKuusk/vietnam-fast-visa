@@ -1,0 +1,13 @@
+{
+  "name": "Vietnam Visa Instagram Ads Generator",
+  "id": "vietnam-visa-instagram-ads",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  }
+}

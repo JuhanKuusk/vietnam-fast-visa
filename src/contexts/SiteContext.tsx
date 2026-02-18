@@ -12,6 +12,7 @@ import {
   Testimonial,
   TrustBadge,
   INDIAN_PAYMENT_METHODS,
+  CHINESE_PAYMENT_METHODS,
 } from "@/lib/site-config";
 
 // =============================================================================
@@ -32,6 +33,7 @@ interface SiteContextType {
   layout: SiteConfig["layout"];
   isIndiaSite: boolean;
   isUrgentSite: boolean;
+  isChinaSite: boolean;
 
   // Content helpers
   content: SiteConfig["content"];
@@ -42,6 +44,7 @@ interface SiteContextType {
   testimonials: Testimonial[];
   trustBadges: TrustBadge[];
   indianPaymentMethods: typeof INDIAN_PAYMENT_METHODS;
+  chinesePaymentMethods: typeof CHINESE_PAYMENT_METHODS;
 
   // Utilities
   formatSitePrice: (usdAmount: number) => string;
@@ -120,6 +123,7 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
       layout: siteConfig.layout,
       isIndiaSite: siteConfig.id === "vietnamvisaurgent-india",
       isUrgentSite: siteConfig.id.includes("urgent"),
+      isChinaSite: siteConfig.id === "yueqian-china",
 
       // Content
       content: siteConfig.content,
@@ -130,6 +134,7 @@ export function SiteProvider({ children }: { children: React.ReactNode }) {
       testimonials,
       trustBadges,
       indianPaymentMethods: INDIAN_PAYMENT_METHODS,
+      chinesePaymentMethods: CHINESE_PAYMENT_METHODS,
 
       // Utilities
       formatSitePrice: (usdAmount: number) => formatPrice(usdAmount, siteConfig),

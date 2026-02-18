@@ -34,6 +34,8 @@ interface FlightCheckBoxProps {
   connectingFlightToVietnamText?: string;
   connectionFlightPlaceholder?: string;
   connectionFlightHintText?: string;
+  /** Language code for locale-specific formatting */
+  language?: string;
 }
 
 export function FlightCheckBox({
@@ -54,7 +56,17 @@ export function FlightCheckBox({
   connectingFlightToVietnamText = "Connecting Flight to Vietnam",
   connectionFlightPlaceholder = "e.g. EY834 (Abu Dhabi to Ho Chi Minh)",
   connectionFlightHintText = "Enter your flight that arrives in Vietnam - this is used for your visa entry date",
+  language = "EN",
 }: FlightCheckBoxProps) {
+  // Chinese date formatting helper
+  const formatChineseDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  };
+
+  // Check if date is selected (required before flight number)
+  const isDateSelected = flightDate && flightDate.length > 0;
   const [hasConnection, setHasConnection] = useState(initialHasConnection);
   const [connectionFlightNumber, setConnectionFlightNumber] = useState(initialConnectionFlightNumber);
 
@@ -128,22 +140,69 @@ export function FlightCheckBox({
           </label>
         )}
         <div className="flex gap-2">
+          {/* Date input - FIRST, highlighted when empty */}
+          <div className="relative">
+            {language === 'ZH' ? (
+              /* Chinese: Show formatted date with clickable overlay */
+              <>
+                <input
+                  type="date"
+                  value={flightDate}
+                  onChange={(e) => onFlightDateChange(e.target.value)}
+                  min={new Date().toISOString().split("T")[0]}
+                  required
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                />
+                <div
+                  className={`w-36 sm:w-44 px-2 sm:px-3 py-3 rounded-lg border text-gray-900 dark:text-white text-sm sm:text-base transition-all cursor-pointer ${
+                    !isDateSelected
+                      ? 'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-400 dark:border-yellow-500 ring-2 ring-yellow-300 dark:ring-yellow-600 animate-pulse'
+                      : 'bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+                  }`}
+                >
+                  {flightDate ? formatChineseDate(flightDate) : '选择日期'}
+                </div>
+              </>
+            ) : (
+              /* Non-Chinese: Standard date input */
+              <input
+                type="date"
+                value={flightDate}
+                onChange={(e) => onFlightDateChange(e.target.value)}
+                min={new Date().toISOString().split("T")[0]}
+                required
+                className={`w-32 sm:w-40 px-2 sm:px-3 py-3 rounded-lg border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all ${
+                  !isDateSelected
+                    ? 'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-400 dark:border-yellow-500 ring-2 ring-yellow-300 dark:ring-yellow-600 animate-pulse'
+                    : 'bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+                }`}
+              />
+            )}
+            {!isDateSelected && (
+              <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold z-20">
+                !
+              </div>
+            )}
+          </div>
+          {/* Flight number input - disabled until date selected */}
           <input
             type="text"
             value={flightNumber}
             onChange={(e) => onFlightNumberChange(e.target.value.toUpperCase())}
-            placeholder={placeholder}
-            className="flex-1 min-w-0 px-2 sm:px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
-          />
-          <input
-            type="date"
-            value={flightDate}
-            onChange={(e) => onFlightDateChange(e.target.value)}
-            min={new Date().toISOString().split("T")[0]}
-            required
-            className="w-28 sm:w-36 px-2 sm:px-3 py-3 rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+            placeholder={isDateSelected ? placeholder : (language === 'ZH' ? '请先选择日期' : 'Select date first')}
+            disabled={!isDateSelected}
+            className={`flex-1 min-w-0 px-2 sm:px-4 py-3 rounded-lg border text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all ${
+              !isDateSelected
+                ? 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 cursor-not-allowed opacity-60'
+                : 'bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+            }`}
           />
         </div>
+        {!isDateSelected && (
+          <p className="mt-1 text-xs text-yellow-600 dark:text-yellow-400 font-medium">
+            {language === 'ZH' ? '⚠️ 请先选择航班日期' : '⚠️ Please select flight date first'}
+          </p>
+        )}
       </div>
 
       {/* Connection Flight Checkbox */}
@@ -215,6 +274,7 @@ export function FlightCheckBox({
                 flightNumber={connectionFlightNumber}
                 date={flightDate}
                 onFlightData={handleConnectionFlightData}
+                language={language}
               />
             </div>
           )}
@@ -225,12 +285,13 @@ export function FlightCheckBox({
       {flightNumber && flightNumber.length >= 3 && (
         <div className={hasConnection ? "opacity-70" : ""}>
           {hasConnection && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">First leg of your journey:</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{language === 'ZH' ? '您旅程的第一段航程：' : 'First leg of your journey:'}</p>
           )}
           <FlightInfo
             flightNumber={flightNumber}
             date={flightDate}
             onFlightData={handleMainFlightData}
+            language={language}
           />
         </div>
       )}

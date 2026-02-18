@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "app_backup"]
+  "exclude": ["node_modules", "app_backup", "app_backup_chinese_changes", "app_backup_moved", "figma-plugin", "examples", "google-ads-editor", "_bmad*"]
 }

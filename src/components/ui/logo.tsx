@@ -6,9 +6,10 @@ interface LogoProps {
   className?: string;
   variant?: "light" | "dark"; // light = white text (for dark bg), dark = black text (for light bg)
   taglineText?: string; // Allow passing translated tagline
+  siteName?: string; // Custom site name (for multi-domain support)
 }
 
-export function Logo({ size = "md", showTagline = true, className = "", variant = "dark", taglineText = "Urgent Visa Processing" }: LogoProps) {
+export function Logo({ size = "md", showTagline = true, className = "", variant = "dark", taglineText = "Urgent Visa Processing", siteName }: LogoProps) {
   // Sizes - text increased by 25%
   const sizes = {
     sm: { icon: 45, text: "text-base", tagline: "text-[11px]" },     // text: sm -> base (+25%)
@@ -62,13 +63,19 @@ export function Logo({ size = "md", showTagline = true, className = "", variant 
         </svg>
       </div>
 
-      {/* Text - VietnamVisaHelp in blue with underlines */}
+      {/* Text - Site name in blue with underlines */}
       <div className="flex flex-col">
-        <span className={`${text} font-bold leading-tight`} style={{ color: '#2d7ef6' }}>
-          <span className="border-b border-black">Vietnam</span>
-          <span className="border-b border-black">Visa</span>
-          <span className="border-b border-black">Help</span>
-        </span>
+        {siteName ? (
+          <span className={`${text} font-bold leading-tight`} style={{ color: '#2d7ef6' }}>
+            {siteName}
+          </span>
+        ) : (
+          <span className={`${text} font-bold leading-tight`} style={{ color: '#2d7ef6' }}>
+            <span className="border-b border-black">Vietnam</span>
+            <span className="border-b border-black">Visa</span>
+            <span className="border-b border-black">Help</span>
+          </span>
+        )}
         {showTagline && (
           <span className={`${tagline} tracking-wide font-medium`} style={{ color: '#2d7ef6' }}>
             {taglineText}

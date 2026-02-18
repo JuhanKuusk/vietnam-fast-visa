@@ -64,11 +64,6 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
 
       setSubmitSuccess(true);
       setInquiryNumber(data.inquiryNumber);
-
-      // Redirect to affiliate URL after 3 seconds
-      setTimeout(() => {
-        window.open(tour.affiliateUrl, "_blank");
-      }, 3000);
     } catch (error) {
       setSubmitError(
         error instanceof Error ? error.message : "Something went wrong"
@@ -106,11 +101,14 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             <strong className="text-lg text-cyan-600">{inquiryNumber}</strong>
           </p>
           <p className="text-sm text-gray-600 mb-4">
-            We&apos;ve received your inquiry and will contact you within 24 hours.
+            We&apos;ve received your inquiry and will contact you within 24 hours to confirm your booking.
           </p>
-          <p className="text-sm text-gray-500">
-            Redirecting you to complete your booking...
-          </p>
+          <a
+            href="/tours"
+            className="inline-block text-cyan-600 hover:text-cyan-700 font-medium text-sm"
+          >
+            Browse more tours
+          </a>
         </div>
       </div>
     );

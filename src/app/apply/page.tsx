@@ -1253,6 +1253,16 @@ function ApplyForm() {
   // If we have both flight and flight1, user had a connecting flight
   const hasConnectionFromUrl = !!(initialFlight && initialFlight1 && initialFlight !== initialFlight1);
 
+  // Chinese date formatting helpers
+  const chineseMonths = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+  const chineseWeekdays = ['日', '一', '二', '三', '四', '五', '六'];
+
+  const formatChineseDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  };
+
   // Memoize date values to prevent hydration mismatch (server vs client Date() differences)
   // These are calculated once on client mount to ensure consistency
   const [todayDate, setTodayDate] = useState("");
@@ -1599,7 +1609,7 @@ function ApplyForm() {
         return;
       }
       if (!agreedToTerms || !agreedToPrivacy) {
-        setSubmitError("Please agree to the Terms & Conditions, Refund Policy, and Privacy Policy");
+        setSubmitError(t.applyForm.pleaseAgreeToTerms || "Please agree to the Terms & Conditions, Refund Policy, and Privacy Policy");
         setIsSubmitting(false);
         return;
       }
@@ -1793,10 +1803,10 @@ function ApplyForm() {
       <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         <div className="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
           <a href="/" className="hidden sm:flex items-center gap-3">
-            <Logo size="md" taglineText={t.header?.logoTagline || t.applyHeader?.tagline || "Check-in Approval in 30 min"} />
+            <Logo size="md" taglineText={t.header?.logoTagline || t.applyHeader?.tagline || "Check-in Approval in 30 min"} siteName={t.header?.siteName !== "VietnamVisaHelp.com" ? t.header?.siteName : undefined} />
           </a>
           <a href="/" className="sm:hidden text-lg font-bold" style={{ color: '#c41e3a' }}>
-            VietnamVisaHelp
+            {t.header?.siteName || "VietnamVisaHelp"}
           </a>
           <div className="flex items-center gap-1 sm:gap-3">
             {/* About Us Button - Blue */}
@@ -1805,7 +1815,7 @@ function ApplyForm() {
               className="px-2 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-white transition-colors hover:opacity-90"
               style={{ backgroundColor: '#2d7ef6' }}
             >
-              About Us
+              {t.header?.aboutUs || "About Us"}
             </a>
             {/* WhatsApp Button - Green */}
             <a
@@ -1839,7 +1849,7 @@ function ApplyForm() {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-bold">${pricePerPerson}</div>
+              <div className="text-3xl font-bold">{formatSitePrice(pricePerPerson)}</div>
               <div className="text-blue-200 text-sm">{t.travelDetails?.perPerson || "per person"}</div>
             </div>
           </div>
@@ -1905,6 +1915,7 @@ function ApplyForm() {
             connectingFlightToVietnamText={t.flightCheckBox?.connectingFlightToVietnam}
             connectionFlightPlaceholder={t.flightCheckBox?.connectionFlightPlaceholder}
             connectionFlightHintText={t.flightCheckBox?.connectionFlightHint}
+            language={language}
           />
           {/* Auto-fill success notification */}
           {autoFilledMessage && (
@@ -1977,6 +1988,79 @@ function ApplyForm() {
               <span className="text-sm font-medium text-gray-500 dark:text-gray-400 hidden sm:inline">{t.progress.payment}</span>
             </div>
           </div>
+        </div>
+
+        {/* AI Features Banner */}
+        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-xl shadow-lg p-6 mb-6">
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            {t.aiFeatures?.title || "🤖 Smart Fast System"}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3">
+              <svg className="w-6 h-6 text-green-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-white text-sm">{t.aiFeatures?.passport || "Auto passport recognition (no manual entry)"}</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3">
+              <svg className="w-6 h-6 text-green-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-white text-sm">{t.aiFeatures?.photo || "Auto-generate compliant visa photo"}</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3">
+              <svg className="w-6 h-6 text-green-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-white text-sm">{t.aiFeatures?.flight || "Auto-match flight information"}</span>
+            </div>
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3">
+              <svg className="w-6 h-6 text-green-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-white text-sm">{t.aiFeatures?.review || "Real-time review system"}</span>
+            </div>
+          </div>
+
+          {/* Payment Methods - Show prominently for Chinese site */}
+          {language === 'ZH' && (
+            <div className="mt-5 pt-5 border-t border-white/20">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <span className="text-lg font-bold text-yellow-300">💳 支持支付宝支付</span>
+                <div className="flex items-center gap-3">
+                  {/* Alipay Logo */}
+                  <div className="bg-white rounded-lg px-3 py-2 flex items-center gap-2">
+                    <svg className="h-6 w-auto" viewBox="0 0 120 40" fill="none">
+                      <rect width="120" height="40" rx="4" fill="#1677FF"/>
+                      <text x="60" y="26" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">支付宝</text>
+                    </svg>
+                  </div>
+                  {/* WeChat Pay Logo */}
+                  <div className="bg-white rounded-lg px-3 py-2 flex items-center gap-2">
+                    <svg className="h-6 w-auto" viewBox="0 0 120 40" fill="none">
+                      <rect width="120" height="40" rx="4" fill="#07C160"/>
+                      <text x="60" y="26" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">微信支付</text>
+                    </svg>
+                  </div>
+                  {/* Visa Logo */}
+                  <div className="bg-white rounded-lg px-3 py-2">
+                    <svg className="h-6 w-auto" viewBox="0 0 80 26" fill="none">
+                      <rect width="80" height="26" rx="3" fill="#1A1F71"/>
+                      <text x="40" y="18" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold" fontStyle="italic">VISA</text>
+                    </svg>
+                  </div>
+                  {/* Mastercard Logo */}
+                  <div className="bg-white rounded-lg px-3 py-2">
+                    <svg className="h-6 w-auto" viewBox="0 0 60 26" fill="none">
+                      <circle cx="20" cy="13" r="10" fill="#EB001B"/>
+                      <circle cx="40" cy="13" r="10" fill="#F79E1B"/>
+                      <path d="M30 6a10 10 0 000 14 10 10 0 000-14z" fill="#FF5F00"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Travel Details Card */}
@@ -2184,13 +2268,28 @@ function ApplyForm() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.entryDate || "Intended Date of Entry"} <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="date"
-                  value={travelDetails.entryDate}
-                  onChange={(e) => setTravelDetails({ ...travelDetails, entryDate: e.target.value })}
-                  min={todayDate}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
+                {language === 'ZH' ? (
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={travelDetails.entryDate}
+                      onChange={(e) => setTravelDetails({ ...travelDetails, entryDate: e.target.value })}
+                      min={todayDate}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                    />
+                    <div className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer">
+                      {travelDetails.entryDate ? formatChineseDate(travelDetails.entryDate) : '选择入境日期'}
+                    </div>
+                  </div>
+                ) : (
+                  <input
+                    type="date"
+                    value={travelDetails.entryDate}
+                    onChange={(e) => setTravelDetails({ ...travelDetails, entryDate: e.target.value })}
+                    min={todayDate}
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  />
+                )}
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {t.travelDetails?.entryDateHint || "You must enter Vietnam on or after this date"}
                 </p>
@@ -2201,16 +2300,31 @@ function ApplyForm() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.travelDetails?.exitDate || "Intended Date of Exit"} <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="date"
-                  value={travelDetails.exitDate}
-                  onChange={(e) => setTravelDetails({ ...travelDetails, exitDate: e.target.value })}
-                  min={travelDetails.entryDate || todayDate}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
+                {language === 'ZH' ? (
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={travelDetails.exitDate}
+                      onChange={(e) => setTravelDetails({ ...travelDetails, exitDate: e.target.value })}
+                      min={travelDetails.entryDate || todayDate}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                    />
+                    <div className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer">
+                      {travelDetails.exitDate ? formatChineseDate(travelDetails.exitDate) : '选择出境日期'}
+                    </div>
+                  </div>
+                ) : (
+                  <input
+                    type="date"
+                    value={travelDetails.exitDate}
+                    onChange={(e) => setTravelDetails({ ...travelDetails, exitDate: e.target.value })}
+                    min={travelDetails.entryDate || todayDate}
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  />
+                )}
                 {lengthOfStay > 0 && (
                   <p className="text-xs text-blue-600 mt-1 font-medium">
-                    {t.travelDetails?.lengthOfStay || "Length of Stay"}: {lengthOfStay} {t.travelDetails?.days || "days"}
+                    {t.travelDetails?.lengthOfStay || "Length of Stay"}: {lengthOfStay} {language === 'ZH' ? '天' : (t.travelDetails?.days || "days")}
                   </p>
                 )}
               </div>
@@ -2558,13 +2672,28 @@ function ApplyForm() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.applyForm.dateOfBirth} <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="date"
-                  value={currentData.dateOfBirth}
-                  onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
-                  max={todayDate}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
+                {language === 'ZH' ? (
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={currentData.dateOfBirth}
+                      onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
+                      max={todayDate}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                    />
+                    <div className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer">
+                      {currentData.dateOfBirth ? formatChineseDate(currentData.dateOfBirth) : '选择出生日期'}
+                    </div>
+                  </div>
+                ) : (
+                  <input
+                    type="date"
+                    value={currentData.dateOfBirth}
+                    onChange={(e) => updateApplicant("dateOfBirth", e.target.value)}
+                    max={todayDate}
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  />
+                )}
               </div>
 
               {/* Religion */}
@@ -2588,13 +2717,13 @@ function ApplyForm() {
               {/* Place of Birth */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Place of birth <span className="text-red-500">*</span>
+                  {t.applyForm.placeOfBirth || "Place of birth"} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.placeOfBirth}
                   onChange={(e) => updateApplicant("placeOfBirth", e.target.value)}
-                  placeholder="Enter place of birth"
+                  placeholder={t.applyForm.placeOfBirthPlaceholder || "Enter place of birth"}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2621,7 +2750,7 @@ function ApplyForm() {
               {/* Passport Number */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Passport <span className="text-red-500">*</span>
+                  {t.applyForm.passportNumber} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -2635,14 +2764,14 @@ function ApplyForm() {
               {/* Issuing Authority/Place of Issue */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Issuing Authority/Place of issue
+                  {t.applyForm.issuingAuthority || "Issuing Authority/Place of issue"}
                 </label>
                 <select
                   value={currentData.issuingAuthority}
                   onChange={(e) => updateApplicant("issuingAuthority", e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
-                  <option value="">Select country...</option>
+                  <option value="">{t.applyForm.selectCountry || "Select country..."}</option>
                   {ALL_COUNTRIES.map((country) => (
                     <option key={country.code} value={country.code}>{country.name}</option>
                   ))}
@@ -2652,31 +2781,47 @@ function ApplyForm() {
               {/* Passport Type */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Type <span className="text-red-500">*</span>
+                  {t.applyForm.passportType || "Type"} <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={currentData.passportType}
                   onChange={(e) => updateApplicant("passportType", e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 >
-                  {PASSPORT_TYPES.map((type) => (
-                    <option key={type.code} value={type.code}>{type.name}</option>
-                  ))}
+                  <option value="ordinary">{t.applyForm.ordinaryPassport || "Ordinary passport"}</option>
+                  <option value="diplomatic">{t.applyForm.diplomaticPassport || "Diplomatic passport"}</option>
+                  <option value="official">{t.applyForm.officialPassport || "Official passport"}</option>
+                  <option value="other">{t.applyForm.otherPassport || "Other"}</option>
                 </select>
               </div>
 
               {/* Date of Issue */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Date of issue
+                  {t.applyForm.dateOfIssue || "Date of issue"}
                 </label>
-                <input
-                  type="date"
-                  value={currentData.dateOfIssue}
-                  onChange={(e) => updateApplicant("dateOfIssue", e.target.value)}
-                  max={todayDate}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
+                {language === 'ZH' ? (
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={currentData.dateOfIssue}
+                      onChange={(e) => updateApplicant("dateOfIssue", e.target.value)}
+                      max={todayDate}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                    />
+                    <div className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer">
+                      {currentData.dateOfIssue ? formatChineseDate(currentData.dateOfIssue) : '选择签发日期'}
+                    </div>
+                  </div>
+                ) : (
+                  <input
+                    type="date"
+                    value={currentData.dateOfIssue}
+                    onChange={(e) => updateApplicant("dateOfIssue", e.target.value)}
+                    max={todayDate}
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  />
+                )}
               </div>
 
               {/* Passport Expiry */}
@@ -2684,13 +2829,28 @@ function ApplyForm() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.applyForm.passportExpiry} <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="date"
-                  value={currentData.passportExpiry}
-                  onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
-                  min={minPassportExpiryDate}
-                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-                />
+                {language === 'ZH' ? (
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={currentData.passportExpiry}
+                      onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
+                      min={minPassportExpiryDate}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                    />
+                    <div className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer">
+                      {currentData.passportExpiry ? formatChineseDate(currentData.passportExpiry) : '选择护照有效期'}
+                    </div>
+                  </div>
+                ) : (
+                  <input
+                    type="date"
+                    value={currentData.passportExpiry}
+                    onChange={(e) => updateApplicant("passportExpiry", e.target.value)}
+                    min={minPassportExpiryDate}
+                    className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                  />
+                )}
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {t.applyForm.passportExpiryHint}
                 </p>
@@ -2698,19 +2858,19 @@ function ApplyForm() {
 
               {/* Contact Information Section */}
               <div className="lg:col-span-2 border-t border-gray-200 dark:border-gray-700 pt-6 mt-2">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.applyForm.contactInformationTitle || "Contact Information"}</h3>
               </div>
 
               {/* Permanent Residential Address */}
               <div className="lg:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Permanent residential address <span className="text-red-500">*</span>
+                  {t.applyForm.permanentAddress || "Permanent residential address"} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.permanentAddress}
                   onChange={(e) => updateApplicant("permanentAddress", e.target.value)}
-                  placeholder="Enter permanent residential address"
+                  placeholder={t.applyForm.permanentAddressPlaceholder || "Enter permanent residential address"}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2718,7 +2878,7 @@ function ApplyForm() {
               {/* Contact Address */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Contact address <span className="text-red-500">*</span>
+                  {t.applyForm.contactAddress || "Contact address"} <span className="text-red-500">*</span>
                 </label>
                 <label className="flex items-center gap-2 mb-2 cursor-pointer">
                   <input
@@ -2733,13 +2893,13 @@ function ApplyForm() {
                     }}
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Same as permanent residential address</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{t.applyForm.sameAsPermanentAddress || "Same as permanent residential address"}</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.contactAddressSameAsPermanent ? currentData.permanentAddress : currentData.contactAddress}
                   onChange={(e) => updateApplicant("contactAddress", e.target.value)}
-                  placeholder="Enter contact address"
+                  placeholder={t.applyForm.contactAddressPlaceholder || "Enter contact address"}
                   disabled={currentData.contactAddressSameAsPermanent}
                   className={`w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${currentData.contactAddressSameAsPermanent ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : ''}`}
                 />
@@ -2748,13 +2908,13 @@ function ApplyForm() {
               {/* Telephone Number */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Telephone number <span className="text-red-500">*</span>
+                  {t.applyForm.telephoneNumber || "Telephone number"} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="tel"
                   value={currentData.telephoneNumber}
                   onChange={(e) => updateApplicant("telephoneNumber", e.target.value)}
-                  placeholder="Enter telephone number"
+                  placeholder={t.applyForm.telephoneNumberPlaceholder || "Enter telephone number"}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2767,13 +2927,13 @@ function ApplyForm() {
               {/* Emergency Contact Full Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Full name <span className="text-red-500">*</span>
+                  {t.applyForm.emergencyFullName || "Full name"} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.emergencyFullName}
                   onChange={(e) => updateApplicant("emergencyFullName", e.target.value)}
-                  placeholder="Enter name"
+                  placeholder={t.applyForm.emergencyFullNamePlaceholder || "Enter name"}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2781,13 +2941,13 @@ function ApplyForm() {
               {/* Emergency Contact Address */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Current residential address <span className="text-red-500">*</span>
+                  {t.applyForm.emergencyAddress || "Current residential address"} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.emergencyAddress}
                   onChange={(e) => updateApplicant("emergencyAddress", e.target.value)}
-                  placeholder="Enter current residential address"
+                  placeholder={t.applyForm.emergencyAddressPlaceholder || "Enter current residential address"}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2795,13 +2955,13 @@ function ApplyForm() {
               {/* Emergency Contact Phone */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Telephone number <span className="text-red-500">*</span>
+                  {t.applyForm.emergencyPhone || "Telephone number"} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="tel"
                   value={currentData.emergencyPhone}
                   onChange={(e) => updateApplicant("emergencyPhone", e.target.value)}
-                  placeholder="Enter telephone number"
+                  placeholder={t.applyForm.emergencyPhonePlaceholder || "Enter telephone number"}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2809,13 +2969,13 @@ function ApplyForm() {
               {/* Emergency Contact Relationship */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Relationship <span className="text-red-500">*</span>
+                  {t.applyForm.emergencyRelationship || "Relationship"} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={currentData.emergencyRelationship}
                   onChange={(e) => updateApplicant("emergencyRelationship", e.target.value)}
-                  placeholder="Enter relationship"
+                  placeholder={t.applyForm.emergencyRelationshipPlaceholder || "Enter relationship"}
                   className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white dark:text-white text-base placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
               </div>
@@ -2933,15 +3093,15 @@ function ApplyForm() {
                         </svg>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 dark:text-white mb-1">Verify Your Phone Number (Optional)</h4>
+                        <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{t.applyForm.verifyPhoneOptional || "Verify Your Phone Number (Optional)"}</h4>
                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                          Verify your phone number to receive urgent visa updates via SMS or WhatsApp. You can skip this step and proceed to payment.
+                          {t.applyForm.verifyPhoneOptionalDesc || "Verify your phone number to receive urgent visa updates via SMS or WhatsApp. You can skip this step and proceed to payment."}
                         </p>
                         <button
                           onClick={() => setShowVerification(true)}
                           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
                         >
-                          Verify Phone Number
+                          {t.applyForm.verifyNow || "Verify Phone Number"}
                         </button>
                       </div>
                     </div>
@@ -2972,9 +3132,9 @@ function ApplyForm() {
                         </svg>
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-green-900 dark:text-green-100">Phone Number Verified ✓</h4>
+                        <h4 className="font-semibold text-green-900 dark:text-green-100">{t.applyForm.phoneVerifiedTitle || "Phone Number Verified ✓"}</h4>
                         <p className="text-sm text-green-700 dark:text-green-300">
-                          {phoneForVerification} is verified. We'll send urgent updates to this number.
+                          {(t.applyForm.phoneVerifiedDesc || "{phoneNumber} is verified. We'll send urgent updates to this number.").replace("{phoneNumber}", phoneForVerification)}
                         </p>
                       </div>
                     </div>
@@ -3012,43 +3172,43 @@ function ApplyForm() {
                     {/* Scrollable Terms & Conditions Preview Box - ~5cm height with right scrollbar */}
                     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                       <div className="bg-gray-100 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600">
-                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Terms & Conditions</h4>
+                        <h4 className="text-sm font-semibold text-gray-900 dark:text-white">{t.applyForm.termsConditionsTitle || "Terms & Conditions"}</h4>
                       </div>
                       <div className="h-[200px] overflow-y-scroll p-4 text-xs text-gray-600 dark:text-gray-400 leading-relaxed scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">1. Definitions</p>
-                        <p className="mb-3">&quot;Provider&quot; - VietnamVisaHelp.com is an e-commercial or non-government website. &quot;Client&quot; - An individual or company who conducts payment of the Sales Order/Booking. &quot;Terms and Conditions&quot; - An agreement between The Client and The Provider governing the rights, obligations, and responsibilities of both parties.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview1Title || "1. Definitions"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview1Content || "\"Provider\" - VietnamVisaHelp.com is an e-commercial or non-government website. \"Client\" - An individual or company who conducts payment of the Sales Order/Booking. \"Terms and Conditions\" - An agreement between The Client and The Provider governing the rights, obligations, and responsibilities of both parties."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">2. Acceptance of Terms</p>
-                        <p className="mb-3">By using our Website and Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. You understand that VietnamVisaHelp.com is an independent visa assistance service and is NOT affiliated with the Vietnamese Government or any governmental body. You agree not to use the website for illegal purposes and to respect all applicable laws.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview2Title || "2. Acceptance of Terms"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview2Content || "By using our Website and Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. You understand that VietnamVisaHelp.com is an independent visa assistance service and is NOT affiliated with the Vietnamese Government or any governmental body. You agree not to use the website for illegal purposes and to respect all applicable laws."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">3. Nature of Our Service</p>
-                        <p className="mb-3">VietnamVisaHelp.com provides professional visa application assistance services including document review and verification, application form preparation and submission, 24/7 customer support, application status tracking, and express processing options. We do not issue visas. All visa decisions are made solely by the Vietnam Immigration Department.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview3Title || "3. Nature of Our Service"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview3Content || "VietnamVisaHelp.com provides professional visa application assistance services including document review and verification, application form preparation and submission, 24/7 customer support, application status tracking, and express processing options. We do not issue visas. All visa decisions are made solely by the Vietnam Immigration Department."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">4. Processing Times</p>
-                        <p className="mb-3">We offer various processing speeds: Emergency (15-30 min with Check-In Approval), Urgent (1 hour), Express (4 hours), Express (1 day), Express (2 days), and Standard (2-3 business days). Processing times are estimates and actual delivery depends on the Vietnam Immigration Department.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview4Title || "4. Processing Times"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview4Content || "We offer various processing speeds: Emergency (15-30 min with Check-In Approval), Urgent (1 hour), Express (4 hours), Express (1 day), Express (2 days), and Standard (2-3 business days). Processing times are estimates and actual delivery depends on the Vietnam Immigration Department."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">5. Fees and Payment</p>
-                        <p className="mb-3">Our fees consist of: Government Fee ($25 USD single entry, $50 USD multiple entry - non-refundable once submitted) and Service Fee (varies by processing speed from $24 to $224). Total prices: Standard $49, Express 2-day $79, Express 1-day $99, Express 4-hour $119, Urgent 1-hour $159, Emergency $199, Weekend/Holiday $249.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview5Title || "5. Fees and Payment"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview5Content || "Our fees consist of: Government Fee ($25 USD single entry, $50 USD multiple entry - non-refundable once submitted) and Service Fee (varies by processing speed from $24 to $224). Total prices: Standard $49, Express 2-day $79, Express 1-day $99, Express 4-hour $119, Urgent 1-hour $159, Emergency $199, Weekend/Holiday $249."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">6. Refund Policy</p>
-                        <p className="mb-3">Full refund: Available if you cancel before we submit your application. Partial refund (service fee only): When you cancel after submission but before approval. No refund: Once visa is approved, visa denial due to your error, change of travel plans, or delays by authorities. If visa is denied by Vietnam Immigration: We refund 50% of service fee.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview6Title || "6. Refund Policy"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview6Content || "Full refund: Available if you cancel before we submit your application. Partial refund (service fee only): When you cancel after submission but before approval. No refund: Once visa is approved, visa denial due to your error, change of travel plans, or delays by authorities. If visa is denied by Vietnam Immigration: We refund 50% of service fee."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">7. Warnings and Disclaimers</p>
-                        <p className="mb-3">VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) for $25 USD with 3 business day processing. Visa approval is at the sole discretion of Vietnamese immigration authorities. Non-refundable fares or reservations must not be purchased until all visas have been obtained.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview7Title || "7. Warnings and Disclaimers"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview7Content || "VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) for $25 USD with 3 business day processing. Visa approval is at the sole discretion of Vietnamese immigration authorities. Non-refundable fares or reservations must not be purchased until all visas have been obtained."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">8. Limitation of Liability</p>
-                        <p className="mb-3">We are not responsible for: visa refusals or delays by the Vietnam Immigration Department, entry denial at Vietnamese borders, travel disruptions or missed flights, changes in Vietnamese visa policies, consequences of incorrect information provided by you, incomplete documentation, or technical issues beyond our control. Our total liability shall not exceed the amount you paid for our services.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview8Title || "8. Limitation of Liability"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview8Content || "We are not responsible for: visa refusals or delays by the Vietnam Immigration Department, entry denial at Vietnamese borders, travel disruptions or missed flights, changes in Vietnamese visa policies, consequences of incorrect information provided by you, incomplete documentation, or technical issues beyond our control. Our total liability shall not exceed the amount you paid for our services."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">9. Privacy and Data Protection</p>
-                        <p className="mb-3">Your personal information is collected only for visa application processing purposes, stored securely, shared only with the Vietnam Immigration Department as required, and never sold to third parties. Your data is deleted 30 days after services are completed.</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview9Title || "9. Privacy and Data Protection"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview9Content || "Your personal information is collected only for visa application processing purposes, stored securely, shared only with the Vietnam Immigration Department as required, and never sold to third parties. Your data is deleted 30 days after services are completed."}</p>
 
-                        <p className="font-semibold text-gray-900 dark:text-white mb-2">10. Contact Information</p>
-                        <p className="mb-3">Email: support@vietnamvisahelp.com | WhatsApp: +84 70 5549868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam</p>
+                        <p className="font-semibold text-gray-900 dark:text-white mb-2">{t.applyForm.termsPreview10Title || "10. Contact Information"}</p>
+                        <p className="mb-3">{t.applyForm.termsPreview10Content || "Email: support@vietnamvisahelp.com | WhatsApp: +84 70 5549868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam"}</p>
 
                         <div className="flex gap-4 mt-4 pt-3 border-t border-gray-200 dark:border-gray-600">
-                          <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">Full Terms →</a>
-                          <a href="/refund" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">Refund Policy →</a>
-                          <a href="/privacy" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">Privacy Policy →</a>
+                          <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">{t.applyForm.fullTermsLink || "Full Terms →"}</a>
+                          <a href="/refund" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">{t.applyForm.refundPolicyLink || "Refund Policy →"}</a>
+                          <a href="/privacy" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">{t.applyForm.privacyPolicyLinkArrow || "Privacy Policy →"}</a>
                         </div>
                       </div>
                     </div>
@@ -3063,7 +3223,7 @@ function ApplyForm() {
                           className="w-5 h-5 mt-0.5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 flex-shrink-0"
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
-                          I confirm that the above information is correct
+                          {t.applyForm.confirmInfoCorrect || "I confirm that the above information is correct"}
                         </span>
                       </label>
                       <label className="flex items-start gap-3 cursor-pointer">
@@ -3077,17 +3237,17 @@ function ApplyForm() {
                           className="w-5 h-5 mt-0.5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 flex-shrink-0"
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
-                          I have read and agree to the{" "}
+                          {t.applyForm.agreeToTermsPrefix || "I have read and agree to the"}{" "}
                           <a href="/terms" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                            Terms & Conditions
+                            {t.applyForm.termsAndConditions || "Terms & Conditions"}
                           </a>
                           ,{" "}
                           <a href="/refund" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                            Cancellation and Refund Policy
+                            {t.applyForm.cancellationPolicy || "Cancellation and Refund Policy"}
                           </a>
-                          , and{" "}
+                          {t.applyForm.andText || ", and"}{" "}
                           <a href="/privacy" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                            Privacy Policy
+                            {t.applyForm.privacyPolicyLink || "Privacy Policy"}
                           </a>
                         </span>
                       </label>
@@ -3127,7 +3287,7 @@ function ApplyForm() {
                   <span className="text-gray-700 dark:text-gray-300 font-medium">
                     {t.applyForm.total} ({travelDetails.applicantCount} {travelDetails.applicantCount === 1 ? t.applyForm.person1 : t.applyForm.people})
                   </span>
-                  <span className="text-2xl font-bold text-blue-600">${totalPrice} USD</span>
+                  <span className="text-2xl font-bold text-blue-600">{formatSitePrice(totalPrice)}</span>
                 </div>
               </div>
             </div>

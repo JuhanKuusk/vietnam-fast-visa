@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { getSupabaseServer } from "@/lib/supabase-server";
 
+// CNY exchange rate (1 USD = 7.2 CNY)
+const CNY_EXCHANGE_RATE = 7.2;
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = getSupabaseServer();
     const stripe = getStripe();
 
-    const { applicationId, referenceNumber } = await request.json();
+    const { applicationId, referenceNumber, paymentMethodTypes, currency } = await request.json();
 
     if (!applicationId) {
       return NextResponse.json(
@@ -38,21 +41,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create Stripe Payment Intent
+    // Determine currency and amount
+    const useCNY = currency === "cny";
+    const amountUSD = application.amount_usd;
+    const amount = useCNY
+      ? Math.round(amountUSD * CNY_EXCHANGE_RATE * 100) // Convert to CNY cents (分)
+      : Math.round(amountUSD * 100); // Convert to USD cents
+
+    // Create Stripe Payment Intent with payment method types
     const entryTypeLabel = application.entry_type === "multiple" ? "Multi-Entry" : "Single Entry";
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(application.amount_usd * 100), // Convert to cents
-      currency: "usd",
+
+    // Build payment intent options
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const paymentIntentOptions: any = {
+      amount,
+      currency: useCNY ? "cny" : "usd",
       metadata: {
         applicationId: application.id,
         referenceNumber: application.reference_number,
         email: application.email,
         entryType: application.entry_type || "single",
         visaSpeed: application.visa_speed,
+        originalAmountUSD: amountUSD,
       },
       receipt_email: application.email,
       description: `Vietnam E-Visa Application (${entryTypeLabel}) - ${application.reference_number}`,
-    });
+    };
+
+    // Add payment method types if specified
+    if (paymentMethodTypes && paymentMethodTypes.length > 0) {
+      paymentIntentOptions.payment_method_types = paymentMethodTypes;
+
+      // Add WeChat Pay specific options if needed
+      if (paymentMethodTypes.includes("wechat_pay")) {
+        paymentIntentOptions.payment_method_options = {
+          wechat_pay: {
+            client: "web",
+          },
+        };
+      }
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create(paymentIntentOptions);
 
     // Store payment intent ID in database
     await supabase
@@ -62,7 +92,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,
-      amount: application.amount_usd,
+      amount: useCNY ? amountUSD * CNY_EXCHANGE_RATE : amountUSD,
+      currency: useCNY ? "cny" : "usd",
       referenceNumber: application.reference_number,
     });
   } catch (error) {

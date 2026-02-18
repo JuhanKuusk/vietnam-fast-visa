@@ -80,7 +80,7 @@ export const MULTI_ENTRY_FEE = 30;
 export const applicationSchema = z.object({
   tripDetails: tripDetailsSchema,
   applicants: z.array(applicantSchema).min(1, "At least one applicant is required"),
-  language: z.enum(["EN", "ES", "PT", "FR", "RU", "HI"]).optional().default("EN"),
+  language: z.enum(["EN", "ES", "PT", "FR", "RU", "HI", "ZH"]).optional().default("EN"),
   visaSpeed: visaSpeedSchema.optional().default("30-min"),
 });
 

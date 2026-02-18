@@ -1,0 +1,27 @@
+[  266815ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://backend.kehastuudio.ee/wp-content/uploads/2019/01/logoh16-1.png:0
+[  268331ms] [ERROR] Access to font at 'https://kehastuudio.ee/wp-content/uploads/fonts/b62522acc16f21f2e785e8d5e40ebd83/lexend--v19-normal-300.woff2?c=1714050405' from origin 'https://backend.kehastuudio.ee' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://backend.kehastuudio.ee/:0
+[  268332ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://kehastuudio.ee/wp-content/uploads/fonts/b62522acc16f21f2e785e8d5e40ebd83/lexend--v19-normal-300.woff2?c=1714050405:0
+[  272231ms] [ERROR] Access to fetch at 'https://zlimline.app.n8n.cloud/webhook/034d87f5-1720-4fe8-8940-c26ff480ff43/chat' from origin 'https://backend.kehastuudio.ee' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ https://backend.kehastuudio.ee/:0
+[  272231ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://zlimline.app.n8n.cloud/webhook/034d87f5-1720-4fe8-8940-c26ff480ff43/chat:0
+[  272232ms] [ERROR] TypeError: Failed to fetch
+    at authenticatedFetch (https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js:11861:16)
+    at async post (https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js:11882:9)
+    at async loadPreviousSession (https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js:11902:9)
+    at async Object.l [as loadPreviousSession] (https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js:12285:78)
+    at async l (https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js:30469:30)
+    at async https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js:30477:4 @ https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js:956
+[  287321ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/tootekategooria/salongihooldused/:0
+[  287322ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/pood/:0
+[  287322ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/osta-tallinna-kehastuudio-teenuseid-stebby-kaudu/:0
+[  287324ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/kontakt/:0
+[  312586ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2025/10/Cream-and-Green-Beige-Refined-Collage-Product-Highlight-Instagram-Story-1-300x300.jpg:0
+[  312587ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2025/07/2-300x300.png:0
+[  312588ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/toode/uus-teenus-glowlift-ritual/:0
+[  312589ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2024/12/IMG_5290-2-300x300.jpg:0
+[  312590ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2024/10/image00019-300x300.jpg:0
+[  312590ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2024/12/kavitatsioon-300x300.jpeg:0
+[  312591ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2025/07/2-3-300x300.png:0
+[  312593ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/toode/new-skin-restart-facial/:0
+[  312593ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2022/11/merlin-pilt-1-300x300.jpg:0
+[  312594ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/wp-content/uploads/2023/03/kehastuudiolpg-300x300.png:0
+[  312595ms] [ERROR] Failed to load resource: net::ERR_HTTP2_PROTOCOL_ERROR @ https://backend.kehastuudio.ee/toode/royal-lift-facial-kehastuudio-eksklusiivseim-naohooldus/:0

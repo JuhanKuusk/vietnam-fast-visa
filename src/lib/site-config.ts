@@ -1,7 +1,8 @@
 // Multi-domain site configuration
 // Each domain can have its own branding, theme, content, and behavior
 
-import { SupportedLanguage } from "./translations";
+// Supported languages (matches locales/*.json files)
+export type SupportedLanguage = "EN" | "ES" | "PT" | "FR" | "RU" | "HI" | "ZH";
 
 // =============================================================================
 // TYPES
@@ -25,7 +26,7 @@ export type SiteTheme = {
 
 export type SiteLayout = {
   // Hero section
-  heroVariant: "default" | "urgent" | "india";
+  heroVariant: "default" | "urgent" | "india" | "china";
   showUrgencyBanner: boolean;
   showCountdownTimer: boolean;
 
@@ -34,15 +35,22 @@ export type SiteLayout = {
   defaultVisaSpeed: "30-min" | "4-hour" | "1-day" | "2-day";
 
   // Trust elements
-  trustBadgeVariant: "default" | "india" | "travel";
-  testimonialSet: "default" | "india" | "urgent" | "travel";
+  trustBadgeVariant: "default" | "india" | "travel" | "china";
+  testimonialSet: "default" | "india" | "urgent" | "travel" | "china";
 
   // Additional sections
   showTours: boolean;  // Show tours & activities section
 
+  // Google Ads compliance
+  useGoogleAdsCompliant: boolean;  // Use Google Ads safe language (no "visa" keyword)
+
   // Footer
   showIndianPaymentMethods: boolean;
   showISTTimezone: boolean;
+
+  // Chinese market
+  showChinesePaymentMethods?: boolean;  // Alipay, WeChat Pay
+  showChinaTimezone?: boolean;          // CST/Beijing time
 };
 
 export type SiteContent = {
@@ -118,6 +126,7 @@ export const SITES: Record<string, SiteConfig> = {
       trustBadgeVariant: "default",
       testimonialSet: "default",
       showTours: false,
+      useGoogleAdsCompliant: false,
       showIndianPaymentMethods: false,
       showISTTimezone: false,
     },
@@ -171,6 +180,7 @@ export const SITES: Record<string, SiteConfig> = {
       trustBadgeVariant: "default",
       testimonialSet: "urgent",
       showTours: false,
+      useGoogleAdsCompliant: false,
       showIndianPaymentMethods: false,
       showISTTimezone: false,
     },
@@ -224,6 +234,7 @@ export const SITES: Record<string, SiteConfig> = {
       trustBadgeVariant: "india",
       testimonialSet: "india",
       showTours: false,
+      useGoogleAdsCompliant: false,
       showIndianPaymentMethods: true,
       showISTTimezone: true,
     },
@@ -280,6 +291,7 @@ export const SITES: Record<string, SiteConfig> = {
       trustBadgeVariant: "travel",       // Travel-focused badges
       testimonialSet: "travel",          // Softer testimonials
       showTours: true,                   // Show tours section - affiliate content
+      useGoogleAdsCompliant: true,       // Use Google Ads safe language (no "visa" keyword)
       showIndianPaymentMethods: false,
       showISTTimezone: false,
     },
@@ -306,6 +318,65 @@ export const SITES: Record<string, SiteConfig> = {
       defaultLanguage: "EN",
       targetCountries: [],
       forceLanguageForCountries: false,
+    },
+  },
+
+  // ---------------------------------------------------------------------------
+  // CHINA SITE: 越签.com (xn--vyzo38a.com)
+  // Aggressive marketing for Baidu/Chinese market - no Google Ads compliance needed
+  // ---------------------------------------------------------------------------
+  "xn--vyzo38a.com": {
+    id: "yueqian-china",
+    theme: {
+      primaryColor: "#dc2626",           // Red - prosperity, luck in Chinese culture
+      primaryColorHover: "#b91c1c",
+      secondaryColor: "#eab308",         // Gold/Yellow - wealth, imperial
+      accentColor: "#f59e0b",            // Amber
+      urgencyColor: "#dc2626",           // Red for urgency
+      heroGradient: "from-red-700 via-red-600 to-amber-600",
+      buttonGradient: "from-red-600 to-amber-500",
+      borderRadius: "rounded",
+    },
+    layout: {
+      heroVariant: "china",              // New variant for aggressive Chinese hero
+      showUrgencyBanner: true,
+      showCountdownTimer: true,
+      highlightedVisaSpeed: "30-min",
+      defaultVisaSpeed: "30-min",
+      trustBadgeVariant: "china",
+      testimonialSet: "china",
+      showTours: false,
+      useGoogleAdsCompliant: false,      // No compliance needed for Baidu
+      showIndianPaymentMethods: false,
+      showISTTimezone: false,
+      showChinesePaymentMethods: true,   // Alipay, WeChat Pay
+      showChinaTimezone: true,           // CST/Beijing time
+    },
+    content: {
+      siteName: "越签.com",
+      siteNameShort: "越签",
+      domain: "xn--vyzo38a.com",
+      tagline: "登机保证 - 1小时签证",
+      metaTitle: "越南签证 - 30分钟登机批准 | 越签.com",
+      metaDescription: "被拒绝登机？30分钟获得越南签证批准函。登机保证，不成功全额退款。24小时中文客服，支持支付宝微信支付。",
+      heroTitle: "🚨 登机保证",
+      heroSubtitle: "航班几小时后起飞？30分钟获得批准函，1小时获得完整签证。¥1,400服务费 vs ¥10,000损失的机票。",
+      heroBadge: "⚡ 官方签证需要5天 - 我们只需1小时",
+      ctaButtonText: "立即获取登机批准",
+      trustHeadline: "今日已帮助47位旅客成功登机",
+      supportEmail: "info@越签.com",
+      whatsappNumber: "+84705549868",
+      whatsappDisplay: "+84 70 5549868",
+      currencyCode: "CNY",
+      currencySymbol: "¥",
+      showAlternateCurrency: true,
+      alternateCurrencyCode: "USD",
+    },
+    behavior: {
+      defaultLanguage: "ZH",
+      targetCountries: ["CN", "TW", "HK", "MO", "SG"],  // Chinese-speaking regions
+      forceLanguageForCountries: true,
+      availableLanguages: ["ZH", "EN"],  // Only Chinese and English
     },
   },
 };
@@ -455,6 +526,52 @@ export const TESTIMONIALS: Record<string, Testimonial[]> = {
       date: "3 days ago",
     },
   ],
+
+  // Aggressive testimonials for 越签.com (Chinese market)
+  china: [
+    {
+      name: "张伟",
+      location: "上海",
+      rating: 5,
+      text: "🚨 航班2小时后起飞，在值机柜台被拦下！25分钟拿到批准函，成功登机！救了我¥8000的机票！",
+      date: "昨天",
+    },
+    {
+      name: "李明",
+      location: "北京",
+      rating: 5,
+      text: "周六办签证，官方关门！他们24/7在线，1小时搞定。支付宝付款超方便！",
+      date: "2天前",
+    },
+    {
+      name: "王芳",
+      location: "广州",
+      rating: 5,
+      text: "带父母去越南旅游，忘记办签证！3个人的签证30分钟全部搞定，没有耽误航班！",
+      date: "3天前",
+    },
+    {
+      name: "陈强",
+      location: "深圳",
+      rating: 5,
+      text: "凌晨3点申请，以为要完蛋了。结果4点就收到签证！中文客服全程跟进，太专业了！",
+      date: "1周前",
+    },
+    {
+      name: "刘洋",
+      location: "杭州",
+      rating: 5,
+      text: "出差急着去胡志明，完全忘记签证这回事。微信支付，30分钟批准，1小时签证到手。值得每一分钱！",
+      date: "4天前",
+    },
+    {
+      name: "赵丽",
+      location: "成都",
+      rating: 5,
+      text: "登机保证不是说说而已！真的在机场值机被拦，他们帮我搞定了！不成功退款的承诺让人放心！",
+      date: "5天前",
+    },
+  ],
 };
 
 // =============================================================================
@@ -489,6 +606,14 @@ export const TRUST_BADGES: Record<string, TrustBadge[]> = {
     { icon: "shield", value: "Secure", label: "Data Protection" },
     { icon: "headphones", value: "7 Days", label: "Email Support" },
   ],
+
+  // Aggressive badges for 越签.com (Chinese market)
+  china: [
+    { icon: "shield", value: "登机保证", label: "不成功全额退款" },
+    { icon: "clock", value: "1小时", label: "签证批准" },
+    { icon: "headphones", value: "24/7", label: "中文客服" },
+    { icon: "creditCard", value: "支付宝", label: "微信支付" },
+  ],
 };
 
 // =============================================================================
@@ -501,6 +626,16 @@ export const INDIAN_PAYMENT_METHODS = [
   { name: "PhonePe", icon: "phonepe" },
   { name: "Google Pay", icon: "gpay" },
   { name: "Net Banking", icon: "netbanking" },
+];
+
+// =============================================================================
+// CHINESE PAYMENT METHODS
+// =============================================================================
+
+export const CHINESE_PAYMENT_METHODS = [
+  { name: "支付宝", nameEn: "Alipay", icon: "alipay" },
+  { name: "微信支付", nameEn: "WeChat Pay", icon: "wechat" },
+  { name: "银联", nameEn: "UnionPay", icon: "unionpay" },
 ];
 
 // =============================================================================
@@ -574,6 +709,15 @@ export function convertUSDtoINR(usdAmount: number): number {
 }
 
 /**
+ * Convert USD to CNY (approximate rate)
+ * In production, you'd want to use a real exchange rate API
+ */
+export function convertUSDtoCNY(usdAmount: number): number {
+  const exchangeRate = 7.2; // Approximate USD to CNY rate
+  return Math.round(usdAmount * exchangeRate);
+}
+
+/**
  * Format price based on site currency
  */
 export function formatPrice(amount: number, siteConfig: SiteConfig): string {
@@ -582,6 +726,11 @@ export function formatPrice(amount: number, siteConfig: SiteConfig): string {
   if (currencyCode === "INR") {
     const inrAmount = convertUSDtoINR(amount);
     return `${currencySymbol}${inrAmount.toLocaleString("en-IN")}`;
+  }
+
+  if (currencyCode === "CNY") {
+    const cnyAmount = convertUSDtoCNY(amount);
+    return `${currencySymbol}${cnyAmount.toLocaleString("zh-CN")}`;
   }
 
   return `${currencySymbol}${amount}`;

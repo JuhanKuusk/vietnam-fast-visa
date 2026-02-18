@@ -68,7 +68,7 @@ export const FEATURED_TOURS: Tour[] = [
     imageUrl: "/tours/halong-day-trip.jpg",
     rating: 9.4,
     reviewCount: 17,
-    affiliateUrl: "https://www.vietnamtourbooking.com/tour/halong-group-day-trip-sung-sot-titop",
+    affiliateUrl: "/cruise/halong-day-trip-sung-sot-titop",
   },
   {
     id: "serenity-cruise-2d1n",
@@ -150,7 +150,7 @@ export const FEATURED_TOURS: Tour[] = [
     imageUrl: "/tours/serenity-cruise.jpg",
     rating: 7.6,
     reviewCount: 9,
-    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/serenity-cruise-2-days-1-night",
+    affiliateUrl: "/cruise/serenity-cruise-2-days-1-night",
   },
   {
     id: "lan-ha-luxury-day",
@@ -217,7 +217,7 @@ export const FEATURED_TOURS: Tour[] = [
       "Alcoholic beverages"
     ],
     imageUrl: "/tours/lan-ha-luxury.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/tour/lan-ha-bay-halong-bay-the-most-luxurious-day-tour",
+    affiliateUrl: "/cruise/lan-ha-bay-luxury-day-tour",
   },
   {
     id: "renea-cruise-2d1n",
@@ -296,7 +296,7 @@ export const FEATURED_TOURS: Tour[] = [
       "Travel insurance"
     ],
     imageUrl: "/tours/renea-cruise.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/tour/renea-cruise-2-days-1-night",
+    affiliateUrl: "/cruise/renea-cruise-2-days-1-night",
   },
   // Mekong Delta Tours
   {
@@ -377,7 +377,7 @@ export const FEATURED_TOURS: Tour[] = [
       "Travel insurance"
     ],
     imageUrl: "/tours/mekong-eyes.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/mekong-eyes-cruise-2-days-saigon-con-dao",
+    affiliateUrl: "/cruise/mekong-eyes-cruise-2-days",
   },
   {
     id: "mekong-eyes-3d",
@@ -472,7 +472,7 @@ export const FEATURED_TOURS: Tour[] = [
       "Travel insurance"
     ],
     imageUrl: "/tours/mekong-3day.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/mekong-eyes-cruise-3-days-saigon-con-dao",
+    affiliateUrl: "/cruise/mekong-eyes-cruise-3-days",
   },
   {
     id: "gecko-eyes-2d",
@@ -552,7 +552,7 @@ export const FEATURED_TOURS: Tour[] = [
       "Additional spa services"
     ],
     imageUrl: "/tours/gecko-eyes.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/gecko-eyes-cruise-saigon-con-dao-2-days",
+    affiliateUrl: "/cruise/gecko-eyes-cruise-2-days",
   },
   {
     id: "cambodia-vietnam-3d",
@@ -650,7 +650,7 @@ export const FEATURED_TOURS: Tour[] = [
       "Travel insurance"
     ],
     imageUrl: "/tours/cambodia-vietnam.jpg",
-    affiliateUrl: "https://www.vietnamtourbooking.com/cruise/3-day-mekong-eyes-cruise-cambodia-vietnam",
+    affiliateUrl: "/cruise/cambodia-vietnam-cruise-3-days",
   },
 ];
 

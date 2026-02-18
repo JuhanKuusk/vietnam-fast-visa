@@ -1,47 +1,30 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-/**
- * Middleware for multi-domain support
- * Detects the hostname and sets cookies for client-side access
- */
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+  const hostname = request.headers.get("host") || "";
+  const pathname = request.nextUrl.pathname;
 
-  // Get hostname from request
-  const hostname = request.headers.get("host") || "vietnamvisahelp.com";
+  // Tours routes should only be accessible on vietnamtravel.help
+  if (pathname.startsWith("/tours") || pathname.startsWith("/cruise")) {
+    // Allow on vietnamtravel.help or localhost (for development)
+    const isVietnamTravelHelp = hostname.includes("vietnamtravel.help");
+    const isLocalhost = hostname.includes("localhost") || hostname.includes("127.0.0.1");
 
-  // Remove port number if present (for local development)
-  const cleanHostname = hostname.split(":")[0].toLowerCase();
+    if (!isVietnamTravelHelp && !isLocalhost) {
+      // Redirect to homepage if trying to access tours from other domains
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+  }
 
-  // Remove www. prefix
-  const domain = cleanHostname.replace(/^www\./, "");
-
-  // Set the domain as a cookie for client-side access
-  // This is more reliable than trying to detect on client
-  response.cookies.set("site-domain", domain, {
-    httpOnly: false, // Allow client-side access
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 365, // 1 year
-    path: "/",
-  });
-
-  // Also set a header that can be read by Server Components
-  response.headers.set("x-site-domain", domain);
-
-  return response;
+  return NextResponse.next();
 }
 
-// Configure which paths the middleware runs on
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - api routes (api/*)
-     * - static files (_next/static/*, _next/image/*, *.ico, *.png, etc.)
-     * - public assets
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.svg|.*\\.webp).*)",
+    "/tours/:path*",
+    "/cruise/:path*",
   ],
 };

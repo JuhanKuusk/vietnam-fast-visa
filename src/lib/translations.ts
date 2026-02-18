@@ -238,6 +238,13 @@ export const translations = {
     selectPurpose: "Select purpose...",
   },
 
+  // Search Prompts (for dropdown placeholders)
+  searchPrompts: {
+    searchCountry: "Type to search countries...",
+    searchAirport: "Search airports...",
+    searchCitizenship: "Type to search...",
+  },
+
   // Dynamic Flights Component
   dynamicFlights: {
     title: "Flights to Vietnam",
@@ -445,6 +452,62 @@ export const translations = {
     personalInfo: "Personal Information",
     passportInfo: "Passport Information",
     emergencyContact: "Emergency Contact",
+    // Emergency Contact fields
+    emergencyFullName: "Full name",
+    emergencyFullNamePlaceholder: "Enter name",
+    emergencyAddress: "Current residential address",
+    emergencyAddressPlaceholder: "Enter current residential address",
+    emergencyPhone: "Telephone number",
+    emergencyPhonePlaceholder: "Enter telephone number",
+    emergencyRelationship: "Relationship",
+    emergencyRelationshipPlaceholder: "Enter relationship",
+    // Applicant contact fields
+    telephoneNumber: "Telephone number",
+    telephoneNumberPlaceholder: "Enter telephone number",
+    sameAsPermanentAddress: "Same as permanent residential address",
+    contactAddressPlaceholder: "Enter contact address",
+    // Phone verification section
+    verifyPhoneOptional: "Verify Your Phone Number (Optional)",
+    verifyPhoneOptionalDesc: "Verify your phone number to receive urgent visa updates via SMS or WhatsApp. You can skip this step and proceed to payment.",
+    phoneVerifiedTitle: "Phone Number Verified ✓",
+    phoneVerifiedDesc: "{phoneNumber} is verified. We'll send urgent updates to this number.",
+    // Terms & Conditions section
+    termsConditionsTitle: "Terms & Conditions",
+    // Consent checkboxes
+    confirmInfoCorrect: "I confirm that the above information is correct",
+    agreeToTermsPrefix: "I have read and agree to the",
+    termsAndConditions: "Terms & Conditions",
+    cancellationPolicy: "Cancellation and Refund Policy",
+    privacyPolicyLink: "Privacy Policy",
+    andText: ", and",
+    // Validation errors
+    validationFailed: "Validation failed",
+    pleaseAgreeToTerms: "Please agree to the Terms & Conditions, Refund Policy, and Privacy Policy",
+    // Links in Terms preview box
+    fullTermsLink: "Full Terms →",
+    refundPolicyLink: "Refund Policy →",
+    privacyPolicyLinkArrow: "Privacy Policy →",
+    // Terms preview box content
+    termsPreview1Title: "1. Definitions",
+    termsPreview1Content: '"Provider" - VietnamVisaHelp.com is an e-commercial or non-government website. "Client" - An individual or company who conducts payment of the Sales Order/Booking. "Terms and Conditions" - An agreement between The Client and The Provider governing the rights, obligations, and responsibilities of both parties.',
+    termsPreview2Title: "2. Acceptance of Terms",
+    termsPreview2Content: "By using our Website and Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. You understand that VietnamVisaHelp.com is an independent visa assistance service and is NOT affiliated with the Vietnamese Government or any governmental body. You agree not to use the website for illegal purposes and to respect all applicable laws.",
+    termsPreview3Title: "3. Nature of Our Service",
+    termsPreview3Content: "VietnamVisaHelp.com provides professional visa application assistance services including document review and verification, application form preparation and submission, 24/7 customer support, application status tracking, and express processing options. We do not issue visas. All visa decisions are made solely by the Vietnam Immigration Department.",
+    termsPreview4Title: "4. Processing Times",
+    termsPreview4Content: "We offer various processing speeds: Emergency (15-30 min with Check-In Approval), Urgent (1 hour), Express (4 hours), Express (1 day), Express (2 days), and Standard (2-3 business days). Processing times are estimates and actual delivery depends on the Vietnam Immigration Department.",
+    termsPreview5Title: "5. Fees and Payment",
+    termsPreview5Content: "Our fees consist of: Government Fee ($25 USD single entry, $50 USD multiple entry - non-refundable once submitted) and Service Fee (varies by processing speed from $24 to $224). Total prices: Standard $49, Express 2-day $79, Express 1-day $99, Express 4-hour $119, Urgent 1-hour $159, Emergency $199, Weekend/Holiday $249.",
+    termsPreview6Title: "6. Refund Policy",
+    termsPreview6Content: "Full refund: Available if you cancel before we submit your application. Partial refund (service fee only): When you cancel after submission but before approval. No refund: Once visa is approved, visa denial due to your error, change of travel plans, or delays by authorities. If visa is denied by Vietnam Immigration: We refund 50% of service fee.",
+    termsPreview7Title: "7. Warnings and Disclaimers",
+    termsPreview7Content: "VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) for $25 USD with 3 business day processing. Visa approval is at the sole discretion of Vietnamese immigration authorities. Non-refundable fares or reservations must not be purchased until all visas have been obtained.",
+    termsPreview8Title: "8. Limitation of Liability",
+    termsPreview8Content: "We are not responsible for: visa refusals or delays by the Vietnam Immigration Department, entry denial at Vietnamese borders, travel disruptions or missed flights, changes in Vietnamese visa policies, consequences of incorrect information provided by you, incomplete documentation, or technical issues beyond our control. Our total liability shall not exceed the amount you paid for our services.",
+    termsPreview9Title: "9. Privacy and Data Protection",
+    termsPreview9Content: "Your personal information is collected only for visa application processing purposes, stored securely, shared only with the Vietnam Immigration Department as required, and never sold to third parties. Your data is deleted 30 days after services are completed.",
+    termsPreview10Title: "10. Contact Information",
+    termsPreview10Content: "Email: support@vietnamvisahelp.com | WhatsApp: +84 70 5549868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam",
     // Selfie tips
     autoProcessText: "When uploading an image, our system will automatically change the photo background to white and generate it in the appropriate size and format.",
     selfieTipsTitle: "How to take the best selfie for E-Visa?",
@@ -455,6 +518,22 @@ export const translations = {
     selfieTip5: "Camera at eye level, not from above or below.",
     selfieTip6: "Look directly at the phone camera (not the screen).",
     selfieTipsGotIt: "Got it!",
+    // Additional passport fields
+    placeOfBirth: "Place of birth",
+    placeOfBirthPlaceholder: "Enter place of birth",
+    issuingAuthority: "Issuing Authority/Place of issue",
+    selectCountry: "Select country...",
+    passportType: "Type",
+    ordinaryPassport: "Ordinary passport",
+    diplomaticPassport: "Diplomatic passport",
+    officialPassport: "Official passport",
+    otherPassport: "Other",
+    dateOfIssue: "Date of issue",
+    // Contact information section
+    contactInformationTitle: "Contact Information",
+    permanentAddress: "Permanent residential address",
+    permanentAddressPlaceholder: "Enter permanent residential address",
+    contactAddress: "Contact address",
   },
 
   // Phone Verification
@@ -485,6 +564,15 @@ export const translations = {
     secure: "Secure & Encrypted",
     fast: "Fast Processing",
     official: "E-Visa Processing",
+  },
+
+  // Apply Page - AI Features Banner
+  aiFeatures: {
+    title: "🤖 Smart Fast System",
+    passport: "Auto passport recognition (no manual entry)",
+    photo: "Auto-generate compliant visa photo",
+    flight: "Auto-match flight information",
+    review: "Real-time review system",
   },
 
   // Apply Page - Header

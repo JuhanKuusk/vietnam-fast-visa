@@ -1,0 +1,235 @@
+[    2251ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[    3792ms] [ERROR] In HTML, %s cannot be a descendant of <%s>.
+This will cause a hydration error.%s <a> a 
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/cruise/ha..." tree={[...]} params={{slug:"halo..."}} cacheNode={{rsc:<Fragment>, ...}} ...>
+            <SegmentViewNode type="page" pagePath="cruise/[sl...">
+              <SegmentTrieNode>
+              <TourDetailPage>
+                <main className="min-h-scre...">
+                  <TourDetailHero>
+                  <div>
+                  <section className="bg-white p...">
+                    <div className="max-w-7xl ...">
+                      <RelatedTours tours={[...]}>
+                        <div>
+                          <div>
+                          <div className="grid sm:gr...">
+                            <LinkComponent href="/cruise/se...">
+>                             <a
+>                               ref={function}
+>                               onClick={function onClick}
+>                               onMouseEnter={function onMouseEnter}
+>                               onTouchStart={function onTouchStart}
+>                               href="/cruise/serenity-cruise-2-days-1-night"
+>                             >
+                                <TourCard tour={{id:"sereni...", ...}}>
+>                                 <a
+>                                   href="https://www.vietnamtourbooking.com/cruise/serenity-cruise-2-days-1-night"
+>                                   target="_blank"
+>                                   rel="noopener noreferrer"
+>                                   className="group block bg-white rounded-xl shadow-sm hover:shadow-lg transition-al..."
+>                                 >
+                            ...
+            ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[    3798ms] [ERROR] <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. a <a> @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[    3965ms] Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+    at throwOnHydrationMismatch (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:3348:56)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6775:918)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopConcurrentByScheduler (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9558:58)
+    at renderRootConcurrent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9541:71)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:150)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[    3998ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[  624415ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[  624458ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[  636500ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/tours/inquiries:0
+[  782004ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[  782021ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[  782050ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[  782159ms] [WARNING] %c%s%c ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  834476ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  835479ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  836482ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  837486ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  838489ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  843495ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  848512ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  853532ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  858546ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  863613ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  868735ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[  873898ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=L3I_vADByGB5q6pfwCXcD' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 1303547ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[ 1304711ms] [WARNING] %c%s%c ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1305797ms] [ERROR] In HTML, %s cannot be a descendant of <%s>.
+This will cause a hydration error.%s <a> a 
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/cruise/ha..." tree={[...]} params={{slug:"halo..."}} cacheNode={{rsc:<Fragment>, ...}} ...>
+            <SegmentViewNode type="page" pagePath="cruise/[sl...">
+              <SegmentTrieNode>
+              <TourDetailPage>
+                <main className="min-h-scre...">
+                  <TourDetailHero>
+                  <div>
+                  <section className="bg-white p...">
+                    <div className="max-w-7xl ...">
+                      <RelatedTours tours={[...]}>
+                        <div>
+                          <div>
+                          <div className="grid sm:gr...">
+                            <LinkComponent href="/cruise/se...">
+>                             <a
+>                               ref={function}
+>                               onClick={function onClick}
+>                               onMouseEnter={function onMouseEnter}
+>                               onTouchStart={function onTouchStart}
+>                               href="/cruise/serenity-cruise-2-days-1-night"
+>                             >
+                                <TourCard tour={{id:"sereni...", ...}}>
+>                                 <a
+>                                   href="https://www.vietnamtourbooking.com/cruise/serenity-cruise-2-days-1-night"
+>                                   target="_blank"
+>                                   rel="noopener noreferrer"
+>                                   className="group block bg-white rounded-xl shadow-sm hover:shadow-lg transition-al..."
+>                                 >
+                            ...
+            ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[ 1305798ms] [ERROR] <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. a <a> @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[ 1306156ms] Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+    at throwOnHydrationMismatch (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:3348:56)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6775:918)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopConcurrentByScheduler (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9558:58)
+    at renderRootConcurrent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9541:71)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:150)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[ 1306285ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[ 1331575ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[ 1331704ms] [WARNING] %c%s%c ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1355173ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[ 1355935ms] [WARNING] %c%s%c ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1360735ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=rgO_BkTNk-WCxauDMeAVz' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 1361739ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=rgO_BkTNk-WCxauDMeAVz' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 1362742ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=rgO_BkTNk-WCxauDMeAVz' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 1363754ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=rgO_BkTNk-WCxauDMeAVz' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 1364757ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=rgO_BkTNk-WCxauDMeAVz' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 1369762ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=rgO_BkTNk-WCxauDMeAVz' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 1379322ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[ 1379443ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[ 1385262ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[ 1386101ms] [WARNING] %c%s%c ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[ 1386415ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[ 1386505ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[ 1386843ms] [ERROR] In HTML, %s cannot be a descendant of <%s>.
+This will cause a hydration error.%s <a> a 
+
+  ...
+    <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/cruise/ha..." tree={[...]} params={{slug:"halo..."}} cacheNode={{rsc:<Fragment>, ...}} ...>
+            <SegmentViewNode type="page" pagePath="cruise/[sl...">
+              <SegmentTrieNode>
+              <TourDetailPage>
+                <main className="min-h-scre...">
+                  <TourDetailHero>
+                  <div>
+                  <section className="bg-white p...">
+                    <div className="max-w-7xl ...">
+                      <RelatedTours tours={[...]}>
+                        <div>
+                          <div>
+                          <div className="grid sm:gr...">
+                            <LinkComponent href="/cruise/se...">
+>                             <a
+>                               ref={function}
+>                               onClick={function onClick}
+>                               onMouseEnter={function onMouseEnter}
+>                               onTouchStart={function onTouchStart}
+>                               href="/cruise/serenity-cruise-2-days-1-night"
+>                             >
+                                <TourCard tour={{id:"sereni...", ...}}>
+>                                 <a
+>                                   href="https://www.vietnamtourbooking.com/cruise/serenity-cruise-2-days-1-night"
+>                                   target="_blank"
+>                                   rel="noopener noreferrer"
+>                                   className="group block bg-white rounded-xl shadow-sm hover:shadow-lg transition-al..."
+>                                 >
+                            ...
+            ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[ 1386843ms] [ERROR] <%s> cannot contain a nested %s.
+See this log for the ancestor stack trace. a <a> @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_f3530cac._.js:3127
+[ 1387160ms] Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+    at throwOnHydrationMismatch (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:3348:56)
+    at beginWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:6775:918)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9562:97)
+    at workLoopConcurrentByScheduler (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9558:58)
+    at renderRootConcurrent (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9541:71)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:9068:150)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_a0e4c7b4._.js:2647:64)
+[ 1388151ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fhalong-day-trip.jpg&w=1200&q=75:0
+[ 1389178ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[ 1389207ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[ 2375284ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Fserenity-cruise.jpg&w=384&q=75:0
+[ 2375317ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/_next/image?url=%2Ftours%2Flan-ha-luxury.jpg&w=384&q=75:0
+[ 2677813ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gLGUOmjLXF-Bd-rkwEIg6' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 2678816ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gLGUOmjLXF-Bd-rkwEIg6' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 2679820ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gLGUOmjLXF-Bd-rkwEIg6' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 2680826ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gLGUOmjLXF-Bd-rkwEIg6' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 2681831ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gLGUOmjLXF-Bd-rkwEIg6' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 2686838ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=gLGUOmjLXF-Bd-rkwEIg6' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10876
+[ 2699427ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/cruise/halong-day-trip-sung-sot-titop:0

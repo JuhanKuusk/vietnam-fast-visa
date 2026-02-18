@@ -7,9 +7,11 @@ import { Logo } from "@/components/ui/logo";
 import { Footer } from "@/components/ui/footer";
 import { DisclaimerBanner } from "@/components/ui/disclaimer-banner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSite } from "@/contexts/SiteContext";
 
 export default function AboutPage() {
   const { t } = useLanguage();
+  const { content } = useSite();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -19,7 +21,7 @@ export default function AboutPage() {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <Link href="/" className="hover:opacity-90 transition-opacity">
-              <Logo size="md" />
+              <Logo size="md" taglineText={t.header?.logoTagline} siteName={t.header?.siteName !== "VietnamVisaHelp.com" ? t.header?.siteName : undefined} />
             </Link>
 
             {/* Right side */}
@@ -122,8 +124,8 @@ export default function AboutPage() {
           <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t.legal?.contact || "Contact Us"}</h2>
             <ul className="list-none text-gray-700 dark:text-gray-300 space-y-2">
-              <li><strong>Email:</strong> <a href="mailto:support@vietnamvisahelp.com" className="text-blue-600 dark:text-blue-400 hover:underline">support@vietnamvisahelp.com</a></li>
-              <li><strong>WhatsApp:</strong> <a href="https://wa.me/84705549868" className="text-blue-600 dark:text-blue-400 hover:underline">+84 70 5549868</a></li>
+              <li><strong>Email:</strong> <a href={`mailto:${content.supportEmail}`} className="text-blue-600 dark:text-blue-400 hover:underline">{content.supportEmail}</a></li>
+              <li><strong>WhatsApp:</strong> <a href={`https://wa.me/${content.whatsappNumber.replace(/[^0-9]/g, '')}`} className="text-blue-600 dark:text-blue-400 hover:underline">{content.whatsappDisplay}</a></li>
               <li className="pt-2"><strong>Address:</strong> Binh Thanh District, Ho Chi Minh City, Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Ho Chi Minh City</li>
             </ul>
           </div>
