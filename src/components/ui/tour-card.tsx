@@ -167,9 +167,7 @@ export function ToursSection({
         {/* View All Button */}
         <div className="text-center mt-10">
           <a
-            href="https://www.vietnamtourbooking.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/tours"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white transition-all hover:opacity-90"
             style={{ backgroundColor: theme.primaryColor }}
           >

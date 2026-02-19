@@ -6,8 +6,10 @@ import { TourCard } from "@/components/ui/tour-card";
 import { TourFilters } from "@/components/tours/TourFilters";
 import type { TourFilters as TourFiltersType, TourSortOption } from "@/types/tours";
 import { filterTours, sortTours, searchTours } from "@/lib/tours-utils";
+import { useSite } from "@/contexts/SiteContext";
 
 export default function ToursPage() {
+  const { content } = useSite();
   const [filters, setFilters] = useState<TourFiltersType>({
     category: "all",
     location: "all",
@@ -187,7 +189,7 @@ export default function ToursPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:help@vietnamtravel.help"
+              href={`mailto:${content.supportEmail}`}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-semibold"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -197,7 +199,7 @@ export default function ToursPage() {
               Email Us
             </a>
             <a
-              href="https://wa.me/84705549868"
+              href={`https://wa.me/${content.whatsappNumber.replace(/[^0-9]/g, '')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-cyan-600 text-cyan-600 rounded-lg hover:bg-cyan-50 transition-colors font-semibold"

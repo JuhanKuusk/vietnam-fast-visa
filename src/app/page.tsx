@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlightCheckBox } from "@/components/ui/flight-check-box";
@@ -14,6 +14,7 @@ import { ToursSection } from "@/components/ui/tour-card";
 import { getFeaturedTours } from "@/lib/tours-data";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSite } from "@/contexts/SiteContext";
+import ChinaVisaForm from "@/components/china/ChinaVisaForm";
 
 // Visa Info Modal Component
 function VisaInfoModal({ isOpen, onClose, t, primaryColor }: { isOpen: boolean; onClose: () => void; t: ReturnType<typeof useLanguage>["t"]; primaryColor: string }) {
@@ -289,7 +290,25 @@ const ENTRY_PORTS = [
 
 export default function Home() {
   const { t, isLoading } = useLanguage();
-  const { formatSitePrice, theme, layout, content } = useSite();
+  const { formatSitePrice, theme, layout, content, isChinaSite, siteName } = useSite();
+
+  // Mobile detection for China site
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Show simplified 4-step form for China site on mobile
+  if (isChinaSite && isMobile) {
+    return <ChinaVisaForm />;
+  }
+
   const [formData, setFormData] = useState({
     flightNumber: "",
     flightDate: (() => {
@@ -380,16 +399,16 @@ export default function Home() {
             {/* Logo */}
             <div className="flex flex-col">
               <Link href="/" className="hover:opacity-90 transition-opacity">
-                <Logo size="md" taglineText={t.header.logoTagline} siteName={t.header.siteName !== "VietnamVisaHelp.com" ? t.header.siteName : undefined} />
+                <Logo size="md" taglineText={t.header.logoTagline} siteName={siteName !== "VietnamVisaHelp.com" ? siteName : undefined} />
               </Link>
               {/* Mobile contact info below logo */}
               <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                <a href="mailto:support@vietnamvisahelp.com" className="hover:text-blue-600">
-                  support@vietnamvisahelp.com
+                <a href={`mailto:${content.supportEmail}`} className="hover:text-blue-600">
+                  {content.supportEmail}
                 </a>
                 <span>|</span>
-                <a href="https://wa.me/84705549868" className="hover:text-green-600">
-                  +84 70 5549868
+                <a href={`https://wa.me/${content.whatsappNumber.replace(/[^0-9]/g, '')}`} className="hover:text-green-600">
+                  {content.whatsappDisplay}
                 </a>
               </div>
             </div>
@@ -406,7 +425,7 @@ export default function Home() {
               </Link>
               {/* WhatsApp Button - Green */}
               <a
-                href="https://wa.me/84705549868"
+                href={`https://wa.me/${content.whatsappNumber.replace(/[^0-9]/g, '')}`}
                 className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition-colors"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
