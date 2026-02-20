@@ -69,6 +69,10 @@ export const FEATURED_TOURS: Tour[] = [
     rating: 9.4,
     reviewCount: 17,
     affiliateUrl: "/cruise/halong-day-trip-sung-sot-titop",
+    durationHours: 10,
+    startCity: "Hanoi",
+    destinations: ["Halong Bay"],
+    activities: ["nature", "cultural", "photography"],
   },
   {
     id: "serenity-cruise-2d1n",
@@ -151,6 +155,10 @@ export const FEATURED_TOURS: Tour[] = [
     rating: 7.6,
     reviewCount: 9,
     affiliateUrl: "/cruise/serenity-cruise-2-days-1-night",
+    durationHours: 48,
+    startCity: "Hanoi",
+    destinations: ["Halong Bay"],
+    activities: ["cruise", "kayaking", "cave-exploration"],
   },
   {
     id: "lan-ha-luxury-day",
@@ -218,6 +226,10 @@ export const FEATURED_TOURS: Tour[] = [
     ],
     imageUrl: "/tours/lan-ha-luxury.jpg",
     affiliateUrl: "/cruise/lan-ha-bay-luxury-day-tour",
+    durationHours: 10,
+    startCity: "Hanoi",
+    destinations: ["Lan Ha Bay"],
+    activities: ["nature", "cultural", "photography"],
   },
   {
     id: "renea-cruise-2d1n",
@@ -297,6 +309,10 @@ export const FEATURED_TOURS: Tour[] = [
     ],
     imageUrl: "/tours/renea-cruise.jpg",
     affiliateUrl: "/cruise/renea-cruise-2-days-1-night",
+    durationHours: 48,
+    startCity: "Hanoi",
+    destinations: ["Bai Tu Long Bay"],
+    activities: ["cruise", "kayaking", "cave-exploration"],
   },
   // Mekong Delta Tours
   {
@@ -378,6 +394,10 @@ export const FEATURED_TOURS: Tour[] = [
     ],
     imageUrl: "/tours/mekong-eyes.jpg",
     affiliateUrl: "/cruise/mekong-eyes-cruise-2-days",
+    durationHours: 48,
+    startCity: "Ho Chi Minh City",
+    destinations: ["Mekong Delta", "Can Tho", "Ben Tre"],
+    activities: ["cruise", "kayaking", "cave-exploration"],
   },
   {
     id: "mekong-eyes-3d",
@@ -473,6 +493,10 @@ export const FEATURED_TOURS: Tour[] = [
     ],
     imageUrl: "/tours/mekong-3day.jpg",
     affiliateUrl: "/cruise/mekong-eyes-cruise-3-days",
+    durationHours: 72,
+    startCity: "Ho Chi Minh City",
+    destinations: ["Mekong Delta", "Can Tho", "Ben Tre"],
+    activities: ["cultural", "nature", "trekking"],
   },
   {
     id: "gecko-eyes-2d",
@@ -553,6 +577,10 @@ export const FEATURED_TOURS: Tour[] = [
     ],
     imageUrl: "/tours/gecko-eyes.jpg",
     affiliateUrl: "/cruise/gecko-eyes-cruise-2-days",
+    durationHours: 48,
+    startCity: "Ho Chi Minh City",
+    destinations: ["Mekong Delta"],
+    activities: ["cruise", "kayaking", "cave-exploration"],
   },
   {
     id: "cambodia-vietnam-3d",
@@ -651,6 +679,10 @@ export const FEATURED_TOURS: Tour[] = [
     ],
     imageUrl: "/tours/cambodia-vietnam.jpg",
     affiliateUrl: "/cruise/cambodia-vietnam-cruise-3-days",
+    durationHours: 72,
+    startCity: "Ho Chi Minh City",
+    destinations: ["Cambodia", "Mekong Delta"],
+    activities: ["cultural", "nature", "trekking"],
   },
 ];
 

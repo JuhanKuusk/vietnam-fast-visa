@@ -7,6 +7,82 @@ import { Tour, TourFilters, TourSortOption } from "@/types/tours";
 import { FEATURED_TOURS } from "./tours-data";
 
 // =====================================================
+// Tour Grouping Types and Functions
+// =====================================================
+
+export interface TourGroup {
+  groupId: string;
+  groupName: string;
+  primaryTour: Tour; // First/default tour in the group
+  variations: Tour[]; // All tours in this group including primary
+}
+
+/**
+ * Group tours by their groupId for display purposes.
+ * Tours with the same groupId are variations (e.g., 2-day, 3-day versions).
+ * Returns tours that aren't grouped + one representative from each group.
+ */
+export function getGroupedToursForListing(tours: Tour[]): Tour[] {
+  const grouped = new Map<string, Tour[]>();
+  const standalone: Tour[] = [];
+
+  // Separate grouped and standalone tours
+  tours.forEach((tour) => {
+    if (tour.groupId) {
+      const existing = grouped.get(tour.groupId) || [];
+      existing.push(tour);
+      grouped.set(tour.groupId, existing);
+    } else {
+      standalone.push(tour);
+    }
+  });
+
+  // For each group, pick the tour with the lowest price as the representative
+  const groupRepresentatives: Tour[] = [];
+  grouped.forEach((groupTours) => {
+    // Sort by price ascending, pick the cheapest as representative
+    const sorted = groupTours.sort((a, b) => a.price - b.price);
+    groupRepresentatives.push(sorted[0]);
+  });
+
+  // Combine standalone and group representatives
+  return [...standalone, ...groupRepresentatives];
+}
+
+/**
+ * Get all tour variations for a specific group
+ */
+export function getTourVariations(groupId: string): Tour[] {
+  return FEATURED_TOURS.filter((tour) => tour.groupId === groupId).sort(
+    (a, b) => a.price - b.price
+  );
+}
+
+/**
+ * Check if a tour has variations
+ */
+export function hasVariations(tour: Tour): boolean {
+  if (!tour.groupId) return false;
+  return FEATURED_TOURS.filter((t) => t.groupId === tour.groupId).length > 1;
+}
+
+/**
+ * Get tour group details
+ */
+export function getTourGroup(groupId: string): TourGroup | null {
+  const variations = getTourVariations(groupId);
+  if (variations.length === 0) return null;
+
+  const primary = variations[0];
+  return {
+    groupId,
+    groupName: primary.groupName || primary.name,
+    primaryTour: primary,
+    variations,
+  };
+}
+
+// =====================================================
 // Tour Lookup Functions
 // =====================================================
 
@@ -74,7 +150,7 @@ export function filterTours(tours: Tour[], filters: TourFilters): Tour[] {
     filtered = filtered.filter((tour) => tour.category === filters.category);
   }
 
-  // Filter by location
+  // Filter by location (legacy)
   if (filters.location && filters.location !== "all") {
     filtered = filtered.filter((tour) =>
       tour.location.toLowerCase().includes(filters.location.toLowerCase())
@@ -101,6 +177,37 @@ export function filterTours(tours: Tour[], filters: TourFilters): Tour[] {
   if (filters.minRating) {
     filtered = filtered.filter(
       (tour) => (tour.rating || 0) >= filters.minRating!
+    );
+  }
+
+  // Filter by start city
+  if (filters.startCity && filters.startCity !== "all") {
+    filtered = filtered.filter((tour) => tour.startCity === filters.startCity);
+  }
+
+  // Filter by destinations (tour must include at least one of the selected destinations)
+  if (filters.destinations && filters.destinations.length > 0) {
+    filtered = filtered.filter((tour) =>
+      filters.destinations.some((dest) => tour.destinations.includes(dest))
+    );
+  }
+
+  // Filter by activities (tour must include at least one of the selected activities)
+  if (filters.activities && filters.activities.length > 0) {
+    filtered = filtered.filter((tour) =>
+      filters.activities.some((activity) => tour.activities.includes(activity))
+    );
+  }
+
+  // Filter by duration range (hours)
+  if (filters.minDuration !== undefined) {
+    filtered = filtered.filter(
+      (tour) => (tour.durationHours || 0) >= filters.minDuration!
+    );
+  }
+  if (filters.maxDuration !== undefined) {
+    filtered = filtered.filter(
+      (tour) => (tour.durationHours || Infinity) <= filters.maxDuration!
     );
   }
 
