@@ -1,12 +1,24 @@
 /**
- * Tour data from vietnamtourbooking.com affiliate partner
- * These tours are displayed on vietnamtravel.help to provide additional travel services
+ * Tour data for vietnamtravel.help
+ *
+ * SUPPLIERS/PARTNERS:
+ * 1. halong-bay-tours.com - 8 cruise tours (Halong Bay & Mekong)
+ *    Contact: via website
+ *
+ * 2. asiatouradvisor.com - All other tours (~65 tours)
+ *    Contact: help@asiatouradvisor.com
+ *    Main supplier for day trips, multi-day tours, and packages
+ *
+ * NOTE: affiliateUrl field is for internal tracking only - NOT shown to customers.
+ * Customers see internal URLs like /cruise/[slug]
  */
 
 import type { Tour, ItineraryDay } from "@/types/tours";
 
 export const FEATURED_TOURS: Tour[] = [
-  // Halong Bay Cruises
+  // ============================================
+  // HALONG-BAY-TOURS.COM CRUISES (8 tours)
+  // ============================================
   {
     id: "halong-day-trip",
     slug: "halong-day-trip-sung-sot-titop",
@@ -685,9 +697,10 @@ export const FEATURED_TOURS: Tour[] = [
     activities: ["cultural", "nature", "trekking"],
   },
 
-  // =====================================================
-  // ASIATOURADVISOR.COM TOURS - Day Trips
-  // =====================================================
+  // ============================================
+  // ASIATOURADVISOR.COM TOURS (~65 tours)
+  // Contact: help@asiatouradvisor.com
+  // ============================================
 
   // Halong Bay Day Trips
   {
