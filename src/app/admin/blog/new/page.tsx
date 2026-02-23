@@ -6,12 +6,10 @@ import type { BlogCategory } from '@/lib/database.types'
 
 export default function NewBlogPostPage() {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState<BlogCategory[]>([])
-  const [searchingImages, setSearchingImages] = useState(false)
-  const [imageResults, setImageResults] = useState<Array<{ url: string; thumb: string; credit: string }>>([])
-  const [imageQuery, setImageQuery] = useState('')
-  const [generatingContent, setGeneratingContent] = useState(false)
+  const [generating, setGenerating] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [step, setStep] = useState<'input' | 'preview'>('input')
 
   const [form, setForm] = useState({
     title: '',
@@ -19,7 +17,7 @@ export default function NewBlogPostPage() {
     excerpt: '',
     featured_image: '',
     category_id: '',
-    status: 'draft' as 'draft' | 'published',
+    status: 'published' as 'draft' | 'published',
     meta_title: '',
     meta_description: '',
     meta_keywords: ''
@@ -39,33 +37,22 @@ export default function NewBlogPostPage() {
     }
   }
 
-  async function searchImages() {
-    if (!imageQuery.trim()) return
-
-    setSearchingImages(true)
-    try {
-      const res = await fetch(`/api/admin/blog/images?query=${encodeURIComponent(imageQuery)}`)
-      const data = await res.json()
-      setImageResults(data.images || [])
-    } catch (error) {
-      console.error('Error searching images:', error)
-    } finally {
-      setSearchingImages(false)
-    }
-  }
-
-  async function generateContent(topic: string) {
-    if (!topic.trim()) {
-      alert('Please enter a title first')
+  async function generateFullPost() {
+    if (!form.title.trim()) {
+      alert('Please enter a title')
       return
     }
 
-    setGeneratingContent(true)
+    setGenerating(true)
     try {
-      const res = await fetch('/api/admin/blog/generate', {
+      // Generate everything in one API call
+      const res = await fetch('/api/admin/blog/generate-full', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, category: form.category_id })
+        body: JSON.stringify({
+          title: form.title,
+          category_id: form.category_id
+        })
       })
 
       if (!res.ok) throw new Error('Generation failed')
@@ -74,28 +61,30 @@ export default function NewBlogPostPage() {
 
       setForm(prev => ({
         ...prev,
-        content: data.content || prev.content,
-        excerpt: data.excerpt || prev.excerpt,
-        meta_description: data.meta_description || prev.meta_description,
-        meta_keywords: data.meta_keywords || prev.meta_keywords
+        content: data.content || '',
+        excerpt: data.excerpt || '',
+        featured_image: data.featured_image || '',
+        meta_title: data.meta_title || prev.title,
+        meta_description: data.meta_description || '',
+        meta_keywords: data.meta_keywords || ''
       }))
+
+      setStep('preview')
     } catch (error) {
-      console.error('Error generating content:', error)
+      console.error('Error generating post:', error)
       alert('Failed to generate content. Please try again.')
     } finally {
-      setGeneratingContent(false)
+      setGenerating(false)
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-
+  async function savePost() {
     if (!form.title || !form.content) {
       alert('Title and content are required')
       return
     }
 
-    setLoading(true)
+    setSaving(true)
     try {
       const res = await fetch('/api/admin/blog', {
         method: 'POST',
@@ -106,299 +95,284 @@ export default function NewBlogPostPage() {
       if (!res.ok) throw new Error('Failed to create post')
 
       const data = await res.json()
-      router.push(`/admin/blog/${data.post.id}`)
+      router.push('/admin/blog')
     } catch (error) {
       console.error('Error creating post:', error)
       alert('Failed to create post')
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
   }
 
-  return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">New Blog Post</h1>
-          <p className="text-gray-600">Create a new article for your blog</p>
+  // Simple input view
+  if (step === 'input') {
+    return (
+      <div className="p-6 max-w-2xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Blog Post</h1>
+          <p className="text-gray-600">Enter a title and AI will generate everything automatically</p>
         </div>
-        <button
-          onClick={() => router.back()}
-          className="text-gray-600 hover:text-gray-900"
-        >
-          Cancel
-        </button>
-      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Title */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Title *
-          </label>
-          <input
-            type="text"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg"
-            placeholder="Enter post title..."
-            required
-          />
-
-          {/* AI Generate Button */}
-          <div className="mt-3 flex gap-2">
-            <button
-              type="button"
-              onClick={() => generateContent(form.title)}
-              disabled={generatingContent || !form.title}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {generatingContent ? (
-                <>
-                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  AI Generate Content
-                </>
-              )}
-            </button>
-            <span className="text-sm text-gray-500 self-center">
-              Generate original content based on the title
-            </span>
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          {/* Title Input */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
+              Blog Post Title
+            </label>
+            <input
+              type="text"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              className="w-full px-4 py-4 text-lg border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+              placeholder="e.g., Vietnam E-Visa Requirements 2026"
+              autoFocus
+            />
           </div>
-        </div>
 
-        {/* Category & Status */}
-        <div className="bg-white rounded-lg shadow p-6 grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category
+          {/* Category Select */}
+          <div className="mb-8">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
+              Category (optional)
             </label>
             <select
               value={form.category_id}
               onChange={(e) => setForm({ ...form, category_id: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             >
-              <option value="">Select category</option>
+              <option value="">Auto-detect category</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>{cat.name}</option>
               ))}
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Status
-            </label>
-            <select
-              value={form.status}
-              onChange={(e) => setForm({ ...form, status: e.target.value as 'draft' | 'published' })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
-          </div>
-        </div>
 
-        {/* Featured Image */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Featured Image
-          </label>
-
-          {form.featured_image ? (
-            <div className="relative mb-4">
-              <img
-                src={form.featured_image}
-                alt="Featured"
-                className="w-full h-48 object-cover rounded-lg"
-              />
-              <button
-                type="button"
-                onClick={() => setForm({ ...form, featured_image: '' })}
-                className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          ) : (
-            <>
-              <input
-                type="text"
-                value={form.featured_image}
-                onChange={(e) => setForm({ ...form, featured_image: e.target.value })}
-                placeholder="Enter image URL or search below"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mb-4"
-              />
-
-              {/* Image Search */}
-              <div className="flex gap-2 mb-4">
-                <input
-                  type="text"
-                  value={imageQuery}
-                  onChange={(e) => setImageQuery(e.target.value)}
-                  placeholder="Search free images (Unsplash)..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                />
-                <button
-                  type="button"
-                  onClick={searchImages}
-                  disabled={searchingImages}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {searchingImages ? 'Searching...' : 'Search'}
-                </button>
-              </div>
-
-              {/* Image Results */}
-              {imageResults.length > 0 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {imageResults.map((img, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => {
-                        setForm({ ...form, featured_image: img.url })
-                        setImageResults([])
-                      }}
-                      className="relative group"
-                    >
-                      <img
-                        src={img.thumb}
-                        alt=""
-                        className="w-full h-20 object-cover rounded hover:opacity-75 transition-opacity"
-                      />
-                      <span className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 truncate opacity-0 group-hover:opacity-100">
-                        {img.credit}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </div>
-
-        {/* Excerpt */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Excerpt
-          </label>
-          <textarea
-            value={form.excerpt}
-            onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-            rows={3}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-            placeholder="Brief summary of the post (shown in listings)..."
-          />
-        </div>
-
-        {/* Content */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Content * (HTML supported)
-          </label>
-          <textarea
-            value={form.content}
-            onChange={(e) => setForm({ ...form, content: e.target.value })}
-            rows={20}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 font-mono text-sm"
-            placeholder="Write your blog post content here... HTML tags are supported."
-            required
-          />
-          <p className="mt-2 text-sm text-gray-500">
-            Tip: Use HTML tags like &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;strong&gt;, etc. for formatting.
-          </p>
-        </div>
-
-        {/* SEO Settings */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">SEO Settings</h3>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Meta Title (max 70 chars)
-              </label>
-              <input
-                type="text"
-                value={form.meta_title}
-                onChange={(e) => setForm({ ...form, meta_title: e.target.value })}
-                maxLength={70}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                placeholder="SEO title (defaults to post title)"
-              />
-              <p className="text-sm text-gray-500 mt-1">{form.meta_title.length}/70 characters</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Meta Description (max 160 chars)
-              </label>
-              <textarea
-                value={form.meta_description}
-                onChange={(e) => setForm({ ...form, meta_description: e.target.value })}
-                maxLength={160}
-                rows={2}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                placeholder="SEO description (defaults to excerpt)"
-              />
-              <p className="text-sm text-gray-500 mt-1">{form.meta_description.length}/160 characters</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Meta Keywords
-              </label>
-              <input
-                type="text"
-                value={form.meta_keywords}
-                onChange={(e) => setForm({ ...form, meta_keywords: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-                placeholder="vietnam visa, travel tips, tourist guide (comma separated)"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Submit Buttons */}
-        <div className="flex justify-end gap-4">
+          {/* Generate Button */}
           <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            onClick={generateFullPost}
+            disabled={generating || !form.title.trim()}
+            className="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-lg font-semibold rounded-xl hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
           >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors flex items-center gap-2"
-          >
-            {loading ? (
+            {generating ? (
               <>
-                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin w-6 h-6" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
-                Creating...
+                <span>Generating Article, Image & SEO...</span>
               </>
             ) : (
-              'Create Post'
+              <>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>Generate Full Blog Post</span>
+              </>
             )}
           </button>
+
+          <p className="text-center text-sm text-gray-500 mt-4">
+            AI will create: Article content + Featured image + SEO metadata
+          </p>
         </div>
-      </form>
+
+        {/* Quick Ideas */}
+        <div className="mt-8">
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">Quick Ideas:</h3>
+          <div className="flex flex-wrap gap-2">
+            {[
+              'Vietnam E-Visa Guide 2026',
+              'Best Time to Visit Vietnam',
+              'Vietnam Travel Tips for First-Timers',
+              'Ha Long Bay Travel Guide',
+              'Vietnamese Street Food Guide',
+              'Vietnam Customs Regulations',
+              'Hanoi vs Ho Chi Minh City',
+              'Vietnam Budget Travel Tips'
+            ].map((idea) => (
+              <button
+                key={idea}
+                onClick={() => setForm({ ...form, title: idea })}
+                className="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+              >
+                {idea}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Preview view
+  return (
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Preview & Publish</h1>
+          <p className="text-gray-600">Review the generated content before publishing</p>
+        </div>
+        <button
+          onClick={() => setStep('input')}
+          className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back
+        </button>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        {/* Main Content */}
+        <div className="col-span-2 space-y-6">
+          {/* Title */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+            <input
+              type="text"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              className="w-full px-4 py-3 text-xl font-semibold border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          {/* Featured Image */}
+          {form.featured_image && (
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+              <img
+                src={form.featured_image}
+                alt="Featured"
+                className="w-full h-64 object-cover"
+              />
+              <div className="p-4">
+                <input
+                  type="text"
+                  value={form.featured_image}
+                  onChange={(e) => setForm({ ...form, featured_image: e.target.value })}
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg"
+                  placeholder="Image URL"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
+            <textarea
+              value={form.content}
+              onChange={(e) => setForm({ ...form, content: e.target.value })}
+              rows={20}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 font-mono text-sm"
+            />
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Publish Box */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Publish</h3>
+
+            <div className="mb-4">
+              <label className="block text-sm text-gray-600 mb-1">Status</label>
+              <select
+                value={form.status}
+                onChange={(e) => setForm({ ...form, status: e.target.value as 'draft' | 'published' })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              >
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm text-gray-600 mb-1">Category</label>
+              <select
+                value={form.category_id}
+                onChange={(e) => setForm({ ...form, category_id: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              >
+                <option value="">None</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              onClick={savePost}
+              disabled={saving}
+              className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {saving ? (
+                <>
+                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Publishing...
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Publish Post
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Excerpt */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Excerpt</label>
+            <textarea
+              value={form.excerpt}
+              onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            />
+          </div>
+
+          {/* SEO */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">SEO</h3>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Meta Title</label>
+                <input
+                  type="text"
+                  value={form.meta_title}
+                  onChange={(e) => setForm({ ...form, meta_title: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Meta Description</label>
+                <textarea
+                  value={form.meta_description}
+                  onChange={(e) => setForm({ ...form, meta_description: e.target.value })}
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Keywords</label>
+                <input
+                  type="text"
+                  value={form.meta_keywords}
+                  onChange={(e) => setForm({ ...form, meta_keywords: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
