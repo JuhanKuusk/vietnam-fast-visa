@@ -33,9 +33,23 @@ export function LanguageSelector() {
   useEffect(() => {
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
+      const isMobile = window.innerWidth < 640;
+
+      // On mobile, ensure dropdown doesn't go off-screen
+      let rightPos = window.innerWidth - rect.right;
+      if (isMobile) {
+        // Ensure at least 8px from right edge
+        rightPos = Math.max(8, rightPos);
+        // Ensure dropdown doesn't extend past left edge (dropdown width is 192px / w-48)
+        const leftEdge = window.innerWidth - rightPos - 192;
+        if (leftEdge < 8) {
+          rightPos = window.innerWidth - 192 - 8;
+        }
+      }
+
       setDropdownPosition({
         top: rect.bottom + 8, // 8px gap below button
-        right: window.innerWidth - rect.right,
+        right: rightPos,
       });
     }
   }, [isOpen]);
@@ -68,6 +82,11 @@ export function LanguageSelector() {
   }, [isOpen]);
 
   const currentLang = languages[language];
+
+  // Don't render selector if only one language is available
+  if (availableLanguages.length <= 1) {
+    return null;
+  }
 
   const dropdownContent = isOpen && mounted ? createPortal(
     <div
@@ -115,24 +134,24 @@ export function LanguageSelector() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex-shrink-0 flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
+        className="flex-shrink-0 flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
         disabled={isLoading}
       >
-        <span className="text-xl sm:text-base">{currentLang.flag}</span>
+        <span className="text-lg sm:text-base">{currentLang.flag}</span>
         <span className="hidden sm:inline">{currentLang.nativeName}</span>
-        {isLoading ? (
-          <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+        {/* Mobile: show small dropdown arrow */}
+        <svg
+          className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+        {isLoading && (
+          <svg className="w-4 h-4 animate-spin ml-1" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-        ) : (
-          <svg
-            className={`w-4 h-4 hidden sm:block transition-transform ${isOpen ? "rotate-180" : ""}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         )}
       </button>

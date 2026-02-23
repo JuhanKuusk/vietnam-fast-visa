@@ -62,7 +62,7 @@ const SiteContext = createContext<SiteContextType | undefined>(undefined);
 // =============================================================================
 
 function getDomainFromCookie(): string {
-  if (typeof document === "undefined") return "vietnamvisahelp.com";
+  if (typeof document === "undefined") return "vietnamtravel.help";
 
   const cookies = document.cookie.split(";");
   for (const cookie of cookies) {
@@ -77,12 +77,12 @@ function getDomainFromCookie(): string {
     const hostname = window.location.hostname.replace(/^www\./, "").toLowerCase();
     // Handle localhost
     if (hostname === "localhost" || hostname.includes("127.0.0.1")) {
-      return "vietnamvisahelp.com"; // Default for local dev
+      return "vietnamtravel.help"; // Default for local dev
     }
     return hostname;
   }
 
-  return "vietnamvisahelp.com";
+  return "vietnamtravel.help";
 }
 
 // =============================================================================
@@ -90,7 +90,7 @@ function getDomainFromCookie(): string {
 // =============================================================================
 
 export function SiteProvider({ children }: { children: React.ReactNode }) {
-  const [domain, setDomain] = useState<string>("vietnamvisahelp.com");
+  const [domain, setDomain] = useState<string>("vietnamtravel.help");
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Detect domain on mount
@@ -180,6 +180,6 @@ export function useSite() {
  * Use this in Server Components
  */
 export function getServerSiteConfig(headers: Headers): SiteConfig {
-  const domain = headers.get("x-site-domain") || "vietnamvisahelp.com";
+  const domain = headers.get("x-site-domain") || "vietnamtravel.help";
   return getSiteConfig(domain);
 }

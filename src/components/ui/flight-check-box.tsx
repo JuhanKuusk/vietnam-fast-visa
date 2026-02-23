@@ -1,7 +1,20 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, MouseEvent } from "react";
 import { FlightInfo } from "./flight-info";
+
+// Helper to make entire date input clickable (opens calendar picker)
+const handleDateInputClick = (e: MouseEvent<HTMLInputElement>) => {
+  const input = e.currentTarget;
+  // Use showPicker API if available (modern browsers)
+  if ('showPicker' in input && typeof input.showPicker === 'function') {
+    try {
+      input.showPicker();
+    } catch {
+      // Some browsers may throw if already showing
+    }
+  }
+};
 
 interface FlightDataCallback {
   arrivalAirport: string;
@@ -143,35 +156,40 @@ export function FlightCheckBox({
           {/* Date input - FIRST, highlighted when empty */}
           <div className="relative">
             {language === 'ZH' ? (
-              /* Chinese: Show formatted date with clickable overlay */
-              <>
+              /* Chinese: Use native date input with Chinese display overlay */
+              <div className="relative w-36 sm:w-44">
+                {/* Native date input - positioned first, full size, clickable */}
                 <input
                   type="date"
                   value={flightDate}
                   onChange={(e) => onFlightDateChange(e.target.value)}
+                  onClick={handleDateInputClick}
                   min={new Date().toISOString().split("T")[0]}
                   required
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
-                />
-                <div
-                  className={`w-36 sm:w-44 px-2 sm:px-3 py-3 rounded-lg border text-gray-900 dark:text-white text-sm sm:text-base transition-all cursor-pointer ${
+                  className={`w-full px-2 sm:px-3 py-3 rounded-lg border text-transparent text-sm sm:text-base transition-all cursor-pointer ${
                     !isDateSelected
                       ? 'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-400 dark:border-yellow-500 ring-2 ring-yellow-300 dark:ring-yellow-600 animate-pulse'
                       : 'bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
                   }`}
+                  style={{ colorScheme: 'light' }}
+                />
+                {/* Chinese text overlay - non-interactive */}
+                <div
+                  className="absolute inset-0 flex items-center px-2 sm:px-3 text-gray-900 dark:text-white text-sm sm:text-base pointer-events-none"
                 >
                   {flightDate ? formatChineseDate(flightDate) : '选择日期'}
                 </div>
-              </>
+              </div>
             ) : (
               /* Non-Chinese: Standard date input */
               <input
                 type="date"
                 value={flightDate}
                 onChange={(e) => onFlightDateChange(e.target.value)}
+                onClick={handleDateInputClick}
                 min={new Date().toISOString().split("T")[0]}
                 required
-                className={`w-32 sm:w-40 px-2 sm:px-3 py-3 rounded-lg border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all ${
+                className={`w-32 sm:w-40 px-2 sm:px-3 py-3 rounded-lg border text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all cursor-pointer ${
                   !isDateSelected
                     ? 'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-400 dark:border-yellow-500 ring-2 ring-yellow-300 dark:ring-yellow-600 animate-pulse'
                     : 'bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600'

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlightCheckBox } from "@/components/ui/flight-check-box";
 import { CitizenshipChecker } from "@/components/ui/citizenship-checker";
@@ -399,7 +400,7 @@ export default function Home() {
             {/* Logo */}
             <div className="flex flex-col">
               <Link href="/" className="hover:opacity-90 transition-opacity">
-                <Logo size="md" taglineText={t.header.logoTagline} siteName={siteName !== "VietnamVisaHelp.com" ? siteName : undefined} />
+                <Logo size="md" taglineText={t.header.logoTagline} siteName={siteName !== "VietnamTravel.help" ? siteName : undefined} />
               </Link>
               {/* Mobile contact info below logo */}
               <div className="flex sm:hidden items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -423,6 +424,27 @@ export default function Home() {
               >
                 {t.header.aboutUs}
               </Link>
+              {/* Added Fees Button - Amber/Orange */}
+              <Link
+                href="/fees"
+                className="hidden sm:flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white rounded-lg transition-all hover:opacity-90"
+                style={{ backgroundColor: '#f59e0b' }}
+              >
+                {t.header?.addedFees || "Added Fees"}
+              </Link>
+              {/* Vietnam Tours Button - Teal/Green */}
+              {layout.showTours && (
+                <Link
+                  href="/tours"
+                  className="hidden sm:flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white rounded-lg transition-all hover:opacity-90"
+                  style={{ backgroundColor: '#0d9488' }}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Vietnam Tours
+                </Link>
+              )}
               {/* WhatsApp Button - Green */}
               <a
                 href={`https://wa.me/${content.whatsappNumber.replace(/[^0-9]/g, '')}`}
@@ -549,6 +571,65 @@ export default function Home() {
                 {t.hero.learnAboutVisa}
               </button>
             </div>
+
+            {/* Featured Tours Preview - 4 curated tours */}
+            {layout.showTours && (
+              <div className="mt-12">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Explore Vietnam Tours</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                  {getFeaturedTours(4).map((tour) => (
+                    <Link
+                      key={tour.id}
+                      href={`/cruise/${tour.slug}`}
+                      className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:scale-105 border border-gray-200 dark:border-gray-700"
+                    >
+                      <div className="relative h-24 md:h-32 overflow-hidden bg-gray-200 dark:bg-gray-700">
+                        <Image
+                          src={tour.imageUrl}
+                          alt={tour.name}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-300"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                        />
+                        <div className="absolute top-2 right-2 bg-white/90 dark:bg-gray-900/90 px-2 py-1 rounded-full text-xs font-bold" style={{ color: theme.primaryColor }}>
+                          ${tour.price}
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <h4 className="font-semibold text-gray-900 dark:text-white text-xs md:text-sm line-clamp-2 leading-tight">
+                          {tour.name}
+                        </h4>
+                        <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">{tour.duration}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Two Action Buttons */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link
+                    href="/apply"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                    style={{ backgroundColor: theme.primaryColor }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Urgent Visa Processing
+                  </Link>
+                  <Link
+                    href="/tours"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                    style={{ backgroundColor: theme.secondaryColor }}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Vietnam Tours
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -1142,7 +1223,7 @@ export default function Home() {
       {/* Tours Section - Only shown on vietnamtravel.help */}
       {layout.showTours && (
         <ToursSection
-          tours={getFeaturedTours(8)}
+          tours={getFeaturedTours(4)}
           title="Explore Vietnam Tours & Activities"
           subtitle="Book amazing experiences with our trusted travel partner and make the most of your Vietnam trip"
         />

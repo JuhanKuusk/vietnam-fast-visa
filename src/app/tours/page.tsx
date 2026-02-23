@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FEATURED_TOURS } from "@/lib/tours-data";
+import { getAllActiveTours } from "@/lib/tours-data";
 import { TourCard } from "@/components/ui/tour-card";
 import { TourFilters } from "@/components/tours/TourFilters";
 import { ToursFAQ } from "@/components/tours/ToursFAQ";
@@ -17,6 +17,9 @@ import { Logo } from "@/components/ui/logo";
 import { Footer } from "@/components/ui/footer";
 import { LanguageSelector } from "@/components/ui/language-selector";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+
+// Mobile pagination - 10 tours per page
+const MOBILE_PAGE_SIZE = 10;
 
 // Hero background images for the tours page (Vietnam Travel Help branded images)
 const HERO_IMAGES = [
@@ -90,11 +93,31 @@ export default function ToursPage() {
 
   const [sortBy, setSortBy] = useState<TourSortOption>("popular");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Reset to page 1 when filters, search, or sort changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, sortBy, searchQuery]);
+
+  // Get active tours (BestPrice Travel only)
+  const activeTours = useMemo(() => getAllActiveTours(), []);
 
   // Apply grouping, filters, search, and sorting
   const displayedTours = useMemo(() => {
     // First, get grouped tours (collapses variations into single representatives)
-    let tours = getGroupedToursForListing(FEATURED_TOURS);
+    let tours = getGroupedToursForListing(activeTours);
 
     // Apply search
     if (searchQuery.trim()) {
@@ -108,12 +131,24 @@ export default function ToursPage() {
     tours = sortTours(tours, sortBy);
 
     return tours;
-  }, [filters, sortBy, searchQuery]);
+  }, [filters, sortBy, searchQuery, activeTours]);
+
+  // Paginated tours for mobile
+  const paginatedTours = useMemo(() => {
+    if (!isMobile) return displayedTours;
+    const startIndex = (currentPage - 1) * MOBILE_PAGE_SIZE;
+    const endIndex = startIndex + MOBILE_PAGE_SIZE;
+    return displayedTours.slice(startIndex, endIndex);
+  }, [displayedTours, currentPage, isMobile]);
+
+  const totalPages = Math.ceil(displayedTours.length / MOBILE_PAGE_SIZE);
+  const startTour = (currentPage - 1) * MOBILE_PAGE_SIZE + 1;
+  const endTour = Math.min(currentPage * MOBILE_PAGE_SIZE, displayedTours.length);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50 overflow-hidden">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
@@ -135,6 +170,17 @@ export default function ToursPage() {
 
             {/* Navigation Buttons */}
             <div className="flex items-center gap-2 sm:gap-3">
+              {/* Mobile: Apply for E-Visa Button */}
+              <Link
+                href="/apply"
+                className="flex sm:hidden items-center gap-1 px-3 py-1.5 text-xs font-medium text-white rounded-lg transition-all hover:opacity-90"
+                style={{ backgroundColor: '#ef7175' }}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Apply E-Visa
+              </Link>
               {/* About Us Button - Blue */}
               <Link
                 href="/about"
@@ -235,7 +281,7 @@ export default function ToursPage() {
                 <TourFilters
                   filters={filters}
                   setFilters={setFilters}
-                  totalCount={FEATURED_TOURS.length}
+                  totalCount={activeTours.length}
                   filteredCount={displayedTours.length}
                 />
               </div>
@@ -276,15 +322,63 @@ export default function ToursPage() {
 
               {/* Tours Grid */}
               {displayedTours.length > 0 ? (
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {displayedTours.map((tour) => (
-                    <TourCard
-                      key={tour.id}
-                      tour={tour}
-                      href={`/cruise/${tour.slug}`}
-                    />
-                  ))}
-                </div>
+                <>
+                  {/* Mobile pagination info */}
+                  {isMobile && displayedTours.length > MOBILE_PAGE_SIZE && (
+                    <div className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      Showing {startTour}-{endTour} of {displayedTours.length} tours
+                    </div>
+                  )}
+
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {paginatedTours.map((tour) => (
+                      <TourCard
+                        key={tour.id}
+                        tour={tour}
+                        href={`/cruise/${tour.slug}`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Mobile Pagination Controls */}
+                  {isMobile && totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-4 mt-8 pb-4">
+                      {currentPage > 1 && (
+                        <button
+                          onClick={() => {
+                            setCurrentPage(currentPage - 1);
+                            window.scrollTo({ top: 400, behavior: 'smooth' });
+                          }}
+                          className="flex items-center gap-2 px-5 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium shadow-lg"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                          Previous
+                        </button>
+                      )}
+
+                      <span className="text-gray-600 dark:text-gray-400 font-medium">
+                        {currentPage} / {totalPages}
+                      </span>
+
+                      {currentPage < totalPages && (
+                        <button
+                          onClick={() => {
+                            setCurrentPage(currentPage + 1);
+                            window.scrollTo({ top: 400, behavior: 'smooth' });
+                          }}
+                          className="flex items-center gap-2 px-5 py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors font-medium shadow-lg"
+                        >
+                          Next
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center py-16">
                   <svg

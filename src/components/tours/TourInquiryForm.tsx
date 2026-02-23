@@ -3,15 +3,29 @@
 import { useState } from "react";
 import type { Tour } from "@/types/tours";
 import type { TourInquiryFormData } from "@/types/tours";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+// Tour translation type
+interface TourTranslation {
+  name?: string;
+}
 
 interface TourInquiryFormProps {
   tour: Tour;
 }
 
 export function TourInquiryForm({ tour }: TourInquiryFormProps) {
+  const { language, t } = useLanguage();
+  const isZH = language === "ZH";
+
+  // Get translated tour name if available
+  const toursTranslations = (t as Record<string, unknown>).tours as Record<string, TourTranslation> | undefined;
+  const tourTranslation = toursTranslations?.[tour.id];
+  const displayName = tourTranslation?.name || tour.name;
+
   const [formData, setFormData] = useState<TourInquiryFormData>({
     tourId: tour.id,
-    tourName: tour.name,
+    tourName: displayName,
     tourCategory: tour.category,
     fullName: "",
     email: "",
@@ -59,14 +73,14 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to submit inquiry");
+        throw new Error(data.error || (isZH ? "提交失败" : "Failed to submit inquiry"));
       }
 
       setSubmitSuccess(true);
       setInquiryNumber(data.inquiryNumber);
     } catch (error) {
       setSubmitError(
-        error instanceof Error ? error.message : "Something went wrong"
+        error instanceof Error ? error.message : (isZH ? "出错了" : "Something went wrong")
       );
     } finally {
       setIsSubmitting(false);
@@ -93,21 +107,23 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             </svg>
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">
-            Inquiry Submitted!
+            {isZH ? "咨询已提交！" : "Inquiry Submitted!"}
           </h3>
           <p className="text-gray-600 mb-4">
-            Your inquiry reference:
+            {isZH ? "您的咨询参考号：" : "Your inquiry reference:"}
             <br />
             <strong className="text-lg text-cyan-600">{inquiryNumber}</strong>
           </p>
           <p className="text-sm text-gray-600 mb-4">
-            We&apos;ve received your inquiry and will contact you within 24 hours to confirm your booking.
+            {isZH
+              ? "我们已收到您的咨询，将在24小时内联系您确认预订。"
+              : "We've received your inquiry and will contact you within 24 hours to confirm your booking."}
           </p>
           <a
             href="/tours"
             className="inline-block text-cyan-600 hover:text-cyan-700 font-medium text-sm"
           >
-            Browse more tours
+            {isZH ? "浏览更多旅游产品" : "Browse more tours"}
           </a>
         </div>
       </div>
@@ -116,9 +132,13 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
-      <h3 className="text-xl font-bold text-gray-900 mb-4">Book This Tour</h3>
+      <h3 className="text-xl font-bold text-gray-900 mb-4">
+        {isZH ? "预订此行程" : "Book This Tour"}
+      </h3>
       <p className="text-sm text-gray-600 mb-6">
-        Fill out the form below and we&apos;ll get back to you within 24 hours.
+        {isZH
+          ? "填写以下表格，我们将在24小时内与您联系。"
+          : "Fill out the form below and we'll get back to you within 24 hours."}
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -128,7 +148,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             htmlFor="fullName"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Full Name *
+            {isZH ? "姓名 *" : "Full Name *"}
           </label>
           <input
             type="text"
@@ -138,7 +158,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             value={formData.fullName}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-            placeholder="John Doe"
+            placeholder={isZH ? "张三" : "John Doe"}
           />
         </div>
 
@@ -148,7 +168,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             htmlFor="email"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Email *
+            {isZH ? "电子邮箱 *" : "Email *"}
           </label>
           <input
             type="email"
@@ -158,7 +178,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             value={formData.email}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-            placeholder="john@example.com"
+            placeholder={isZH ? "zhangsan@example.com" : "john@example.com"}
           />
         </div>
 
@@ -168,7 +188,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             htmlFor="phone"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Phone Number *
+            {isZH ? "手机号码 *" : "Phone Number *"}
           </label>
           <input
             type="tel"
@@ -178,7 +198,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             value={formData.phone}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-            placeholder="+1 234 567 8900"
+            placeholder={isZH ? "+86 138 0000 0000" : "+1 234 567 8900"}
           />
         </div>
 
@@ -188,7 +208,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             htmlFor="whatsapp"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            WhatsApp (Optional)
+            {isZH ? "微信/WhatsApp（选填）" : "WhatsApp (Optional)"}
           </label>
           <input
             type="tel"
@@ -197,7 +217,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             value={formData.whatsapp}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-            placeholder="+1 234 567 8900"
+            placeholder={isZH ? "微信号或WhatsApp号码" : "+1 234 567 8900"}
           />
         </div>
 
@@ -207,7 +227,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             htmlFor="nationality"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Nationality (Optional)
+            {isZH ? "国籍（选填）" : "Nationality (Optional)"}
           </label>
           <input
             type="text"
@@ -216,7 +236,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             value={formData.nationality}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-            placeholder="United States"
+            placeholder={isZH ? "中国" : "United States"}
           />
         </div>
 
@@ -226,7 +246,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             htmlFor="preferredDate"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Preferred Date (Optional)
+            {isZH ? "期望出发日期（选填）" : "Preferred Date (Optional)"}
           </label>
           <input
             type="date"
@@ -246,7 +266,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
               htmlFor="numberOfAdults"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Adults *
+              {isZH ? "成人 *" : "Adults *"}
             </label>
             <select
               id="numberOfAdults"
@@ -269,7 +289,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
               htmlFor="numberOfChildren"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Children
+              {isZH ? "儿童" : "Children"}
             </label>
             <select
               id="numberOfChildren"
@@ -293,7 +313,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             htmlFor="specialRequests"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Special Requests (Optional)
+            {isZH ? "特殊要求（选填）" : "Special Requests (Optional)"}
           </label>
           <textarea
             id="specialRequests"
@@ -302,7 +322,7 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
             value={formData.specialRequests}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
-            placeholder="Any dietary requirements, accessibility needs, etc."
+            placeholder={isZH ? "如饮食要求、无障碍需求等" : "Any dietary requirements, accessibility needs, etc."}
           />
         </div>
 
@@ -340,15 +360,17 @@ export function TourInquiryForm({ tour }: TourInquiryFormProps) {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              Submitting...
+              {isZH ? "提交中..." : "Submitting..."}
             </span>
           ) : (
-            "Send Inquiry"
+            isZH ? "发送咨询" : "Send Inquiry"
           )}
         </button>
 
         <p className="text-xs text-gray-500 text-center">
-          By submitting, you agree to be contacted about your inquiry.
+          {isZH
+            ? "提交即表示您同意我们就您的咨询与您联系。"
+            : "By submitting, you agree to be contacted about your inquiry."}
         </p>
       </form>
     </div>

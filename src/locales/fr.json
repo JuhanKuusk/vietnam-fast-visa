@@ -1,11 +1,12 @@
 {
   "header": {
-    "siteName": "VietnamVisaHelp.com",
+    "siteName": "VietnamTravel.help",
     "tagline": "Service Visa Express",
     "logoTagline": "Approbation de l'enregistrement en 30 minutes",
     "support": "Assistance WhatsApp 24/7",
     "supportShort": "Soutien",
-    "aboutUs": "À Propos"
+    "aboutUs": "À Propos",
+    "addedFees": "Frais Supplémentaires"
   },
   "banner": {
     "deniedBoarding": "Refus d'embarquement et impossibilité d'enregistrement ?",
@@ -948,7 +949,15 @@
     "liabilityItem4": "Changements dans les politiques gouvernementales",
     "externalLinks": "Liens externes",
     "externalLinksText": "Notre site web peut contenir des liens vers des sites externes. Nous ne sommes pas responsables de leur contenu ou de leurs politiques.",
-    "consentCheckboxText": "Je confirme que toutes les informations fournies sont exactes et j'accepte les conditions d'utilisation, la politique de confidentialité et la politique de remboursement. Je comprends que VietnamVisaHelp.com n'est pas une agence gouvernementale et ne garantit pas l'obtention d'un visa."
+    "consentCheckboxText": "Je confirme que toutes les informations fournies sont exactes et j'accepte les conditions d'utilisation, la politique de confidentialité et la politique de remboursement. Je comprends que VietnamTravel.help n'est pas une agence gouvernementale et ne garantit pas l'obtention d'un visa.",
+    "footerFees": "Frais",
+    "officialPartner": "Partenaire officiel : CÔNG TY CỔ PHẦN CÔNG NGHỆ DU LỊCH BESTPRICE",
+    "licenseNumber": "Licence commerciale N° 0104679428 - Émise le 26/05/2010 - Dept. Planif. Investissement Hanoï | Licence Tour-opérateur N° 01-1794/2022/SDL-GPLHND",
+    "hanoiOffice": "Bureau de Hanoï",
+    "hcmOffice": "Bureau de Hô Chi Minh-Ville",
+    "hanoiAddress": "11e étage, Vinaconex Diamond Tower, 459C rue Bach Mai, quartier Bach Mai, Hanoï, Vietnam",
+    "hcmAddress": "Park 7 Building, 38e étage, Vinhomes Central Park, 720A, District de Binh Thanh, Hô Chi Minh-Ville, Vietnam",
+    "allRights": "Tous droits réservés"
   },
   "searchPrompts": {
     "searchCountry": "Tapez pour rechercher des pays...",

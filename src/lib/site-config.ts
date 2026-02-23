@@ -376,7 +376,7 @@ export const SITES: Record<string, SiteConfig> = {
       defaultLanguage: "ZH",
       targetCountries: ["CN", "TW", "HK", "MO", "SG"],  // Chinese-speaking regions
       forceLanguageForCountries: true,
-      availableLanguages: ["ZH", "EN"],  // Only Chinese and English
+      availableLanguages: ["ZH", "EN"],  // Chinese and English (for review/testing)
     },
   },
 };
@@ -661,8 +661,8 @@ export function getSiteConfig(hostname: string): SiteConfig {
     }
   }
 
-  // Default to main site
-  return SITES["vietnamvisahelp.com"];
+  // Default to VietnamTravel.help
+  return SITES["vietnamtravel.help"];
 }
 
 /**

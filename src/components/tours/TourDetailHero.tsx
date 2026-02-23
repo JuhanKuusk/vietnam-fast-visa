@@ -2,18 +2,58 @@
 
 import Image from "next/image";
 import type { Tour } from "@/types/tours";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
+
+// Tour translation type
+interface TourTranslation {
+  name?: string;
+  description?: string;
+  location?: string;
+  duration?: string;
+  highlights?: string[];
+  included?: string[];
+  excluded?: string[];
+  fullDescription?: string;
+  itinerary?: Array<{
+    title?: string;
+    description?: string;
+    activities?: string[];
+    meals?: string[];
+  }>;
+}
 
 interface TourDetailHeroProps {
   tour: Tour;
 }
 
 export function TourDetailHero({ tour }: TourDetailHeroProps) {
+  const { language, t } = useLanguage();
+  const { formatPrice } = useCurrency();
+  const isZH = language === "ZH";
+
+  // Get translated tour content if available
+  const toursTranslations = (t as Record<string, unknown>).tours as Record<string, TourTranslation> | undefined;
+  const tourTranslation = toursTranslations?.[tour.id];
+
+  // Use translations with fallback to original
+  const displayName = tourTranslation?.name || tour.name;
+  const displayLocation = tourTranslation?.location || tour.location;
+  const displayDuration = tourTranslation?.duration || tour.duration;
+
+  // Category labels
+  const getCategoryLabel = () => {
+    if (tour.category === "cruise") return isZH ? "邮轮" : "Cruise";
+    if (tour.category === "day-trip") return isZH ? "一日游" : "Day Trip";
+    return isZH ? "多日游" : "Multi-Day Tour";
+  };
+
   return (
     <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] bg-gradient-to-br from-gray-900 to-gray-700">
       {/* Background Image */}
       <Image
         src={tour.imageUrl}
-        alt={tour.name}
+        alt={displayName}
         fill
         className="object-cover opacity-60"
         priority
@@ -27,28 +67,31 @@ export function TourDetailHero({ tour }: TourDetailHeroProps) {
             {/* Category Badge */}
             <div className="mb-4">
               <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-white/90 text-gray-900">
-                {tour.category === "cruise"
-                  ? "Cruise"
-                  : tour.category === "day-trip"
-                  ? "Day Trip"
-                  : "Multi-Day Tour"}
+                {getCategoryLabel()}
               </span>
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-              {tour.name}
+            <h1
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-lg"
+              style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5)' }}
+            >
+              {displayName}
             </h1>
 
             {/* Meta Information */}
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-white/90">
+            <div
+              className="flex flex-wrap items-center gap-4 sm:gap-6 text-white drop-shadow-md"
+              style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.4)' }}
+            >
               {/* Location */}
               <div className="flex items-center gap-2">
                 <svg
-                  className="w-5 h-5"
+                  className="w-5 h-5 drop-shadow-md"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  style={{ filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.6))' }}
                 >
                   <path
                     strokeLinecap="round"
@@ -63,16 +106,17 @@ export function TourDetailHero({ tour }: TourDetailHeroProps) {
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
-                <span className="text-sm sm:text-base">{tour.location}</span>
+                <span className="text-sm sm:text-base font-medium">{displayLocation}</span>
               </div>
 
               {/* Duration */}
               <div className="flex items-center gap-2">
                 <svg
-                  className="w-5 h-5"
+                  className="w-5 h-5 drop-shadow-md"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  style={{ filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.6))' }}
                 >
                   <path
                     strokeLinecap="round"
@@ -81,24 +125,25 @@ export function TourDetailHero({ tour }: TourDetailHeroProps) {
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span className="text-sm sm:text-base">{tour.duration}</span>
+                <span className="text-sm sm:text-base font-medium">{displayDuration}</span>
               </div>
 
               {/* Rating */}
               {tour.rating && (
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-yellow-400"
+                    className="w-5 h-5 text-yellow-400 drop-shadow-md"
                     fill="currentColor"
                     viewBox="0 0 20 20"
+                    style={{ filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.6))' }}
                   >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
-                  <span className="text-sm sm:text-base font-medium">
+                  <span className="text-sm sm:text-base font-semibold">
                     {tour.rating}
                     {tour.reviewCount && (
-                      <span className="text-white/70 ml-1">
-                        ({tour.reviewCount} reviews)
+                      <span className="text-white/90 ml-1">
+                        ({tour.reviewCount} {isZH ? "评价" : "reviews"})
                       </span>
                     )}
                   </span>
@@ -109,24 +154,24 @@ export function TourDetailHero({ tour }: TourDetailHeroProps) {
             {/* Price (visible on mobile) */}
             <div className="mt-6 sm:hidden">
               <div className="inline-flex items-baseline gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <span className="text-sm text-white/70">From</span>
+                <span className="text-sm text-white/70">{isZH ? "起价" : "From"}</span>
                 {tour.originalPrice && (
                   <span className="text-sm text-white/50 line-through">
-                    US${tour.originalPrice}
+                    {formatPrice(tour.originalPrice)}
                   </span>
                 )}
                 <span className="text-2xl font-bold text-white">
-                  US${tour.price}
+                  {formatPrice(tour.price)}
                 </span>
-                <span className="text-sm text-white/70">per person</span>
+                <span className="text-sm text-white/70">{isZH ? "每人" : "per person"}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
+      {/* Gradient Overlay - stronger for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 pointer-events-none" />
     </div>
   );
 }

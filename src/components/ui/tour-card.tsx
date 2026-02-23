@@ -3,6 +3,9 @@
 import Image from "next/image";
 import type { Tour } from "@/types/tours";
 import { useSite } from "@/contexts/SiteContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { getTourVariations } from "@/lib/tours-utils";
 
 interface TourCardProps {
   tour: Tour;
@@ -14,6 +17,28 @@ interface TourCardProps {
 
 export function TourCard({ tour, href, openInNewTab }: TourCardProps) {
   const { theme } = useSite();
+  const { language, t } = useLanguage();
+  const { formatPrice } = useCurrency();
+
+  // Get translated tour content if available
+  // Tours translations are dynamically added to zh.json, so we use type assertion
+  const toursTranslations = (t as Record<string, unknown>).tours as Record<string, {
+    name?: string;
+    description?: string;
+    location?: string;
+    duration?: string;
+    highlights?: string[];
+  }> | undefined;
+  const tourTranslation = toursTranslations?.[tour.id];
+  const displayName = tourTranslation?.name || tour.name;
+  const displayDescription = tourTranslation?.description || tour.description;
+  const displayLocation = tourTranslation?.location || tour.location;
+  const displayDuration = tourTranslation?.duration || tour.duration;
+  const displayHighlights = tourTranslation?.highlights || tour.highlights;
+
+  // Check if this tour has variations
+  const variations = tour.groupId ? getTourVariations(tour.groupId) : [];
+  const hasMultipleVariations = variations.length > 1;
 
   // Use provided href or default to affiliate URL
   const linkUrl = href || tour.affiliateUrl;
@@ -49,7 +74,11 @@ export function TourCard({ tour, href, openInNewTab }: TourCardProps) {
 
         {/* Category badge */}
         <div className="absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium bg-white/90 text-gray-700">
-          {tour.category === "cruise" ? "Cruise" : tour.category === "day-trip" ? "Day Trip" : "Multi-Day"}
+          {tour.category === "cruise"
+            ? (language === "ZH" ? "邮轮" : "Cruise")
+            : tour.category === "day-trip"
+              ? (language === "ZH" ? "一日游" : "Day Trip")
+              : (language === "ZH" ? "多日游" : "Multi-Day")}
         </div>
 
         {/* Duration */}
@@ -57,8 +86,18 @@ export function TourCard({ tour, href, openInNewTab }: TourCardProps) {
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          {tour.duration}
+          {displayDuration}
         </div>
+
+        {/* Variations badge */}
+        {hasMultipleVariations && (
+          <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-purple-600 text-white">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+            {variations.length} {language === "ZH" ? "个选项" : "options"}
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -68,22 +107,22 @@ export function TourCard({ tour, href, openInNewTab }: TourCardProps) {
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
           </svg>
-          {tour.location}
+          {displayLocation}
         </div>
 
         {/* Title */}
         <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-cyan-700 transition-colors">
-          {tour.name}
+          {displayName}
         </h3>
 
         {/* Description */}
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-          {tour.description}
+          {displayDescription}
         </p>
 
         {/* Highlights */}
         <div className="flex flex-wrap gap-1 mb-3">
-          {tour.highlights.slice(0, 3).map((highlight, idx) => (
+          {displayHighlights.slice(0, 3).map((highlight, idx) => (
             <span
               key={idx}
               className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600"
@@ -110,14 +149,14 @@ export function TourCard({ tour, href, openInNewTab }: TourCardProps) {
           <div className="text-right">
             {tour.originalPrice && (
               <span className="text-xs text-gray-400 line-through block">
-                US${tour.originalPrice}
+                {formatPrice(tour.originalPrice)}
               </span>
             )}
             <span
               className="text-lg font-bold"
               style={{ color: theme.primaryColor }}
             >
-              US${tour.price}
+              {formatPrice(tour.price)}
             </span>
           </div>
         </div>
@@ -137,10 +176,17 @@ interface ToursSectionProps {
 
 export function ToursSection({
   tours,
-  title = "Explore Vietnam Tours & Activities",
-  subtitle = "Book amazing experiences with our trusted travel partner"
+  title,
+  subtitle
 }: ToursSectionProps) {
   const { theme } = useSite();
+  const { language } = useLanguage();
+
+  // Default titles based on language
+  const defaultTitle = language === "ZH" ? "探索越南旅游和活动" : "Explore Vietnam Tours & Activities";
+  const defaultSubtitle = language === "ZH" ? "与我们信赖的旅行合作伙伴一起预订精彩体验" : "Book amazing experiences with our trusted travel partner";
+  const displayTitle = title || defaultTitle;
+  const displaySubtitle = subtitle || defaultSubtitle;
 
   if (!tours || tours.length === 0) return null;
 
@@ -150,10 +196,10 @@ export function ToursSection({
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">
-            {title}
+            {displayTitle}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            {subtitle}
+            {displaySubtitle}
           </p>
         </div>
 
@@ -171,7 +217,7 @@ export function ToursSection({
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white transition-all hover:opacity-90"
             style={{ backgroundColor: theme.primaryColor }}
           >
-            View All Tours
+            {language === "ZH" ? "查看全部旅游" : "View All Tours"}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
@@ -181,7 +227,7 @@ export function ToursSection({
         {/* Partner Badge */}
         <div className="text-center mt-6">
           <p className="text-xs text-gray-500">
-            Tours provided by{" "}
+            {language === "ZH" ? "旅游由" : "Tours provided by"}{" "}
             <a
               href="https://www.vietnamtourbooking.com"
               target="_blank"
@@ -191,7 +237,7 @@ export function ToursSection({
             >
               Vietnam Tour Booking
             </a>
-            {" "}· Rated 4.5/5 stars
+            {" "}· {language === "ZH" ? "评分 4.5/5 星" : "Rated 4.5/5 stars"}
           </p>
         </div>
       </div>

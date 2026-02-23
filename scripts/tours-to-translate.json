@@ -1,0 +1,2194 @@
+[
+  {
+    "id": "halong-day-trip",
+    "name": "Halong Bay Day Trip (Sung Sot - Titop)",
+    "description": "Experience the magnificent Halong Bay on a day cruise. Visit Sung Sot Cave, the largest and most beautiful cave, and Titop Island.",
+    "location": "Halong Bay",
+    "duration": "1 day",
+    "highlights": [
+      "Sung Sot Cave",
+      "Titop Island",
+      "Kayaking",
+      "Lunch on board"
+    ],
+    "included": [
+      "Round-trip transfer from Hanoi",
+      "English-speaking tour guide",
+      "Lunch with Vietnamese specialties",
+      "Entrance fees and kayaking",
+      "Bottled water on bus"
+    ],
+    "excluded": [
+      "Personal expenses",
+      "Tips and gratuities",
+      "Beverages during meals",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": "serenity-cruise-2d1n",
+    "name": "Serenity Cruise 2 Days/1 Night",
+    "description": "Float on a calm, azure sea among limestone peaks. Perfect for discerning travelers seeking tranquility and natural beauty.",
+    "location": "Halong Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Overnight on bay",
+      "Cave exploration",
+      "Sunset views",
+      "Fresh seafood dinner"
+    ],
+    "included": [
+      "1 night accommodation in private cabin",
+      "All meals (lunch, dinner, breakfast, brunch)",
+      "English-speaking tour guide",
+      "Kayaking and cave entrance fees",
+      "Sunset party with snacks",
+      "Tai Chi class",
+      "Cooking demonstration"
+    ],
+    "excluded": [
+      "Transfer from Hanoi (available for extra fee)",
+      "Beverages and alcohol",
+      "Tips and personal expenses",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": "lan-ha-luxury-day",
+    "name": "Lan Ha Bay Luxury Day Tour",
+    "description": "Experience world-class comfort with luxury limousine transfer and premium cruise through the stunning Lan Ha Bay.",
+    "location": "Lan Ha Bay",
+    "duration": "1 day",
+    "highlights": [
+      "Luxury transfer",
+      "Less crowded",
+      "Premium cruise",
+      "Gourmet lunch"
+    ],
+    "included": [
+      "Luxury limousine round-trip transfer",
+      "Premium cruise experience",
+      "Gourmet lunch with drinks",
+      "English-speaking guide",
+      "Kayaking equipment",
+      "Bamboo boat ride",
+      "All entrance fees",
+      "Travel insurance"
+    ],
+    "excluded": [
+      "Personal expenses",
+      "Tips and gratuities",
+      "Alcoholic beverages"
+    ]
+  },
+  {
+    "id": "renea-cruise-2d1n",
+    "name": "Renea Cruise 2 Days/1 Night",
+    "description": "Authentic Halong cruise experience on a warm ancient wooden boat. Explore Bai Tu Long Bay with clearer waters and fewer tourists.",
+    "location": "Bai Tu Long Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Traditional wooden boat",
+      "Bai Tu Long Bay",
+      "Clearer waters",
+      "Authentic experience"
+    ],
+    "included": [
+      "1 night on traditional wooden boat",
+      "All meals (lunch, dinner, breakfast, brunch)",
+      "English-speaking guide",
+      "Kayaking and bamboo boat rides",
+      "Cave entrance fees",
+      "Tai Chi class",
+      "Squid fishing equipment"
+    ],
+    "excluded": [
+      "Transfer from Hanoi",
+      "Beverages and drinks",
+      "Tips and personal expenses",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": "mekong-eyes-2d",
+    "name": "Mekong Eyes Cruise 2 Days",
+    "description": "Discover real Vietnamese culture through cooking classes, bicycle tours, floating markets, and sampan river experiences.",
+    "location": "Mekong Delta",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Floating markets",
+      "Cooking class",
+      "Bicycle tour",
+      "Local villages"
+    ],
+    "included": [
+      "Round-trip transfer from Saigon",
+      "1 night on cruise with A/C cabin",
+      "All meals with drinks",
+      "English-speaking guide",
+      "Cooking class",
+      "Bicycle rental",
+      "Sampan boat rides",
+      "All entrance fees"
+    ],
+    "excluded": [
+      "Alcoholic beverages",
+      "Tips and personal expenses",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": "mekong-eyes-3d",
+    "name": "Mekong Eyes Cruise 3 Days",
+    "description": "Extended Mekong experience visiting the famous Cai Rang floating market, local handicrafts, brick kilns, and fruit orchards.",
+    "location": "Mekong Delta",
+    "duration": "3 days, 2 nights",
+    "highlights": [
+      "Cai Rang market",
+      "Handicrafts",
+      "Fruit orchards",
+      "Extended exploration"
+    ],
+    "included": [
+      "Round-trip transfer from Saigon",
+      "2 nights accommodation",
+      "All meals and soft drinks",
+      "English-speaking guide",
+      "Cooking class",
+      "Bicycle rental",
+      "All activities and entrance fees"
+    ],
+    "excluded": [
+      "Alcoholic beverages",
+      "Tips and personal expenses",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": "gecko-eyes-2d",
+    "name": "Gecko Eyes Premium Cruise 2 Days",
+    "description": "Premium cruise watching scenic Mekong views, daily river life, Cai Rang floating market and pearl island exploration.",
+    "location": "Mekong Delta - Con Dao",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Premium cruise",
+      "Con Dao island",
+      "Pearl island",
+      "Scenic views"
+    ],
+    "included": [
+      "Luxury van transfer",
+      "Premium cabin with A/C",
+      "All gourmet meals and premium drinks",
+      "English-speaking guide",
+      "All activities and entrance fees",
+      "Complimentary spa treatment",
+      "Welcome champagne",
+      "Travel insurance"
+    ],
+    "excluded": [
+      "Alcoholic beverages (wine extra)",
+      "Tips and personal expenses",
+      "Additional spa services"
+    ]
+  },
+  {
+    "id": "cambodia-vietnam-3d",
+    "name": "Cambodia to Vietnam Cruise 3 Days",
+    "description": "Cross-border adventure exploring the beautiful Mekong from Phnom Penh, Cambodia to Ho Chi Minh City, Vietnam.",
+    "location": "Phnom Penh to Ho Chi Minh City",
+    "duration": "3 days, 2 nights",
+    "highlights": [
+      "Cross-border journey",
+      "Phnom Penh start",
+      "Cultural immersion",
+      "River adventure"
+    ],
+    "included": [
+      "2 nights accommodation on cruise",
+      "All meals and soft drinks",
+      "English-speaking guide",
+      "Border crossing assistance",
+      "All activities and entrance fees",
+      "Sampan boat rides",
+      "Cooking class",
+      "Transfer to Saigon hotel"
+    ],
+    "excluded": [
+      "Visa fees (Cambodia and Vietnam)",
+      "Transfer from Phnom Penh hotel to pier",
+      "Alcoholic beverages",
+      "Tips and personal expenses",
+      "Optional Phnom Penh sightseeing",
+      "Travel insurance"
+    ]
+  },
+  {
+    "id": "halong-2d1n-cruise",
+    "name": "Halong Bay 2 Days 1 Night Cruise",
+    "description": "Classic overnight cruise in Halong Bay. Explore caves, kayak through emerald waters, and enjoy sunset on the bay.",
+    "location": "Halong Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Overnight cruise",
+      "Cave exploration",
+      "Kayaking",
+      "Sunset viewing"
+    ],
+    "included": [
+      "Cabin accommodation",
+      "All meals",
+      "Kayaking",
+      "Cave entrance",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips",
+      "Transfer from Hanoi"
+    ]
+  },
+  {
+    "id": "halong-luxury-cruise",
+    "name": "Halong Bay Luxury Cruise 2D1N",
+    "description": "5-star luxury cruise experience in Halong Bay with premium cabins, gourmet dining, and exclusive activities.",
+    "location": "Halong Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "5-star cruise",
+      "Premium cabins",
+      "Gourmet dining",
+      "Spa included"
+    ],
+    "included": [
+      "Luxury cabin",
+      "All gourmet meals",
+      "Spa treatment",
+      "All activities",
+      "Transfer"
+    ],
+    "excluded": [
+      "Premium wines",
+      "Tips"
+    ]
+  },
+  {
+    "id": "lan-ha-2d1n",
+    "name": "Lan Ha Bay 2 Days 1 Night",
+    "description": "Explore the pristine Lan Ha Bay, less crowded than Halong Bay, with crystal clear waters and untouched islands.",
+    "location": "Lan Ha Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Less crowded",
+      "Crystal clear waters",
+      "Cat Ba Island",
+      "Floating villages"
+    ],
+    "included": [
+      "Cabin accommodation",
+      "All meals",
+      "Kayaking",
+      "Guide",
+      "Cat Ba visit"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "bai-tu-long-2d1n",
+    "name": "Bai Tu Long Bay 2 Days 1 Night",
+    "description": "Escape the crowds in Bai Tu Long Bay, featuring pristine waters, untouched caves, and authentic fishing villages.",
+    "location": "Bai Tu Long Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Off the beaten path",
+      "Pristine waters",
+      "Traditional villages",
+      "Authentic experience"
+    ],
+    "included": [
+      "Cabin",
+      "All meals",
+      "Activities",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips",
+      "Transfer from Hanoi"
+    ]
+  },
+  {
+    "id": "ninh-binh-day",
+    "name": "Ninh Binh Day Trip from Hanoi",
+    "description": "Explore ",
+    "location": "Ninh Binh",
+    "duration": "1 day",
+    "highlights": [
+      "Trang An boat ride",
+      "Hoa Lu temples",
+      "Mua Cave viewpoint",
+      "Rice paddies"
+    ],
+    "included": [
+      "Transport",
+      "Lunch",
+      "Boat ride",
+      "Entrance fees",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "sapa-trekking",
+    "name": "Sapa Trekking 2 Days 1 Night",
+    "description": "Trek through stunning rice terraces, visit hill tribe villages, and experience authentic homestay with local families.",
+    "location": "Sapa",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Rice terrace trekking",
+      "Hill tribe villages",
+      "Homestay experience",
+      "Local cuisine"
+    ],
+    "included": [
+      "Transport",
+      "Homestay",
+      "Meals",
+      "Trekking guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips",
+      "Personal expenses"
+    ]
+  },
+  {
+    "id": "hanoi-2days",
+    "name": "Hanoi City Tour 2 Days",
+    "description": "Comprehensive Hanoi exploration covering Old Quarter, temples, museums, street food, and hidden gems.",
+    "location": "Hanoi",
+    "duration": "2 days",
+    "highlights": [
+      "Old Quarter",
+      "Temple of Literature",
+      "Ho Chi Minh Mausoleum",
+      "Street food tour"
+    ],
+    "included": [
+      "Hotel",
+      "Meals",
+      "Guide",
+      "Entrance fees",
+      "Cyclo ride"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hanoi-3days",
+    "name": "Hanoi 3 Days Discovery",
+    "description": "In-depth Hanoi experience with day trips to surrounding attractions including Bat Trang ceramic village.",
+    "location": "Hanoi",
+    "duration": "3 days",
+    "highlights": [
+      "Complete city tour",
+      "Bat Trang village",
+      "Water puppet show",
+      "Cooking class"
+    ],
+    "included": [
+      "Hotel",
+      "All meals",
+      "Guide",
+      "Entrance fees",
+      "Activities"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hanoi-4days",
+    "name": "Hanoi 4 Days Complete",
+    "description": "Ultimate Hanoi package with day trips to Ninh Binh and Perfume Pagoda for complete northern Vietnam experience.",
+    "location": "Hanoi & surroundings",
+    "duration": "4 days",
+    "highlights": [
+      "Hanoi highlights",
+      "Ninh Binh day trip",
+      "Perfume Pagoda",
+      "Cooking class"
+    ],
+    "included": [
+      "Hotel",
+      "All meals",
+      "Guide",
+      "All transportation",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "mekong-4days",
+    "name": "Mekong Delta 4 Days Exploration",
+    "description": "Comprehensive Mekong Delta exploration visiting floating markets, fruit orchards, and traditional villages.",
+    "location": "Mekong Delta",
+    "duration": "4 days, 3 nights",
+    "highlights": [
+      "Cai Rang floating market",
+      "Ben Tre coconut village",
+      "Homestay",
+      "Cycling tours"
+    ],
+    "included": [
+      "Hotels/Homestay",
+      "All meals",
+      "Boat trips",
+      "Guide",
+      "All activities"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "mekong-3days",
+    "name": "Mekong Delta 3 Days",
+    "description": "Three-day journey through the Mekong Delta visiting Cai Rang market, coconut villages, and local workshops.",
+    "location": "Mekong Delta",
+    "duration": "3 days, 2 nights",
+    "highlights": [
+      "Cai Rang market",
+      "Coconut workshops",
+      "Sampan rides",
+      "Local homestay"
+    ],
+    "included": [
+      "Accommodation",
+      "All meals",
+      "Boat trips",
+      "Guide",
+      "Activities"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "mekong-homestay",
+    "name": "Mekong Delta Homestay 2 Days",
+    "description": "Authentic Mekong experience staying with local family, learning traditional cooking, and exploring by bicycle.",
+    "location": "Mekong Delta",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Authentic homestay",
+      "Cooking class",
+      "Cycling",
+      "Floating market visit"
+    ],
+    "included": [
+      "Homestay",
+      "Meals",
+      "Cooking class",
+      "Bicycle",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "mekong-ben-tre-eco",
+    "name": "Ben Tre Eco Tour Day Trip",
+    "description": "Eco-friendly day trip exploring Ben Tre",
+    "location": "Ben Tre, Mekong Delta",
+    "duration": "1 day",
+    "highlights": [
+      "Coconut workshops",
+      "Sampan rides",
+      "Fruit tasting",
+      "Local villages"
+    ],
+    "included": [
+      "Transport",
+      "Boat rides",
+      "Lunch",
+      "Fruit tasting",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "mekong-cycling-2d",
+    "name": "Mekong Cycling Adventure 2 Days",
+    "description": "Active Mekong exploration by bicycle, riding through villages, rice paddies, and along scenic riverbanks.",
+    "location": "Mekong Delta",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Cycling through villages",
+      "Rice paddy views",
+      "Local interactions",
+      "Floating market"
+    ],
+    "included": [
+      "Bicycle",
+      "Homestay",
+      "Meals",
+      "Guide",
+      "Support vehicle"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "ben-tre-day",
+    "name": "Ben Tre Day Trip",
+    "description": "Visit Ben Tre province, famous for coconut candy, sampan rides through narrow canals, and tropical fruit orchards.",
+    "location": "Ben Tre",
+    "duration": "1 day",
+    "highlights": [
+      "Coconut candy factory",
+      "Sampan ride",
+      "Fruit orchard",
+      "Local lunch"
+    ],
+    "included": [
+      "Transport",
+      "Boat rides",
+      "Lunch",
+      "Guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "cu-chi-half-day",
+    "name": "Cu Chi Tunnels Half Day Tour",
+    "description": "Explore the famous Cu Chi Tunnels, an underground network used during the Vietnam War, with expert historical guide.",
+    "location": "Cu Chi",
+    "duration": "Half day",
+    "highlights": [
+      "Tunnel exploration",
+      "War history",
+      "Shooting range option",
+      "Local lunch"
+    ],
+    "included": [
+      "Transport",
+      "Entrance fee",
+      "Guide",
+      "Water"
+    ],
+    "excluded": [
+      "Lunch",
+      "Shooting range",
+      "Tips"
+    ]
+  },
+  {
+    "id": "central-vietnam-5d",
+    "name": "Central Vietnam 5 Days",
+    "description": "Explore Central Vietnam",
+    "location": "Hue - Hoi An - Da Nang",
+    "duration": "5 days, 4 nights",
+    "highlights": [
+      "Hue Imperial City",
+      "Hoi An Ancient Town",
+      "My Son Sanctuary",
+      "Da Nang beaches"
+    ],
+    "included": [
+      "Hotels",
+      "All meals",
+      "Transport",
+      "Guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "danang-4days",
+    "name": "Da Nang & Hoi An 4 Days",
+    "description": "Beach relaxation meets cultural exploration with Da Nang",
+    "location": "Da Nang - Hoi An",
+    "duration": "4 days, 3 nights",
+    "highlights": [
+      "Ba Na Hills",
+      "Hoi An Ancient Town",
+      "My Khe Beach",
+      "Marble Mountains"
+    ],
+    "included": [
+      "Hotels",
+      "Meals",
+      "Transport",
+      "Guide",
+      "Ba Na Hills ticket"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips",
+      "Tailoring"
+    ]
+  },
+  {
+    "id": "sapa-muong-hoa",
+    "name": "Sapa Muong Hoa Valley Trek",
+    "description": "Trek through the beautiful Muong Hoa Valley with terraced rice fields, waterfalls, and ethnic minority villages.",
+    "location": "Sapa",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Muong Hoa Valley",
+      "Rice terraces",
+      "Ethnic villages",
+      "Waterfall visit"
+    ],
+    "included": [
+      "Homestay",
+      "Meals",
+      "Trekking guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Transport to Sapa",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "sapa-off-beaten",
+    "name": "Sapa Off the Beaten Track 3 Days",
+    "description": "Explore lesser-known Sapa trails, remote villages, and pristine landscapes away from tourist crowds.",
+    "location": "Sapa",
+    "duration": "3 days, 2 nights",
+    "highlights": [
+      "Remote villages",
+      "Pristine landscapes",
+      "Traditional homestays",
+      "Local culture"
+    ],
+    "included": [
+      "Homestays",
+      "All meals",
+      "Guide",
+      "Activities"
+    ],
+    "excluded": [
+      "Transport to Sapa",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "northern-vietnam-5d",
+    "name": "Northern Vietnam 5 Days",
+    "description": "Comprehensive Northern Vietnam tour covering Hanoi, Sapa rice terraces, and Halong Bay cruise.",
+    "location": "Hanoi - Sapa - Halong",
+    "duration": "5 days, 4 nights",
+    "highlights": [
+      "Hanoi Old Quarter",
+      "Sapa terraces",
+      "Halong Bay cruise",
+      "Hill tribe villages"
+    ],
+    "included": [
+      "Hotels/Homestay",
+      "All meals",
+      "Transport",
+      "Guide",
+      "Cruise cabin"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "pu-luong-trek",
+    "name": "Pu Luong Nature Reserve Trek",
+    "description": "Trek through Pu Luong Nature Reserve with stunning terraced rice fields, waterfalls, and Thai ethnic villages.",
+    "location": "Pu Luong",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Rice terraces",
+      "Waterfalls",
+      "Thai villages",
+      "Pristine nature"
+    ],
+    "included": [
+      "Homestay",
+      "Meals",
+      "Guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Transport to Pu Luong",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hanoi-halong-4d",
+    "name": "Hanoi & Halong Bay 4 Days",
+    "description": "Perfect combination of Hanoi city exploration and overnight Halong Bay cruise experience.",
+    "location": "Hanoi - Halong Bay",
+    "duration": "4 days, 3 nights",
+    "highlights": [
+      "Hanoi Old Quarter",
+      "Temple of Literature",
+      "Halong Bay cruise",
+      "Cave exploration"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise cabin",
+      "Meals",
+      "Transport",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hanoi-halong-3d2n",
+    "name": "Hanoi & Halong 3 Days 2 Nights",
+    "description": "Compact package with essential Hanoi sights and a memorable Halong Bay day cruise experience.",
+    "location": "Hanoi - Halong Bay",
+    "duration": "3 days, 2 nights",
+    "highlights": [
+      "Hanoi highlights",
+      "Halong Bay cruise",
+      "Old Quarter",
+      "Vietnamese cuisine"
+    ],
+    "included": [
+      "Hotel",
+      "Day cruise",
+      "Meals",
+      "Transport",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "phu-quoc-3d",
+    "name": "Phu Quoc Island 3 Days",
+    "description": "Tropical island getaway with pristine beaches, snorkeling, and famous Phu Quoc fish sauce and pepper farm visits.",
+    "location": "Phu Quoc",
+    "duration": "3 days, 2 nights",
+    "highlights": [
+      "Pristine beaches",
+      "Snorkeling",
+      "Fish sauce factory",
+      "Pepper farm"
+    ],
+    "included": [
+      "Resort",
+      "Meals",
+      "Snorkeling trip",
+      "Island tour",
+      "Guide"
+    ],
+    "excluded": [
+      "Flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "phu-quoc-diving-4d",
+    "name": "Phu Quoc Diving Adventure 4 Days",
+    "description": "Scuba diving adventure exploring Phu Quoc",
+    "location": "Phu Quoc",
+    "duration": "4 days, 3 nights",
+    "highlights": [
+      "Multiple dive sites",
+      "Coral reefs",
+      "Marine life",
+      "PADI instruction available"
+    ],
+    "included": [
+      "Resort",
+      "Meals",
+      "All diving",
+      "Equipment",
+      "PADI certification option"
+    ],
+    "excluded": [
+      "Flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hcm-mekong-4d",
+    "name": "Ho Chi Minh City & Mekong 4 Days",
+    "description": "Explore bustling Saigon and serene Mekong Delta with floating markets, Cu Chi tunnels, and local homestays.",
+    "location": "Ho Chi Minh City - Mekong Delta",
+    "duration": "4 days, 3 nights",
+    "highlights": [
+      "Saigon highlights",
+      "Cu Chi Tunnels",
+      "Floating markets",
+      "Mekong homestay"
+    ],
+    "included": [
+      "Hotels/Homestay",
+      "Meals",
+      "Transport",
+      "Guide",
+      "Boat trips"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-6days",
+    "name": "Vietnam Highlights 6 Days",
+    "description": "Compact Vietnam experience covering Hanoi, Halong Bay cruise, and ancient Hoi An in 6 memorable days.",
+    "location": "Hanoi - Halong - Hoi An",
+    "duration": "6 days, 5 nights",
+    "highlights": [
+      "Hanoi Old Quarter",
+      "Halong Bay cruise",
+      "Hoi An lanterns",
+      "Vietnamese cuisine"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise cabin",
+      "Domestic flight",
+      "All meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "northern-vietnam-7d",
+    "name": "Northern Vietnam 7 Days Complete",
+    "description": "Comprehensive Northern Vietnam tour with Sapa trekking, Halong Bay cruise, and Ninh Binh exploration.",
+    "location": "Hanoi - Sapa - Halong - Ninh Binh",
+    "duration": "7 days, 6 nights",
+    "highlights": [
+      "Sapa rice terraces",
+      "Halong Bay overnight",
+      "Ninh Binh",
+      "Ethnic minorities"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "Homestay",
+      "All meals",
+      "Transport",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-intro-8d",
+    "name": "Vietnam Introduction 8 Days",
+    "description": "Perfect first-time Vietnam experience from north to south covering all must-see destinations.",
+    "location": "Hanoi - Halong - Hue - Hoi An - HCMC",
+    "duration": "8 days, 7 nights",
+    "highlights": [
+      "Hanoi",
+      "Halong Bay",
+      "Hue Imperial City",
+      "Hoi An",
+      "Ho Chi Minh City"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "Domestic flights",
+      "All meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "scenic-vietnam-10d",
+    "name": "Scenic Vietnam 10 Days",
+    "description": "Comprehensive Vietnam journey with extra time for Mekong Delta and beach relaxation in Central Vietnam.",
+    "location": "North to South Vietnam",
+    "duration": "10 days, 9 nights",
+    "highlights": [
+      "Halong Bay",
+      "Hue",
+      "Hoi An",
+      "Mekong Delta",
+      "Da Nang beach"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "All transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-11-days",
+    "name": "Vietnam Discovery 11 Days",
+    "description": "In-depth Vietnam exploration with Sapa highlands, central heritage sites, and southern deltas.",
+    "location": "Complete Vietnam",
+    "duration": "11 days, 10 nights",
+    "highlights": [
+      "Sapa trekking",
+      "Halong Bay",
+      "Hue & Hoi An",
+      "Mekong Delta",
+      "Cu Chi Tunnels"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "Homestay",
+      "All transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-12-days",
+    "name": "Vietnam Complete 12 Days",
+    "description": "Complete Vietnam journey with extra time for immersive experiences, cooking classes, and local interactions.",
+    "location": "North to South",
+    "duration": "12 days, 11 nights",
+    "highlights": [
+      "Cooking classes",
+      "Cycling tours",
+      "All major sites",
+      "Local experiences",
+      "Photography"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "All activities",
+      "Transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-insight-14d",
+    "name": "Vietnam Insight 14 Days",
+    "description": "Two-week immersive journey through Vietnam with off-the-beaten-path experiences and cultural deep dives.",
+    "location": "Complete Vietnam",
+    "duration": "14 days, 13 nights",
+    "highlights": [
+      "Pu Luong",
+      "Mai Chau",
+      "Complete north-south",
+      "Cultural workshops",
+      "Homestays"
+    ],
+    "included": [
+      "All accommodation",
+      "Cruise",
+      "Transport",
+      "Meals",
+      "Guide",
+      "Activities"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "amazing-vietnam-15d",
+    "name": "Amazing Vietnam 15 Days",
+    "description": "Extensive Vietnam exploration including beach relaxation in Nha Trang or Phu Quoc.",
+    "location": "Complete Vietnam + Beach",
+    "duration": "15 days, 14 nights",
+    "highlights": [
+      "All major destinations",
+      "Beach resort time",
+      "Phu Quoc or Nha Trang",
+      "Complete experience"
+    ],
+    "included": [
+      "All accommodation",
+      "Beach resort",
+      "Transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-cambodia-15d",
+    "name": "Vietnam & Cambodia 15 Days",
+    "description": "Combined Vietnam and Cambodia adventure including Angkor Wat temples and the best of both countries.",
+    "location": "Vietnam + Angkor Wat",
+    "duration": "15 days, 14 nights",
+    "highlights": [
+      "Vietnam highlights",
+      "Angkor Wat",
+      "Angkor Thom",
+      "Siem Reap",
+      "Cross-border experience"
+    ],
+    "included": [
+      "All accommodation",
+      "Cross-border transport",
+      "Angkor passes",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Cambodia visa",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-cambodia-18d",
+    "name": "Vietnam & Cambodia 18 Days",
+    "description": "Comprehensive Vietnam-Cambodia tour with extended Angkor exploration and Mekong river journey.",
+    "location": "Vietnam + Cambodia Complete",
+    "duration": "18 days, 17 nights",
+    "highlights": [
+      "Complete Vietnam",
+      "3 days at Angkor",
+      "Mekong River crossing",
+      "Phnom Penh"
+    ],
+    "included": [
+      "All accommodation",
+      "River cruise",
+      "All transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Visas",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "discover-vietnam-20d",
+    "name": "Discover Vietnam 20 Days",
+    "description": "Ultimate Vietnam exploration covering every region, hidden gems, and authentic local experiences.",
+    "location": "Complete Vietnam Journey",
+    "duration": "20 days, 19 nights",
+    "highlights": [
+      "Ha Giang loop",
+      "Pu Luong",
+      "All major sites",
+      "Beach time",
+      "Off-the-beaten-path"
+    ],
+    "included": [
+      "All accommodation",
+      "All transport",
+      "All activities",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-cambodia-21d",
+    "name": "Vietnam & Cambodia Grand Tour 21 Days",
+    "description": "Grand Indochina journey through Vietnam and Cambodia with extended exploration of both countries.",
+    "location": "Indochina Complete",
+    "duration": "21 days, 20 nights",
+    "highlights": [
+      "Complete Vietnam",
+      "Angkor temples",
+      "Phnom Penh",
+      "Tonle Sap",
+      "Mekong journey"
+    ],
+    "included": [
+      "All accommodation",
+      "All transport",
+      "All activities",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Visas",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-family-11d",
+    "name": "Vietnam Family Adventure 11 Days",
+    "description": "Family-friendly Vietnam tour with activities suitable for all ages, comfortable pacing, and kid-friendly experiences.",
+    "location": "Family-friendly Vietnam",
+    "duration": "11 days, 10 nights",
+    "highlights": [
+      "Kid-friendly activities",
+      "Comfortable pace",
+      "Family hotels",
+      "Fun experiences"
+    ],
+    "included": [
+      "Family rooms",
+      "All activities",
+      "Transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-beach-family-14d",
+    "name": "Vietnam Beach & Family 14 Days",
+    "description": "Extended family tour with additional beach resort time for relaxation and water activities.",
+    "location": "Vietnam with Beach Resort",
+    "duration": "14 days, 13 nights",
+    "highlights": [
+      "Beach resort",
+      "Family activities",
+      "Water sports",
+      "Cultural sites"
+    ],
+    "included": [
+      "All accommodation",
+      "Beach resort",
+      "Activities",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-luxury-10d",
+    "name": "Vietnam Luxury Collection 10 Days",
+    "description": "Premium Vietnam experience with 5-star hotels, private guides, luxury cruises, and exclusive experiences.",
+    "location": "Luxury Vietnam",
+    "duration": "10 days, 9 nights",
+    "highlights": [
+      "5-star hotels",
+      "Luxury cruise",
+      "Private guide",
+      "Fine dining",
+      "Exclusive experiences"
+    ],
+    "included": [
+      "Luxury hotels",
+      "Premium cruise",
+      "Private car",
+      "Fine dining",
+      "Butler service"
+    ],
+    "excluded": [
+      "International flights",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hanoi-sapa-6d",
+    "name": "Hanoi & Sapa 6 Days",
+    "description": "Focused northern Vietnam experience combining Hanoi city with Sapa mountain trekking and homestays.",
+    "location": "Hanoi - Sapa",
+    "duration": "6 days, 5 nights",
+    "highlights": [
+      "Hanoi Old Quarter",
+      "Sapa terraces",
+      "Hill tribe villages",
+      "Homestay experience"
+    ],
+    "included": [
+      "Hotels",
+      "Homestay",
+      "Train/transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "essential-vietnam-9d",
+    "name": "Essential Vietnam 9 Days",
+    "description": "All essential Vietnam highlights in 9 well-paced days from Hanoi to Ho Chi Minh City.",
+    "location": "North to South",
+    "duration": "9 days, 8 nights",
+    "highlights": [
+      "Hanoi",
+      "Halong Bay",
+      "Hue",
+      "Hoi An",
+      "Ho Chi Minh City"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "Domestic flights",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "essence-vietnam-10d",
+    "name": "Essence of Vietnam 10 Days",
+    "description": "Capture the essence of Vietnam with carefully selected experiences showcasing culture, nature, and cuisine.",
+    "location": "Vietnam Highlights",
+    "duration": "10 days, 9 nights",
+    "highlights": [
+      "Cultural immersion",
+      "Cooking classes",
+      "Local markets",
+      "Authentic experiences"
+    ],
+    "included": [
+      "Hotels",
+      "All activities",
+      "Transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "central-vietnam-7d",
+    "name": "Best of Central Vietnam 7 Days",
+    "description": "In-depth Central Vietnam exploration including Hue, Hoi An, Da Nang, and My Son temples.",
+    "location": "Central Vietnam",
+    "duration": "7 days, 6 nights",
+    "highlights": [
+      "Hue Imperial City",
+      "Hoi An Ancient Town",
+      "My Son temples",
+      "Da Nang beaches"
+    ],
+    "included": [
+      "Hotels",
+      "All transport",
+      "Meals",
+      "Guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Flights to/from Central Vietnam",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "discovery-northeast-9d",
+    "name": "Discovery North-East Vietnam 9 Days",
+    "description": "Adventure through Vietnam",
+    "location": "Ha Giang - Cao Bang - Ban Gioc",
+    "duration": "9 days, 8 nights",
+    "highlights": [
+      "Ha Giang loop",
+      "Ban Gioc waterfall",
+      "Dong Van Karst",
+      "Ethnic villages"
+    ],
+    "included": [
+      "Hotels",
+      "Transport",
+      "Meals",
+      "Guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "southern-vietnam-7d",
+    "name": "Southern Vietnam 7 Days",
+    "description": "Explore southern Vietnam from bustling Saigon to serene Mekong Delta and tropical Phu Quoc island.",
+    "location": "Ho Chi Minh - Mekong - Phu Quoc",
+    "duration": "7 days, 6 nights",
+    "highlights": [
+      "Ho Chi Minh City",
+      "Cu Chi Tunnels",
+      "Mekong Delta",
+      "Phu Quoc beach"
+    ],
+    "included": [
+      "Hotels",
+      "Resort",
+      "Domestic flight",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "signatures-vietnam-14d",
+    "name": "Signatures of Vietnam 14 Days",
+    "description": "Premium Vietnam experience with handpicked boutique hotels, exclusive experiences, and signature moments.",
+    "location": "Complete Vietnam Luxury",
+    "duration": "14 days, 13 nights",
+    "highlights": [
+      "Boutique hotels",
+      "Exclusive experiences",
+      "Signature moments",
+      "Premium service"
+    ],
+    "included": [
+      "Boutique hotels",
+      "Premium activities",
+      "Private guide",
+      "Fine dining"
+    ],
+    "excluded": [
+      "International flights",
+      "Tips"
+    ]
+  },
+  {
+    "id": "cultural-heritage-12d",
+    "name": "Best Cultural Heritage Vietnam 12 Days",
+    "description": "Focus on Vietnam",
+    "location": "UNESCO Sites Vietnam",
+    "duration": "12 days, 11 nights",
+    "highlights": [
+      "All UNESCO sites",
+      "Expert guides",
+      "Cultural workshops",
+      "Temple visits"
+    ],
+    "included": [
+      "Hotels",
+      "All entrance fees",
+      "Expert guides",
+      "Meals",
+      "Transport"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "natural-wonders-16d",
+    "name": "Natural Wonders of Vietnam 16 Days",
+    "description": "Nature-focused Vietnam journey exploring national parks, caves, waterfalls, and pristine landscapes.",
+    "location": "Vietnam Nature Focus",
+    "duration": "16 days, 15 nights",
+    "highlights": [
+      "Phong Nha caves",
+      "National parks",
+      "Pristine nature",
+      "Waterfalls"
+    ],
+    "included": [
+      "All accommodation",
+      "Park fees",
+      "Trekking guides",
+      "Meals",
+      "Transport"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "perfect-vietnam-7d",
+    "name": "Perfect Vietnam 7 Days",
+    "description": "Perfectly balanced 7-day Vietnam tour hitting all highlights without rushing.",
+    "location": "Vietnam Highlights",
+    "duration": "7 days, 6 nights",
+    "highlights": [
+      "Hanoi",
+      "Halong Bay",
+      "Hoi An",
+      "Comfortable pace"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "Domestic flight",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-discovery-8d",
+    "name": "Vietnam Discovery 8 Days",
+    "description": "Discover Vietnam",
+    "location": "North to South",
+    "duration": "8 days, 7 nights",
+    "highlights": [
+      "North to South journey",
+      "Cultural diversity",
+      "Local cuisine",
+      "Photography opportunities"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "Domestic flights",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hanoi-ninh-binh-halong-5d",
+    "name": "Hanoi, Ninh Binh & Halong 5 Days",
+    "description": "Compact northern Vietnam experience combining Hanoi, Ninh Binh",
+    "location": "Northern Vietnam Highlights",
+    "duration": "5 days, 4 nights",
+    "highlights": [
+      "Hanoi city",
+      "Trang An complex",
+      "Halong Bay overnight",
+      "Bai Dinh pagoda"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise cabin",
+      "Transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "north-vietnam-adventure-7d",
+    "name": "North Vietnam Adventure 7 Days",
+    "description": "Action-packed Northern Vietnam adventure with trekking, cycling, kayaking, and cultural immersion.",
+    "location": "Northern Vietnam",
+    "duration": "7 days, 6 nights",
+    "highlights": [
+      "Trekking",
+      "Cycling",
+      "Kayaking",
+      "Adventure activities"
+    ],
+    "included": [
+      "Hotels",
+      "Homestay",
+      "All activities",
+      "Equipment",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "nature-north-vietnam-8d",
+    "name": "Best of Nature Northern Vietnam 8 Days",
+    "description": "Nature-focused Northern Vietnam tour exploring national parks, rice terraces, and pristine bay waters.",
+    "location": "Northern Vietnam Nature",
+    "duration": "8 days, 7 nights",
+    "highlights": [
+      "Sapa terraces",
+      "Pu Luong",
+      "Halong Bay",
+      "Nature walks"
+    ],
+    "included": [
+      "Hotels",
+      "Homestays",
+      "Transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "highlights-vietnam-10d",
+    "name": "Highlights of Vietnam 10 Days",
+    "description": "All Vietnam highlights in 10 days with perfect balance of culture, nature, and local experiences.",
+    "location": "Vietnam Complete",
+    "duration": "10 days, 9 nights",
+    "highlights": [
+      "All major destinations",
+      "Perfect pacing",
+      "Local experiences",
+      "Complete journey"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "Transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "cultural-odyssey-10d",
+    "name": "Vietnamese Cultural Odyssey 10 Days",
+    "description": "Deep cultural immersion in Vietnam with traditional workshops, ethnic encounters, and authentic experiences.",
+    "location": "Vietnam Culture Focus",
+    "duration": "10 days, 9 nights",
+    "highlights": [
+      "Cultural workshops",
+      "Ethnic villages",
+      "Traditional arts",
+      "Authentic experiences"
+    ],
+    "included": [
+      "Hotels",
+      "Workshops",
+      "Transport",
+      "Meals",
+      "Expert guides"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "best-vietnam-13d",
+    "name": "Best of Vietnam 13 Days",
+    "description": "Comprehensive 13-day journey showcasing the very best Vietnam has to offer from north to south.",
+    "location": "Complete Vietnam",
+    "duration": "13 days, 12 nights",
+    "highlights": [
+      "Complete Vietnam",
+      "Sapa to Mekong",
+      "Beach time",
+      "All highlights"
+    ],
+    "included": [
+      "Hotels",
+      "Cruise",
+      "All transport",
+      "Meals",
+      "Guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "discovery-north-east-13d",
+    "name": "Discovery North-East Vietnam 13 Days",
+    "description": "Extended northeast Vietnam adventure with Ha Giang loop, ethnic markets, and remote mountain villages.",
+    "location": "Ha Giang - Northeast Vietnam",
+    "duration": "13 days, 12 nights",
+    "highlights": [
+      "Ha Giang complete",
+      "Sunday markets",
+      "Remote villages",
+      "Spectacular scenery"
+    ],
+    "included": [
+      "Hotels",
+      "Transport",
+      "Meals",
+      "Guide",
+      "Market visits"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-essential-10d",
+    "name": "Vietnam Essential 10 Days",
+    "description": "Well designed itinerary helping you explore famous places from North to South with local activities like rowing boats and tasting regional cuisines.",
+    "location": "Complete Vietnam",
+    "duration": "10 days, 9 nights",
+    "highlights": [
+      "Ho Chi Minh City",
+      "Mekong Delta",
+      "Cu Chi Tunnels",
+      "Hoi An",
+      "Halong Bay"
+    ],
+    "included": [
+      "9 nights accommodation",
+      "Domestic flights",
+      "All transfers",
+      "English-speaking guides",
+      "Meals as mentioned",
+      "Entrance fees",
+      "Halong Bay cruise"
+    ],
+    "excluded": [
+      "International flights",
+      "Visa fees",
+      "Travel insurance",
+      "Personal expenses",
+      "Tips"
+    ]
+  },
+  {
+    "id": "best-vietnam-heritage-15d",
+    "name": "Best of Vietnam: World Heritage Sites 15 Days",
+    "description": "Comprehensive journey exploring Vietnam",
+    "location": "Complete Vietnam",
+    "duration": "15 days, 14 nights",
+    "highlights": [
+      "UNESCO Sites",
+      "Mai Chau Valley",
+      "Halong Bay Cruise",
+      "Imperial Hue",
+      "Ancient Hoi An",
+      "Mekong Delta"
+    ],
+    "included": [
+      "14 nights hotels",
+      "1 night cruise",
+      "All transport",
+      "Domestic flights",
+      "Most meals",
+      "English guide"
+    ],
+    "excluded": [
+      "International flights",
+      "Visa",
+      "Insurance",
+      "Tips"
+    ]
+  },
+  {
+    "id": "highlights-vietnam-12d",
+    "name": "Highlights of Vietnam: North to South 12 Days",
+    "description": "Perfect journey for first-time visitors offering deep experiences of culture, nature, and people across the nation.",
+    "location": "Complete Vietnam",
+    "duration": "12 days, 11 nights",
+    "highlights": [
+      "Hanoi",
+      "Halong Bay Cruise",
+      "Hoi An",
+      "Hue",
+      "Cu Chi Tunnels",
+      "Mekong Delta"
+    ],
+    "included": [
+      "10 hotel nights",
+      "1 cruise night",
+      "11 breakfasts",
+      "4 lunches",
+      "1 dinner",
+      "Internal flights",
+      "Transfers",
+      "English guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Visa fees",
+      "Insurance",
+      "Personal expenses",
+      "Tips"
+    ]
+  },
+  {
+    "id": "real-taste-vietnam-13d",
+    "name": "Real Taste of Vietnam 13 Days",
+    "description": "Designed specifically for food lovers who want to fully explore the unique flavors of Vietnam from North to South.",
+    "location": "Complete Vietnam",
+    "duration": "13 days, 12 nights",
+    "highlights": [
+      "Street Food Tours",
+      "Cooking Classes",
+      "Market Visits",
+      "Regional Cuisines",
+      "Halong Bay",
+      "Mekong Delta"
+    ],
+    "included": [
+      "11 hotel nights",
+      "1 cruise night",
+      "12 breakfasts",
+      "6 lunches",
+      "5 dinners",
+      "Domestic flights",
+      "All transfers",
+      "Food tours",
+      "Cooking classes"
+    ],
+    "excluded": [
+      "International flights",
+      "Visa",
+      "Insurance",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "vietnam-cambodia-15d",
+    "name": "Best of Vietnam and Cambodia 15 Days",
+    "description": "Combined experience exploring Vietnamese heritage sites and Angkor temples with Mekong Delta immersion.",
+    "location": "Vietnam & Cambodia",
+    "duration": "15 days, 14 nights",
+    "highlights": [
+      "Hanoi",
+      "Halong Bay",
+      "Hoi An",
+      "Mekong Delta",
+      "Angkor Wat",
+      "Siem Reap"
+    ],
+    "included": [
+      "14 nights hotels",
+      "1 night cruise",
+      "All transport",
+      "Flights",
+      "Most meals",
+      "English guides",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "International flights",
+      "Visa",
+      "Insurance",
+      "Tips"
+    ]
+  },
+  {
+    "id": "catherine-cruise-2d1n",
+    "name": "Catherine Cruise Halong Bay",
+    "description": "One of the largest cruises in Halong Bay with 5 huge decks, elevators, and luxury amenities. 39 premium cabins.",
+    "location": "Halong Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Largest Cruise",
+      "5 Decks",
+      "Elevator Access",
+      "39 Cabins",
+      "Luxury Amenities"
+    ],
+    "included": [
+      "Cabin accommodation",
+      "All meals",
+      "Activities",
+      "Kayaking",
+      "Cave visits",
+      "Tai Chi"
+    ],
+    "excluded": [
+      "Transfer from Hanoi",
+      "Drinks",
+      "Tips",
+      "Spa treatments"
+    ]
+  },
+  {
+    "id": "ambassador-signature-2d1n",
+    "name": "Ambassador Signature Cruise",
+    "description": "Lan Ha Bay explorer with Michelin-starred menu, waterslide, and 39 luxury cabins.",
+    "location": "Lan Ha Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Lan Ha Bay",
+      "Michelin Menu",
+      "Waterslide",
+      "39 Cabins",
+      "Less Crowded"
+    ],
+    "included": [
+      "Cabin",
+      "All meals",
+      "Activities",
+      "Kayaking",
+      "Cave visits"
+    ],
+    "excluded": [
+      "Transfer",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "mon-cheri-cruise-2d1n",
+    "name": "Mon Cheri Cruise",
+    "description": "Best-seller luxurious cruise in Lan Ha Bay. Halal certified with 18 elegant cabins.",
+    "location": "Lan Ha Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Best-Seller",
+      "Halal Certified",
+      "18 Cabins",
+      "Lan Ha Bay",
+      "Boutique Luxury"
+    ],
+    "included": [
+      "Cabin",
+      "All meals (Halal available)",
+      "Activities",
+      "Kayaking"
+    ],
+    "excluded": [
+      "Transfer",
+      "Drinks",
+      "Tips"
+    ]
+  },
+  {
+    "id": "lyra-grandeur-cruise-2d1n",
+    "name": "Lyra Grandeur Cruise",
+    "description": "Newly launched in 2025 with mini golf, sauna, and 33 suites with private balconies.",
+    "location": "Halong Bay",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Newest Cruise (2025)",
+      "Mini Golf",
+      "Sauna",
+      "33 Suites",
+      "Private Balconies"
+    ],
+    "included": [
+      "Suite accommodation",
+      "All meals",
+      "Activities",
+      "Spa access"
+    ],
+    "excluded": [
+      "Transfer",
+      "Drinks",
+      "Tips",
+      "Golf equipment rental"
+    ]
+  },
+  {
+    "id": "hanoi-street-food-tour",
+    "name": "Hanoi Street Food Walking Tour",
+    "description": "Take a walk and integrate yourself into the lively atmosphere while sampling Pho Bo, Bun Thang, Banh Cuon, and more.",
+    "location": "Hanoi",
+    "duration": "Half day",
+    "highlights": [
+      "Old Quarter",
+      "6+ Tastings",
+      "Local Guide",
+      "Hidden Gems",
+      "Authentic Experience"
+    ],
+    "included": [
+      "All food tastings",
+      "Local guide",
+      "Walking tour",
+      "Bottled water"
+    ],
+    "excluded": [
+      "Additional food",
+      "Tips",
+      "Personal expenses"
+    ]
+  },
+  {
+    "id": "mekong-delta-day-trip",
+    "name": "Insight Mekong Delta Day Trip",
+    "description": "Sampan boat rides through mangrove landscapes and scenic cruises along the Ham Luong river with xe loi rides.",
+    "location": "Mekong Delta",
+    "duration": "Full day",
+    "highlights": [
+      "Sampan Boats",
+      "Ham Luong River",
+      "Xe Loi Ride",
+      "Fruit Orchards",
+      "Coconut Candy"
+    ],
+    "included": [
+      "Transport from HCMC",
+      "Boat rides",
+      "Lunch",
+      "Guide",
+      "Entrance fees"
+    ],
+    "excluded": [
+      "Tips",
+      "Personal expenses"
+    ]
+  },
+  {
+    "id": "cu-chi-speedboat-tour",
+    "name": "Cu Chi Tunnels Speedboat Tour",
+    "description": "Speedboat journey along Saigon River with visits to rice paper and rice wine workshops plus Cu Chi Tunnels.",
+    "location": "Cu Chi",
+    "duration": "Half day",
+    "highlights": [
+      "Speedboat Journey",
+      "Saigon River",
+      "Rice Paper Workshop",
+      "Cu Chi Tunnels",
+      "War History"
+    ],
+    "included": [
+      "Speedboat",
+      "All visits",
+      "Guide",
+      "Entrance fees",
+      "Light refreshments"
+    ],
+    "excluded": [
+      "Lunch",
+      "Tips"
+    ]
+  },
+  {
+    "id": "saigon-dinner-cruise",
+    "name": "Luxury Dinner Cruise on Saigon River",
+    "description": "Experience the city",
+    "location": "Ho Chi Minh City",
+    "duration": "Evening",
+    "highlights": [
+      "Night Cruise",
+      "Premium Dinner",
+      "City Views",
+      "Entertainment",
+      "Romantic Setting"
+    ],
+    "included": [
+      "Dinner buffet",
+      "Cruise",
+      "Entertainment",
+      "Drinks package"
+    ],
+    "excluded": [
+      "Transport to pier",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hoi-an-memories-show",
+    "name": "Hoi An Memories Show",
+    "description": "Experience a stunning art performance while learning about the 400-year-old town and its traditions with over 500 artists.",
+    "location": "Hoi An",
+    "duration": "Evening",
+    "highlights": [
+      "500+ Artists",
+      "Outdoor Performance",
+      "400-Year History",
+      "Cultural Show",
+      "Impression Theme Park"
+    ],
+    "included": [
+      "Show ticket",
+      "Theme park access"
+    ],
+    "excluded": [
+      "Transport",
+      "Food",
+      "Tips"
+    ]
+  },
+  {
+    "id": "hoi-an-basket-boat",
+    "name": "Cam Thanh Coconut Village Basket Boat Tour",
+    "description": "Immerse in the natural beauty of the region while riding along the stunning river with basket boat demonstrations.",
+    "location": "Hoi An",
+    "duration": "Half day",
+    "highlights": [
+      "Basket Boats",
+      "Coconut Village",
+      "Water Palm Forest",
+      "Local Fishermen",
+      "Traditional Craft"
+    ],
+    "included": [
+      "Basket boat ride",
+      "Guide",
+      "Life jacket",
+      "Bottled water"
+    ],
+    "excluded": [
+      "Transport to village",
+      "Tips",
+      "Food"
+    ]
+  },
+  {
+    "id": "hoi-an-walking-tour",
+    "name": "Hoi An Half-Day Walking City Tour",
+    "description": "Walk through Hoi An Ancient Town",
+    "location": "Hoi An",
+    "duration": "Half day",
+    "highlights": [
+      "Ancient Town",
+      "Japanese Bridge",
+      "Assembly Halls",
+      "Old Houses",
+      "Local Artisans"
+    ],
+    "included": [
+      "Guide",
+      "Entrance tickets",
+      "Bottled water"
+    ],
+    "excluded": [
+      "Food",
+      "Tips",
+      "Shopping"
+    ]
+  },
+  {
+    "id": "sapa-fansipan-2d",
+    "name": "Highlights Sapa with Fansipan Mountain",
+    "description": "Visit Hmong cultural sites and enjoy panoramic views through the cable car to Fansipan peak - the Roof of Indochina.",
+    "location": "Sapa",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Fansipan Peak",
+      "Cable Car",
+      "Cat Cat Village",
+      "Mountain Views",
+      "Hmong Culture"
+    ],
+    "included": [
+      "Hotel",
+      "Transport from Hanoi",
+      "Cable car",
+      "Guide",
+      "Meals as specified"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips",
+      "Personal expenses"
+    ]
+  },
+  {
+    "id": "sapa-trekking-homestay-2d",
+    "name": "Sapa Rice Fields & Homestay Trek",
+    "description": "Homestay experience featuring stunning terraced fields of Lao Chai Village with local cultural engagement.",
+    "location": "Sapa",
+    "duration": "2 days, 1 night",
+    "highlights": [
+      "Homestay",
+      "Rice Terraces",
+      "Lao Chai Village",
+      "Ta Van Village",
+      "Local Culture"
+    ],
+    "included": [
+      "Homestay",
+      "Transport",
+      "Guide",
+      "Meals",
+      "Trekking"
+    ],
+    "excluded": [
+      "Drinks",
+      "Tips"
+    ]
+  }
+]

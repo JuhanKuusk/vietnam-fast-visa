@@ -2027,34 +2027,29 @@ function ApplyForm() {
             <div className="mt-5 pt-5 border-t border-white/20">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <span className="text-lg font-bold text-yellow-300">💳 支持支付宝支付</span>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 flex-wrap justify-center">
                   {/* Alipay Logo */}
-                  <div className="bg-white rounded-lg px-3 py-2 flex items-center gap-2">
-                    <svg className="h-6 w-auto" viewBox="0 0 120 40" fill="none">
-                      <rect width="120" height="40" rx="4" fill="#1677FF"/>
-                      <text x="60" y="26" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">支付宝</text>
-                    </svg>
+                  <div className="bg-white rounded-md px-2 py-1.5 shadow-sm">
+                    <img src="/Alipay-logo.png" alt="Alipay" className="h-6 w-auto" />
                   </div>
                   {/* WeChat Pay Logo */}
-                  <div className="bg-white rounded-lg px-3 py-2 flex items-center gap-2">
-                    <svg className="h-6 w-auto" viewBox="0 0 120 40" fill="none">
-                      <rect width="120" height="40" rx="4" fill="#07C160"/>
-                      <text x="60" y="26" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">微信支付</text>
-                    </svg>
+                  <div className="bg-white rounded-md px-2 py-1.5 shadow-sm">
+                    <img src="/WeChat-pay.png" alt="WeChat Pay" className="h-6 w-auto" />
                   </div>
                   {/* Visa Logo */}
-                  <div className="bg-white rounded-lg px-3 py-2">
-                    <svg className="h-6 w-auto" viewBox="0 0 80 26" fill="none">
-                      <rect width="80" height="26" rx="3" fill="#1A1F71"/>
-                      <text x="40" y="18" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold" fontStyle="italic">VISA</text>
+                  <div className="bg-white rounded-md px-2 py-1.5 shadow-sm">
+                    <svg className="h-6 w-auto" viewBox="0 0 50 24" fill="none">
+                      <rect width="50" height="24" rx="3" fill="#1A1F71"/>
+                      <text x="25" y="17" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold" fontStyle="italic">VISA</text>
                     </svg>
                   </div>
                   {/* Mastercard Logo */}
-                  <div className="bg-white rounded-lg px-3 py-2">
-                    <svg className="h-6 w-auto" viewBox="0 0 60 26" fill="none">
-                      <circle cx="20" cy="13" r="10" fill="#EB001B"/>
-                      <circle cx="40" cy="13" r="10" fill="#F79E1B"/>
-                      <path d="M30 6a10 10 0 000 14 10 10 0 000-14z" fill="#FF5F00"/>
+                  <div className="bg-white rounded-md px-2 py-1.5 shadow-sm">
+                    <svg className="h-6 w-auto" viewBox="0 0 40 24" fill="none">
+                      <rect width="40" height="24" rx="3" fill="#F5F5F5"/>
+                      <circle cx="14" cy="12" r="8" fill="#EB001B"/>
+                      <circle cx="26" cy="12" r="8" fill="#F79E1B"/>
+                      <path d="M20 5.5a8 8 0 000 13 8 8 0 000-13z" fill="#FF5F00"/>
                     </svg>
                   </div>
                 </div>
@@ -2269,17 +2264,26 @@ function ApplyForm() {
                   {t.travelDetails?.entryDate || "Intended Date of Entry"} <span className="text-red-500">*</span>
                 </label>
                 {language === 'ZH' ? (
-                  <div className="relative">
+                  <div
+                    className="relative w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer"
+                    onClick={() => {
+                      const input = document.getElementById('entry-date-input') as HTMLInputElement;
+                      if (input) {
+                        input.showPicker?.();
+                        input.focus();
+                      }
+                    }}
+                  >
                     <input
+                      id="entry-date-input"
                       type="date"
                       value={travelDetails.entryDate}
                       onChange={(e) => setTravelDetails({ ...travelDetails, entryDate: e.target.value })}
                       min={todayDate}
-                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      style={{ WebkitAppearance: 'none' }}
                     />
-                    <div className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer">
-                      {travelDetails.entryDate ? formatChineseDate(travelDetails.entryDate) : '选择入境日期'}
-                    </div>
+                    <span>{travelDetails.entryDate ? formatChineseDate(travelDetails.entryDate) : '选择入境日期'}</span>
                   </div>
                 ) : (
                   <input
@@ -2301,17 +2305,26 @@ function ApplyForm() {
                   {t.travelDetails?.exitDate || "Intended Date of Exit"} <span className="text-red-500">*</span>
                 </label>
                 {language === 'ZH' ? (
-                  <div className="relative">
+                  <div
+                    className="relative w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer"
+                    onClick={() => {
+                      const input = document.getElementById('exit-date-input') as HTMLInputElement;
+                      if (input) {
+                        input.showPicker?.();
+                        input.focus();
+                      }
+                    }}
+                  >
                     <input
+                      id="exit-date-input"
                       type="date"
                       value={travelDetails.exitDate}
                       onChange={(e) => setTravelDetails({ ...travelDetails, exitDate: e.target.value })}
                       min={travelDetails.entryDate || todayDate}
-                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      style={{ WebkitAppearance: 'none' }}
                     />
-                    <div className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-base cursor-pointer">
-                      {travelDetails.exitDate ? formatChineseDate(travelDetails.exitDate) : '选择出境日期'}
-                    </div>
+                    <span>{travelDetails.exitDate ? formatChineseDate(travelDetails.exitDate) : '选择出境日期'}</span>
                   </div>
                 ) : (
                   <input

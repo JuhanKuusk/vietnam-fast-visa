@@ -4,7 +4,10 @@
  */
 
 import { Tour, TourFilters, TourSortOption } from "@/types/tours";
-import { FEATURED_TOURS } from "./tours-data";
+import { getAllActiveTours } from "./tours-data";
+
+// Get the active (filtered) tours
+const getActiveTours = () => getAllActiveTours();
 
 // =====================================================
 // Tour Grouping Types and Functions
@@ -53,7 +56,7 @@ export function getGroupedToursForListing(tours: Tour[]): Tour[] {
  * Get all tour variations for a specific group
  */
 export function getTourVariations(groupId: string): Tour[] {
-  return FEATURED_TOURS.filter((tour) => tour.groupId === groupId).sort(
+  return getActiveTours().filter((tour) => tour.groupId === groupId).sort(
     (a, b) => a.price - b.price
   );
 }
@@ -63,7 +66,7 @@ export function getTourVariations(groupId: string): Tour[] {
  */
 export function hasVariations(tour: Tour): boolean {
   if (!tour.groupId) return false;
-  return FEATURED_TOURS.filter((t) => t.groupId === tour.groupId).length > 1;
+  return getActiveTours().filter((t) => t.groupId === tour.groupId).length > 1;
 }
 
 /**
@@ -90,21 +93,21 @@ export function getTourGroup(groupId: string): TourGroup | null {
  * Get a tour by its URL slug
  */
 export function getTourBySlug(slug: string): Tour | undefined {
-  return FEATURED_TOURS.find((tour) => tour.slug === slug);
+  return getActiveTours().find((tour) => tour.slug === slug);
 }
 
 /**
  * Get a tour by its ID
  */
 export function getTourById(id: string): Tour | undefined {
-  return FEATURED_TOURS.find((tour) => tour.id === id);
+  return getActiveTours().find((tour) => tour.id === id);
 }
 
 /**
  * Get all tours
  */
 export function getAllTours(): Tour[] {
-  return FEATURED_TOURS;
+  return getActiveTours();
 }
 
 // =====================================================
@@ -121,7 +124,7 @@ export function getRelatedTours(
   location?: string,
   limit: number = 3
 ): Tour[] {
-  return FEATURED_TOURS.filter((tour) => {
+  return getActiveTours().filter((tour) => {
     // Exclude current tour
     if (tour.id === currentTourId) return false;
 

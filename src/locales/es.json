@@ -1,11 +1,12 @@
 {
   "header": {
-    "siteName": "VietnamVisaHelp.com",
+    "siteName": "VietnamTravel.help",
     "tagline": "Servicio de visado exprés",
     "logoTagline": "Aprobación de la facturación en 30 min",
     "support": "Asistencia WhatsApp 24 horas al día, 7 días a la semana",
     "supportShort": "Ayuda",
-    "aboutUs": "Sobre Nosotros"
+    "aboutUs": "Sobre Nosotros",
+    "addedFees": "Tarifas Adicionales"
   },
   "banner": {
     "deniedBoarding": "¿Le han denegado el embarque y no puede facturar?",
@@ -948,7 +949,15 @@
     "liabilityItem4": "Cambios en las políticas gubernamentales",
     "externalLinks": "Enlaces externos",
     "externalLinksText": "Nuestro sitio web puede contener enlaces a sitios externos. No somos responsables de su contenido ni de sus políticas.",
-    "consentCheckboxText": "Confirmo que toda la información proporcionada es correcta y acepto las Condiciones de uso, la Política de privacidad y la Política de reembolso. Entiendo que VietnamVisaHelp.com no es una agencia gubernamental y no garantiza la aprobación del visado."
+    "consentCheckboxText": "Confirmo que toda la información proporcionada es correcta y acepto las Condiciones de uso, la Política de privacidad y la Política de reembolso. Entiendo que VietnamTravel.help no es una agencia gubernamental y no garantiza la aprobación del visado.",
+    "footerFees": "Tarifas",
+    "officialPartner": "Socio oficial: CÔNG TY CỔ PHẦN CÔNG NGHỆ DU LỊCH BESTPRICE",
+    "licenseNumber": "Licencia Comercial Nº 0104679428 - Emitida: 26/05/2010 - Dept. Planificación Inversión Hanói | Licencia Operador Turístico Nº 01-1794/2022/SDL-GPLHND",
+    "hanoiOffice": "Oficina de Hanói",
+    "hcmOffice": "Oficina de Ciudad Ho Chi Minh",
+    "hanoiAddress": "Piso 11, Vinaconex Diamond Tower, 459C Calle Bach Mai, Barrio Bach Mai, Hanói, Vietnam",
+    "hcmAddress": "Edificio Park 7, Piso 38, Vinhomes Central Park, 720A, Distrito Binh Thanh, Ciudad Ho Chi Minh, Vietnam",
+    "allRights": "Todos los derechos reservados"
   },
   "searchPrompts": {
     "searchCountry": "Escriba para buscar países...",

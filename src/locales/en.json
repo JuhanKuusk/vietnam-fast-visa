@@ -1,11 +1,12 @@
 {
   "header": {
-    "siteName": "VietnamVisaHelp.com",
+    "siteName": "VietnamTravel.help",
     "tagline": "Express Visa Service",
     "logoTagline": "Check-in Approval in 30 min",
     "support": "24/7 WhatsApp Support",
     "supportShort": "Support",
-    "aboutUs": "About Us"
+    "aboutUs": "About Us",
+    "addedFees": "Added Fees"
   },
   "banner": {
     "deniedBoarding": "Denied Boarding and can not Check-in?",
@@ -444,13 +445,13 @@
     "termsPreview6Title": "6. Refund Policy",
     "termsPreview6Content": "Full refund: Available if you cancel before we submit your application. Partial refund (service fee only): When you cancel after submission but before approval. No refund: Once visa is approved, visa denial due to your error, change of travel plans, or delays by authorities. If visa is denied by Vietnam Immigration: We refund 50% of service fee.",
     "termsPreview7Title": "7. Warnings and Disclaimers",
-    "termsPreview7Content": "VietnamVisaHelp.com is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) for $25 USD with 3 business day processing. Visa approval is at the sole discretion of Vietnamese immigration authorities. Non-refundable fares or reservations must not be purchased until all visas have been obtained.",
+    "termsPreview7Content": "VietnamTravel.help is NOT a government agency and is NOT affiliated with the Vietnam Immigration Department. We are an independent commercial service. You may apply directly through the official government website (evisa.xuatnhapcanh.gov.vn) for $25 USD with 3 business day processing. Visa approval is at the sole discretion of Vietnamese immigration authorities. Non-refundable fares or reservations must not be purchased until all visas have been obtained.",
     "termsPreview8Title": "8. Limitation of Liability",
     "termsPreview8Content": "We are not responsible for: visa refusals or delays by the Vietnam Immigration Department, entry denial at Vietnamese borders, travel disruptions or missed flights, changes in Vietnamese visa policies, consequences of incorrect information provided by you, incomplete documentation, or technical issues beyond our control. Our total liability shall not exceed the amount you paid for our services.",
     "termsPreview9Title": "9. Privacy and Data Protection",
     "termsPreview9Content": "Your personal information is collected only for visa application processing purposes, stored securely, shared only with the Vietnam Immigration Department as required, and never sold to third parties. Your data is deleted 30 days after services are completed.",
     "termsPreview10Title": "10. Contact Information",
-    "termsPreview10Content": "Email: support@vietnamvisahelp.com | WhatsApp: +84 70 5549868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam"
+    "termsPreview10Content": "Email: info@vietnamtravel.help | WhatsApp: +84 70 5549868 | Address: Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam"
   },
   "verification": {
     "title": "Verify Your Phone",
@@ -847,7 +848,7 @@
     "sms3": "We do not share your mobile information with lead generators or data brokers",
     "sms4": "Message frequency varies based on your application status",
     "sms5": "Message and data rates may apply",
-    "smsOptOut": "To opt out of SMS messages, reply STOP to any message. For help, reply HELP or contact support@vietnamvisahelp.com.",
+    "smsOptOut": "To opt out of SMS messages, reply STOP to any message. For help, reply HELP or contact info@vietnamtravel.help.",
     "internationalTransfers": "International Transfers",
     "internationalTransfersText": "Your data may be processed outside your country. We use safeguards compliant with GDPR where applicable.",
     "dataRetention": "Data Retention",
@@ -914,6 +915,14 @@
     "liabilityItem4": "Changes to government policies",
     "externalLinks": "External Links",
     "externalLinksText": "Our website may contain links to external sites. We are not responsible for their content or policies.",
-    "consentCheckboxText": "I confirm that all information provided is accurate, and I agree to the Terms of Use, Privacy Policy, and Refund Policy. I understand that VietnamVisaHelp.com is not a government agency and does not guarantee visa approval."
+    "consentCheckboxText": "I confirm that all information provided is accurate, and I agree to the Terms of Use, Privacy Policy, and Refund Policy. I understand that VietnamTravel.help is not a government agency and does not guarantee visa approval.",
+    "footerFees": "Fees",
+    "officialPartner": "Official Partner: CÔNG TY CỔ PHẦN CÔNG NGHỆ DU LỊCH BESTPRICE",
+    "licenseNumber": "Business License No: 0104679428 - Issued: 26/05/2010 - Investment Planning Dept. Hanoi | Tour Operator License No: 01-1794/2022/SDL-GPLHND",
+    "hanoiOffice": "Hanoi Office",
+    "hcmOffice": "Ho Chi Minh City Office",
+    "hanoiAddress": "11th Floor, Vinaconex Diamond Tower, 459C Bach Mai Street, Bach Mai Ward, Hanoi, Vietnam",
+    "hcmAddress": "Park 7 Building, Floor 38, Vinhomes Central Park, 720A, Binh Thanh District, Ho Chi Minh City, Vietnam",
+    "allRights": "All rights reserved"
   }
 }

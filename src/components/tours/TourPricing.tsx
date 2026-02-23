@@ -1,19 +1,44 @@
 "use client";
 
 import type { Tour } from "@/types/tours";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
+
+// Tour translation type
+interface TourTranslation {
+  name?: string;
+  description?: string;
+  location?: string;
+  duration?: string;
+  highlights?: string[];
+  included?: string[];
+  excluded?: string[];
+}
 
 interface TourPricingProps {
   tour: Tour;
 }
 
 export function TourPricing({ tour }: TourPricingProps) {
+  const { language, t } = useLanguage();
+  const { formatPrice } = useCurrency();
+  const isZH = language === "ZH";
+
+  // Get translated tour content if available
+  const toursTranslations = (t as Record<string, unknown>).tours as Record<string, TourTranslation> | undefined;
+  const tourTranslation = toursTranslations?.[tour.id];
+
+  // Use translations with fallback to original
+  const displayDuration = tourTranslation?.duration || tour.duration;
+  const displayLocation = tourTranslation?.location || tour.location;
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-cyan-100">
       {/* Discount Badge */}
       {tour.discount && (
         <div className="mb-4">
           <span className="inline-block px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
-            {tour.discount}% OFF
+            {tour.discount}% {isZH ? "折扣" : "OFF"}
           </span>
         </div>
       )}
@@ -21,22 +46,22 @@ export function TourPricing({ tour }: TourPricingProps) {
       {/* Price */}
       <div className="mb-6">
         <div className="flex items-baseline gap-2 mb-1">
-          <span className="text-sm text-gray-600">From</span>
+          <span className="text-sm text-gray-600">{isZH ? "起价" : "From"}</span>
           {tour.originalPrice && (
             <span className="text-lg text-gray-400 line-through">
-              US${tour.originalPrice}
+              {formatPrice(tour.originalPrice)}
             </span>
           )}
         </div>
         <div className="flex items-baseline gap-1">
           <span className="text-4xl font-bold text-cyan-600">
-            US${tour.price}
+            {formatPrice(tour.price)}
           </span>
-          <span className="text-gray-600">/ person</span>
+          <span className="text-gray-600">/ {isZH ? "每人" : "person"}</span>
         </div>
         {tour.discount && (
           <p className="text-sm text-green-600 font-medium mt-1">
-            Save US${tour.originalPrice! - tour.price}!
+            {isZH ? `节省 ${formatPrice(tour.originalPrice! - tour.price)}!` : `Save ${formatPrice(tour.originalPrice! - tour.price)}!`}
           </p>
         )}
       </div>
@@ -58,7 +83,7 @@ export function TourPricing({ tour }: TourPricingProps) {
             />
           </svg>
           <span className="text-gray-700">
-            <strong>Duration:</strong> {tour.duration}
+            <strong>{isZH ? "时长：" : "Duration:"}</strong> {displayDuration}
           </span>
         </div>
 
@@ -77,7 +102,7 @@ export function TourPricing({ tour }: TourPricingProps) {
             />
           </svg>
           <span className="text-gray-700">
-            <strong>Location:</strong> {tour.location}
+            <strong>{isZH ? "地点：" : "Location:"}</strong> {displayLocation}
           </span>
         </div>
 
@@ -92,7 +117,7 @@ export function TourPricing({ tour }: TourPricingProps) {
             </svg>
             <span className="text-gray-700">
               <strong>{tour.rating}/10</strong>
-              {tour.reviewCount && ` (${tour.reviewCount} reviews)`}
+              {tour.reviewCount && ` (${tour.reviewCount} ${isZH ? "评价" : "reviews"})`}
             </span>
           </div>
         )}
@@ -112,7 +137,7 @@ export function TourPricing({ tour }: TourPricingProps) {
               clipRule="evenodd"
             />
           </svg>
-          Free cancellation available
+          {isZH ? "免费取消" : "Free cancellation available"}
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <svg
@@ -126,7 +151,7 @@ export function TourPricing({ tour }: TourPricingProps) {
               clipRule="evenodd"
             />
           </svg>
-          Instant confirmation
+          {isZH ? "即时确认" : "Instant confirmation"}
         </div>
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <svg
@@ -140,7 +165,7 @@ export function TourPricing({ tour }: TourPricingProps) {
               clipRule="evenodd"
             />
           </svg>
-          English speaking guide
+          {isZH ? "中文导游" : "English speaking guide"}
         </div>
       </div>
     </div>

@@ -384,6 +384,49 @@ export type Database = {
   }
 }
 
+// Blog types
+export interface BlogCategory {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  created_at: string
+}
+
+export interface BlogPost {
+  id: string
+  title: string
+  slug: string
+  excerpt: string | null
+  content: string
+  featured_image: string | null
+  category_id: string | null
+  author_id: string | null
+  status: 'draft' | 'published' | 'archived'
+  meta_title: string | null
+  meta_description: string | null
+  meta_keywords: string | null
+  published_at: string | null
+  created_at: string
+  updated_at: string
+  view_count: number
+  // Joined fields
+  category?: BlogCategory
+  author?: { id: string; name: string }
+  tags?: BlogTag[]
+}
+
+export interface BlogTag {
+  id: string
+  name: string
+  slug: string
+}
+
+export interface BlogPostTag {
+  post_id: string
+  tag_id: string
+}
+
 export type Tables<T extends keyof Database["public"]["Tables"]> =
   Database["public"]["Tables"][T]["Row"]
 export type TablesInsert<T extends keyof Database["public"]["Tables"]> =

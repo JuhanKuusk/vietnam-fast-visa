@@ -1,0 +1,10 @@
+[    3319ms] [WARNING] jQuery.Deferred exception: Cannot read properties of null (reading 'addEventListener') TypeError: Cannot read properties of null (reading 'addEventListener')
+    at toggleCommentForm (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/js/base.js?ver=4.2.2:482:14)
+    at HTMLDocument.<anonymous> (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/js/base.js?ver=4.2.2:569:5)
+    at e (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/lib/jquery-3.6.0.min.js?ver=4.2.2:2:30038)
+    at t (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/lib/jquery-3.6.0.min.js?ver=4.2.2:2:30340) undefined @ https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/lib/jquery-3.6.0.min.js?ver=4.2.2:1
+[    3862ms] TypeError: Cannot read properties of null (reading 'addEventListener')
+    at toggleCommentForm (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/js/base.js?ver=4.2.2:482:14)
+    at HTMLDocument.<anonymous> (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/js/base.js?ver=4.2.2:569:5)
+    at e (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/lib/jquery-3.6.0.min.js?ver=4.2.2:2:30038)
+    at t (https://www.vietnam-visa.com/wp-content/themes/vietnam_visa_v4.1/assets/lib/jquery-3.6.0.min.js?ver=4.2.2:2:30340)

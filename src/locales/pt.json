@@ -1,11 +1,12 @@
 {
   "header": {
-    "siteName": "VietnameVisaHelp.com",
+    "siteName": "VietnamTravel.help",
     "tagline": "Serviço de vistos expresso",
     "logoTagline": "Aprovação do check-in em 30 minutos",
     "support": "Suporte WhatsApp 24/7",
     "supportShort": "Apoio",
-    "aboutUs": "Sobre Nós"
+    "aboutUs": "Sobre Nós",
+    "addedFees": "Taxas Adicionais"
   },
   "banner": {
     "deniedBoarding": "Recusado o embarque e não pode efetuar o check-in?",
@@ -948,7 +949,15 @@
     "liabilityItem4": "Alterações nas políticas governamentais",
     "externalLinks": "Ligações externas",
     "externalLinksText": "O nosso sítio Web pode conter ligações a sítios externos. Não somos responsáveis pelo seu conteúdo ou políticas.",
-    "consentCheckboxText": "Confirmo que todas as informações fornecidas são exactas e concordo com os Termos de utilização, a Política de privacidade e a Política de reembolso. Compreendo que o VietnamVisaHelp.com não é uma agência governamental e não garante a aprovação do visto."
+    "consentCheckboxText": "Confirmo que todas as informações fornecidas são exactas e concordo com os Termos de utilização, a Política de privacidade e a Política de reembolso. Compreendo que o VietnamTravel.help não é uma agência governamental e não garante a aprovação do visto.",
+    "footerFees": "Taxas",
+    "officialPartner": "Parceiro oficial: CÔNG TY CỔ PHẦN CÔNG NGHỆ DU LỊCH BESTPRICE",
+    "licenseNumber": "Licença Comercial Nº 0104679428 - Emitida: 26/05/2010 - Dept. Planejamento Investimento Hanói | Licença Operador Turístico Nº 01-1794/2022/SDL-GPLHND",
+    "hanoiOffice": "Escritório de Hanói",
+    "hcmOffice": "Escritório de Ho Chi Minh",
+    "hanoiAddress": "11º andar, Vinaconex Diamond Tower, 459C Rua Bach Mai, Bairro Bach Mai, Hanói, Vietnã",
+    "hcmAddress": "Edifício Park 7, 38º andar, Vinhomes Central Park, 720A, Distrito de Binh Thanh, Cidade de Ho Chi Minh, Vietnã",
+    "allRights": "Todos os direitos reservados"
   },
   "searchPrompts": {
     "searchCountry": "Digite para pesquisar países...",

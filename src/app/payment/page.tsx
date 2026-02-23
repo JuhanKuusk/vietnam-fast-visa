@@ -179,7 +179,7 @@ function PaymentForm() {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "alipay" | "wechat" | "paypal" | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "alipay" | "wechat" | "unionpay" | "paypal" | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   // Helper function for price formatting
@@ -195,14 +195,16 @@ function PaymentForm() {
       return;
     }
 
-    // Create payment intent when Stripe, Alipay, or WeChat is selected
-    if (paymentMethod === "stripe" || paymentMethod === "alipay" || paymentMethod === "wechat") {
+    // Create payment intent when Stripe, Alipay, WeChat, or UnionPay is selected
+    if (paymentMethod === "stripe" || paymentMethod === "alipay" || paymentMethod === "wechat" || paymentMethod === "unionpay") {
       // Determine payment method types based on selection
       const paymentMethodTypes = paymentMethod === "alipay"
         ? ["alipay"]
         : paymentMethod === "wechat"
           ? ["wechat_pay"]
-          : ["card"];
+          : paymentMethod === "unionpay"
+            ? ["card"] // UnionPay uses card payment method type in Stripe
+            : ["card"];
 
       fetch("/api/create-payment-intent", {
         method: "POST",
@@ -416,36 +418,52 @@ function PaymentForm() {
 
                     {/* Chinese Payment Methods */}
                     {isZH && (
-                      <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="grid grid-cols-3 gap-3 mb-4">
                         <button
                           onClick={() => setPaymentMethod("alipay")}
-                          className={`flex flex-col items-center gap-3 p-5 rounded-xl border-2 transition-all ${
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                             paymentMethod === "alipay"
                               ? "bg-emerald-500/20 border-emerald-500"
                               : "bg-white/5 border-white/20 hover:border-white/40"
                           }`}
                         >
-                          <div className="w-16 h-10 bg-[#1677FF] rounded-md flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">支付宝</span>
+                          <div className="w-14 h-9 bg-[#1677FF] rounded-md flex items-center justify-center">
+                            <span className="text-white font-bold text-xs">支付宝</span>
                           </div>
-                          <span className="text-base font-medium text-gray-300">
+                          <span className="text-sm font-medium text-gray-300">
                             支付宝
                           </span>
                         </button>
 
                         <button
                           onClick={() => setPaymentMethod("wechat")}
-                          className={`flex flex-col items-center gap-3 p-5 rounded-xl border-2 transition-all ${
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
                             paymentMethod === "wechat"
                               ? "bg-emerald-500/20 border-emerald-500"
                               : "bg-white/5 border-white/20 hover:border-white/40"
                           }`}
                         >
-                          <div className="w-16 h-10 bg-[#07C160] rounded-md flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">微信支付</span>
+                          <div className="w-14 h-9 bg-[#07C160] rounded-md flex items-center justify-center">
+                            <span className="text-white font-bold text-xs">微信支付</span>
                           </div>
-                          <span className="text-base font-medium text-gray-300">
+                          <span className="text-sm font-medium text-gray-300">
                             微信支付
+                          </span>
+                        </button>
+
+                        <button
+                          onClick={() => setPaymentMethod("unionpay")}
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                            paymentMethod === "unionpay"
+                              ? "bg-emerald-500/20 border-emerald-500"
+                              : "bg-white/5 border-white/20 hover:border-white/40"
+                          }`}
+                        >
+                          <div className="w-14 h-9 bg-[#1A3D6D] rounded-md flex items-center justify-center">
+                            <span className="text-white font-bold text-xs">银联</span>
+                          </div>
+                          <span className="text-sm font-medium text-gray-300">
+                            银联卡
                           </span>
                         </button>
                       </div>
@@ -500,8 +518,8 @@ function PaymentForm() {
                     </div>
                   </div>
 
-                  {/* Stripe/Alipay/WeChat Payment */}
-                  {(paymentMethod === "stripe" || paymentMethod === "alipay" || paymentMethod === "wechat") && (
+                  {/* Stripe/Alipay/WeChat/UnionPay Payment */}
+                  {(paymentMethod === "stripe" || paymentMethod === "alipay" || paymentMethod === "wechat" || paymentMethod === "unionpay") && (
                     <>
                       {clientSecret ? (
                         <Elements

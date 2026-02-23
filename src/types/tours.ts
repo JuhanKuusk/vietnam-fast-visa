@@ -33,8 +33,27 @@ export type TourActivity =
   | "temple-visit"
   | "market-visit"
   | "boat-trip"
+  | "boat-tour"
   | "nature"
-  | "wildlife";
+  | "wildlife"
+  | "walking-tour"
+  | "speedboat"
+  | "historical"
+  | "dining"
+  | "entertainment"
+  | "golf"
+  | "spa"
+  | "cable-car"
+  | "temple-visits"
+  | "swimming"
+  | "sightseeing"
+  | "romance"
+  | "motorbike"
+  | "adventure"
+  | "off-road"
+  | "luxury"
+  | "educational"
+  | "vespa-tour";
 
 // Start cities where tours depart from
 export type StartCity =
@@ -46,7 +65,8 @@ export type StartCity =
   | "Nha Trang"
   | "Sapa"
   | "Can Tho"
-  | "Hai Phong";
+  | "Hai Phong"
+  | "Phu Quoc";
 
 // Destination regions/areas visited
 export type Destination =
@@ -70,7 +90,31 @@ export type Destination =
   | "Ha Giang"
   | "Mai Chau"
   | "Pu Luong"
-  | "Cambodia";
+  | "Cambodia"
+  | "Hanoi"
+  | "Ho Chi Minh City"
+  | "Fansipan"
+  | "Lao Chai"
+  | "Ta Van"
+  | "Siem Reap"
+  | "Hon Thom Island"
+  | "Dong Van"
+  | "Meo Vac"
+  | "Yen Minh"
+  | "Ta Xua"
+  | "Cao Bang"
+  | "Ban Gioc"
+  | "Cat Tien"
+  | "Dalat"
+  | "Buon Ma Thuot"
+  | "Ba Na Hills"
+  | "Lang Co"
+  | "DMZ"
+  | "Cai Be"
+  | "Tan Phong Island"
+  | "Ba Be"
+  | "Long Tan"
+  | "Nui Dat";
 
 export interface Tour {
   id: string;

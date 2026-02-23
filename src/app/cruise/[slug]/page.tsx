@@ -1,19 +1,22 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTourBySlug, getRelatedTours } from "@/lib/tours-utils";
-import { FEATURED_TOURS } from "@/lib/tours-data";
+import { getAllActiveTours } from "@/lib/tours-data";
 import { TourDetailHero } from "@/components/tours/TourDetailHero";
+import { TourDescription } from "@/components/tours/TourDescription";
 import { TourHighlights } from "@/components/tours/TourHighlights";
 import { TourItinerary } from "@/components/tours/TourItinerary";
+import { TourIncludedExcluded } from "@/components/tours/TourIncludedExcluded";
 import { TourPricing } from "@/components/tours/TourPricing";
 import { TourInquiryForm } from "@/components/tours/TourInquiryForm";
 import { RelatedTours } from "@/components/tours/RelatedTours";
+import { TourVariationSelector } from "@/components/tours/TourVariationSelector";
 
 // Allow dynamic params in development
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  return FEATURED_TOURS.map((tour) => ({
+  return getAllActiveTours().map((tour) => ({
     slug: tour.slug,
   }));
 }
@@ -69,114 +72,23 @@ export default async function TourDetailPage({
           {/* Left Column - Tour Details (2/3 width) */}
           <div className="lg:col-span-2 space-y-8">
             {/* Tour Description */}
-            <section className="bg-white rounded-xl shadow-sm p-6 sm:p-8">
-              <div
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: tour.fullDescription }}
-              />
-            </section>
+            <TourDescription tour={tour} />
 
             {/* Highlights */}
-            {tour.highlights && tour.highlights.length > 0 && (
-              <TourHighlights highlights={tour.highlights} />
-            )}
+            <TourHighlights tour={tour} />
 
             {/* Itinerary */}
-            {tour.itinerary && tour.itinerary.length > 0 && (
-              <TourItinerary itinerary={tour.itinerary} />
-            )}
+            <TourItinerary tour={tour} />
 
             {/* Included/Excluded */}
-            {(tour.included || tour.excluded) && (
-              <section className="bg-white rounded-xl shadow-sm p-6 sm:p-8">
-                <div className="grid md:grid-cols-2 gap-8">
-                  {/* Included */}
-                  {tour.included && tour.included.length > 0 && (
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg
-                          className="w-6 h-6 text-green-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        Included
-                      </h3>
-                      <ul className="space-y-2">
-                        {tour.included.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-gray-700">
-                            <svg
-                              className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Excluded */}
-                  {tour.excluded && tour.excluded.length > 0 && (
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg
-                          className="w-6 h-6 text-red-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                        Not Included
-                      </h3>
-                      <ul className="space-y-2">
-                        {tour.excluded.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-gray-700">
-                            <svg
-                              className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </section>
-            )}
+            <TourIncludedExcluded tour={tour} />
           </div>
 
           {/* Right Column - Pricing & Booking (1/3 width, sticky) */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
+              {/* Variation Selector - shows if tour has variations */}
+              <TourVariationSelector currentTour={tour} />
               <TourPricing tour={tour} />
               <TourInquiryForm tour={tour} />
             </div>

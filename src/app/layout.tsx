@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteProvider } from "@/contexts/SiteContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 
 const geistSans = Geist({
@@ -35,8 +36,10 @@ export default function RootLayout({
         <SiteProvider>
           <ThemeProvider>
             <LanguageProvider>
-              {children}
-              <CookieConsent />
+              <CurrencyProvider>
+                {children}
+                <CookieConsent />
+              </CurrencyProvider>
             </LanguageProvider>
           </ThemeProvider>
         </SiteProvider>
