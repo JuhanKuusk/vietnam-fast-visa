@@ -75,7 +75,7 @@ Structure the article with:
 Focus on providing genuine value to travelers visiting Vietnam.`
 
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: {
@@ -116,7 +116,7 @@ Focus on providing genuine value to travelers visiting Vietnam.`
     const excerptPrompt = `Write a 2-sentence excerpt/summary for a blog article titled "${topic}" about Vietnam travel. Keep it under 160 characters. Do not use quotes.`
 
     const excerptResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -140,7 +140,7 @@ Focus on providing genuine value to travelers visiting Vietnam.`
     const keywordsPrompt = `List 10 SEO keywords for a blog article about "${topic}" related to Vietnam travel. Return only comma-separated keywords, nothing else.`
 
     const keywordsResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
