@@ -18,7 +18,7 @@ export const translations = {
   // Header
   header: {
     siteName: "VietnamTravel.help",
-    tagline: "Express Visa Service",
+    tagline: "Fast-Track Travel Service",
     logoTagline: "Check-in Approval in 30 min",
     support: "24/7 WhatsApp Support",
     supportShort: "Support",
@@ -887,7 +887,7 @@ export const translations = {
     allRightsReserved: "All rights reserved.",
     footerDescription: "Fast, reliable Vietnam visa assistance service. Express processing available.",
     importantDisclaimer: "Important Disclaimer",
-    disclaimerBannerText: "VietnamVisaHelp.com is an independent visa assistance service. We are not a government agency or official visa authority. We help you prepare and submit your visa application for a service fee. All visa approval decisions are made by Vietnamese immigration authorities.",
+    disclaimerBannerText: "VietnamTravel.help is a private travel consultancy and concierge service operated by BestPrice Travel (License No: 01-1794/2022/SDL-GPLHND). We are not affiliated with the Vietnamese Government or the Immigration Department. We provide B2B and B2C travel planning, airport fast-track, and entry document guidance. Travelers may choose to arrange their own entry requirements directly through official Vietnam government portals.",
 
     // Top Disclaimer Banner (the red banner at top)
     topDisclaimerText: "is not affiliated with the Vietnamese Government or the Immigration Department. As part of our services, processing fees are applicable, separate from government-regulated charges. You can also visit the",
@@ -905,6 +905,7 @@ export const translations = {
     footerRefund: "Cancellation and Refund Policy",
     footerPrivacy: "Privacy Policy",
     footerFees: "Fees",
+    footerDisclaimer: "Disclaimer",
     securePayment: "Secure Payment:",
 
     // Contact Form

@@ -1,0 +1,146 @@
+{
+  "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/hanoi-halong-bay-mai-chau-4-days.html",
+  "fetchedAt": "2026-03-02T03:21:50.311Z",
+  "name": "Hanoi, Halong Bay, Mai Chau 4 days",
+  "rating": 9.4,
+  "reviewCount": 7,
+  "duration": "Places:Hanoi - Halong Bay - Mai Chau",
+  "places": "Meals:3 Breakfasts, 3 Lunches, 1 Brunch, 1 Dinner",
+  "mealsSummary": "Operated by:BestPrice Travel",
+  "highlights": [
+    "Cruise through the legendary limestone karsts that define the enchanting landscape of Halong Bay.",
+    "Join a bicycle tour to explore the amazing ethnic culture and gorgeous nature in Mai Chau",
+    "Wake up to the tranquility of Halong Bay at sunrise and join an unforgettable Tai Chi Class.",
+    "Admire the best scenery of North Vietnam at an affordable price."
+  ],
+  "overview": "",
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Hanoi - Embark on an overnight cruise through Halong Bay",
+      "description": "Morning\n\nAround 08:00 - 08:30, our driver will pick you up from your hotel in Hanoi and then go on a 2.5-hour shuttle bus ride to Halong Bay, a UNESCO World Heritage Site. This natural wonder boasts over 1,600 limestone islands and islets emerging from emerald waters. After arriving at the cruise port, meet the captain and the crew briefing about the safety instructions and refresh with a welcome drink. Your boarding time is at around 12:00, and lunch with fresh seafood will be served as the boat cruises toward the bay. You can savor your dishes while enjoying the spectacular view of the charm...",
+      "activities": [],
+      "meals": [
+        "Lunch",
+        "Dinner"
+      ],
+      "accommodation": "Halong Bay Cruise",
+      "dayImages": [
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976366.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976366.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976364.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976367.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976365.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976363.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976364.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976365.jpg"
+      ]
+    },
+    {
+      "day": 2,
+      "title": "Disembark Halong Bay Cruise - Back to Hanoi",
+      "description": "Morning\n\nThis morning you can join a refreshing Tai Chi session to energize you for the day ahead (some cruises may offer yoga or Vovinam classes - please check with our consultants), or just simply wake up early and witness the stunning sunrise over the bay. Around 07:00, enjoy a light breakfast before the cruise continues its journey across the tranquil green waters to the last destination. Along the way, take in the stunning vistas of the Bay with dramatic limestone. We will return to the cruise and check out the cabin at 10:00. Brunch is served on the 90-minute transfer back to the harbor",
+      "activities": [],
+      "meals": [
+        "Breakfast",
+        "Brunch"
+      ],
+      "accommodation": "Hotel in Hanoi",
+      "dayImages": [
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976361.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/665ebdb84afcf.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976361.jpg"
+      ]
+    },
+    {
+      "day": 3,
+      "title": "Hanoi - Mai Chau - Scenic bike ride through picturesque villages",
+      "description": "07:00 - 07:30 Hotel pickup in Hanoi’s Old Quarter (If traffic conditions or accessibility issues arise, we will provide an alternative meeting point)\n\nYou will jurney through scenic mountain roads, passing through the lush landscapes of the Muong and Thai ethnic communities, where traditional stilt houses blend harmoniously with the surrounding valleys and hills. Stop at Thung Khe Pass, an ideal viewpoint to take in the breathtaking panorama of Mai Chau Valley. Visit a temporary local market run by the Muong people, offering fresh produce and unique handmade goods. Enjoy a traditional Vietname...",
+      "activities": [],
+      "meals": [
+        "Breakfast",
+        "Lunch"
+      ],
+      "accommodation": "Hotel in Mai Chau",
+      "dayImages": [
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976362.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d597635c.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976362.jpg"
+      ]
+    },
+    {
+      "day": 4,
+      "title": "Mai Chau - Trek through remote villages Na Meo & Na Mo - Hanoi",
+      "description": "Distance & Est. time: Cycling 2 km\n\nMorning\n\nHave breakfast at the homestay. Accompanied by a local Thai guide, embark on a 2 km cycling trip before trekking through the remote villages of Na Meo, Na Mo, and Xam Pa. Admire the stunning rice terraces and gain a deeper understanding of Thai ethnic traditions and daily life. At noon, return to the homestay for check-out and lunch",
+      "activities": [],
+      "meals": [
+        "Breakfast",
+        "Lunch"
+      ],
+      "accommodation": "NA",
+      "dayImages": [
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d597635f.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/665ebda80982b.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d597635f.jpg"
+      ]
+    }
+  ],
+  "pricingTiers": [
+    {
+      "category": "Economy  2*+ Hotels",
+      "price": 289
+    },
+    {
+      "category": "Superior 3* Hotels",
+      "price": 319
+    },
+    {
+      "category": "First Class 4* Hotels",
+      "price": 399
+    }
+  ],
+  "included": [
+    "Accommodation in TWN/ DBL sharing accommodation at hotel, except overnight on train and home-stay (if any)",
+    "All transport within Vietnam, as per itinerary.",
+    "All in-tour stationed local English speaking guide.",
+    "Entrance fees as per itinerary",
+    "Meals as indicated in the program"
+  ],
+  "images": [
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/667bcb681f2a3.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976366.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976364.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976367.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976365.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976363.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976361.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/665ebdb84afcf.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d5976362.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d597635c.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/65e13d597635f.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/665ebda80982b.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/hanoi,-halong-bay,-mai-chau-4-days-649d370cbec44.png",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976364.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976365.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976361.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d5976362.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/65e13d597635f.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/hotels/544_306/67f493235432d.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/hotels/544_306/67f6176a66e95.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/hotels/544_306/67f9c8111f8f4.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/hotels/544_306/67f9c9a589b4a.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/544_306/deluxe-double-cabin-641bd8ee3d6e7.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/544_306/656ff7f5c82fa.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/544_306/deluxe-balcony-twin-suite-640e9b4f7ff76.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/66cd320e94af7.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/66cd843724ce7.png",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/667bc9f0eba9d.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/65e008a054fe5.jpg",
+    "https://d122axpxm39woi.cloudfront.net/assets/img/dcma.png"
+  ],
+  "importantNotes": [
+    "PROGRAMS & SCHEDULES SUBJECT TO CHANGE WITHOUT PRIOR NOTICE"
+  ],
+  "reviews": [],
+  "scoreBreakdown": {}
+}

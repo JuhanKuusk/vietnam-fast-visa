@@ -1,0 +1,1082 @@
+{
+  "highConfidence": [
+    {
+      "id": "catherine-cruise-2d1n",
+      "name": "Catherine Cruise Halong Bay",
+      "currentUrl": "https://www.bestpricetravel.com/halong-bay-cruises/catherine-cruise.html",
+      "matchedUrl": "https://www.bestpricetravel.com/halong-bay-tours/halong-bay-cruise-2-days-1-night-from-hanoi-with-transfer.html",
+      "matchedTitle": "Halong Bay Cruise Package from Hanoi with Transfer 2 Days",
+      "score": 0.75
+    },
+    {
+      "id": "south-vietnam-phu-quoc-6d",
+      "name": "South Vietnam: Phu Quoc & Saigon",
+      "currentUrl": "https://www.bestpricetravel.com/en-us/vietnam-tours/south-vietnam-phu-quoc-saigon-6-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/south-vietnam-phu-quoc-saigon-6-days.html",
+      "matchedTitle": "Essence of South Vietnam: Ho Chi Minh City to Phu Quoc Escape 6 days",
+      "score": 0.75
+    },
+    {
+      "id": "ha-giang-3d-exploration",
+      "name": "Authentic Ha Giang 3 Days",
+      "currentUrl": "https://www.bestpricetravel.com/ha-giang-tours/authentic-of-ha-giang-3-days-exploration.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ha-giang-tours/ha-giang-panoramas-4-days.html",
+      "matchedTitle": "Ha Giang Loop Panoramas: Scenic Passes & Authentic Local Life 4 days",
+      "score": 1
+    },
+    {
+      "id": "cycling-hue-hoi-an-7d",
+      "name": "Cycling Vietnam Coast: Hue to Hoi An",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/cycling-along-vietnam-central-coast-from-hue-to-hoi-an-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/hue-to-hoi-an-cycling-journey-4-days.html",
+      "matchedTitle": "Hue To Hoi An Cycling Journey 4 Days",
+      "score": 0.75
+    },
+    {
+      "id": "vietnam-family-classic-8d",
+      "name": "Classic Vietnam Family Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/classic-vietnam-family-tour-with-kids-8-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/classic-vietnam-tours-for-family-12-days.html",
+      "matchedTitle": "Classic Vietnam Family Tour with Kids 8 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-honeymoon-romantic-10d",
+      "name": "Vietnam Romantic Honeymoon Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-romantic-honeymoon-escape-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-romantic-honeymoon-holiday-14-days.html",
+      "matchedTitle": "Vietnam Romantic Honeymoon Holiday 14 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "vietnam-lovers-honeymoon-12d",
+      "name": "Impressive Vietnam for Lovers",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/impressive-vietnam-for-lovers-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/impressive-vietnam-for-lovers-10-days.html",
+      "matchedTitle": "Impressive Vietnam for Lovers 10 days",
+      "score": 1
+    },
+    {
+      "id": "epic-vietnam-north-south-12d",
+      "name": "Epic Vietnam: North to South Small Group",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/epic-vietnam-north-south-small-group-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/epic-vietnam-from-north-to-south-10-days.html",
+      "matchedTitle": "Epic Vietnam from North to South 10 days - Group Tour",
+      "score": 1
+    },
+    {
+      "id": "vietnam-classic-small-group-10d",
+      "name": "Vietnam Classic Small Group Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-classic-small-group-tour-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-grand-discovery-18-days.html",
+      "matchedTitle": "Vietnam Grand Discovery Classic 18 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-culinary-journey-10d",
+      "name": "Vietnam Culinary Journey",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-culinary-journey-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-culinary-journey-on-wheels-11-days.html",
+      "matchedTitle": "Vietnam Culinary Journey On Wheels 11 Days",
+      "score": 1
+    },
+    {
+      "id": "hoi-an-therapeutic-escape-5d",
+      "name": "Hoi An Therapeutic Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-therapeutic-escape-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-wellness-retreat-5-days.html",
+      "matchedTitle": "Hoi An Therapeutic Escape - Acupressure & Herbal Therapy 5 days",
+      "score": 1
+    },
+    {
+      "id": "saigon-executive-wellness-5d",
+      "name": "Saigon Executive Wellness Retreat",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-executive-wellness-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-wellness-retreat-5-days.html",
+      "matchedTitle": "Saigon Executive Wellness Retreat: Rejuvenation In 5 days",
+      "score": 1
+    },
+    {
+      "id": "hanoi-halong-ninh-binh-4d",
+      "name": "Hanoi, Halong & Ninh Binh Express",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hanoi-halong-ninh-binh-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ninh-binh-tours/ninh-binh-hoa-lu-trang-an-full-day-private-tour.html",
+      "matchedTitle": "Ninh Binh: Hoa Lu – Trang An Full Day Private Tour from Hanoi",
+      "score": 0.6
+    },
+    {
+      "id": "sapa-fansipan-adventure-3d",
+      "name": "Sapa & Fansipan Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/sapa-fansipan-adventure-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/halong-sapa-tours/halong-bay-sapa-luxury-5-days-private-tour.html",
+      "matchedTitle": "Luxury Halong Bay & Sapa Adventure 5 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "ha-giang-loop-adventure-4d",
+      "name": "Ha Giang Loop Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/ha-giang-loop-adventure-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ha-giang-tours/ha-giang-loop-on-motorbike-4-days.html",
+      "matchedTitle": "Ha Giang Loop on Motorbike 4 days: Dong Van, Ma Pi Leng & Local Villages",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "ba-be-lake-ban-gioc-5d",
+      "name": "Ba Be Lake & Ban Gioc Waterfall",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/ba-be-lake-ban-gioc-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/ba-be-lake-ban-gioc-waterfall-5-days.html",
+      "matchedTitle": "Northeast Vietnam: Ba Be Lake & Ban Gioc Waterfall 5 days",
+      "score": 1
+    },
+    {
+      "id": "mai-chau-pu-luong-escape-3d",
+      "name": "Mai Chau & Pu Luong Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mai-chau-pu-luong-escape-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hanoi-tours/mai-chau-to-pu-luong-mountain-escape-3-days.html",
+      "matchedTitle": "Mai Chau to Pu Luong - Vietnam’s Mountain Escape 3 days",
+      "score": 1
+    },
+    {
+      "id": "hoi-an-memories-show-tour",
+      "name": "Hoi An Memories Show Experience",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-memories-show-tour.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hoi-an-tours/hoi-an-memories-show-ticket.html",
+      "matchedTitle": "Hoi An Memories Show Ticket",
+      "score": 0.75
+    },
+    {
+      "id": "hue-dmz-day-tour",
+      "name": "Hue DMZ Historical Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hue-dmz-day-tour.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hue-tours/hue-dmz-full-day-tour.html",
+      "matchedTitle": "DMZ Full Day Tour from Hue",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "hoi-an-countryside-cycling",
+      "name": "Hoi An Countryside Cycling Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-countryside-cycling-tour.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/hue-to-hoi-an-cycling-journey-4-days.html",
+      "matchedTitle": "Hue To Hoi An Cycling Journey 4 Days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "phong-nha-cave-2d",
+      "name": "Phong Nha Cave Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/phong-nha-cave-adventure-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/phong-nha-cave-dmz-4-days.html",
+      "matchedTitle": "Phong Nha Cave & DMZ 4 days",
+      "score": 0.75
+    },
+    {
+      "id": "mekong-delta-authentic-2d",
+      "name": "Mekong Delta Authentic Experience",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mekong-delta-authentic-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/mekong-delta-tours/authentic-mekong-delta-2-days-with-homestay-ben-tre-tra-vinh.html",
+      "matchedTitle": "Authentic Mekong Delta 2 days with homestay: Ben Tre - Tra Vinh",
+      "score": 0.75
+    },
+    {
+      "id": "cu-chi-mekong-combo",
+      "name": "Cu Chi Tunnels & Mekong Delta Combo",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/cu-chi-mekong-combo-day-tour.html",
+      "matchedUrl": "https://www.bestpricetravel.com/mekong-delta-tours/cu-chi-tunnels-mekong-delta-day-trip.html",
+      "matchedTitle": "Cu Chi Tunnels and Mekong Delta Day Tour",
+      "score": 0.8
+    },
+    {
+      "id": "phu-quoc-island-escape-4d",
+      "name": "Phu Quoc Island Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/phu-quoc-island-escape-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/south-vietnam-phu-quoc-saigon-6-days.html",
+      "matchedTitle": "Essence of South Vietnam: Ho Chi Minh City to Phu Quoc Escape 6 days",
+      "score": 0.75
+    },
+    {
+      "id": "saigon-street-food-night-tour",
+      "name": "Saigon Street Food Night Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-street-food-night-tour.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ho-chi-minh-city-tours/saigon-by-night-jeep-adventure-street-food-delights.html",
+      "matchedTitle": "Saigon by Night: Jeep Adventure & Street Food Delights",
+      "score": 1
+    },
+    {
+      "id": "vietnam-cambodia-highlights-12d",
+      "name": "Vietnam & Cambodia Highlights",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-cambodia-highlights-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/highlights-of-vietnam-cambodia-thailand-3-weeks.html",
+      "matchedTitle": "Highlights of Indochina: Vietnam, Cambodia & Thailand 3 weeks",
+      "score": 1
+    },
+    {
+      "id": "angkor-wat-extension-3d",
+      "name": "Angkor Wat Extension",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/angkor-wat-extension-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/romance-of-vietnam-cambodia-from-mekong-delta-to-angkor-wat-13-days.html",
+      "matchedTitle": "Romance of Vietnam & Cambodia from Mekong Delta to Angkor Wat 13 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "mekong-to-angkor-7d",
+      "name": "Mekong Delta to Angkor Wat",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mekong-to-angkor-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/romance-of-vietnam-cambodia-from-mekong-delta-to-angkor-wat-13-days.html",
+      "matchedTitle": "Romance of Vietnam & Cambodia from Mekong Delta to Angkor Wat 13 days",
+      "score": 1
+    },
+    {
+      "id": "best-indochina-15d",
+      "name": "Best of Indochina",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-indochina-15-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/highlights-of-vietnam-cambodia-thailand-3-weeks.html",
+      "matchedTitle": "Highlights of Indochina: Vietnam, Cambodia & Thailand 3 weeks",
+      "score": 1
+    },
+    {
+      "id": "vietnam-luxury-train-8d",
+      "name": "Vietnam by Luxury Train",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-by-luxury-train-8-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-from-north-to-south-by-luxury-train-8-days.html",
+      "matchedTitle": "Discover Essence of Vietnam from North to South by Luxury Train 8 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-eco-adventure-10d",
+      "name": "Vietnam Eco Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-eco-adventure-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hanoi-tours/family-adventure-in-hanoi-outskirt-ba-vi-eco-escape-3-days.html",
+      "matchedTitle": "Family Adventure in Hanoi Outskirt & Ba Vi Eco Escape 3 days",
+      "score": 1
+    },
+    {
+      "id": "saigon-danang-golf-8d",
+      "name": "Saigon to Da Nang: Golf, History & Coastal Charms",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-danang-golf-8-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-to-da-nang-golf-8-days.html",
+      "matchedTitle": "Saigon to Da Nang: Golf, History & Coastal Charms 8 days",
+      "score": 1
+    },
+    {
+      "id": "danang-golf-holiday-5d",
+      "name": "Luxury Da Nang Golf Holiday",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-danang-golf-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-da-nang-golf-5-days.html",
+      "matchedTitle": "Luxury Da Nang Golf Holiday 5 days",
+      "score": 1
+    },
+    {
+      "id": "nha-trang-golf-coastal-5d",
+      "name": "Nha Trang Golf & Coastal Bliss",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-golf-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-golf-coastal-5-days.html",
+      "matchedTitle": "Nha Trang Golf & Coastal Bliss 5 days",
+      "score": 1
+    },
+    {
+      "id": "phu-quoc-golf-seaside-4d",
+      "name": "Phu Quoc Golf & Seaside Relaxation",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/phu-quoc-golf-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/phu-quoc-golf-seaside-4-days.html",
+      "matchedTitle": "Phu Quoc Golf & Seaside Relaxation 4 days",
+      "score": 1
+    },
+    {
+      "id": "majestic-vietnam-beach-17d",
+      "name": "Majestic Vietnam with Beach Holiday",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/majestic-vietnam-beach-17-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/majestic-vietnam-with-beach-relaxation-17-days.html",
+      "matchedTitle": "Majestic Vietnam with Beach Holiday 17 days",
+      "score": 1
+    },
+    {
+      "id": "hoi-an-beach-break-7d",
+      "name": "Hoi An Surrounding & Beach Break",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-beach-break-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-surrounding-and-beach-break-7days.html",
+      "matchedTitle": "Hoi An Surrounding And Beach Break 7 days",
+      "score": 1
+    },
+    {
+      "id": "saigon-mui-ne-beach-7d",
+      "name": "South Vietnam: Saigon & Mui Ne Beach Relaxation",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-mui-ne-beach-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-and-mui-ne-relaxation-7-days.html",
+      "matchedTitle": "South Vietnam: Saigon & Mui Ne Beach Relaxation 7 days: Price & Itiner",
+      "score": 1
+    },
+    {
+      "id": "nha-trang-discovery-beach-6d",
+      "name": "Nha Trang Discovery & Beach Break",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-beach-6-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-discovery-and-beach-break-6-days.html",
+      "matchedTitle": "Nha Trang Discovery and Beach Break 6 Days",
+      "score": 1
+    },
+    {
+      "id": "luxury-beach-wellness-14d",
+      "name": "Luxury Vietnam Beach Wellness & Spa",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-beach-wellness-14-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-vietnam-beach-wellness-spa-14-days.html",
+      "matchedTitle": "Luxury Vietnam Beach Wellness & Spa Package 2 weeks",
+      "score": 1
+    },
+    {
+      "id": "vietnam-world-heritage-15d",
+      "name": "Best of Vietnam: World Heritage Sites",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/best-vietnam-world-heritage-15-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-vietnam-15-days.html",
+      "matchedTitle": "Best of Vietnam: World Heritage Sites 15 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-highlights-north-south-12d",
+      "name": "Highlights of Vietnam from North to South",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/highlights-vietnam-north-south-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/highlights-of-vietnam-12-days.html",
+      "matchedTitle": "Highlights of Vietnam from North to South 12 days",
+      "score": 1
+    },
+    {
+      "id": "real-taste-vietnam-13d",
+      "name": "Real Taste of Vietnam",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/real-taste-vietnam-13-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/real-taste-of-vietnam-13-days.html",
+      "matchedTitle": "Real Taste of Vietnam 13 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-essential-10d",
+      "name": "Vietnam Essential",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-essential-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-essential-10-days-small-group-tour.html",
+      "matchedTitle": "Vietnam Essential 10 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-classic-8d",
+      "name": "Vietnam Classic Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-classic-8-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-grand-discovery-18-days.html",
+      "matchedTitle": "Vietnam Grand Discovery Classic 18 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-discovery-14d",
+      "name": "Vietnam Discovery",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-discovery-14-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/off-the-beaten-track-northeast-vietnam-7-days.html",
+      "matchedTitle": "Hidden Trails of Northeast Vietnam: 7 Days of Discovery (Ha Giang, Ba Be)",
+      "score": 1
+    },
+    {
+      "id": "hanoi-food-walking-tour",
+      "name": "Hanoi Street Food Walking Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hanoi-street-food-walking-tour.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hanoi-tours/hanoi-street-food-tour.html",
+      "matchedTitle": "Hanoi Street Food Walking Tour",
+      "score": 1
+    },
+    {
+      "id": "mekong-delta-day-trip",
+      "name": "Mekong Delta Day Trip",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mekong-delta-day-trip.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-south-vietnam-5-days.html",
+      "matchedTitle": "Best of South Vietnam: Saigon, Cu Chi Tunnel & Mekong Delta 5 days",
+      "score": 1
+    },
+    {
+      "id": "ninh-binh-day-trip",
+      "name": "Ninh Binh Day Trip from Hanoi",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/ninh-binh-day-trip.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ninh-binh-tours/ninh-binh-hoa-lu-trang-an-full-day-private-tour.html",
+      "matchedTitle": "Ninh Binh: Hoa Lu – Trang An Full Day Private Tour from Hanoi",
+      "score": 1
+    },
+    {
+      "id": "cu-chi-tunnels-half-day",
+      "name": "Cu Chi Tunnels Half Day Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/cu-chi-tunnels-half-day.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ho-chi-minh-city-tours/cu-chi-tunnels-half-day-small-group.html",
+      "matchedTitle": "Cu Chi Tunnels Half Day - Small Group",
+      "score": 1
+    },
+    {
+      "id": "my-son-sanctuary-half-day",
+      "name": "My Son Sanctuary Half Day Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/my-son-sanctuary-half-day.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hoi-an-tours/my-son-sanctuary-half-day-tour.html",
+      "matchedTitle": "My Son Sanctuary Half-Day Tour from Hoi An",
+      "score": 1
+    },
+    {
+      "id": "vietnam-adventure-biking-trekking-12d",
+      "name": "Vietnam Adventure: Biking, Trekking & Snorkeling",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-adventure-biking-trekking-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-biking-trekking-snorkeling-12-days.html",
+      "matchedTitle": "Vietnam Adventure with Biking, Trekking & Snorkeling 12 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-bike-north-south-16d",
+      "name": "Vietnam Adventure on Bike: North to South",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-bike-north-south-16-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-on-wheels-16-days.html",
+      "matchedTitle": "Vietnam Adventure on Bike from North to South 16 days",
+      "score": 1
+    },
+    {
+      "id": "vietnam-land-rail-water-12d",
+      "name": "Ultimate Vietnam Journey: Land, Rail & Water",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-land-rail-water-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-mix-transportation-12-days.html",
+      "matchedTitle": "Ultimate Vietnam Journey: 12 Days by Land, Rail & Water",
+      "score": 1
+    },
+    {
+      "id": "family-easy-adventure-10d",
+      "name": "North & Central Vietnam Easy Adventure for Family",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/family-easy-adventure-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/north-center-vietnam-easy-adventure-for-family-with-kids-10-days.html",
+      "matchedTitle": "North & Central Vietnam for Family 10 days: Price & Itinerary 2026",
+      "score": 0.6
+    },
+    {
+      "id": "ha-giang-motorbike-loop-5d",
+      "name": "Ha Giang Motorbike Loop Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/ha-giang-motorbike-loop-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ha-giang-tours/ha-giang-loop-on-motorbike-4-days.html",
+      "matchedTitle": "Ha Giang Loop on Motorbike 4 days: Dong Van, Ma Pi Leng & Local Villages",
+      "score": 0.75
+    },
+    {
+      "id": "honeymoon-vietnam-beach-12d",
+      "name": "Honeymoon Vietnam Beach Paradise",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/honeymoon-beach-paradise-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/cultural-beach-paradise-vietnam-cambodia-bali-16-days.html",
+      "matchedTitle": "Cultural Wonders & Beach Paradise: Vietnam, Cambodia & Bali Journey 16 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "halong-bay-romantic-cruise-3d",
+      "name": "Halong Bay Romantic Cruise",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/halong-romantic-cruise-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/halong-bay-tours/halong-bay-cruise-2-days-1-night-from-hanoi-with-transfer.html",
+      "matchedTitle": "Halong Bay Cruise Package from Hanoi with Transfer 2 Days",
+      "score": 0.75
+    },
+    {
+      "id": "north-vietnam-budget-6d",
+      "name": "North Vietnam Budget Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/north-vietnam-budget-6-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-marvelous-budget-adventure-10-days.html",
+      "matchedTitle": "Vietnam Marvelous Budget Adventure 10 days: Price & Itinerary 2026",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "vietnam-small-group-classic-10d",
+      "name": "Vietnam Small Group Classic",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-small-group-classic-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-grand-discovery-18-days.html",
+      "matchedTitle": "Vietnam Grand Discovery Classic 18 days",
+      "score": 1
+    },
+    {
+      "id": "small-group-north-vietnam-7d",
+      "name": "Small Group North Vietnam Explorer",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/small-group-north-vietnam-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/sapa-northwest-vietnam-beauty-11-days.html",
+      "matchedTitle": "Northwest Vietnam Explorer: 11 Days of Culture & Stunning Landscapes",
+      "score": 0.75
+    },
+    {
+      "id": "small-group-central-highlands-5d",
+      "name": "Small Group Central Highlands",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/small-group-central-highlands-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/south-central-highlands-memorial-sites-9-days.html",
+      "matchedTitle": "South & Central Highlands Memorial Sites 9 days",
+      "score": 1
+    },
+    {
+      "id": "small-group-hoi-an-experience-4d",
+      "name": "Small Group Hoi An Experience",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/small-group-hoi-an-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hoi-an-tours/rural-villages-experience-on-vespa.html",
+      "matchedTitle": "Hoi An Rural Villages Experience on Vespa",
+      "score": 1
+    },
+    {
+      "id": "vietnam-luxury-signature-12d",
+      "name": "Vietnam Luxury Signature Journey",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-luxury-signature-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/luxurious-beauty-of-vietnam-18-days.html",
+      "matchedTitle": "The Ultimate Vietnam Luxury Journey 18 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "luxury-northern-escape-6d",
+      "name": "Luxury Northern Vietnam Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-northern-escape-6-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/luxurious-northern-vietnam-exploration-7-days.html",
+      "matchedTitle": "Indulgent Northern Vietnam: 7 Days of Luxury & Scenic Wonders",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "luxury-central-vietnam-5d",
+      "name": "Luxury Central Vietnam Retreat",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-central-vietnam-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-luxury-wellness-retreat-escape-8-days.html",
+      "matchedTitle": "Vietnam Luxury Wellness Retreat Escape 8 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "sapa-rice-terrace-photo-4d",
+      "name": "Sapa Rice Terrace Photography",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/sapa-rice-terrace-photography-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/sapa-tours/sapa-trekking-2-days-homestay.html",
+      "matchedTitle": "Sapa Terraced Rice Fields & Ethnic Villages Trek 2 days",
+      "score": 0.625
+    },
+    {
+      "id": "mekong-delta-photo-3d",
+      "name": "Mekong Delta Photography",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mekong-delta-photography-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-south-vietnam-5-days.html",
+      "matchedTitle": "Best of South Vietnam: Saigon, Cu Chi Tunnel & Mekong Delta 5 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "halong-bay-photo-cruise-2d",
+      "name": "Halong Bay Photography Cruise",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/halong-bay-photography-cruise-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/halong-bay-tours/halong-bay-cruise-2-days-1-night-from-hanoi-with-transfer.html",
+      "matchedTitle": "Halong Bay Cruise Package from Hanoi with Transfer 2 Days",
+      "score": 0.75
+    },
+    {
+      "id": "vietnam-culinary-journey-12d",
+      "name": "Vietnam Culinary Journey",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-culinary-journey-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-culinary-journey-on-wheels-11-days.html",
+      "matchedTitle": "Vietnam Culinary Journey On Wheels 11 Days",
+      "score": 1
+    },
+    {
+      "id": "hanoi-food-masterclass-3d",
+      "name": "Hanoi Food Masterclass",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hanoi-food-masterclass-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hanoi-tours/hanoi-street-food-tour.html",
+      "matchedTitle": "Hanoi Street Food Walking Tour",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "hoi-an-cooking-farmstay-2d",
+      "name": "Hoi An Cooking & Farmstay",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-cooking-farmstay-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hoi-an-tours/experience-rural-life-and-cooking-at-organic-farm-in-hoi-an.html",
+      "matchedTitle": "Experience Rural Life and Cooking at Organic Farm in Hoi An",
+      "score": 0.8333333333333334
+    },
+    {
+      "id": "saigon-street-food-master-2d",
+      "name": "Saigon Street Food Master",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-street-food-master-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ho-chi-minh-city-tours/saigon-by-night-jeep-adventure-street-food-delights.html",
+      "matchedTitle": "Saigon by Night: Jeep Adventure & Street Food Delights",
+      "score": 0.75
+    },
+    {
+      "id": "mekong-cooking-homestay-3d",
+      "name": "Mekong Cooking Homestay",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mekong-cooking-homestay-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/mekong-delta-tours/mekong-delta-explore-at-ben-tre-homestay-2-days.html",
+      "matchedTitle": "Mekong Delta Explore 2 days - Homestay",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "vietnam-war-history-10d",
+      "name": "Vietnam War History Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-war-history-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-war-history-scenic-heritage-tour-8-days.html",
+      "matchedTitle": "Vietnam War History & Scenic Heritage Tour 8 days",
+      "score": 1
+    },
+    {
+      "id": "nha-trang-beach-4d",
+      "name": "Nha Trang Beach Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-beach-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-discovery-and-beach-break-6-days.html",
+      "matchedTitle": "Nha Trang Discovery and Beach Break 6 Days",
+      "score": 0.75
+    },
+    {
+      "id": "mui-ne-beach-kite-4d",
+      "name": "Mui Ne Beach & Kitesurfing",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mui-ne-kitesurfing-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-and-mui-ne-relaxation-7-days.html",
+      "matchedTitle": "South Vietnam: Saigon & Mui Ne Beach Relaxation 7 days: Price & Itiner",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "bac-ha-market-weekend-3d",
+      "name": "Bac Ha Market Weekend",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/bac-ha-market-weekend-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/sapa-tours/sapa-with-bac-ha-market-2-days.html",
+      "matchedTitle": "Sapa with Bac Ha Market 2 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "ha-giang-loop-5d",
+      "name": "Ha Giang Loop Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/ha-giang-loop-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ha-giang-tours/ha-giang-loop-on-motorbike-4-days.html",
+      "matchedTitle": "Ha Giang Loop on Motorbike 4 days: Dong Van, Ma Pi Leng & Local Villages",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "mai-chau-homestay-2d",
+      "name": "Mai Chau Valley Homestay",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mai-chau-homestay-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hanoi-tours/mai-chau-valley-break-2-days-small-group.html",
+      "matchedTitle": "Mai Chau Valley Break 2 days - Small Group from Hanoi",
+      "score": 0.75
+    },
+    {
+      "id": "pu-luong-ethnic-trek-4d",
+      "name": "Pu Luong Ethnic Trekking",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/pu-luong-ethnic-trek-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/sapa-tours/sapa-trekking-ethnic-market-3-days.html",
+      "matchedTitle": "Sapa Trekking & Ethnic Market 3 days",
+      "score": 0.6666666666666666
+    },
+    {
+      "id": "vietnam-wellness-retreat-7d",
+      "name": "Vietnam Wellness Retreat",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-wellness-retreat-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-luxury-wellness-retreat-escape-8-days.html",
+      "matchedTitle": "Vietnam Luxury Wellness Retreat Escape 8 days",
+      "score": 1
+    }
+  ],
+  "mediumConfidence": [
+    {
+      "id": "saigon-danang-motorbike-7d",
+      "name": "Saigon to Danang: Vietnam Highlands",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-highlands-motorbike-tour-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-to-da-nang-golf-8-days.html",
+      "matchedTitle": "Saigon to Da Nang: Golf, History & Coastal Charms 8 days",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-beaches-island-10d",
+      "name": "Vietnam Beaches & Islands Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-beaches-islands-escape-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/phu-quoc-tours/phu-quoc-beach-escape-5-days.html",
+      "matchedTitle": "Phu Quoc Beach Escape 5 days",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-trekking-caving-12d",
+      "name": "Vietnam Active Escape: Trekking, Caving & Water",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-trekking-caving-water-thrills-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/trekking-caving-ba-be-national-park-3-days-2-nights.html",
+      "matchedTitle": "Trekking Caving Ba Be National Park 3 Days 2 Nights",
+      "score": 0.4
+    },
+    {
+      "id": "vietnam-photo-expedition-14d",
+      "name": "Vietnam Photography Expedition",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-photography-expedition-14-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/central-and-southern-vietnamese-taste-10-days.html",
+      "matchedTitle": "From Hoi An to Saigon: A 10-Day Vietnamese Culinary Expedition",
+      "score": 0.5
+    },
+    {
+      "id": "central-vietnam-discovery-5d",
+      "name": "Central Vietnam Discovery",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/central-vietnam-discovery-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/a-glimpse-of-the-central-vietnam-5-days.html",
+      "matchedTitle": "A Glimpse of Central Vietnam 5 days",
+      "score": 0.5
+    },
+    {
+      "id": "saigon-city-highlights",
+      "name": "Saigon City Highlights Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-city-highlights-tour.html",
+      "matchedUrl": "https://www.bestpricetravel.com/da-nang-tours/da-nang-full-day-city-tour.html",
+      "matchedTitle": "Da Nang Highlight Full day City Tour",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-rural-immersion-7d",
+      "name": "Vietnam Rural Immersion",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-rural-immersion-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hanoi-tours/northern-vietnams-flavors-and-traditions-3-days.html",
+      "matchedTitle": "Soul of Hanoi: Tradition, Cuisine & Craft Immersion 3 days",
+      "score": 0.5
+    },
+    {
+      "id": "hanoi-halong-golf-6d",
+      "name": "Luxury Hanoi & Halong Golf Retreat",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-hanoi-halong-golf-6-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-northern-vietnam-6-days.html",
+      "matchedTitle": "Best of Northern Vietnam: Hanoi, Sapa & Halong 6 days",
+      "score": 0.4
+    },
+    {
+      "id": "perfume-pagoda-day-trip",
+      "name": "Perfume Pagoda Day Trip",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/perfume-pagoda-day-trip.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hue-tours/imperial-taste-on-perfume-river.html",
+      "matchedTitle": "Imperial Taste on Perfume River Cruise",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-romantic-escape-10d",
+      "name": "Vietnam Romantic Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-romantic-escape-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/south-vietnam-phu-quoc-saigon-6-days.html",
+      "matchedTitle": "Essence of South Vietnam: Ho Chi Minh City to Phu Quoc Escape 6 days",
+      "score": 0.5
+    },
+    {
+      "id": "couples-hoi-an-beach-5d",
+      "name": "Couples Hoi An Beach Retreat",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/couples-hoi-an-beach-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-surrounding-and-beach-break-7days.html",
+      "matchedTitle": "Hoi An Surrounding And Beach Break 7 days",
+      "score": 0.5
+    },
+    {
+      "id": "saigon-phu-quoc-honeymoon-7d",
+      "name": "Saigon & Phu Quoc Honeymoon",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-phu-quoc-honeymoon-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/south-vietnam-phu-quoc-saigon-6-days.html",
+      "matchedTitle": "Essence of South Vietnam: Ho Chi Minh City to Phu Quoc Escape 6 days",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-budget-backpacker-12d",
+      "name": "Vietnam Budget Backpacker",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-budget-backpacker-12-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-marvelous-budget-adventure-10-days.html",
+      "matchedTitle": "Vietnam Marvelous Budget Adventure 10 days: Price & Itinerary 2026",
+      "score": 0.5
+    },
+    {
+      "id": "small-group-mekong-adventure-3d",
+      "name": "Small Group Mekong Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/small-group-mekong-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-biking-trekking-snorkeling-12-days.html",
+      "matchedTitle": "Vietnam Adventure with Biking, Trekking & Snorkeling 12 days",
+      "score": 0.5
+    },
+    {
+      "id": "luxury-halong-heritage-cruise-3d",
+      "name": "Luxury Halong Heritage Line Cruise",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-halong-heritage-cruise-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/halong-sapa-tours/halong-bay-sapa-luxury-5-days-private-tour.html",
+      "matchedTitle": "Luxury Halong Bay & Sapa Adventure 5 days",
+      "score": 0.4
+    },
+    {
+      "id": "vietnam-photography-15d",
+      "name": "Vietnam Photography Expedition",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-photography-expedition-15-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/central-and-southern-vietnamese-taste-10-days.html",
+      "matchedTitle": "From Hoi An to Saigon: A 10-Day Vietnamese Culinary Expedition",
+      "score": 0.5
+    },
+    {
+      "id": "dmz-battlefield-2d",
+      "name": "DMZ Battlefield Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/dmz-battlefield-tour-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/phong-nha-cave-dmz-4-days.html",
+      "matchedTitle": "Phong Nha Cave & DMZ 4 days",
+      "score": 0.5
+    },
+    {
+      "id": "cu-chi-war-remnants-full-day",
+      "name": "Cu Chi & War Remnants Full Day",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/cu-chi-war-remnants-full-day.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ho-chi-minh-city-tours/cu-chi-tunnels-biking-tour-full-day.html",
+      "matchedTitle": "Cu Chi Tunnels Cycling Tour Full Day",
+      "score": 0.5
+    },
+    {
+      "id": "hanoi-war-sites-full-day",
+      "name": "Hanoi War Sites Full Day",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hanoi-war-sites-full-day.html",
+      "matchedUrl": "https://www.bestpricetravel.com/ninh-binh-tours/ninh-binh-hoa-lu-trang-an-full-day-private-tour.html",
+      "matchedTitle": "Ninh Binh: Hoa Lu – Trang An Full Day Private Tour from Hanoi",
+      "score": 0.5
+    },
+    {
+      "id": "saigon-war-history-half-day",
+      "name": "Saigon War History Half Day",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-war-history-half-day.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-war-history-scenic-heritage-tour-8-days.html",
+      "matchedTitle": "Vietnam War History & Scenic Heritage Tour 8 days",
+      "score": 0.5
+    },
+    {
+      "id": "hue-festival-arts-5d",
+      "name": "Hue Festival Arts & Culture",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hue-festival-arts-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/hue-tours/authentic-hue-food-culture-countryside-4-days.html",
+      "matchedTitle": "Authentic Hue - Food, Culture & Countryside Discovery 3 days",
+      "score": 0.5
+    },
+    {
+      "id": "dalat-day-trip",
+      "name": "Dalat Day Trip from Saigon",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/dalat-day-trip-saigon.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-south-vietnam-5-days.html",
+      "matchedTitle": "Best of South Vietnam: Saigon, Cu Chi Tunnel & Mekong Delta 5 days",
+      "score": 0.5
+    },
+    {
+      "id": "nha-trang-diving-3d",
+      "name": "Nha Trang Diving Experience",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-diving-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-discovery-and-beach-break-6-days.html",
+      "matchedTitle": "Nha Trang Discovery and Beach Break 6 Days",
+      "score": 0.5
+    },
+    {
+      "id": "nha-trang-mui-ne-combo-6d",
+      "name": "Nha Trang & Mui Ne Combo",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-mui-ne-6-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/nha-trang-discovery-and-beach-break-6-days.html",
+      "matchedTitle": "Nha Trang Discovery and Beach Break 6 Days",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-train-journey-14d",
+      "name": "Vietnam Train Journey",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-train-journey-14-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/one-journey-two-heritages-spiritual-yen-tu-to-majestic-halong-bay-6-days.html",
+      "matchedTitle": "One Journey - Two Heritages: Spiritual Yen Tu to Majestic Halong Bay 6 days",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-volunteering-14d",
+      "name": "Vietnam Volunteering Experience",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-volunteering-14-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-flavors-experience-11-days.html",
+      "matchedTitle": "Vietnam Flavors Experience & Beach Relax 11 days",
+      "score": 0.5
+    },
+    {
+      "id": "vietnam-birdwatching-10d",
+      "name": "Vietnam Birdwatching Expedition",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-birdwatching-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/central-and-southern-vietnamese-taste-10-days.html",
+      "matchedTitle": "From Hoi An to Saigon: A 10-Day Vietnamese Culinary Expedition",
+      "score": 0.5
+    }
+  ],
+  "lowConfidence": [
+    {
+      "id": "ambassador-signature-2d1n",
+      "name": "Ambassador Signature Cruise",
+      "currentUrl": "https://www.bestpricetravel.com/halong-bay-cruises/ambassador-signature-cruise.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/upstream-the-mekong-river-on-luxury-cruise-13-days.html",
+      "matchedTitle": "Discover the Mekong River on Luxury Cruise 13 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "mon-cheri-cruise-2d1n",
+      "name": "Mon Cheri Cruise",
+      "currentUrl": "https://www.bestpricetravel.com/halong-bay-cruises/mon-cheri-cruise.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/upstream-the-mekong-river-on-luxury-cruise-13-days.html",
+      "matchedTitle": "Discover the Mekong River on Luxury Cruise 13 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "lyra-grandeur-cruise-2d1n",
+      "name": "Lyra Grandeur Cruise",
+      "currentUrl": "https://www.bestpricetravel.com/halong-bay-cruises/lyra-grandeur-cruise.html",
+      "matchedUrl": "https://www.bestpricetravel.com/indochina-tours/upstream-the-mekong-river-on-luxury-cruise-13-days.html",
+      "matchedTitle": "Discover the Mekong River on Luxury Cruise 13 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "central-vietnam-deep-dive-7d",
+      "name": "Central Vietnam Deep Dive",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/central-vietnam-deep-dive-7-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/a-glimpse-of-the-central-vietnam-5-days.html",
+      "matchedTitle": "A Glimpse of Central Vietnam 5 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "vietnam-natural-wonders-healing-8d",
+      "name": "Vietnam Traditional Therapies & Natural Wonders",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-natural-wonders-healing-8-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/luxurious-northern-vietnam-exploration-7-days.html",
+      "matchedTitle": "Indulgent Northern Vietnam: 7 Days of Luxury & Scenic Wonders",
+      "score": 0.25
+    },
+    {
+      "id": "vietnam-mountain-retreat-10d",
+      "name": "Vietnam Mountain Retreat & Healing",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-mountain-retreat-healing-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-luxury-wellness-retreat-escape-8-days.html",
+      "matchedTitle": "Vietnam Luxury Wellness Retreat Escape 8 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "rejuvenate-vietnam-14d",
+      "name": "Rejuvenate Vietnam: Heritage, Healing & Renewal",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/rejuvenate-vietnam-14-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-vietnam-15-days.html",
+      "matchedTitle": "Best of Vietnam: World Heritage Sites 15 days",
+      "score": 0.25
+    },
+    {
+      "id": "ba-na-hills-day-trip",
+      "name": "Ba Na Hills & Golden Bridge Day Trip",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/ba-na-hills-golden-bridge-day-trip.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/da-nang-hoi-an-ba-na-hills-5-days.html",
+      "matchedTitle": "Central Vietnam: Da Nang, Hoi An & Ba Na Hills 5 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "dalat-highlands-3d",
+      "name": "Dalat Highlands Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/dalat-highlands-adventure-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-biking-trekking-snorkeling-12-days.html",
+      "matchedTitle": "Vietnam Adventure with Biking, Trekking & Snorkeling 12 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "south-vietnam-budget-5d",
+      "name": "South Vietnam Budget Explorer",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/south-vietnam-budget-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/highlights-of-vietnam-12-days.html",
+      "matchedTitle": "Highlights of Vietnam from North to South 12 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "central-vietnam-budget-4d",
+      "name": "Central Vietnam Budget Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/central-vietnam-budget-4-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/a-glimpse-of-the-central-vietnam-5-days.html",
+      "matchedTitle": "A Glimpse of Central Vietnam 5 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "hoi-an-lantern-photo-2d",
+      "name": "Hoi An Lantern Photography",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-lantern-photography-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-surrounding-and-beach-break-7days.html",
+      "matchedTitle": "Hoi An Surrounding And Beach Break 7 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "vietnam-tet-festival-10d",
+      "name": "Vietnam Tet Festival Experience",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-tet-festival-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-flavors-experience-11-days.html",
+      "matchedTitle": "Vietnam Flavors Experience & Beach Relax 11 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "hoi-an-lantern-festival-3d",
+      "name": "Hoi An Lantern Festival",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-lantern-festival-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/hoi-an-surrounding-and-beach-break-7days.html",
+      "matchedTitle": "Hoi An Surrounding And Beach Break 7 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "sapa-spring-festival-5d",
+      "name": "Sapa Spring Festival Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/sapa-spring-festival-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-northern-vietnam-6-days.html",
+      "matchedTitle": "Best of Northern Vietnam: Hanoi, Sapa & Halong 6 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "dalat-highlands-5d",
+      "name": "Dalat Highlands Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/dalat-highlands-5-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-biking-trekking-snorkeling-12-days.html",
+      "matchedTitle": "Vietnam Adventure with Biking, Trekking & Snorkeling 12 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "dalat-canyoning-2d",
+      "name": "Dalat Canyoning Adventure",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/dalat-canyoning-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-biking-trekking-snorkeling-12-days.html",
+      "matchedTitle": "Vietnam Adventure with Biking, Trekking & Snorkeling 12 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "dalat-coffee-wine-2d",
+      "name": "Dalat Coffee & Wine Experience",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/dalat-coffee-wine-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-flavors-experience-11-days.html",
+      "matchedTitle": "Vietnam Flavors Experience & Beach Relax 11 days",
+      "score": 0.25
+    },
+    {
+      "id": "dalat-easy-escape-3d",
+      "name": "Dalat Easy Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/dalat-easy-escape-3-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/south-vietnam-phu-quoc-saigon-6-days.html",
+      "matchedTitle": "Essence of South Vietnam: Ho Chi Minh City to Phu Quoc Escape 6 days",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "mui-ne-sand-dunes-2d",
+      "name": "Mui Ne Sand Dunes Escape",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mui-ne-sand-dunes-2-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/saigon-and-mui-ne-relaxation-7-days.html",
+      "matchedTitle": "South Vietnam: Saigon & Mui Ne Beach Relaxation 7 days: Price & Itiner",
+      "score": 0.25
+    },
+    {
+      "id": "northern-ethnic-minorities-10d",
+      "name": "Northern Ethnic Minorities",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/northern-ethnic-minorities-10-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/luxurious-northern-vietnam-exploration-7-days.html",
+      "matchedTitle": "Indulgent Northern Vietnam: 7 Days of Luxury & Scenic Wonders",
+      "score": 0.3333333333333333
+    },
+    {
+      "id": "vietnam-craft-artisan-8d",
+      "name": "Vietnam Craft & Artisan Journey",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-craft-artisan-8-days.html",
+      "matchedUrl": "https://www.bestpricetravel.com/vietnam-tours/one-journey-two-heritages-spiritual-yen-tu-to-majestic-halong-bay-6-days.html",
+      "matchedTitle": "One Journey - Two Heritages: Spiritual Yen Tu to Majestic Halong Bay 6 days",
+      "score": 0.3333333333333333
+    }
+  ],
+  "noMatch": [
+    {
+      "id": "vietnam-gentle-pace-10d",
+      "name": "Vietnam at a Gentle Pace",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-gentle-pace-10-days.html",
+      "score": 0
+    },
+    {
+      "id": "vietnam-express-6d",
+      "name": "Vietnam Express",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-express-6-days.html",
+      "score": 0
+    },
+    {
+      "id": "vietnam-complete-18d",
+      "name": "Vietnam Complete",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-complete-18-days.html",
+      "score": 0
+    },
+    {
+      "id": "mid-autumn-festival-3d",
+      "name": "Mid-Autumn Festival Tour",
+      "currentUrl": "https://www.bestpricetravel.com/vietnam-tours/mid-autumn-festival-3-days.html",
+      "score": 0
+    }
+  ]
+}

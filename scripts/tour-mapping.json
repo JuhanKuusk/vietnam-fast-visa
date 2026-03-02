@@ -1,0 +1,640 @@
+{
+  "generated": "2026-03-02T04:41:51.730Z",
+  "matches": [
+    {
+      "scrapedSlug": "ba-be-lake-ban-gioc-waterfall-5-days",
+      "scrapedName": "Northeast Vietnam: Ba Be Lake & Ban Gioc Waterfall 5 days",
+      "existingSlug": "ba-be-lake-ban-gioc-waterfall-5-days",
+      "matchScore": 100,
+      "itineraryDays": 5,
+      "images": 24
+    },
+    {
+      "scrapedSlug": "ba-na-hills-golden-bridge-day-trip",
+      "scrapedName": "",
+      "existingSlug": "ba-na-hills-golden-bridge-day-trip",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 11
+    },
+    {
+      "scrapedSlug": "best-of-northern-vietnam-6-days",
+      "scrapedName": "Best of Northern Vietnam: Hanoi, Sapa & Halong 6 days",
+      "existingSlug": "best-of-northern-vietnam-6-days",
+      "matchScore": 100,
+      "itineraryDays": 6,
+      "images": 49
+    },
+    {
+      "scrapedSlug": "best-of-south-vietnam-5-days",
+      "scrapedName": "Best of South Vietnam: Saigon, Cu Chi Tunnel & Mekong Delta 5 days",
+      "existingSlug": "best-of-south-vietnam-5-days",
+      "matchScore": 100,
+      "itineraryDays": 5,
+      "images": 32
+    },
+    {
+      "scrapedSlug": "hanoi-halong-bay-mai-chau-4-days",
+      "scrapedName": "Hanoi, Halong Bay, Mai Chau 4 days",
+      "existingSlug": "hanoi-halong-bay-mai-chau-4-days",
+      "matchScore": 100,
+      "itineraryDays": 4,
+      "images": 30
+    },
+    {
+      "scrapedSlug": "ho-chi-minh-city-tour-full-day",
+      "scrapedName": "Ho Chi Minh City Tour Full Day with Lunch",
+      "existingSlug": "ho-chi-minh-city-tour-full-day",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 16
+    },
+    {
+      "scrapedSlug": "ho-chi-minh-vespa-half-day",
+      "scrapedName": "Ho Chi Minh Vespa Half-day",
+      "existingSlug": "ho-chi-minh-vespa-half-day",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 16
+    },
+    {
+      "scrapedSlug": "hoi-an-half-day-walking-city-tour",
+      "scrapedName": "Hoi An: Half-Day Walking City Tour‎",
+      "existingSlug": "hoi-an-half-day-walking-city-tour",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 14
+    },
+    {
+      "scrapedSlug": "hoi-an-memories-show-ticket",
+      "scrapedName": "Hoi An Memories Show Ticket",
+      "existingSlug": "hoi-an-memories-show-ticket",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 14
+    },
+    {
+      "scrapedSlug": "hue-and-hoi-an-at-a-glance-4-days",
+      "scrapedName": "Hue and Hoi An At A Glance 4 days",
+      "existingSlug": "hue-and-hoi-an-at-a-glance-4-days",
+      "matchScore": 100,
+      "itineraryDays": 4,
+      "images": 16
+    },
+    {
+      "scrapedSlug": "luxurious-vietnam-exploration-11-days",
+      "scrapedName": "Luxurious Vietnam Exploration Package 11 days",
+      "existingSlug": "luxurious-vietnam-exploration-11-days",
+      "matchScore": 100,
+      "itineraryDays": 11,
+      "images": 54
+    },
+    {
+      "scrapedSlug": "luxury-cu-chi-tunnels-speedboat-tour",
+      "scrapedName": "Luxury Cu Chi Tunnels Speedboat Tour",
+      "existingSlug": "luxury-cu-chi-tunnels-speedboat-tour",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 14
+    },
+    {
+      "scrapedSlug": "luxury-gourmet-explorer-vietnam-13-days",
+      "scrapedName": "Luxury Gourmet Explorer Vietnam 13 days",
+      "existingSlug": "luxury-gourmet-explorer-vietnam-13-days",
+      "matchScore": 100,
+      "itineraryDays": 13,
+      "images": 44
+    },
+    {
+      "scrapedSlug": "luxury-vietnam-beach-wellness-spa-14-days",
+      "scrapedName": "Luxury Vietnam Beach Wellness & Spa Package 2 weeks",
+      "existingSlug": "luxury-vietnam-beach-wellness-spa-14-days",
+      "matchScore": 100,
+      "itineraryDays": 9,
+      "images": 58
+    },
+    {
+      "scrapedSlug": "northern-vietnam-soft-adventure-8-days",
+      "scrapedName": "Northern Vietnam Soft Adventure 8 days",
+      "existingSlug": "northern-vietnam-soft-adventure-8-days",
+      "matchScore": 100,
+      "itineraryDays": 8,
+      "images": 45
+    },
+    {
+      "scrapedSlug": "phu-quoc-beach-escape-5-days",
+      "scrapedName": "Phu Quoc Beach Escape 5 days",
+      "existingSlug": "phu-quoc-beach-escape-5-days",
+      "matchScore": 100,
+      "itineraryDays": 5,
+      "images": 27
+    },
+    {
+      "scrapedSlug": "south-vietnam-phu-quoc-saigon-6-days",
+      "scrapedName": "Essence of South Vietnam: Ho Chi Minh City to Phu Quoc Escape 6 days",
+      "existingSlug": "south-vietnam-phu-quoc-saigon-6-days",
+      "matchScore": 100,
+      "itineraryDays": 6,
+      "images": 29
+    },
+    {
+      "scrapedSlug": "vietnam-complete-18-days",
+      "scrapedName": "",
+      "existingSlug": "vietnam-complete-18-days",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 11
+    },
+    {
+      "scrapedSlug": "vietnam-express-6-days",
+      "scrapedName": "",
+      "existingSlug": "vietnam-express-6-days",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 11
+    },
+    {
+      "scrapedSlug": "vietnam-gentle-pace-10-days",
+      "scrapedName": "",
+      "existingSlug": "vietnam-gentle-pace-10-days",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 11
+    },
+    {
+      "scrapedSlug": "vietnam-mountain-retreat-healing-10-days",
+      "scrapedName": "",
+      "existingSlug": "vietnam-mountain-retreat-healing-10-days",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 11
+    },
+    {
+      "scrapedSlug": "vietnam-natural-wonders-healing-8-days",
+      "scrapedName": "",
+      "existingSlug": "vietnam-natural-wonders-healing-8-days",
+      "matchScore": 100,
+      "itineraryDays": 0,
+      "images": 11
+    },
+    {
+      "scrapedSlug": "cam-thanh-coconut-village-basket-boat-tour",
+      "scrapedName": "Cam Thanh Coconut Village Basket Boat Tour",
+      "existingSlug": "cam-thanh-coconut-village-basket-boat",
+      "matchScore": 70.47619047619048,
+      "itineraryDays": 0,
+      "images": 19
+    },
+    {
+      "scrapedSlug": "ambassador-signature-cruise",
+      "scrapedName": "Ambassador Signature Cruise Halong Bay",
+      "existingSlug": "ambassador-signature-cruise-lan-ha-bay",
+      "matchScore": 60,
+      "itineraryDays": 2,
+      "images": 84
+    },
+    {
+      "scrapedSlug": "central-vietnam-grand-discovery-9-days",
+      "scrapedName": "Central Vietnam Heritage & Adventure Private Tour 9 days",
+      "existingSlug": "central-vietnam-5-days",
+      "matchScore": 60,
+      "itineraryDays": 9,
+      "images": 32
+    },
+    {
+      "scrapedSlug": "classic-vietnam-tours-for-family-12-days",
+      "scrapedName": "Classic Vietnam Family Tour with Kids 8 days",
+      "existingSlug": "classic-vietnam-family-tour-kids-8-days",
+      "matchScore": 60,
+      "itineraryDays": 8,
+      "images": 57
+    },
+    {
+      "scrapedSlug": "cu-chi-tunnels-mekong-delta-day-trip",
+      "scrapedName": "Cu Chi Tunnels and Mekong Delta Day Tour",
+      "existingSlug": "cu-chi-tunnels-half-day",
+      "matchScore": 60,
+      "itineraryDays": 0,
+      "images": 23
+    },
+    {
+      "scrapedSlug": "da-nang-hoi-an-ba-na-hills-5-days",
+      "scrapedName": "Central Vietnam: Da Nang, Hoi An & Ba Na Hills 5 days",
+      "existingSlug": "central-vietnam-5-days",
+      "matchScore": 60,
+      "itineraryDays": 5,
+      "images": 34
+    },
+    {
+      "scrapedSlug": "deep-in-love-in-phu-quoc-5-days",
+      "scrapedName": "Romantic Getaway in Phu Quoc: 5 Days of Love & Paradise",
+      "existingSlug": "romantic-getaway-phu-quoc-5-days",
+      "matchScore": 60,
+      "itineraryDays": 3,
+      "images": 25
+    },
+    {
+      "scrapedSlug": "hanoi-street-food-tour",
+      "scrapedName": "Hanoi Street Food Walking Tour",
+      "existingSlug": "hanoi-street-food-walking-tour",
+      "matchScore": 60,
+      "itineraryDays": 0,
+      "images": 19
+    },
+    {
+      "scrapedSlug": "highlights-sapa-with-fansipan-mountain-2-days",
+      "scrapedName": "Highlights Sapa with Fansipan Mountain 2 days",
+      "existingSlug": "highlights-sapa-fansipan-mountain-2-days",
+      "matchScore": 60,
+      "itineraryDays": 2,
+      "images": 14
+    },
+    {
+      "scrapedSlug": "hill-tribes-of-northern-vietnam-9-days",
+      "scrapedName": "Ethnic Encounters: 9 Days with Hill Tribes in Northwest & Northeast Vietnam",
+      "existingSlug": "ethnic-encounters-hill-tribes-vietnam-9-days",
+      "matchScore": 60,
+      "itineraryDays": 9,
+      "images": 40
+    },
+    {
+      "scrapedSlug": "hoi-an-surrounding-and-beach-break-7days",
+      "scrapedName": "Hoi An Surrounding And Beach Break 7 days",
+      "existingSlug": "hoi-an-surrounding-beach-break-7-days",
+      "matchScore": 60,
+      "itineraryDays": 5,
+      "images": 27
+    },
+    {
+      "scrapedSlug": "hoi-an-wellness-retreat-5-days",
+      "scrapedName": "Hoi An Therapeutic Escape - Acupressure & Herbal Therapy 5 days",
+      "existingSlug": "hoi-an-therapeutic-escape-5-days",
+      "matchScore": 60,
+      "itineraryDays": 5,
+      "images": 16
+    },
+    {
+      "scrapedSlug": "impressive-vietnam-for-lovers-10-days",
+      "scrapedName": "Impressive Vietnam for Lovers 10 days",
+      "existingSlug": "impressive-vietnam-for-lovers-12-days",
+      "matchScore": 60,
+      "itineraryDays": 10,
+      "images": 49
+    },
+    {
+      "scrapedSlug": "incredible-luxury-vietnam-and-cambodia-15-days",
+      "scrapedName": "Incredible Luxury Vietnam and Cambodia 2 Weeks",
+      "existingSlug": "incredible-luxury-vietnam-cambodia-15-days",
+      "matchScore": 60,
+      "itineraryDays": 15,
+      "images": 51
+    },
+    {
+      "scrapedSlug": "insight-mekong-delta-full-day",
+      "scrapedName": "Insight Mekong Delta Day Trip from Saigon",
+      "existingSlug": "insight-mekong-delta-day-trip",
+      "matchScore": 60,
+      "itineraryDays": 0,
+      "images": 19
+    },
+    {
+      "scrapedSlug": "insight-vietnam-local-luxury-tour-14-days",
+      "scrapedName": "Luxurious Insight Vietnam Local 14 days",
+      "existingSlug": "luxurious-insight-vietnam-local-14-days",
+      "matchScore": 60,
+      "itineraryDays": 14,
+      "images": 56
+    },
+    {
+      "scrapedSlug": "long-tan-nui-dat-battle-field-full-day-tour",
+      "scrapedName": "Long Tan - Nui Dat Battle Field Full Day Tour",
+      "existingSlug": "long-tan-nui-dat-battlefield-full-day",
+      "matchScore": 60,
+      "itineraryDays": 0,
+      "images": 14
+    },
+    {
+      "scrapedSlug": "luxury-dinner-cruise-on-saigon-river",
+      "scrapedName": "Luxury Dinner Cruise on Saigon River",
+      "existingSlug": "luxury-dinner-cruise-saigon-river",
+      "matchScore": 60,
+      "itineraryDays": 0,
+      "images": 11
+    },
+    {
+      "scrapedSlug": "luxury-mekong-delta-speedboat-tour-full-day",
+      "scrapedName": "Luxury Mekong Delta Speedboat Tour Full Day",
+      "existingSlug": "luxury-mekong-delta-speedboat-full-day",
+      "matchScore": 60,
+      "itineraryDays": 0,
+      "images": 21
+    },
+    {
+      "scrapedSlug": "majestic-vietnam-with-beach-relaxation-17-days",
+      "scrapedName": "Majestic Vietnam with Beach Holiday 17 days",
+      "existingSlug": "majestic-vietnam-beach-holiday-17-days",
+      "matchScore": 60,
+      "itineraryDays": 15,
+      "images": 82
+    },
+    {
+      "scrapedSlug": "mekong-delta-local-life-full-day",
+      "scrapedName": "Mekong Local Life: Cai Be - Tan Phong Island Full Day Private Tour",
+      "existingSlug": "mekong-local-life-cai-be-tan-phong-day",
+      "matchScore": 60,
+      "itineraryDays": 0,
+      "images": 13
+    },
+    {
+      "scrapedSlug": "nha-trang-discovery-and-beach-break-6-days",
+      "scrapedName": "Nha Trang Discovery and Beach Break 6 Days",
+      "existingSlug": "nha-trang-discovery-beach-break-6-days",
+      "matchScore": 60,
+      "itineraryDays": 5,
+      "images": 21
+    },
+    {
+      "scrapedSlug": "nha-trang-golf-coastal-5-days",
+      "scrapedName": "Nha Trang Golf & Coastal Bliss 5 days",
+      "existingSlug": "nha-trang-golf-coastal-bliss-5-days",
+      "matchScore": 60,
+      "itineraryDays": 5,
+      "images": 19
+    },
+    {
+      "scrapedSlug": "north-center-vietnam-easy-adventure-for-family-with-kids-10-days",
+      "scrapedName": "North & Central Vietnam Easy Adventure for Family with Kids 10 days",
+      "existingSlug": "north-central-vietnam-family-kids-10-days",
+      "matchScore": 60,
+      "itineraryDays": 10,
+      "images": 50
+    },
+    {
+      "scrapedSlug": "north-vietnam-at-a-glance-halong-bay-sapa-5-days",
+      "scrapedName": "North Vietnam at A Glance: Sapa & Halong Bay Package 5 days",
+      "existingSlug": "north-vietnam-adventure-7-days",
+      "matchScore": 60,
+      "itineraryDays": 5,
+      "images": 30
+    },
+    {
+      "scrapedSlug": "north-vietnam-off-road-by-motorbike-10-days",
+      "scrapedName": "Vietnam Off-Road: Ta Xua, Ha Giang and Cao Bang by Motorbike 10 days",
+      "existingSlug": "vietnam-off-road-motorbike-10-days",
+      "matchScore": 60,
+      "itineraryDays": 10,
+      "images": 38
+    },
+    {
+      "scrapedSlug": "phu-quoc-golf-seaside-4-days",
+      "scrapedName": "Phu Quoc Golf & Seaside Relaxation 4 days",
+      "existingSlug": "phu-quoc-golf-seaside-relaxation-4-days",
+      "matchScore": 60,
+      "itineraryDays": 4,
+      "images": 18
+    },
+    {
+      "scrapedSlug": "private-gateways-to-north-vietnam-14-days",
+      "scrapedName": "Private Gateways to North Vietnam 2 Weeks",
+      "existingSlug": "private-gateways-north-vietnam-14-days",
+      "matchScore": 60,
+      "itineraryDays": 14,
+      "images": 49
+    },
+    {
+      "scrapedSlug": "saigon-and-mui-ne-relaxation-7-days",
+      "scrapedName": "South Vietnam: Saigon & Mui Ne Beach Relaxation 7 days",
+      "existingSlug": "south-vietnam-saigon-mui-ne-beach-7-days",
+      "matchScore": 60,
+      "itineraryDays": 7,
+      "images": 34
+    },
+    {
+      "scrapedSlug": "saigon-wellness-retreat-5-days",
+      "scrapedName": "Saigon Executive Wellness Retreat: Rejuvenation In 5 days",
+      "existingSlug": "saigon-executive-wellness-retreat-5-days",
+      "matchScore": 60,
+      "itineraryDays": 5,
+      "images": 18
+    },
+    {
+      "scrapedSlug": "sapa-trekking-2-days-homestay",
+      "scrapedName": "Sapa Terraced Rice Fields & Ethnic Villages Trek 2 days",
+      "existingSlug": "sapa-terraced-rice-fields-homestay-2-days",
+      "matchScore": 60,
+      "itineraryDays": 2,
+      "images": 17
+    },
+    {
+      "scrapedSlug": "trekking-caving-ba-be-national-park-3-days-2-nights",
+      "scrapedName": "Trekking Caving Ba Be National Park 3 Days 2 Nights",
+      "existingSlug": "vietnam-active-escape-trekking-caving-12-days",
+      "matchScore": 60,
+      "itineraryDays": 3,
+      "images": 17
+    },
+    {
+      "scrapedSlug": "uncover-northern-vietnam-on-motorbike-7-days",
+      "scrapedName": "Uncover Northern Vietnam: Ha Giang By Scooter 7 Days",
+      "existingSlug": "uncover-northern-vietnam-scooter-7-days",
+      "matchScore": 60,
+      "itineraryDays": 7,
+      "images": 21
+    },
+    {
+      "scrapedSlug": "vietnam-culinary-journey-on-wheels-11-days",
+      "scrapedName": "Vietnam Culinary Journey On Wheels 11 Days",
+      "existingSlug": "vietnam-culinary-journey-10-days",
+      "matchScore": 60,
+      "itineraryDays": 11,
+      "images": 40
+    },
+    {
+      "scrapedSlug": "vietnam-easy-rider-16-days",
+      "scrapedName": "Vietnam Easy Rider Private 16 Days",
+      "existingSlug": "vietnam-easy-rider-motorbike-16-days",
+      "matchScore": 60,
+      "itineraryDays": 16,
+      "images": 62
+    },
+    {
+      "scrapedSlug": "vietnam-essential-10-days-small-group-tour",
+      "scrapedName": "Vietnam Essential 10 days",
+      "existingSlug": "vietnam-essential-10-days",
+      "matchScore": 60,
+      "itineraryDays": 10,
+      "images": 66
+    },
+    {
+      "scrapedSlug": "vietnam-mix-transportation-12-days",
+      "scrapedName": "Ultimate Vietnam Journey: 12 Days by Land, Rail & Water",
+      "existingSlug": "ultimate-vietnam-journey-land-rail-water-12-days",
+      "matchScore": 60,
+      "itineraryDays": 12,
+      "images": 62
+    },
+    {
+      "scrapedSlug": "vietnam-on-wheels-16-days",
+      "scrapedName": "Vietnam Adventure on Bike from North to South 16 days",
+      "existingSlug": "north-vietnam-adventure-7-days",
+      "matchScore": 60,
+      "itineraryDays": 16,
+      "images": 66
+    },
+    {
+      "scrapedSlug": "vietnam-romantic-honeymoon-holiday-14-days",
+      "scrapedName": "Vietnam Romantic Honeymoon Holiday 14 days",
+      "existingSlug": "vietnam-romantic-honeymoon-escape-10-days",
+      "matchScore": 60,
+      "itineraryDays": 14,
+      "images": 53
+    }
+  ],
+  "unmatched": [
+    {
+      "scrapedSlug": "a-glimpse-of-southern-vietnam-4-days",
+      "scrapedName": "A Glimpse of Southern Vietnam 4 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/a-glimpse-of-southern-vietnam-4-days.html"
+    },
+    {
+      "scrapedSlug": "a-glimpse-of-the-central-vietnam-5-days",
+      "scrapedName": "A Glimpse of Central Vietnam 5 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/a-glimpse-of-the-central-vietnam-5-days.html"
+    },
+    {
+      "scrapedSlug": "best-of-vietnam-15-days",
+      "scrapedName": "Best of Vietnam: World Heritage Sites 15 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/best-of-vietnam-15-days.html"
+    },
+    {
+      "scrapedSlug": "best-of-vietnam-and-cambodia-15-days",
+      "scrapedName": "Best of Vietnam and Cambodia 15 days",
+      "sourceUrl": "https://www.bestpricetravel.com/indochina-tours/best-of-vietnam-and-cambodia-15-days.html"
+    },
+    {
+      "scrapedSlug": "cultural-beach-paradise-vietnam-cambodia-bali-16-days",
+      "scrapedName": "Cultural Wonders & Beach Paradise: Vietnam, Cambodia & Bali Journey 16 days",
+      "sourceUrl": "https://www.bestpricetravel.com/indochina-tours/cultural-beach-paradise-vietnam-cambodia-bali-16-days.html"
+    },
+    {
+      "scrapedSlug": "epic-vietnam-from-north-to-south-10-days",
+      "scrapedName": "Epic Vietnam from North to South 10 days - Group Tour",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/epic-vietnam-from-north-to-south-10-days.html"
+    },
+    {
+      "scrapedSlug": "ha-giang-loop-on-motorbike-4-days",
+      "scrapedName": "Ha Giang Loop on Motorbike 4 days: Dong Van, Ma Pi Leng & Local Villages",
+      "sourceUrl": "https://www.bestpricetravel.com/ha-giang-tours/ha-giang-loop-on-motorbike-4-days.html"
+    },
+    {
+      "scrapedSlug": "halong-bay-cruise-2-days-1-night-from-hanoi-with-transfer",
+      "scrapedName": "Halong Bay Cruise Package from Hanoi with Transfer 2 Days",
+      "sourceUrl": "https://www.bestpricetravel.com/halong-bay-tours/halong-bay-cruise-2-days-1-night-from-hanoi-with-transfer.html"
+    },
+    {
+      "scrapedSlug": "halong-bay-sapa-luxury-5-days-private-tour",
+      "scrapedName": "Luxury Halong Bay & Sapa Adventure 5 days",
+      "sourceUrl": "https://www.bestpricetravel.com/halong-sapa-tours/halong-bay-sapa-luxury-5-days-private-tour.html"
+    },
+    {
+      "scrapedSlug": "hanoi-halong-bay-ninh-binh-a-glimpse-of-north-vietnam-5-days",
+      "scrapedName": "Glimpse of North Vietnam: 5-day Budget Tour",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/hanoi-halong-bay-ninh-binh-a-glimpse-of-north-vietnam-5-days.html"
+    },
+    {
+      "scrapedSlug": "highlights-of-vietnam-12-days",
+      "scrapedName": "Highlights of Vietnam from North to South 12 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/highlights-of-vietnam-12-days.html"
+    },
+    {
+      "scrapedSlug": "highlights-of-vietnam-cambodia-thailand-3-weeks",
+      "scrapedName": "Highlights of Indochina: Vietnam, Cambodia & Thailand 3 weeks",
+      "sourceUrl": "https://www.bestpricetravel.com/indochina-tours/highlights-of-vietnam-cambodia-thailand-3-weeks.html"
+    },
+    {
+      "scrapedSlug": "hue-dmz-full-day-tour",
+      "scrapedName": "DMZ Full Day Tour from Hue",
+      "sourceUrl": "https://www.bestpricetravel.com/hue-tours/hue-dmz-full-day-tour.html"
+    },
+    {
+      "scrapedSlug": "hue-to-hoi-an-cycling-journey-4-days",
+      "scrapedName": "Hue To Hoi An Cycling Journey 4 Days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/hue-to-hoi-an-cycling-journey-4-days.html"
+    },
+    {
+      "scrapedSlug": "imperial-taste-on-perfume-river",
+      "scrapedName": "Imperial Taste on Perfume River Cruise",
+      "sourceUrl": "https://www.bestpricetravel.com/hue-tours/imperial-taste-on-perfume-river.html"
+    },
+    {
+      "scrapedSlug": "luxurious-northern-vietnam-exploration-7-days",
+      "scrapedName": "Indulgent Northern Vietnam: 7 Days of Luxury & Scenic Wonders",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/luxurious-northern-vietnam-exploration-7-days.html"
+    },
+    {
+      "scrapedSlug": "luxury-da-nang-golf-5-days",
+      "scrapedName": "Luxury Da Nang Golf Holiday 5 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/luxury-da-nang-golf-5-days.html"
+    },
+    {
+      "scrapedSlug": "mai-chau-to-pu-luong-mountain-escape-3-days",
+      "scrapedName": "Mai Chau to Pu Luong - Vietnam’s Mountain Escape 3 days",
+      "sourceUrl": "https://www.bestpricetravel.com/hanoi-tours/mai-chau-to-pu-luong-mountain-escape-3-days.html"
+    },
+    {
+      "scrapedSlug": "mekong-delta-with-floating-market-2-days",
+      "scrapedName": "Mekong Delta with Floating Market 2 days",
+      "sourceUrl": "https://www.bestpricetravel.com/mekong-delta-tours/mekong-delta-with-floating-market-2-days.html"
+    },
+    {
+      "scrapedSlug": "ninh-binh-hoa-lu-trang-an-full-day-private-tour",
+      "scrapedName": "Ninh Binh: Hoa Lu – Trang An Full Day Private Tour from Hanoi",
+      "sourceUrl": "https://www.bestpricetravel.com/ninh-binh-tours/ninh-binh-hoa-lu-trang-an-full-day-private-tour.html"
+    },
+    {
+      "scrapedSlug": "off-the-beaten-track-northeast-vietnam-7-days",
+      "scrapedName": "Hidden Trails of Northeast Vietnam: 7 Days of Discovery (Ha Giang, Ba Be)",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/off-the-beaten-track-northeast-vietnam-7-days.html"
+    },
+    {
+      "scrapedSlug": "real-taste-of-vietnam-13-days",
+      "scrapedName": "Real Taste of Vietnam 13 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/real-taste-of-vietnam-13-days.html"
+    },
+    {
+      "scrapedSlug": "rejuvenate-vietnam-14-days",
+      "scrapedName": "",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/rejuvenate-vietnam-14-days.html"
+    },
+    {
+      "scrapedSlug": "romance-of-vietnam-cambodia-from-mekong-delta-to-angkor-wat-13-days",
+      "scrapedName": "Romance of Vietnam & Cambodia from Mekong Delta to Angkor Wat 13 days",
+      "sourceUrl": "https://www.bestpricetravel.com/indochina-tours/romance-of-vietnam-cambodia-from-mekong-delta-to-angkor-wat-13-days.html"
+    },
+    {
+      "scrapedSlug": "saigon-by-night-jeep-adventure-street-food-delights",
+      "scrapedName": "Saigon by Night: Jeep Adventure & Street Food Delights",
+      "sourceUrl": "https://www.bestpricetravel.com/ho-chi-minh-city-tours/saigon-by-night-jeep-adventure-street-food-delights.html"
+    },
+    {
+      "scrapedSlug": "sightseeing-in-the-south-hon-thom-island-full-day",
+      "scrapedName": "Sightseeing in The South – Hon Thom Island full day",
+      "sourceUrl": "https://www.bestpricetravel.com/phu-quoc-tours/sightseeing-in-the-south-hon-thom-island-full-day.html"
+    },
+    {
+      "scrapedSlug": "vietnam-from-north-to-south-by-luxury-train-8-days",
+      "scrapedName": "Discover Essence of Vietnam from North to South by Luxury Train 8 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-from-north-to-south-by-luxury-train-8-days.html"
+    },
+    {
+      "scrapedSlug": "vietnam-grand-discovery-18-days",
+      "scrapedName": "Vietnam Grand Discovery Classic 18 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-grand-discovery-18-days.html"
+    },
+    {
+      "scrapedSlug": "vietnam-marvelous-budget-adventure-10-days",
+      "scrapedName": "Vietnam Marvelous Budget Adventure: Group Tour 10 days",
+      "sourceUrl": "https://www.bestpricetravel.com/vietnam-tours/vietnam-marvelous-budget-adventure-10-days.html"
+    }
+  ]
+}

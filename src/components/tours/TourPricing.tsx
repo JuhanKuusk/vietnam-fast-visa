@@ -3,6 +3,7 @@
 import type { Tour } from "@/types/tours";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useState } from "react";
 
 // Tour translation type
 interface TourTranslation {
@@ -23,6 +24,7 @@ export function TourPricing({ tour }: TourPricingProps) {
   const { language, t } = useLanguage();
   const { formatPrice } = useCurrency();
   const isZH = language === "ZH";
+  const [selectedTier, setSelectedTier] = useState(0);
 
   // Get translated tour content if available
   const toursTranslations = (t as Record<string, unknown>).tours as Record<string, TourTranslation> | undefined;
@@ -32,6 +34,12 @@ export function TourPricing({ tour }: TourPricingProps) {
   const displayDuration = tourTranslation?.duration || tour.duration;
   const displayLocation = tourTranslation?.location || tour.location;
 
+  // Get current price (from selected tier or default)
+  const pricingTiers = tour.pricingTiers ?? [];
+  const hasPricingTiers = pricingTiers.length > 0;
+  const currentPrice = hasPricingTiers ? pricingTiers[selectedTier].price : tour.price;
+  const currentCategory = hasPricingTiers ? pricingTiers[selectedTier].category : null;
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-cyan-100">
       {/* Discount Badge */}
@@ -40,6 +48,33 @@ export function TourPricing({ tour }: TourPricingProps) {
           <span className="inline-block px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
             {tour.discount}% {isZH ? "折扣" : "OFF"}
           </span>
+        </div>
+      )}
+
+      {/* Pricing Tiers */}
+      {hasPricingTiers && (
+        <div className="mb-4">
+          <label className="text-sm font-medium text-gray-700 block mb-2">
+            {isZH ? "选择酒店级别" : "Select Hotel Category"}
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {pricingTiers.map((tier, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedTier(idx)}
+                className={`px-3 py-2 text-xs rounded-lg border transition-colors ${
+                  selectedTier === idx
+                    ? 'bg-cyan-600 text-white border-cyan-600'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-cyan-300'
+                }`}
+              >
+                <div className="font-medium">{tier.category.replace(' Hotels', '')}</div>
+                <div className={selectedTier === idx ? 'text-cyan-100' : 'text-gray-500'}>
+                  {formatPrice(tier.price)}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
@@ -55,10 +90,15 @@ export function TourPricing({ tour }: TourPricingProps) {
         </div>
         <div className="flex items-baseline gap-1">
           <span className="text-4xl font-bold text-cyan-600">
-            {formatPrice(tour.price)}
+            {formatPrice(currentPrice)}
           </span>
           <span className="text-gray-600">/ {isZH ? "每人" : "person"}</span>
         </div>
+        {currentCategory && (
+          <p className="text-sm text-cyan-600 font-medium mt-1">
+            {currentCategory}
+          </p>
+        )}
         {tour.discount && (
           <p className="text-sm text-green-600 font-medium mt-1">
             {isZH ? `节省 ${formatPrice(tour.originalPrice! - tour.price)}!` : `Save ${formatPrice(tour.originalPrice! - tour.price)}!`}
@@ -118,6 +158,27 @@ export function TourPricing({ tour }: TourPricingProps) {
             <span className="text-gray-700">
               <strong>{tour.rating}/10</strong>
               {tour.reviewCount && ` (${tour.reviewCount} ${isZH ? "评价" : "reviews"})`}
+            </span>
+          </div>
+        )}
+
+        {tour.groupSize && (
+          <div className="flex items-center gap-3 text-sm">
+            <svg
+              className="w-5 h-5 text-gray-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            <span className="text-gray-700">
+              <strong>{isZH ? "团队规模：" : "Group Size:"}</strong> {tour.groupSize.min}-{tour.groupSize.max} {isZH ? "人" : "people"}
             </span>
           </div>
         )}

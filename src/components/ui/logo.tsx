@@ -9,7 +9,7 @@ interface LogoProps {
   siteName?: string; // Custom site name (for multi-domain support)
 }
 
-export function Logo({ size = "md", showTagline = true, className = "", variant = "dark", taglineText = "Urgent Visa Processing", siteName }: LogoProps) {
+export function Logo({ size = "md", showTagline = true, className = "", variant = "dark", taglineText = "Your Travel Concierge", siteName }: LogoProps) {
   // Sizes - text increased by 25%
   const sizes = {
     sm: { icon: 45, text: "text-base", tagline: "text-[11px]" },     // text: sm -> base (+25%)

@@ -1,0 +1,85 @@
+{
+  "sourceUrl": "https://www.bestpricetravel.com/sapa-tours/highlights-sapa-with-fansipan-mountain-2-days.html",
+  "fetchedAt": "2026-03-02T02:56:45.681Z",
+  "name": "Highlights Sapa with Fansipan Mountain 2 days",
+  "rating": 9.3,
+  "reviewCount": 2,
+  "duration": "Places:Sapa - Cat Cat Village - Sin Chai Village - Fansipan Mountain",
+  "places": "Meals:1 Breakfast, 1 Lunch",
+  "mealsSummary": "Operated by:Sapa Pathfinder Travel",
+  "highlights": [
+    "Step into the heart of the Hmong ethnic culture in the vibrant Cat Cat Village.",
+    "Discover the tranquility of the Kim Son Bao Thang Tu pagoda, a hidden gem amidst the majestic mountains.",
+    "Enjoy panoramic views of the stunning mountain landscapes through the cabin's glass windows."
+  ],
+  "overview": "",
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Sapa - Cat Cat Village",
+      "description": "",
+      "activities": [],
+      "meals": [],
+      "accommodation": "",
+      "dayImages": [
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e737806.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e737806.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780b.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/origin/651690e73780b.jpg"
+      ]
+    },
+    {
+      "day": 2,
+      "title": "Fansipan Cable Car - Hanoi",
+      "description": "",
+      "activities": [],
+      "meals": [],
+      "accommodation": "",
+      "dayImages": [
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780c.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780d.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780e.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780f.jpg",
+        "https://d122axpxm39woi.cloudfront.net/images/tours/origin/651690e73780d.jpg"
+      ]
+    }
+  ],
+  "pricingTiers": [
+    {
+      "category": "Superior Group Tour",
+      "price": 139
+    },
+    {
+      "category": "Deluxe Group Tour",
+      "price": 169
+    }
+  ],
+  "included": [
+    "Accommodation in hotel in Sapa",
+    "All transport as per itinerary",
+    "English speaking guide",
+    "All entrance tickets to indicated sites",
+    "Meals as indicated in the program"
+  ],
+  "images": [
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e737810.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e737806.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780b.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780c.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780d.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780e.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/800_450/651690e73780f.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/651690e73780b.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/origin/651690e73780d.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/65168bde41bcc.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/651697184b7a5.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/6516996a1c49f.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/tours/370_207/65168f2158d0a.jpg",
+    "https://d122axpxm39woi.cloudfront.net/assets/img/dcma.png"
+  ],
+  "importantNotes": [
+    "PROGRAMS & SCHEDULES SUBJECT TO CHANGE WITHOUT PRIOR NOTICE"
+  ],
+  "reviews": [],
+  "scoreBreakdown": {}
+}

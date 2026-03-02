@@ -13,6 +13,29 @@ export interface ItineraryDay {
   description: string;
   activities: string[];
   meals?: string[];
+  // Enhanced fields for detailed itinerary
+  accommodation?: string; // "Hotel in Hanoi", "Overnight cruise"
+  imageUrl?: string; // Day-specific primary image
+  dayImages?: string[]; // Multiple images for this day (from BestPrice scraping)
+  startTime?: string; // "8:00 AM"
+  highlights?: string[]; // Key experiences for this day
+  foodHighlights?: string[]; // Specific dishes/foods featured
+}
+
+// Pricing tiers for multi-tier tour pricing
+export interface PricingTier {
+  category: string; // "Economy 2★+", "Superior 3★", "First Class 4★", "Deluxe 5★"
+  price: number;
+  singleSupplement?: number; // Extra charge for single room
+}
+
+// Customer review
+export interface TourReview {
+  name: string;
+  country: string;
+  rating: number;
+  comment: string;
+  date?: string;
 }
 
 // Activity types for filtering
@@ -177,6 +200,19 @@ export interface Tour {
   rating?: number;
   reviewCount?: number;
   affiliateUrl: string;
+  // Enhanced fields from BestPrice Travel
+  overview?: string; // Detailed tour overview
+  importantNotes?: string[]; // Schedule changes, dietary requirements, etc.
+  pricingTiers?: PricingTier[]; // Economy, Superior, First Class, Deluxe pricing
+  groupSize?: { min: number; max: number }; // Min/max group size
+  reviews?: TourReview[]; // Customer reviews with scores
+  scoreBreakdown?: {
+    itinerary?: number;
+    foodDrink?: number;
+    tourGuide?: number;
+    entertainment?: number;
+    accommodations?: number;
+  };
   // Grouping for tour variations (e.g., same tour with different durations)
   groupId?: string; // Tours with same groupId are variations of each other
   groupName?: string; // Display name for the group (e.g., "Mekong Eyes Cruise")

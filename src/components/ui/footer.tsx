@@ -40,6 +40,10 @@ export function Footer() {
               {t.legal?.footerFees || "Fees"}
             </Link>
             <span className="text-gray-600">|</span>
+            <Link href="/disclaimer" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal?.footerDisclaimer || "Disclaimer"}
+            </Link>
+            <span className="text-gray-600">|</span>
             <span className="text-xs text-gray-500">{t.legal.securePayment}</span>
             {/* Chinese site: Alipay, WeChat Pay, Visa, UnionPay */}
             {isChinaSite && (
@@ -123,6 +127,10 @@ export function Footer() {
             <span className="text-gray-600 mx-2">|</span>
             <Link href="/fees" className="text-xs text-gray-400 hover:text-white transition-colors">
               {t.legal?.footerFees || "Fees"}
+            </Link>
+            <span className="text-gray-600 mx-2">|</span>
+            <Link href="/disclaimer" className="text-xs text-gray-400 hover:text-white transition-colors">
+              {t.legal?.footerDisclaimer || "Disclaimer"}
             </Link>
           </div>
 

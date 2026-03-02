@@ -1,0 +1,52 @@
+{
+  "slug": "ambassador-signature-cruise-lan-ha-bay",
+  "scrapedName": "Ambassador Signature Cruise Halong Bay",
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Hanoi - Halong International Cruise Port - Lan Ha Bay - Viet Hai Village",
+      "description": "",
+      "activities": [],
+      "meals": [],
+      "accommodation": "",
+      "dayImages": []
+    },
+    {
+      "day": 2,
+      "title": "Dark & Bright Cave - Halong Bay - Hanoi",
+      "description": "",
+      "activities": [],
+      "meals": [],
+      "accommodation": "",
+      "dayImages": []
+    }
+  ],
+  "pricingTiers": [],
+  "highlights": [],
+  "included": [],
+  "images": [
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/848_477/659e22d634a9d.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/848_477/659e230fa2703.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/848_477/659e235addc3e.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/375_250/659e21c433cbc.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/375_250/659e22917f789.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/375_250/659e21f7d82be.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/375_250/659e224888593.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e21c433cbc.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e238a16c7f.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/6656e79dd46cc.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e22917f788.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e22917f789.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e22917f78a.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/6656e79dd46cd.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/6656e83bbcbd2.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e21f7d82be.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e224888592.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e224888593.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e21f7d82bd.jpg",
+    "https://d122axpxm39woi.cloudfront.net/images/cruises/origin/659e224888594.jpg"
+  ],
+  "importantNotes": [
+    "PROGRAMS & SCHEDULES SUBJECT TO CHANGE WITHOUT PRIOR NOTICE"
+  ]
+}
