@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSite } from "@/contexts/SiteContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Footer } from "@/components/ui/footer";
 import { Logo } from "@/components/ui/logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { LanguageSelector } from "@/components/ui/language-selector";
 
 // Lead Capture Form Modal
 function LeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -140,7 +142,22 @@ function LeadCaptureModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
 export default function WelcomeConciergePage() {
   const { content } = useSite();
+  const { language, setLanguage } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Default to English for this page (VietnamTravel.Help is English-focused)
+  useEffect(() => {
+    // Only set to English if no browser language preference detected
+    if (typeof window !== 'undefined') {
+      const browserLang = navigator.language?.toLowerCase() || '';
+      const storedLang = localStorage.getItem('language');
+
+      // If no stored preference and browser is not Chinese, default to English
+      if (!storedLang && !browserLang.startsWith('zh')) {
+        setLanguage('EN');
+      }
+    }
+  }, [setLanguage]);
 
   const whatsappLink = `https://wa.me/${content.whatsappNumber?.replace(/\+/g, "") || "84705549868"}`;
 
@@ -171,6 +188,7 @@ export default function WelcomeConciergePage() {
             </nav>
 
             <div className="flex items-center gap-3">
+              <LanguageSelector />
               <ThemeToggle />
               <a
                 href={whatsappLink}
